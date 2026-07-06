@@ -33,3 +33,32 @@
 .rating-star{color:#fbbf24;text-shadow:0 1px 0 #92400e,0 0 8px rgba(251,191,36,.45);font-weight:1000}
 .date-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin:14px 0}
 .date-only-title{margin-top:18px;margin-bottom:8px;font-weight:1000}
+
+
+.section-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  margin:14px 0 8px;
+  border:1px dashed var(--p);
+  border-radius:16px;
+  background:rgba(74,159,216,.07);
+}
+.section-toggle b{font-size:13px}
+.section-toggle label{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--t2);
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.section-toggle input{accent-color:var(--p);width:16px;height:16px}
+.section-hidden-note{
+  font-size:11px;
+  color:var(--t3);
+  margin-top:4px;
+}

@@ -1,6 +1,27 @@
 let view='home',currentCat='all',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
 function hotelStars(n){return `<span class="hotel-stars">${Array.from({length:Number(n)||0}).map(()=>'<i class="fa-solid fa-star"></i>').join('')}</span>`}
 function ratingStar(){return '<span class="rating-star">★</span>'}
+function defaultSections(){
+  return {
+    description:true,
+    flightInfo:true,
+    dates:true,
+    hotels:true,
+    gallery:true,
+    itinerary:true,
+    docs:true,
+    includes:true,
+    excludes:true,
+    cancellation:true,
+    childPolicy:true,
+    reviews:true
+  };
+}
+function sectionOn(t,key){
+  const v = Object.assign(defaultSections(), t.sectionVisibility || {});
+  return v[key] !== false;
+}
+function maybe(show, html){ return show ? html : ''; }
 function initBuyer(){mount('buyer');route('home');setInterval(()=>document.querySelectorAll('[data-countdown]').forEach(e=>e.textContent=countdown(e.dataset.countdown)),1000)}
 function route(v,id){view=v;if(v==='detail')selectedTour=id;if(v==='booking'){booking.tourId=id;booking.hotel=0;booking.step=1;const t=findTour(id);booking.date=t?.dates?.[0]||null}renderBuyer()}
 function renderBuyer(){if(view==='home')return renderHome();if(view==='detail')return renderDetail(findTour(selectedTour));if(view==='booking')return renderBooking(findTour(booking.tourId));if(view==='wish')return renderWish();if(view==='mine')return renderMine()}
@@ -30,7 +51,47 @@ function renderCompareDock(){const d=$('compareDock');if(!d)return;$('compareCou
 function clearCompare(){compare.clear();filterHome()}
 function openCompare(){const list=[...compare].map(id=>findTour(id)).filter(Boolean);if(!list.length)return;const rows=[['تصویر',...list.map(t=>`<img src="${t.img}" style="width:160px;height:95px;object-fit:cover;border-radius:12px">`)],['عنوان',...list.map(t=>`<b>${t.title}</b>`)],['مقصد',...list.map(t=>t.dest)],['مدت',...list.map(t=>t.duration)],['ایرلاین',...list.map(t=>t.airline)],['شروع قیمت',...list.map(t=>`<b class="price">${money(minHotel(t).price)}</b>`)],['ظرفیت',...list.map(t=>faNum(totalCapacity(t))+' نفر')],['هتل‌ها',...list.map(t=>(t.hotels||[]).map(h=>`${h.star}★ ${h.name}`).join('<br>'))]];$('compareContent').innerHTML=`<table><tbody>${rows.map(r=>`<tr>${r.map((c,i)=>`<td style="min-width:${i?190:120}px">${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;$('compareModal').classList.add('on')}
 function closeCompare(){$('compareModal').classList.remove('on')}
-function renderDetail(t){if(!t)return;$('app').innerHTML=`${buyerTabs()}<button class="soft" onclick="route('home')">بازگشت</button><section class="card pad" style="margin-top:16px"><div class="badges">${badges(t)}</div><img class="detail-img" src="${t.img||DEFAULT_IMG}"><div class="gallery">${[t.img,...(t.gallery||[])].slice(0,5).map(x=>`<img src="${x}" onclick="lightbox('${x}')">`).join('')}</div><div class="row wrap" style="margin-top:18px"><div><h1>${t.title}</h1><p class="small">${t.desc}</p></div><button class="soft" onclick="toggleWish(${t.id})">♡ علاقه‌مندی</button></div><div class="info-grid">${info('مقصد',t.dest)}${info('مدت',t.duration)}${info('ایرلاین',t.airline)}${info('شماره پرواز',t.flightNumber)}${info('زمان پرواز',t.flightTime)}${info('زمان فرود',t.landingTime)}</div>${dateOnly(t)}<h3>انتخاب هتل</h3><div class="stack">${t.hotels.map((h,i)=>`<div class="hotel ${i===selectedHotel?'selected':''} ${h.capacity<=0?'disabled':''}" onclick="${h.capacity>0?`selectedHotel=${i};renderDetail(findTour(${t.id}))`:''}"><div class="row"><b>${h.name} ${hotelStars(h.star)}</b><b>${money(h.price)}</b></div><small>${h.capacity>0?faNum(h.capacity)+' ظرفیت':'تکمیل ظرفیت'}</small></div>`).join('')}</div><div class="g2 grid" style="margin-top:18px"><div class="info"><small>برنامه سفر</small>${(t.itinerary||[]).map(x=>`<p class="small">• ${x}</p>`).join('')}</div><div class="info"><small>مدارک لازم</small>${(t.docs||[]).map(x=>`<p class="small">• ${x}</p>`).join('')}</div><div class="info"><small>خدمات شامل</small>${(t.includes||[]).map(x=>`<p class="small">✓ ${x}</p>`).join('')}</div><div class="info"><small>خدمات غیرشامل</small>${(t.excludes||[]).map(x=>`<p class="small">× ${x}</p>`).join('')}</div></div><div class="row wrap" style="border-top:1px solid var(--b);margin-top:18px;padding-top:18px"><div><small class="small">قیمت هتل انتخاب‌شده</small><div class="price">${money((t.hotels[selectedHotel]||minHotel(t)).price)}</div></div><button class="btn" onclick="route('booking',${t.id})">رزرو نهایی</button></div></section><div class="sticky-cta"><b>${money((t.hotels[selectedHotel]||minHotel(t)).price)}</b><button class="btn" onclick="route('booking',${t.id})">رزرو سریع</button></div>`}
+function renderDetail(t){
+  if(!t)return;
+  const selected = t.hotels[selectedHotel] || minHotel(t);
+  const detailGallery = sectionOn(t,'gallery') ? `<div class="gallery">${[t.img,...(t.gallery||[])].slice(0,5).map(x=>`<img src="${x}" onclick="lightbox('${x}')">`).join('')}</div>` : '';
+  const descHtml = sectionOn(t,'description') ? `<p class="small">${t.desc||''}</p>` : '';
+  const flightHtml = sectionOn(t,'flightInfo') ? `<div class="info-grid">${info('مقصد',t.dest)}${info('مدت',t.duration)}${info('ایرلاین',t.airline)}${info('شماره پرواز',t.flightNumber)}${info('زمان پرواز',t.flightTime)}${info('زمان فرود',t.landingTime)}</div>` : '';
+  const datesHtml = sectionOn(t,'dates') ? dateOnly(t) : '';
+  const hotelsHtml = sectionOn(t,'hotels') ? `<h3>انتخاب هتل</h3><div class="stack">${t.hotels.map((h,i)=>`<div class="hotel ${i===selectedHotel?'selected':''} ${h.capacity<=0?'disabled':''}" onclick="${h.capacity>0?`selectedHotel=${i};renderDetail(findTour(${t.id}))`:''}"><div class="row"><b>${h.name} ${hotelStars(h.star)}</b><b>${money(h.price)}</b></div><small>${h.capacity>0?faNum(h.capacity)+' ظرفیت':'تکمیل ظرفیت'}</small></div>`).join('')}</div>` : '';
+  const itineraryHtml = sectionOn(t,'itinerary') ? `<div class="info"><small>برنامه سفر</small>${(t.itinerary||[]).map(x=>`<p class="small">• ${x}</p>`).join('')}</div>` : '';
+  const docsHtml = sectionOn(t,'docs') ? `<div class="info"><small>مدارک لازم</small>${(t.docs||[]).map(x=>`<p class="small">• ${x}</p>`).join('')}</div>` : '';
+  const includesHtml = sectionOn(t,'includes') ? `<div class="info"><small>خدمات شامل</small>${(t.includes||[]).map(x=>`<p class="small">✓ ${x}</p>`).join('')}</div>` : '';
+  const excludesHtml = sectionOn(t,'excludes') ? `<div class="info"><small>خدمات غیرشامل</small>${(t.excludes||[]).map(x=>`<p class="small">× ${x}</p>`).join('')}</div>` : '';
+  const blocks = [itineraryHtml,docsHtml,includesHtml,excludesHtml].filter(Boolean).join('');
+  const blocksHtml = blocks ? `<div class="g2 grid" style="margin-top:18px">${blocks}</div>` : '';
+  const policyBits = [];
+  if(sectionOn(t,'cancellation')) policyBits.push(`<p class="small">قوانین کنسلی: ${t.cancellation||'—'}</p>`);
+  if(sectionOn(t,'childPolicy')) policyBits.push(`<p class="small">شرایط کودک: ${t.childPolicy||'—'}</p>`);
+  const policyHtml = policyBits.length ? `<div class="info" style="margin-top:14px"><small>قوانین و شرایط</small>${policyBits.join('')}</div>` : '';
+  const reviewsHtml = sectionOn(t,'reviews') && (t.reviews||[]).length ? `<h3>نظر مسافران</h3><div class="g2 grid">${(t.reviews||[]).map(r=>`<div class="info"><div class="row"><b>${r.name}</b><span style="color:#f59e0b">${'★'.repeat(r.rate||5)}</span></div><p class="small">${r.text}</p></div>`).join('')}</div>` : '';
+  $('app').innerHTML=`${buyerTabs()}<button class="soft" onclick="route('home')">بازگشت</button>
+  <section class="card pad" style="margin-top:16px">
+    <div class="badges">${badges(t)}</div>
+    <img class="detail-img" src="${t.img||DEFAULT_IMG}">
+    ${detailGallery}
+    <div class="row wrap" style="margin-top:18px">
+      <div><h1>${t.title}</h1>${descHtml}</div>
+      <button class="soft" onclick="toggleWish(${t.id})">♡ علاقه‌مندی</button>
+    </div>
+    ${flightHtml}
+    ${datesHtml}
+    ${hotelsHtml}
+    ${blocksHtml}
+    ${policyHtml}
+    ${reviewsHtml}
+    <div class="row wrap" style="border-top:1px solid var(--b);margin-top:18px;padding-top:18px">
+      <div><small class="small">قیمت هتل انتخاب‌شده</small><div class="price">${money(selected.price)}</div></div>
+      <button class="btn" onclick="route('booking',${t.id})">رزرو نهایی</button>
+    </div>
+  </section>
+  <div class="sticky-cta"><b>${money(selected.price)}</b><button class="btn" onclick="route('booking',${t.id})">رزرو سریع</button></div>`;
+}
 function info(l,v){return `<div class="info"><small>${l}</small><b>${v||'—'}</b></div>`}
 
 function dateOnly(t){
