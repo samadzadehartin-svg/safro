@@ -72,7 +72,7 @@ function footer(type){
       <a href="../admin/index.html"><i class="fa-solid fa-chart-line"></i>مدیریت</a>
     </nav>`;
 
-  return `<footer class="footer"><b>سفر رو</b><br>${type === 'buyer' ? 'خرید و رزرو آنلاین تور' : 'پنل داخلی سفر رو'}</footer>${type === 'buyer' ? buyerBottom : privateBottom}`;
+  return `<footer class="footer"><b>سفرو ایرانیان</b><br>${type === 'buyer' ? 'خرید و رزرو آنلاین تورهای داخلی و خارجی' : 'پنل داخلی سفر رو'}<br><span style="font-size:11px;color:var(--t2)">۰۲۱-۴۹۹۷۶ | تهران، بلوار فردوس شرق، بعد از عقیل، پلاک ۳۵۱</span></footer>${type === 'buyer' ? buyerBottom : privateBottom}`;
 }
 
 function mount(type){

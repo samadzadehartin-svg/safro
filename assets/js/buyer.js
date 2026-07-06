@@ -204,9 +204,42 @@ function consultPopupHtml(){
   </div>`;
 }
 
+
+function aboutContactSection(){
+  return `<section class="about-contact-section">
+    <div class="about-contact-grid">
+      <div class="about-box">
+        <span class="badge special">درباره سفرو ایرانیان</span>
+        <h2>همراه مطمئن سفرهای داخلی و خارجی</h2>
+        <p>سفرو ایرانیان با تمرکز روی تورهای داخلی و خارجی، تلاش می‌کند انتخاب سفر را ساده‌تر، شفاف‌تر و مطمئن‌تر کند. از مشاوره و انتخاب مقصد تا رزرو تور، هتل و پیگیری سفر، تیم سفرو کنار مسافر می‌ماند.</p>
+        <div class="about-points">
+          <div class="about-point"><i class="fa-solid fa-calendar-check"></i> رزروهای انعطاف‌پذیر</div>
+          <div class="about-point"><i class="fa-solid fa-headset"></i> پشتیبانی ۲۴/۷</div>
+          <div class="about-point"><i class="fa-solid fa-tags"></i> نرخ‌های رقابتی</div>
+          <div class="about-point"><i class="fa-solid fa-shuttle-van"></i> خدمات کامل سفر</div>
+        </div>
+      </div>
+      <div class="contact-box">
+        <span class="badge domestic">ارتباط با ما</span>
+        <h2>سفرو ایرانیان</h2>
+        <div class="contact-list">
+          <div class="contact-row"><i class="fa-solid fa-phone"></i><div><b>تلفن تماس</b><a href="tel:02149976" dir="ltr">۰۲۱-۴۹۹۷۶</a></div></div>
+          <div class="contact-row"><i class="fa-solid fa-envelope"></i><div><b>ایمیل</b><a href="mailto:info@safaroiranian.com" dir="ltr">info@safaroiranian.com</a></div></div>
+          <div class="contact-row"><i class="fa-solid fa-location-dot"></i><div><b>آدرس</b><span>تهران، بلوار فردوس شرق، بعد از عقیل، پلاک ۳۵۱، طبقه ۱</span></div></div>
+          <div class="contact-row"><i class="fa-solid fa-globe"></i><div><b>وب‌سایت رسمی</b><a href="https://safaroiranian.com/" target="_blank">safaroiranian.com</a></div></div>
+        </div>
+        <div class="contact-actions">
+          <a class="btn" href="tel:02149976"><i class="fa-solid fa-phone-volume"></i> تماس فوری</a>
+          <a class="soft" href="https://safaroiranian.com/about-us/" target="_blank">درباره ما</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
- $('app').innerHTML=`${buyerTabs()}${consultationSection()}${trustSection()}${consultPopupHtml()}
+ $('app').innerHTML=`${buyerTabs()}${consultationSection()}${trustSection()}${aboutContactSection()}${consultPopupHtml()}
  <section><div class="row wrap"><h2>پیشنهادهای لحظه آخری</h2><span class="small">تخفیف‌دار و ظرفیت محدود</span></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
  <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div><span class="small">فیلترها ساده و سریع طراحی شده‌اند</span></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
