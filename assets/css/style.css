@@ -1,3 +1,4 @@
+@import url("https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css");
 :root{--p:#4a9fd8;--pl:#73c3ee;--a:#e8a838;--bg:#f0f4fa;--c:#fff;--t:#0b1a2e;--t2:#64748b;--t3:#94a3b8;--b:#e2e8f0;--ok:#10b981;--no:#ef4444;--wr:#f59e0b;--gl:rgba(255,255,255,.92);--sh:0 18px 45px rgba(15,23,42,.12)}
 .dark{--bg:#0b1222;--c:#131d30;--t:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--b:#1e293b;--gl:rgba(19,29,48,.92);--sh:0 18px 45px rgba(0,0,0,.32)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font-family:'Vazirmatn',sans-serif;overflow-x:hidden}a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:inherit}button{cursor:pointer}
@@ -470,4 +471,10 @@ body{
 @media(max-width:900px){
   .about-contact-grid{grid-template-columns:1fr}
   .about-points{grid-template-columns:1fr}
+}
+
+
+/* Vazirmatn global font */
+html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,strong,table{
+  font-family:"Vazirmatn","Vazir","Tahoma",sans-serif!important;
 }
