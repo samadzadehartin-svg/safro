@@ -26,3 +26,10 @@
 .toast{position:fixed;left:18px;bottom:20px;z-index:300;background:#0f172a;color:#fff;border-radius:15px;padding:12px 16px;font-size:12px;font-weight:900;opacity:0;transform:translateY(12px);transition:.25s}.toast.on{opacity:1;transform:translateY(0)}
 .login-box{max-width:430px;margin:45px auto}.footer{margin-top:50px;padding:28px;text-align:center;background:var(--c);border-top:4px solid var(--a);color:var(--t2);font-size:12px}.hidden{display:none!important}
 @media(max-width:900px){.links{display:none}.hero{padding:28px}.hero h1{font-size:29px}.grid,.g2,.g3,.g4,.filter-grid,.info-grid{grid-template-columns:1fr}.container{padding:0 12px}.detail-img{height:245px}.gallery{grid-template-columns:1fr 1fr}.gallery img:first-child{grid-column:span 2;height:210px}.bottom-nav{display:flex}.sticky-cta{display:flex}.dock{bottom:145px;width:calc(100% - 20px);justify-content:space-between}.calendar-grid{gap:4px}.cal-day{min-height:48px}}
+
+
+.hotel-stars{display:inline-flex;gap:2px;margin-right:6px;vertical-align:middle}
+.hotel-stars i{color:#fbbf24;text-shadow:0 1px 0 #92400e,0 0 8px rgba(251,191,36,.55);font-size:13px}
+.rating-star{color:#fbbf24;text-shadow:0 1px 0 #92400e,0 0 8px rgba(251,191,36,.45);font-weight:1000}
+.date-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin:14px 0}
+.date-only-title{margin-top:18px;margin-bottom:8px;font-weight:1000}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 720 430">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#7c3aed"/>
+</linearGradient>
+<filter id="s"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#0f172a" flood-opacity=".24"/></filter>
+</defs>
+<rect width="720" height="430" fill="url(#g)"/>
+<circle cx="105" cy="90" r="56" fill="#fff7ed" opacity=".45"/>
+<circle cx="610" cy="72" r="35" fill="#fff" opacity=".2"/>
+<g filter="url(#s)">
+<rect x="345" y="95" width="30" height="250" rx="9" fill="#facc15"/>
+<polygon points="360,45 405,350 315,350" fill="none" stroke="#fff7ed" stroke-width="14"/>
+<line x1="300" y1="220" x2="420" y2="220" stroke="#fff7ed" stroke-width="12"/>
+<line x1="300" y1="350" x2="420" y2="350" stroke="#fff7ed" stroke-width="18" stroke-linecap="round"/>
+</g>
+<rect y="318" width="720" height="112" fill="rgba(15,23,42,.34)"/>
+<text x="360" y="365" text-anchor="middle" font-family="Tahoma,Arial" font-size="34" font-weight="900" fill="#ffffff">Paris</text>
+<text x="360" y="398" text-anchor="middle" font-family="Tahoma,Arial" font-size="18" font-weight="700" fill="#e0f2fe">Eiffel Tower</text>
+</svg>

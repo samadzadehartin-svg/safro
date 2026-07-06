@@ -1,3 +1,4 @@
+function hotelStars(n){return `<span class="hotel-stars">${Array.from({length:Number(n)||0}).map(()=>'<i class="fa-solid fa-star"></i>').join('')}</span>`}
 function initStaff(){mount('staff');if(!authGate('staff'))return renderLogin();renderStaff()}
 function renderLogin(){$('app').innerHTML=`<div class="card pad login-box"><h2>ورود کارمند</h2><p class="small">رمز دمو: staff123</p><input id="pass" class="field" type="password" placeholder="رمز"><button class="btn" style="width:100%;margin-top:12px" onclick="doLogin()">ورود</button></div>`}
 function doLogin(){if(loginRole('staff',$('pass').value))location.reload();else alert('رمز اشتباه است')}

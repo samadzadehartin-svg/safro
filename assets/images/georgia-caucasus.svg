@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 720 430">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#22c55e"/><stop offset="1" stop-color="#0369a1"/>
+</linearGradient>
+<filter id="s"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#0f172a" flood-opacity=".24"/></filter>
+</defs>
+<rect width="720" height="430" fill="url(#g)"/>
+<circle cx="105" cy="90" r="56" fill="#fff7ed" opacity=".45"/>
+<circle cx="610" cy="72" r="35" fill="#fff" opacity=".2"/>
+<g filter="url(#s)">
+<path d="M0 340 L110 230 L170 290 L270 160 L390 330 L480 230 L720 350 L720 430 L0 430 Z" fill="#fef3c7"/>
+<path d="M260 175 L300 240 L230 240 Z" fill="#ffffff"/>
+<path d="M475 235 L510 285 L435 285 Z" fill="#ffffff"/>
+</g>
+<rect y="318" width="720" height="112" fill="rgba(15,23,42,.34)"/>
+<text x="360" y="365" text-anchor="middle" font-family="Tahoma,Arial" font-size="34" font-weight="900" fill="#ffffff">Georgia</text>
+<text x="360" y="398" text-anchor="middle" font-family="Tahoma,Arial" font-size="18" font-weight="700" fill="#e0f2fe">Caucasus Mountains</text>
+</svg>
