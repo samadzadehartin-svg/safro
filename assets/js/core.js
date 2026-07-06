@@ -7,6 +7,7 @@ function write(k,v){localStorage.setItem(PREFIX+k,JSON.stringify(v))}
 function seed(){if(!read('tours',null))write('tours',DEFAULT_TOURS);if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS)}
 function tours(){return read('tours',DEFAULT_TOURS)}function saveTours(v){write('tours',v)}
 function orders(){return read('orders',[])}function saveOrders(v){write('orders',v)}
+function leads(){return read('leads',[])}function saveLeads(v){write('leads',v)}
 function discounts(){return read('discounts',DEFAULT_DISCOUNTS)}function saveDiscounts(v){write('discounts',v)}
 function wishlist(){return read('wish',[])}function saveWish(v){write('wish',v)}
 function findTour(id){return tours().find(t=>Number(t.id)===Number(id))}

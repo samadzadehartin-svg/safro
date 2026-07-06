@@ -1,4 +1,5 @@
 let view='home',currentCat='all',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
+const MANAGER_WHATSAPP='989126144939';
 function hotelStars(n){return `<span class="hotel-stars">${Array.from({length:Number(n)||0}).map(()=>'<i class="fa-solid fa-star"></i>').join('')}</span>`}
 function ratingStar(){return '<span class="rating-star">★</span>'}
 function defaultSections(){
@@ -26,11 +27,191 @@ function initBuyer(){mount('buyer');route('home');setInterval(()=>document.query
 function route(v,id){view=v;if(v==='detail')selectedTour=id;if(v==='booking'){booking.tourId=id;booking.hotel=0;booking.step=1;const t=findTour(id);booking.date=t?.dates?.[0]||null}renderBuyer()}
 function renderBuyer(){if(view==='home')return renderHome();if(view==='detail')return renderDetail(findTour(selectedTour));if(view==='booking')return renderBooking(findTour(booking.tourId));if(view==='wish')return renderWish();if(view==='mine')return renderMine()}
 function buyerTabs(){return `<div class="catbar"><button onclick="route('home')" class="${view==='home'?'active':''}">خانه خریدار</button><button onclick="route('wish')" class="${view==='wish'?'active':''}">علاقه‌مندی‌ها</button><button onclick="route('mine')" class="${view==='mine'?'active':''}">رزروهای من</button></div>`}
+
+function sendLeadToWhatsApp(lead){
+  const msg = `درخواست مشاوره جدید سفر رو
+نام: ${lead.name || '—'}
+شماره: ${lead.phone}
+مقصد: ${lead.dest || '—'}
+تعداد نفرات: ${lead.people || '—'}
+توضیح: ${lead.note || '—'}
+منبع: ${lead.source || 'سایت'}
+کد: ${lead.id}`;
+  const url = `https://wa.me/${MANAGER_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  const w = window.open(url,'_blank');
+  if(!w){
+    const box = $('leadStatus') || $('popupLeadStatus');
+    if(box){
+      box.innerHTML = `درخواست ثبت شد. برای ارسال به واتس‌اپ مدیر، <a href="${url}" target="_blank">اینجا بزنید</a>.`;
+      box.classList.add('on');
+    }
+  }
+}
+
+function buildLeadFromForm(prefix){
+  return {
+    id:'LEAD-' + Date.now().toString().slice(-6),
+    name:$(prefix+'Name')?.value?.trim() || '',
+    phone:$(prefix+'Phone')?.value?.trim() || '',
+    dest:$(prefix+'Dest')?.value?.trim() || '',
+    people:$(prefix+'People')?.value || '',
+    note:$(prefix+'Note')?.value?.trim() || '',
+    source:prefix==='popupLead'?'پاپ‌آپ مشاوره بعد از مشاهده تور':'تور خودتو بساز / صفحه اول',
+    status:'جدید',
+    createdAt:new Date().toISOString()
+  };
+}
+
+function saveLeadAndNotify(lead, statusId){
+  if(!lead.phone || lead.phone.length < 8){
+    alert('لطفاً شماره تماس معتبر وارد کنید');
+    return false;
+  }
+  const list = leads();
+  list.unshift(lead);
+  saveLeads(list);
+  localStorage.setItem('safarro_popup_done','1');
+
+  const box = $(statusId);
+  if(box){
+    box.textContent = 'شماره شما ثبت شد. پیام آماده برای واتس‌اپ مدیر باز می‌شود.';
+    box.classList.add('on');
+  }
+
+  sendLeadToWhatsApp(lead);
+  showToast('شماره ثبت شد و پیام واتس‌اپ آماده شد');
+  return true;
+}
+
+function submitConsultation(e){
+  e.preventDefault();
+  const lead = buildLeadFromForm('lead');
+  if(saveLeadAndNotify(lead,'leadStatus')){
+    e.target.reset();
+  }
+}
+
+function submitPopupConsultation(e){
+  e.preventDefault();
+  const lead = buildLeadFromForm('popupLead');
+  if(saveLeadAndNotify(lead,'popupLeadStatus')){
+    e.target.reset();
+    setTimeout(closeConsultPopup,1200);
+  }
+}
+
+function closeConsultPopup(){
+  const p=$('consultPopup');
+  if(p) p.classList.remove('on');
+  localStorage.setItem('safarro_popup_closed','1');
+}
+
+function openConsultPopup(){
+  if(localStorage.getItem('safarro_popup_done')==='1') return;
+  const p=$('consultPopup');
+  if(p) p.classList.add('on');
+}
+
+function countTourViewAndMaybePopup(){
+  const n = Number(localStorage.getItem('safarro_tour_views')||0) + 1;
+  localStorage.setItem('safarro_tour_views', String(n));
+  if(n>=2 && localStorage.getItem('safarro_popup_done')!=='1' && localStorage.getItem('safarro_popup_closed')!=='1'){
+    setTimeout(openConsultPopup, 900);
+  }
+}
+
+function consultationSection(){
+  return `<section class="build-tour-hero">
+    <div class="build-tour-grid">
+      <div>
+        <span class="badge special">تور اختصاصی سفر رو</span>
+        <h1 class="build-tour-title">تور خودتو بساز</h1>
+        <p class="consult-sub">مقصد، بودجه، تاریخ و سلیقه‌ات را وارد کن؛ کارشناس سفر رو بهترین ترکیب پرواز، هتل و خدمات را برایت پیشنهاد می‌دهد.</p>
+        <div class="build-tour-steps">
+          <div class="build-tour-step"><i class="fa-solid fa-location-dot"></i> مقصد و تاریخ دلخواهت را بگو</div>
+          <div class="build-tour-step"><i class="fa-solid fa-hotel"></i> هتل ۳، ۴ یا ۵ ستاره انتخاب کن</div>
+          <div class="build-tour-step"><i class="fa-solid fa-phone-volume"></i> کارشناس سفر رو با تو تماس می‌گیرد</div>
+        </div>
+      </div>
+      <form class="build-tour-card" onsubmit="submitConsultation(event)">
+        <div class="grid g2">
+          <input id="leadName" class="field" placeholder="نام شما">
+          <input id="leadPhone" class="field" placeholder="شماره تماس *" dir="ltr">
+          <input id="leadDest" class="field" placeholder="مقصد دلخواه">
+          <select id="leadPeople" class="field">
+            <option value="">تعداد نفرات</option>
+            <option>۱ نفر</option>
+            <option>۲ نفر</option>
+            <option>۳ نفر</option>
+            <option>۴ نفر یا بیشتر</option>
+          </select>
+        </div>
+        <textarea id="leadNote" class="field" rows="3" style="margin-top:10px" placeholder="مثلاً: استانبول، هتل ۵ ستاره، بودجه ۳۰ میلیون، آخر هفته"></textarea>
+        <button class="gold" style="width:100%;margin-top:12px" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> ثبت درخواست ساخت تور</button>
+        <div id="leadStatus" class="lead-status"></div>
+        <div class="whatsapp-note">بعد از ثبت، پیام آماده به واتس‌اپ مدیر با شماره ۰۹۱۲۶۱۴۴۹۳۹ باز می‌شود.</div>
+      </form>
+    </div>
+  </section>`;
+}
+
+function trustSection(){
+  return `<section class="trust-section">
+    <div class="trust-card">
+      <div class="trust-content">
+        <div class="trust-head">
+          <div>
+            <span class="badge domestic">چرا سفر رو؟</span>
+            <h2>خرید تور با خیال راحت</h2>
+          </div>
+          <span class="small">بعد از ارسال عکس مرجع، ظاهر این بخش دقیق‌تر شبیه نمونه سفر رو می‌شود.</span>
+        </div>
+        <div class="trust-items">
+          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-headset"></i></div><b>پشتیبانی قبل و بعد از خرید</b><p>کارشناس‌ها از انتخاب تور تا زمان سفر همراهت هستند.</p></div>
+          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-hotel"></i></div><b>انتخاب آزاد هتل</b><p>برای هر تور می‌توانی هتل ۳، ۴ یا ۵ ستاره را انتخاب کنی.</p></div>
+          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-shield-heart"></i></div><b>شفافیت قیمت و ظرفیت</b><p>قیمت، ظرفیت و خدمات تور واضح نمایش داده می‌شود.</p></div>
+          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-ticket"></i></div><b>پیگیری رزرو</b><p>با شماره موبایل یا کد پیگیری، وضعیت رزروت را ببین.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+
+function consultPopupHtml(){
+  return `<div id="consultPopup" class="popup-backdrop">
+    <div class="consult-popup">
+      <button class="popup-close" onclick="closeConsultPopup()">×</button>
+      <span class="badge special">مشاوره رایگان</span>
+      <div class="popup-title">هنوز بین تورها مرددی؟</div>
+      <p class="popup-desc">شماره‌ات را بگذار تا کارشناس سفر رو با توجه به مقصد، بودجه و تاریخ سفرت بهترین پیشنهاد را بدهد.</p>
+      <form onsubmit="submitPopupConsultation(event)">
+        <div class="grid g2">
+          <input id="popupLeadName" class="field" placeholder="نام شما">
+          <input id="popupLeadPhone" class="field" placeholder="شماره تماس *" dir="ltr">
+          <input id="popupLeadDest" class="field" placeholder="مقصد موردنظر">
+          <select id="popupLeadPeople" class="field">
+            <option value="">تعداد نفرات</option>
+            <option>۱ نفر</option>
+            <option>۲ نفر</option>
+            <option>۳ نفر</option>
+            <option>۴ نفر یا بیشتر</option>
+          </select>
+        </div>
+        <textarea id="popupLeadNote" class="field" rows="3" style="margin-top:10px" placeholder="توضیح کوتاه، بودجه یا تاریخ دلخواه"></textarea>
+        <button class="btn" style="width:100%;margin-top:12px" type="submit"><i class="fa-brands fa-whatsapp"></i> ثبت و ارسال به واتس‌اپ مدیر</button>
+        <div id="popupLeadStatus" class="lead-status"></div>
+      </form>
+      <div class="whatsapp-note">این نسخه بدون بک‌اند است؛ برای پیامک خودکار واقعی باید پنل پیامکی وصل شود.</div>
+    </div>
+  </div>`;
+}
+
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
- $('app').innerHTML=`${buyerTabs()}<section class="hero"><span class="badge special">پنل خریدار</span><h1>خرید تور، رزرو هتل و پیگیری سفارش در یک پنل</h1><p>همه بخش‌های خریدار، شامل جزئیات تور، رزرو، علاقه‌مندی و رزروهای من، داخل همین پنل نمایش داده می‌شود.</p></section>
- <section><div class="row wrap"><h2>تورهای لحظه آخری</h2><span class="small">با تایمر تخفیف</span></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
- <section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
+ $('app').innerHTML=`${buyerTabs()}${consultationSection()}${trustSection()}${consultPopupHtml()}
+ <section><div class="row wrap"><h2>پیشنهادهای لحظه آخری</h2><span class="small">تخفیف‌دار و ظرفیت محدود</span></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
+ <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div><span class="small">فیلترها ساده و سریع طراحی شده‌اند</span></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
  <div class="row"><h2>تورها</h2><b id="tourCount">۰</b></div><section id="tourGrid" class="grid g3"></section>
  <div id="compareDock" class="dock"><b><i class="fa-solid fa-code-compare"></i> <span id="compareCount">۰</span> تور برای مقایسه</b><div class="actions"><button class="soft" onclick="openCompare()">مقایسه</button><button class="danger" onclick="clearCompare()">پاک کردن</button></div></div>
@@ -53,6 +234,7 @@ function openCompare(){const list=[...compare].map(id=>findTour(id)).filter(Bool
 function closeCompare(){$('compareModal').classList.remove('on')}
 function renderDetail(t){
   if(!t)return;
+  countTourViewAndMaybePopup();
   const selected = t.hotels[selectedHotel] || minHotel(t);
   const detailGallery = sectionOn(t,'gallery') ? `<div class="gallery">${[t.img,...(t.gallery||[])].slice(0,5).map(x=>`<img src="${x}" onclick="lightbox('${x}')">`).join('')}</div>` : '';
   const descHtml = sectionOn(t,'description') ? `<p class="small">${t.desc||''}</p>` : '';
