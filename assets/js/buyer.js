@@ -74,12 +74,12 @@ function saveLeadAndNotify(lead, statusId){
 
   const box = $(statusId);
   if(box){
-    box.textContent = 'شماره شما ثبت شد. پیام آماده برای واتس‌اپ مدیر باز می‌شود.';
+    box.textContent = 'درخواست شما ثبت شد.';
     box.classList.add('on');
   }
 
   sendLeadToWhatsApp(lead);
-  showToast('شماره ثبت شد و پیام واتس‌اپ آماده شد');
+  showToast('درخواست مشاوره ثبت شد');
   return true;
 }
 
@@ -126,7 +126,7 @@ function consultationSection(){
       <div>
         <span class="badge special">تور اختصاصی سفر رو</span>
         <h1 class="build-tour-title">تور خودتو بساز</h1>
-        <p class="consult-sub">مقصد، بودجه، تاریخ و سلیقه‌ات را وارد کن؛ کارشناس سفر رو بهترین ترکیب پرواز، هتل و خدمات را برایت پیشنهاد می‌دهد.</p>
+        <p class="consult-sub">مقصد، تاریخ و بودجه‌ات را بگو؛ ما بهترین پیشنهاد سفر را برایت آماده می‌کنیم.</p>
         <div class="build-tour-steps">
           <div class="build-tour-step"><i class="fa-solid fa-location-dot"></i> مقصد و تاریخ دلخواهت را بگو</div>
           <div class="build-tour-step"><i class="fa-solid fa-hotel"></i> هتل ۳، ۴ یا ۵ ستاره انتخاب کن</div>
@@ -147,9 +147,8 @@ function consultationSection(){
           </select>
         </div>
         <textarea id="leadNote" class="field" rows="3" style="margin-top:10px" placeholder="مثلاً: استانبول، هتل ۵ ستاره، بودجه ۳۰ میلیون، آخر هفته"></textarea>
-        <button class="gold" style="width:100%;margin-top:12px" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> ثبت درخواست ساخت تور</button>
+        <button class="gold" style="width:100%;margin-top:12px" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> ساخت تور اختصاصی</button>
         <div id="leadStatus" class="lead-status"></div>
-        <div class="whatsapp-note">بعد از ثبت، پیام آماده به واتس‌اپ مدیر با شماره ۰۹۱۲۶۱۴۴۹۳۹ باز می‌شود.</div>
       </form>
     </div>
   </section>`;
@@ -164,7 +163,6 @@ function trustSection(){
             <span class="badge domestic">چرا سفر رو؟</span>
             <h2>خرید تور با خیال راحت</h2>
           </div>
-          <span class="small">بعد از ارسال عکس مرجع، ظاهر این بخش دقیق‌تر شبیه نمونه سفر رو می‌شود.</span>
         </div>
         <div class="trust-items">
           <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-headset"></i></div><b>پشتیبانی قبل و بعد از خرید</b><p>کارشناس‌ها از انتخاب تور تا زمان سفر همراهت هستند.</p></div>
@@ -183,8 +181,8 @@ function consultPopupHtml(){
     <div class="consult-popup">
       <button class="popup-close" onclick="closeConsultPopup()">×</button>
       <span class="badge special">مشاوره رایگان</span>
-      <div class="popup-title">هنوز بین تورها مرددی؟</div>
-      <p class="popup-desc">شماره‌ات را بگذار تا کارشناس سفر رو با توجه به مقصد، بودجه و تاریخ سفرت بهترین پیشنهاد را بدهد.</p>
+      <div class="popup-title">برای انتخاب تور کمک می‌خوای؟</div>
+      <p class="popup-desc">شماره‌ات را وارد کن تا کارشناس سفر رو با تو تماس بگیرد.</p>
       <form onsubmit="submitPopupConsultation(event)">
         <div class="grid g2">
           <input id="popupLeadName" class="field" placeholder="نام شما">
@@ -199,10 +197,9 @@ function consultPopupHtml(){
           </select>
         </div>
         <textarea id="popupLeadNote" class="field" rows="3" style="margin-top:10px" placeholder="توضیح کوتاه، بودجه یا تاریخ دلخواه"></textarea>
-        <button class="btn" style="width:100%;margin-top:12px" type="submit"><i class="fa-brands fa-whatsapp"></i> ثبت و ارسال به واتس‌اپ مدیر</button>
+        <button class="btn" style="width:100%;margin-top:12px" type="submit"><i class="fa-brands fa-whatsapp"></i> ثبت درخواست مشاوره</button>
         <div id="popupLeadStatus" class="lead-status"></div>
       </form>
-      <div class="whatsapp-note">این نسخه بدون بک‌اند است؛ برای پیامک خودکار واقعی باید پنل پیامکی وصل شود.</div>
     </div>
   </div>`;
 }

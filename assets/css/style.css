@@ -198,3 +198,179 @@
 }
 .build-tour-step i{color:#fbbf24}
 @media(max-width:900px){.build-tour-grid{grid-template-columns:1fr}.build-tour-title{font-size:28px}}
+
+
+/* Minimal modern refresh */
+:root{
+  --radius-xl:28px;
+  --soft-shadow:0 16px 45px rgba(15,23,42,.08);
+}
+body{
+  background:
+    radial-gradient(circle at 10% 0%, rgba(74,159,216,.10), transparent 24%),
+    linear-gradient(180deg,#f8fafc 0%,#eef6fb 100%);
+}
+.card,.trust-card,.tour,.hotel,.info,.consult-popup,.build-tour-card{
+  box-shadow:var(--soft-shadow);
+}
+.header{
+  background:rgba(255,255,255,.76);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(226,232,240,.8);
+}
+.dark .header{background:rgba(11,16,32,.72)}
+.logo-icon{
+  box-shadow:none;
+}
+.build-tour-hero{
+  margin:24px 0 18px;
+  border-radius:34px;
+  padding:34px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.94),rgba(245,250,255,.92)),
+    radial-gradient(circle at 10% 15%, rgba(74,159,216,.13), transparent 30%);
+  color:var(--t);
+  border:1px solid rgba(226,232,240,.95);
+  box-shadow:0 24px 70px rgba(15,23,42,.08);
+}
+.dark .build-tour-hero{
+  background:linear-gradient(135deg,rgba(15,23,42,.92),rgba(15,32,48,.86));
+  border-color:rgba(148,163,184,.18);
+}
+.build-tour-hero:after{
+  display:none;
+}
+.build-tour-grid{
+  grid-template-columns:1.05fr .95fr;
+  gap:24px;
+}
+.build-tour-title{
+  color:var(--t);
+  font-size:42px;
+  letter-spacing:-1px;
+}
+.consult-sub{
+  color:var(--t2);
+  font-size:13px;
+  max-width:520px;
+}
+.build-tour-steps{
+  grid-template-columns:repeat(3,1fr);
+  display:grid;
+  gap:10px;
+  margin-top:20px;
+}
+.build-tour-step{
+  background:rgba(74,159,216,.08);
+  border:1px solid rgba(74,159,216,.14);
+  color:var(--t);
+  border-radius:18px;
+  padding:13px;
+  font-size:11px;
+}
+.build-tour-step i{
+  color:var(--p);
+}
+.build-tour-card{
+  background:#fff;
+  border:1px solid rgba(226,232,240,.9);
+  border-radius:26px;
+  padding:18px;
+  backdrop-filter:none;
+}
+.dark .build-tour-card{
+  background:rgba(15,23,42,.88);
+  border-color:rgba(148,163,184,.16);
+}
+.field{
+  border-radius:16px;
+  min-height:46px;
+}
+.btn,.gold,.soft{
+  border-radius:16px;
+}
+.gold{
+  background:linear-gradient(135deg,#0b6fa4,#4a9fd8);
+  color:#fff;
+  box-shadow:0 14px 30px rgba(74,159,216,.24);
+}
+.trust-card{
+  border-radius:28px;
+  padding:20px;
+  background:rgba(255,255,255,.86);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(226,232,240,.9);
+}
+.dark .trust-card{background:rgba(15,23,42,.78);border-color:rgba(148,163,184,.16)}
+.trust-card:before{
+  display:none;
+}
+.trust-head{
+  margin-bottom:16px;
+}
+.trust-head h2{
+  font-size:24px;
+  letter-spacing:-.4px;
+}
+.trust-items{
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.trust-item{
+  background:rgba(248,250,252,.88);
+  border:1px solid rgba(226,232,240,.9);
+  border-radius:20px;
+  padding:17px;
+  min-height:120px;
+  box-shadow:none;
+}
+.dark .trust-item{background:rgba(15,23,42,.55);border-color:rgba(148,163,184,.14)}
+.trust-icon{
+  width:40px;
+  height:40px;
+  border-radius:16px;
+  background:rgba(74,159,216,.10);
+  color:var(--p);
+  box-shadow:none;
+}
+.tours-anchor-title{
+  padding:4px 2px;
+}
+.tours-anchor-title h2{
+  font-size:25px;
+  letter-spacing:-.3px;
+}
+.popup-backdrop{
+  background:rgba(15,23,42,.44);
+}
+.consult-popup{
+  border-radius:30px;
+  padding:24px;
+  box-shadow:0 34px 100px rgba(15,23,42,.26);
+}
+.consult-popup:before{
+  background:rgba(74,159,216,.10);
+}
+.popup-title{
+  font-size:24px;
+  letter-spacing:-.4px;
+}
+.whatsapp-note{
+  display:none!important;
+}
+.lead-status{
+  background:rgba(16,185,129,.10);
+  color:#047857;
+  border:1px solid rgba(16,185,129,.18);
+}
+@media(max-width:900px){
+  .build-tour-steps{grid-template-columns:1fr}
+  .build-tour-title{font-size:31px}
+  .trust-items{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .build-tour-hero{padding:22px;border-radius:26px}
+  .build-tour-card{padding:14px}
+  .trust-items{grid-template-columns:1fr}
+  .trust-card{padding:15px}
+}
