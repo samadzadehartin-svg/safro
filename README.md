@@ -13,3 +13,8 @@
 - مدیریت: `admin123`
 
 برای اجرا بهتر است پوشه را در VS Code با Live Server باز کنید و وارد `buyer/index.html` شوید.
+
+
+## Vercel
+
+در ریشه پروژه فایل `index.html` و `vercel.json` اضافه شده تا آدرس اصلی سایت به `/buyer/` منتقل شود.
