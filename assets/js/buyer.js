@@ -1,5 +1,4 @@
 let view='home',currentCat='all',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
-const MANAGER_WHATSAPP='989126144939';
 function hotelStars(n){return `<span class="hotel-stars">${Array.from({length:Number(n)||0}).map(()=>'<i class="fa-solid fa-star"></i>').join('')}</span>`}
 function ratingStar(){return '<span class="rating-star">★</span>'}
 function defaultSections(){
@@ -28,25 +27,7 @@ function route(v,id){view=v;if(v==='detail')selectedTour=id;if(v==='booking'){bo
 function renderBuyer(){if(view==='home')return renderHome();if(view==='detail')return renderDetail(findTour(selectedTour));if(view==='booking')return renderBooking(findTour(booking.tourId));if(view==='wish')return renderWish();if(view==='mine')return renderMine()}
 function buyerTabs(){return `<div class="catbar"><button onclick="route('home')" class="${view==='home'?'active':''}">خانه خریدار</button><button onclick="route('wish')" class="${view==='wish'?'active':''}">علاقه‌مندی‌ها</button><button onclick="route('mine')" class="${view==='mine'?'active':''}">رزروهای من</button></div>`}
 
-function sendLeadToWhatsApp(lead){
-  const msg = `درخواست مشاوره جدید سفر رو
-نام: ${lead.name || '—'}
-شماره: ${lead.phone}
-مقصد: ${lead.dest || '—'}
-تعداد نفرات: ${lead.people || '—'}
-توضیح: ${lead.note || '—'}
-منبع: ${lead.source || 'سایت'}
-کد: ${lead.id}`;
-  const url = `https://wa.me/${MANAGER_WHATSAPP}?text=${encodeURIComponent(msg)}`;
-  const w = window.open(url,'_blank');
-  if(!w){
-    const box = $('leadStatus') || $('popupLeadStatus');
-    if(box){
-      box.innerHTML = `درخواست ثبت شد. برای ارسال به واتس‌اپ مدیر، <a href="${url}" target="_blank">اینجا بزنید</a>.`;
-      box.classList.add('on');
-    }
-  }
-}
+function sendLeadToWhatsApp(lead){ return; }
 
 function buildLeadFromForm(prefix){
   return {
@@ -126,7 +107,7 @@ function consultationSection(){
       <div>
         <span class="badge special">تور اختصاصی سفر رو</span>
         <h1 class="build-tour-title">تور خودتو بساز</h1>
-        <p class="consult-sub">مقصد، تاریخ و بودجه‌ات را بگو؛ ما بهترین پیشنهاد سفر را برایت آماده می‌کنیم.</p>
+        <p class="consult-sub"></p>
         <div class="build-tour-steps">
           <div class="build-tour-step"><i class="fa-solid fa-location-dot"></i> مقصد و تاریخ دلخواهت را بگو</div>
           <div class="build-tour-step"><i class="fa-solid fa-hotel"></i> هتل ۳، ۴ یا ۵ ستاره انتخاب کن</div>
@@ -241,7 +222,7 @@ function renderHome(){
  const list=tours().filter(t=>t.status==='active');
  $('app').innerHTML=`${buyerTabs()}${consultationSection()}${trustSection()}${consultPopupHtml()}
  <section><div class="row wrap"><h2>پیشنهادهای لحظه آخری</h2><span class="small">تخفیف‌دار و ظرفیت محدود</span></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
- <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div><span class="small">فیلترها ساده و سریع طراحی شده‌اند</span></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
+ <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
  <div class="row"><h2>تورها</h2><b id="tourCount">۰</b></div><section id="tourGrid" class="grid g3"></section>
  ${aboutContactSection()}
