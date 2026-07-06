@@ -1,0 +1,17 @@
+{
+  "name": "Safarro Three Panels",
+  "short_name": "سفر رو",
+  "start_url": "./buyer/index.html",
+  "display": "standalone",
+  "background_color": "#f0f4fa",
+  "theme_color": "#4a9fd8",
+  "dir": "rtl",
+  "lang": "fa",
+  "icons": [
+    {
+      "src": "https://dummyimage.com/192x192/4a9fd8/ffffff.png&text=S",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
