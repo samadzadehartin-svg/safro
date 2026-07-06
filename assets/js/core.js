@@ -25,8 +25,58 @@ function findDiscount(code,tour,gross){code=(code||'').trim().toUpperCase();if(!
 function authGate(role){return read(role+'_auth',false)}
 function loginRole(role,pass){if(role==='admin'&&pass==='admin123'){write('admin_auth',true);return true}if(role==='staff'&&pass==='staff123'){write('staff_auth',true);return true}return false}
 function logoutRole(role){write(role+'_auth',false);location.reload()}
-function layout(type){const root=type==='buyer'?'../buyer/index.html':'../buyer/index.html';return `
-<header class="header"><div class="container nav"><a class="logo" href="${root}"><span class="logo-icon"><i class="fa-solid fa-plane-departure"></i></span><span>سفر رو<small style="display:block;color:var(--p);font-size:9px;letter-spacing:2px">SAFARRO</small></span></a><nav class="links"><a href="../buyer/index.html">پنل خریدار</a><a href="../staff/index.html">پنل کارمند</a><a href="../admin/index.html">پنل مدیریت</a></nav><div class="actions"><button class="soft" onclick="toggleDark()"><i class="fa-solid fa-moon"></i></button><span class="soft"><i class="fa-regular fa-heart"></i><span id="wishCount">۰</span></span></div></div></header>`}
-function footer(){return `<footer class="footer"><b>سفر رو</b><br>ساختار سه‌پنلی: خریدار، کارمند، مدیریت</footer><nav class="bottom-nav"><a href="../buyer/index.html"><i class="fa-solid fa-house"></i>خریدار</a><a href="../staff/index.html"><i class="fa-regular fa-user-pen"></i>کارمند</a><a href="../admin/index.html"><i class="fa-solid fa-chart-line"></i>مدیریت</a></nav>`}
-function mount(type){$('headerMount').innerHTML=layout(type);$('footerMount').innerHTML=footer();updateWishCount()}
+function layout(type){
+  const buyerLinks = `
+    <a href="../buyer/index.html">خانه</a>
+    <a href="#" onclick="route('wish');return false;">علاقه‌مندی‌ها</a>
+    <a href="#" onclick="route('mine');return false;">رزروهای من</a>
+  `;
+
+  const privateLinks = `
+    <a href="../buyer/index.html">پنل خریدار</a>
+    <a href="../staff/index.html">پنل کارمند</a>
+    <a href="../admin/index.html">پنل مدیریت</a>
+  `;
+
+  const links = type === 'buyer' ? buyerLinks : privateLinks;
+
+  return `
+<header class="header">
+  <div class="container nav">
+    <a class="logo" href="../buyer/index.html">
+      <span class="logo-icon"><i class="fa-solid fa-plane-departure"></i></span>
+      <span>سفر رو<small style="display:block;color:var(--p);font-size:9px;letter-spacing:2px">SAFARRO</small></span>
+    </a>
+    <nav class="links">${links}</nav>
+    <div class="actions">
+      <button class="soft" onclick="toggleDark()"><i class="fa-solid fa-moon"></i></button>
+      <span class="soft"><i class="fa-regular fa-heart"></i><span id="wishCount">۰</span></span>
+    </div>
+  </div>
+</header>`;
+}
+
+function footer(type){
+  const buyerBottom = `
+    <nav class="bottom-nav">
+      <a href="../buyer/index.html"><i class="fa-solid fa-house"></i>خانه</a>
+      <a href="#" onclick="route('wish');return false;"><i class="fa-regular fa-heart"></i>علاقه‌مندی</a>
+      <a href="#" onclick="route('mine');return false;"><i class="fa-regular fa-ticket"></i>رزروهای من</a>
+    </nav>`;
+
+  const privateBottom = `
+    <nav class="bottom-nav">
+      <a href="../buyer/index.html"><i class="fa-solid fa-house"></i>خریدار</a>
+      <a href="../staff/index.html"><i class="fa-regular fa-user-pen"></i>کارمند</a>
+      <a href="../admin/index.html"><i class="fa-solid fa-chart-line"></i>مدیریت</a>
+    </nav>`;
+
+  return `<footer class="footer"><b>سفر رو</b><br>${type === 'buyer' ? 'خرید و رزرو آنلاین تور' : 'پنل داخلی سفر رو'}</footer>${type === 'buyer' ? buyerBottom : privateBottom}`;
+}
+
+function mount(type){
+  $('headerMount').innerHTML = layout(type);
+  $('footerMount').innerHTML = footer(type);
+  updateWishCount();
+}
 document.addEventListener('DOMContentLoaded',()=>{seed();initTheme()});
