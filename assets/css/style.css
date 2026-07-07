@@ -1016,3 +1016,72 @@ html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,st
 .customer-trail-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
 .customer-trail-chip{font-size:11px;font-weight:900;background:var(--c);border:1px solid var(--b);border-radius:999px;padding:6px 9px}
 @media(max-width:900px){.visa-admin-grid{grid-template-columns:1fr}}
+
+
+/* Final Persian font and text visibility fix */
+@import url("https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css");
+
+html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,strong,table,th,td,label,option{
+  font-family:"Vazirmatn","Tahoma","Arial",sans-serif!important;
+  font-feature-settings:"ss01" 0;
+  text-rendering:optimizeLegibility;
+}
+
+body{
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+h1,h2,h3,h4,h5,h6,.tour-title,.price,.badge,.btn,.soft,.field,.label{
+  line-height:1.65!important;
+}
+
+.card,.pad,.info,.field,.btn,.soft,.badge,.tour-title,.small,.meta,.row,.nav,.links,.footer,.hotel,.visa-card,.hero-custom-tour-card{
+  overflow:visible;
+}
+
+button,.btn,.soft,.badge,.field,select,input,textarea{
+  min-height:unset;
+}
+
+.field,input,select,textarea{
+  padding-top:12px!important;
+  padding-bottom:12px!important;
+  line-height:1.8!important;
+}
+
+.badge{
+  padding-top:7px!important;
+  padding-bottom:7px!important;
+  white-space:normal;
+}
+
+.tour-title,h1,h2,h3,p,.small,.meta span,.info b,.info small,.hotel b,.hotel small,.visa-card h3,.visa-card p{
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+
+.hero-experience,
+.combined-hero-card,
+.hero-custom-tour-card,
+.visa-section,
+.card{
+  height:auto!important;
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+td,th{
+  vertical-align:middle;
+  line-height:1.8!important;
+}
+
+@media(max-width:768px){
+  h1{font-size:28px!important}
+  h2{font-size:22px!important}
+  h3{font-size:18px!important}
+  .hero-custom-tour-card h2{font-size:21px!important}
+}

@@ -3,7 +3,25 @@ function hotelStars(n){return `<span class="hotel-stars">${Array.from({length:Nu
 function defaultSections(){return{description:true,flightInfo:true,dates:true,hotels:true,gallery:true,itinerary:true,docs:true,includes:true,excludes:true,cancellation:true,childPolicy:true,reviews:true}}
 function sectionVal(id){return !!$(id)?.checked}
 function setSectionToggles(t){const v=Object.assign(defaultSections(),t?.sectionVisibility||{});Object.entries({visDescription:'description',visFlightInfo:'flightInfo',visDates:'dates',visHotels:'hotels',visItinerary:'itinerary',visDocs:'docs',visIncludes:'includes',visExcludes:'excludes',visCancellation:'cancellation',visChildPolicy:'childPolicy',visReviews:'reviews'}).forEach(([id,key])=>{if($(id))$(id).checked=v[key]!==false})}
-function initStaff(){mount('staff');if(!authGate('staff'))return renderLogin();renderStaff()}
+function currentStaffAccount(){
+  try{
+    const u=currentStaffUser();
+    if(!u)return null;
+    return staffAccounts().find(a=>a.username===u.username || a.id===u.id) || null;
+  }catch(e){return null}
+}
+function initStaff(){
+  mount('staff');
+  try{
+    if(!authGate('staff'))return renderLogin();
+    return renderStaff();
+  }catch(err){
+    console.error('staff panel error',err);
+    write('staff_auth',false);
+    write('currentStaffUser',null);
+    $('app').innerHTML=`<div class="card pad login-box"><h2>ورود پنل فروش</h2><p class="small">پنل فروش به‌روزرسانی شد. برای ورود دوباره دکمه زیر را بزن.</p><button class="btn" style="width:100%" onclick="location.reload()">ورود مجدد</button></div>`;
+  }
+}
 function renderLogin(){$('app').innerHTML=`<div class="card pad login-box"><h2>ورود فروش</h2><p class="small">هر فروش با یوزرنیم و پسورد خودش وارد می‌شود. ورود دمو: فقط رمز staff123</p><input id="user" class="field" placeholder="یوزرنیم" dir="ltr"><input id="pass" class="field" type="password" placeholder="پسورد" dir="ltr"><button class="btn" style="width:100%;margin-top:12px" onclick="doLogin()">ورود</button></div>`}
 function doLogin(){if(loginRole('staff',$('pass').value,$('user').value))location.reload();else alert('یوزرنیم یا پسورد اشتباه است')}
 function renderStaff(){

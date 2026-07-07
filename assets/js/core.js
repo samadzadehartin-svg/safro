@@ -135,7 +135,7 @@ function loginRole(role,pass,username=''){
     const user=(username||'').trim();
     if(!user && pass==='staff123'){
       write('staff_auth',true);
-      write('currentStaffUser',{username:'demo-staff',name:'کارمند دمو'});
+      write('currentStaffUser',{username:'demo-staff',name:'فروش دمو'});
       return true;
     }
     const acc=staffAccounts().find(a=>a.username===user && a.password===pass && a.active!==false);
