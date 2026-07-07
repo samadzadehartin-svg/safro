@@ -478,3 +478,142 @@ body{
 html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,strong,table{
   font-family:"Vazirmatn","Vazir","Tahoma",sans-serif!important;
 }
+
+
+.lead-tools{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:end;
+  margin-top:12px;
+}
+.staff-chip-list{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.staff-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid var(--b);
+  background:var(--bg);
+  color:var(--t);
+  border-radius:999px;
+  padding:8px 10px;
+  font-size:12px;
+  font-weight:900;
+}
+.staff-chip button{
+  border:none;
+  background:transparent;
+  color:#ef4444;
+  cursor:pointer;
+  font-weight:1000;
+}
+.lead-select{
+  min-width:135px;
+  border-radius:13px;
+  border:1px solid var(--b);
+  background:var(--c);
+  color:var(--t);
+  padding:9px;
+  font-family:inherit;
+  font-size:12px;
+}
+.lead-note-input{
+  min-width:160px;
+  border-radius:13px;
+  border:1px solid var(--b);
+  background:var(--c);
+  color:var(--t);
+  padding:9px;
+  font-family:inherit;
+  font-size:12px;
+}
+.lead-status-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  padding:6px 9px;
+  font-size:11px;
+  font-weight:1000;
+  background:rgba(74,159,216,.11);
+  color:var(--p);
+}
+.lead-status-badge.done{background:rgba(16,185,129,.12);color:#047857}
+.lead-status-badge.follow{background:rgba(251,191,36,.16);color:#92400e}
+.lead-status-badge.cancel{background:rgba(239,68,68,.12);color:#b91c1c}
+@media(max-width:900px){
+  .lead-tools{grid-template-columns:1fr}
+  .lead-select,.lead-note-input{min-width:120px}
+}
+
+
+.admin-mini-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:end}
+.hotel-admin-table input,.hotel-admin-table select,.staff-account-table input,.staff-account-table select{min-width:120px}
+.hotel-editor-star{
+  border:1px solid var(--b);
+  background:var(--c);
+  border-radius:20px;
+  padding:14px;
+  margin-bottom:12px;
+}
+.hotel-editor-star h4{
+  margin:0 0 10px;
+  font-weight:1000;
+}
+.hotel-edit-row{
+  display:grid;
+  grid-template-columns:1.1fr .75fr .65fr .52fr;
+  gap:8px;
+  align-items:center;
+  padding:8px;
+  border:1px solid var(--b);
+  border-radius:14px;
+  margin-bottom:8px;
+  background:var(--bg);
+}
+.hotel-name-latin{
+  direction:ltr;
+  text-align:left;
+  font-weight:900;
+  color:var(--t);
+}
+.hotel-star-group{
+  margin:14px 0;
+  border:1px solid var(--b);
+  border-radius:20px;
+  padding:12px;
+  background:var(--bg);
+}
+.hotel-star-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.batch-box{
+  margin:16px 0;
+  border:1px solid var(--b);
+  border-radius:22px;
+  padding:16px;
+  background:var(--c);
+}
+.batch-options{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.last-edited{
+  font-size:11px;
+  color:var(--t3);
+}
+@media(max-width:900px){
+  .admin-mini-grid{grid-template-columns:1fr}
+  .hotel-edit-row{grid-template-columns:1fr}
+}
