@@ -245,28 +245,58 @@ function aboutContactSection(){
 
 function referenceHeroSection(){
   const activeCount = tours().filter(t=>t.status==='active').length;
-  return `<div class="hero-experience relative overflow-hidden mb-7 text-white">
-    <div class="relative z-10 p-7 md:p-11">
-      <span class="inline-flex items-center gap-1.5 text-[.62rem] font-black px-3 py-1 rounded-full mb-3" style="background:var(--a);color:#78350f">
-        <i class="fa-solid fa-bolt"></i>بروزرسانی لحظه‌ای قیمت و ظرفیت
-      </span>
-      <div class="hero-copy">
-        <h1 class="text-2xl md:text-5xl font-black leading-tight mb-3">سفر رو؛ تور دلخواهت با <span style="color:var(--a)">هتل دلخواهت</span></h1>
-        <p class="text-white/80 text-sm leading-relaxed max-w-2xl">تورهای داخلی و خارجی را با قیمت، ظرفیت و هتل واقعی مقایسه کن؛ انتخاب نهایی دست خودت است.</p>
+  return `<section class="hero-experience combined-hero-card">
+    <div class="combined-hero-grid">
+      <div class="combined-hero-copy">
+        <span class="inline-flex items-center gap-1.5 text-[.62rem] font-black px-3 py-1 rounded-full mb-3" style="background:var(--a);color:#78350f">
+          <i class="fa-solid fa-bolt"></i>بروزرسانی لحظه‌ای قیمت و ظرفیت
+        </span>
+        <div class="hero-copy">
+          <h1 class="text-2xl md:text-5xl font-black leading-tight mb-3">سفر رو؛ تور دلخواهت با <span style="color:var(--a)">هتل دلخواهت</span></h1>
+          <p class="text-white/80 text-sm leading-relaxed max-w-2xl">تورهای داخلی و خارجی را با قیمت، ظرفیت و هتل واقعی مقایسه کن؛ انتخاب نهایی دست خودت است.</p>
+        </div>
+        <div class="trust-strip">
+          <span class="trust-item"><i class="fa-solid fa-fire"></i><span>${faNum(activeCount)} تور فعال</span></span>
+          <span class="trust-item"><i class="fa-solid fa-star"></i><span>۴.۸ از ۵ رضایت مسافران</span></span>
+          <span class="trust-item"><i class="fa-solid fa-shield-halved"></i><span>قیمت شفاف و قابل مقایسه</span></span>
+        </div>
       </div>
-      <div class="trust-strip">
-        <span class="trust-item"><i class="fa-solid fa-fire"></i><span>${faNum(activeCount)} تور فعال</span></span>
-        <span class="trust-item"><i class="fa-solid fa-star"></i><span>۴.۸ از ۵ رضایت مسافران</span></span>
-        <span class="trust-item"><i class="fa-solid fa-shield-halved"></i><span>قیمت شفاف و قابل مقایسه</span></span>
-      </div>
+
+      <form class="hero-custom-tour-card" onsubmit="submitConsultation(event)">
+        <span class="badge special">تور اختصاصی سفر رو</span>
+        <h2>تور خودتو بساز</h2>
+        <p>مقصد، تعداد نفرات و توضیحاتت را بفرست تا کارشناس سفر رو برای ساخت تور اختصاصی با تو تماس بگیرد.</p>
+        <div class="hero-mini-steps">
+          <div class="hero-mini-step"><i class="fa-solid fa-location-dot"></i> مقصد و تاریخ دلخواهت را بگو</div>
+          <div class="hero-mini-step"><i class="fa-solid fa-hotel"></i> هتل ۳، ۴ یا ۵ ستاره انتخاب کن</div>
+          <div class="hero-mini-step"><i class="fa-solid fa-phone-volume"></i> کارشناس سفر رو با تو تماس می‌گیرد</div>
+        </div>
+        <div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
+        <div class="grid g2">
+          <input id="leadName" class="field" placeholder="نام شما">
+          <input id="leadPhone" class="field" placeholder="شماره تماس *" required dir="ltr">
+          <input id="leadDest" class="field" placeholder="مقصد دلخواه">
+          <select id="leadPeople" class="field">
+            <option value="">تعداد نفرات</option>
+            <option>۱ نفر</option>
+            <option>۲ نفر</option>
+            <option>۳ نفر</option>
+            <option>۴ نفر یا بیشتر</option>
+          </select>
+        </div>
+        <textarea id="leadNote" class="field" rows="3" style="margin-top:10px" placeholder="مثلاً: استانبول، هتل ۵ ستاره، بودجه ۳۰ میلیون، آخر هفته"></textarea>
+        <button class="gold" style="width:100%;margin-top:12px" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> ساخت تور اختصاصی</button>
+        <div id="leadStatus" class="lead-status"></div>
+      </form>
     </div>
-  </div>`;
+  </section>`;
 }
+
 
 
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
- $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${consultationSection()}${trustSection()}${consultPopupHtml()}
+ $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${trustSection()}${consultPopupHtml()}
  <section><div class="row wrap"><h2>قسمت ویژه</h2></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
  <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>

@@ -784,3 +784,117 @@ html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,st
     grid-template-columns:1fr;
   }
 }
+
+
+/* Combined hero + custom tour card */
+.hero-experience.combined-hero-card{
+  min-height:auto;
+  padding:0;
+}
+.combined-hero-grid{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(330px,.72fr);
+  gap:22px;
+  align-items:stretch;
+  padding:34px;
+}
+.combined-hero-copy{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:330px;
+}
+.hero-custom-tour-card{
+  background:rgba(255,255,255,.94);
+  color:var(--t);
+  border:1px solid rgba(255,255,255,.38);
+  border-radius:24px;
+  padding:20px;
+  box-shadow:0 22px 55px rgba(2,6,23,.20);
+  backdrop-filter:blur(16px);
+}
+.dark .hero-custom-tour-card{
+  background:rgba(19,29,48,.92);
+  color:var(--t);
+  border-color:rgba(255,255,255,.12);
+}
+.hero-custom-tour-card .badge{
+  margin-bottom:8px;
+}
+.hero-custom-tour-card h2{
+  font-size:26px;
+  line-height:1.45;
+  font-weight:1000;
+  margin:0 0 8px;
+  color:var(--t);
+}
+.hero-custom-tour-card p{
+  color:var(--t2);
+  font-size:12px;
+  line-height:2;
+  margin:0 0 12px;
+}
+.hero-custom-tour-card .field{
+  background:rgba(240,244,250,.95);
+}
+.hero-custom-tour-card .form-note-required{
+  margin-top:0;
+}
+.hero-custom-tour-card .gold,
+.hero-custom-tour-card button.gold{
+  border:none;
+  border-radius:16px;
+  padding:13px 16px;
+  font-weight:1000;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--a,#e8a838),#fbbf24);
+  color:#1e293b;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.hero-mini-steps{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin:12px 0;
+}
+.hero-mini-step{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  font-weight:900;
+  color:var(--t2);
+  background:var(--bg);
+  border:1px solid var(--b);
+  border-radius:13px;
+  padding:8px 10px;
+}
+.hero-mini-step i{
+  color:var(--p);
+}
+@media(max-width:980px){
+  .combined-hero-grid{
+    grid-template-columns:1fr;
+    padding:24px;
+  }
+  .combined-hero-copy{
+    min-height:auto;
+  }
+}
+@media(max-width:560px){
+  .combined-hero-grid{
+    padding:18px;
+  }
+  .hero-custom-tour-card{
+    border-radius:18px;
+    padding:16px;
+  }
+  .hero-custom-tour-card h2{
+    font-size:22px;
+  }
+}
