@@ -667,3 +667,32 @@ html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,st
   color:var(--t3);
   margin-top:5px;
 }
+
+
+.req-star{
+  color:#ef4444;
+  font-weight:1000;
+  margin-inline-start:4px;
+}
+.back-floating{
+  position:fixed;
+  right:18px;
+  bottom:86px;
+  z-index:999;
+  border:none;
+  border-radius:18px;
+  padding:12px 15px;
+  background:var(--c);
+  color:var(--t);
+  box-shadow:0 18px 45px rgba(15,23,42,.16);
+  border:1px solid var(--b);
+  cursor:pointer;
+  display:none;
+  font-weight:1000;
+}
+.back-floating.on{display:inline-flex;align-items:center;gap:8px}
+.form-note-required{
+  font-size:11px;
+  color:var(--t3);
+  margin:8px 0;
+}

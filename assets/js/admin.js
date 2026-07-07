@@ -1,6 +1,6 @@
 
 function initAdmin(){mount('admin');if(!authGate('admin'))return renderLogin();renderAdmin()}
-function renderLogin(){$('app').innerHTML=`<div class="card pad login-box"><h2>ورود مدیریت</h2><p class="small">رمز دمو: admin123</p><input id="pass" class="field" type="password" placeholder="رمز"><button class="btn" style="width:100%;margin-top:12px" onclick="doLogin()">ورود</button></div>`}
+function renderLogin(){$('app').innerHTML=`<div class="card pad login-box"><h2>ورود مدیریت</h2><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div><p class="small">رمز دمو: admin123</p><input id="pass" class="field" type="password" placeholder="رمز *"><button class="btn" style="width:100%;margin-top:12px" onclick="doLogin()">ورود</button></div>`}
 function doLogin(){if(loginRole('admin',$('pass').value))location.reload();else alert('رمز اشتباه است')}
 
 function renderAdmin(){
@@ -14,12 +14,12 @@ function renderAdmin(){
   </section>
 
   <section class="card pad" style="margin-bottom:16px">
-    <h3>مدیریت یوزرنیم و پسورد پرسنل</h3>
+    <h3>مدیریت یوزرنیم و پسورد پرسنل</h3><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
     <p class="small">برای هر پرسنل یک نام کاربری و رمز جدا بساز. کارمند با همین اطلاعات وارد پنل کارمند می‌شود و نامش روی ویرایش‌ها ثبت می‌شود.</p>
     <div class="admin-mini-grid">
-      <input id="staffFullName" class="field" placeholder="نام کارمند">
-      <input id="staffUsername" class="field" placeholder="Username" dir="ltr">
-      <input id="staffPassword" class="field" placeholder="Password" dir="ltr">
+      <input id="staffFullName" class="field" placeholder="نام کارمند *">
+      <input id="staffUsername" class="field" placeholder="Username *" dir="ltr">
+      <input id="staffPassword" class="field" placeholder="Password *" dir="ltr">
       <select id="staffActive" class="field"><option value="true">فعال</option><option value="false">غیرفعال</option></select>
       <button class="btn" onclick="saveStaffAccount()">ذخیره کارمند</button>
     </div>
@@ -29,16 +29,16 @@ function renderAdmin(){
   <section class="card pad" style="margin-bottom:16px"><h3>آپدیت قیمت با شیت</h3><p class="small">فایل CSV خروجی گرفته‌شده از شیت نمونه را اینجا آپلود کن تا قیمت‌ها، ظرفیت‌ها و تخفیف دستی آپدیت شوند.</p><div class="price-import-box"><input id="adminPriceImport" class="field" type="file" accept=".csv,.txt"><button class="btn" onclick="importPriceSheet('adminPriceImport','adminImportResult')">آپلود و آپدیت قیمت‌ها</button><div id="adminImportResult" class="import-result"></div></div></section>
 
   <section class="card pad" style="margin-bottom:16px">
-    <h3>مدیریت هتل‌ها برای قیمت‌گذاری کارمندان</h3>
+    <h3>مدیریت هتل‌ها برای قیمت‌گذاری کارمندان</h3><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
     <p class="small">نام هتل را لاتین وارد کن و مشخص کن کدام هتل‌ها در پنل کارمند برای قیمت‌گذاری نمایش داده شوند.</p>
     <div class="admin-mini-grid">
-      <input id="hotelLatinName" class="field" placeholder="Hotel Latin Name" dir="ltr">
+      <input id="hotelLatinName" class="field" placeholder="Hotel Latin Name *" dir="ltr">
       <select id="hotelStar" class="field"><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select>
       <select id="hotelEnabled" class="field"><option value="true">نمایش برای کارمند</option><option value="false">عدم نمایش</option></select>
       <button class="btn" onclick="saveHotelItem()">افزودن هتل</button>
       <button class="soft" onclick="resetDefaultHotels()">بازگردانی نمونه‌ها</button>
     </div>
-    <div id="hotelCatalogTable" class="table-wrap hotel-admin-table" style="margin-top:12px"></div><div class="current-hotels-box"><h3>هتل‌های فعلی ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل خریدار را فعال/غیرفعال کنی.</p><div id="currentTourHotelsTable" class="table-wrap"></div></div>
+    <div id="hotelCatalogTable" class="table-wrap hotel-admin-table" style="margin-top:12px"></div><div class="current-hotels-box"><h3>هتل‌های فعلی ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل خریدار را فعال/غیرفعال کنی.</p><div class="row wrap" style="margin-bottom:10px"><button class="soft" onclick="renderCurrentTourHotels()">بروزرسانی لیست</button><button class="btn" onclick="syncCatalogHotelsToTours()">اعمال هتل‌های فعال مدیریت روی همه تورها</button></div><div id="currentTourHotelsTable" class="table-wrap"></div></div>
   </section>
 
   <section class="card pad" style="margin-bottom:16px">
@@ -50,7 +50,7 @@ function renderAdmin(){
 
   <section class="card pad" style="margin-bottom:16px">
     <h3>مدیریت کد تخفیف</h3>
-    <div class="row wrap"><input id="dcode" class="field" placeholder="کد" style="max-width:170px"><select id="dtype" class="field" style="max-width:150px"><option value="percent">درصدی</option><option value="fixed">مبلغ ثابت</option></select><input id="dvalue" class="field" type="number" placeholder="مقدار" style="max-width:150px"><input id="dmin" class="field" type="number" placeholder="حداقل خرید" style="max-width:150px"><select id="dtour" class="field" style="max-width:170px"><option value="all">همه تورها</option><option value="lastminute">قسمت ویژه</option>${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join('')}</select><button class="btn" onclick="addDiscount()">افزودن</button></div>
+    <div class="row wrap"><input id="dcode" class="field" placeholder="کد *" style="max-width:170px"><select id="dtype" class="field" style="max-width:150px"><option value="percent">درصدی</option><option value="fixed">مبلغ ثابت</option></select><input id="dvalue" class="field" type="number" placeholder="مقدار *" style="max-width:150px"><input id="dmin" class="field" type="number" placeholder="حداقل خرید" style="max-width:150px"><select id="dtour" class="field" style="max-width:170px"><option value="all">همه تورها</option><option value="lastminute">قسمت ویژه</option>${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join('')}</select><button class="btn" onclick="addDiscount()">افزودن</button></div>
     <div id="discountTable" class="table-wrap" style="margin-top:12px"></div>
   </section>
 
@@ -113,11 +113,29 @@ function formatDuration(sec){
   if(m>=60)return faNum(Math.floor(m/60))+' ساعت و '+faNum(m%60)+' دقیقه';
   return faNum(m)+' دقیقه و '+faNum(s)+' ثانیه';
 }
+
+function syncCatalogHotelsToTours(){
+  const catalog=hotelCatalog().filter(h=>h.enabledForStaff!==false);
+  if(!catalog.length){alert('هتل فعالی در مدیریت تعریف نشده است');return}
+  const ts=tours().map(t=>{
+    const existing=t.hotels||[];
+    const hs=catalog.map(c=>{
+      const old=existing.find(x=>x.hotelId===c.id || (String(x.name).toLowerCase()===String(c.nameLatin).toLowerCase() && Number(x.star)===Number(c.star)));
+      return old ? {...old,hotelId:c.id,name:c.nameLatin,star:c.star,showInBuyer:old.showInBuyer!==false} : {hotelId:c.id,star:c.star,name:c.nameLatin,price:Number(t.price||0),capacity:0,showInBuyer:true};
+    });
+    return {...t,hotels:hs};
+  });
+  saveTours(ts);renderCurrentTourHotels();showToast('هتل‌های فعال روی تورها اعمال شد');
+}
+
 function renderCurrentTourHotels(){
   const box=$('currentTourHotelsTable');if(!box)return;
   const rows=[];
   tours().forEach(t=>(t.hotels||[]).forEach((h,i)=>rows.push({tourId:t.id,tourTitle:t.title,index:i,...h})));
-  box.innerHTML=`<table><thead><tr><th>تور</th><th>هتل</th><th>ستاره</th><th>قیمت</th><th>ظرفیت</th><th>نمایش در خریدار</th><th>عملیات</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.tourTitle}</td><td dir="ltr">${r.name}</td><td>${hotelStars(r.star)}</td><td>${money(r.price)}</td><td>${faNum(r.capacity||0)}</td><td>${r.showInBuyer!==false?'فعال':'غیرفعال'}</td><td><button class="soft" onclick="toggleTourHotel(${r.tourId},${r.index})">${r.showInBuyer!==false?'غیرفعال کن':'فعال کن'}</button></td></tr>`).join('')||'<tr><td colspan="7">هتلی ثبت نشده است.</td></tr>'}</tbody></table>`;
+  const catalog=hotelCatalog().slice().sort((a,b)=>a.star-b.star||a.nameLatin.localeCompare(b.nameLatin));
+  const catalogHtml=`<h4 style="margin:12px 0 8px">لیست هتل‌های تعریف‌شده مدیریت</h4><table><thead><tr><th>نام لاتین هتل</th><th>ستاره</th><th>وضعیت برای کارمند</th><th>عملیات</th></tr></thead><tbody>${catalog.map(h=>`<tr><td dir="ltr"><b>${h.nameLatin}</b></td><td>${hotelStars(h.star)}</td><td>${h.enabledForStaff!==false?'فعال':'غیرفعال'}</td><td><button class="soft" onclick="toggleHotelItem('${h.id}')">${h.enabledForStaff!==false?'غیرفعال کن':'فعال کن'}</button></td></tr>`).join('')||'<tr><td colspan="4">هنوز هتلی تعریف نشده است.</td></tr>'}</tbody></table>`;
+  const tourHtml=`<h4 style="margin:16px 0 8px">هتل‌های ثبت‌شده روی تورها</h4><table><thead><tr><th>تور</th><th>هتل</th><th>ستاره</th><th>قیمت</th><th>ظرفیت</th><th>نمایش در خریدار</th><th>عملیات</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.tourTitle}</td><td dir="ltr">${r.name}</td><td>${hotelStars(r.star)}</td><td>${money(r.price)}</td><td>${faNum(r.capacity||0)}</td><td>${r.showInBuyer!==false?'فعال':'غیرفعال'}</td><td><button class="soft" onclick="toggleTourHotel(${r.tourId},${r.index})">${r.showInBuyer!==false?'غیرفعال کن':'فعال کن'}</button></td></tr>`).join('')||'<tr><td colspan="7">برای تورها هنوز هتلی ثبت نشده است. روی دکمه «اعمال هتل‌های فعال مدیریت روی همه تورها» بزن.</td></tr>'}</tbody></table>`;
+  box.innerHTML=catalogHtml+tourHtml;
 }
 function toggleTourHotel(tourId,index){
   const ts=tours().map(t=>{
@@ -142,6 +160,30 @@ function parseCSV(text){
   return rows.filter(r=>r.some(x=>String(x).trim()!==''));
 }
 function normalizeHeader(h){return String(h||'').trim().toLowerCase().replace(/\s+/g,'_')}
+
+function headerAliases(){
+  return {
+    tour_id:['tour_id','آیدی_تور','کد_تور','شناسه_تور'],
+    tour_title:['tour_title','نام_تور','عنوان_تور'],
+    hotel_star:['hotel_star','ستاره_هتل','درجه_هتل'],
+    hotel_name_latin:['hotel_name_latin','نام_لاتین_هتل','اسم_لاتین_هتل','نام_هتل'],
+    price:['price','قیمت','قیمت_جدید'],
+    capacity:['capacity','ظرفیت'],
+    show_in_buyer:['show_in_buyer','نمایش_در_خریدار','نمایش'],
+    special_old_price:['special_old_price','مبلغ_قبل_تخفیف','قیمت_قبل'],
+    special_new_price:['special_new_price','مبلغ_بعد_تخفیف','قیمت_بعد'],
+    special_discount_percent:['special_discount_percent','درصد_تخفیف'],
+    special_end_jalali:['special_end_jalali','تاریخ_پایان_تخفیف_شمسی','پایان_تخفیف_شمسی'],
+    note:['note','یادداشت']
+  };
+}
+function headerIndex(headers,key){
+  const aliases=headerAliases()[key]||[key];
+  for(const a of aliases){const i=headers.indexOf(normalizeHeader(a));if(i>=0)return i}
+  return -1;
+}
+function cellByKey(row,headers,key){const i=headerIndex(headers,key);return i>=0?row[i]:''}
+
 function importPriceSheet(inputId,resultId){
   const file=$(inputId)?.files?.[0];if(!file){alert('فایل CSV را انتخاب کنید');return}
   const reader=new FileReader();
@@ -153,11 +195,11 @@ function importPriceSheet(inputId,resultId){
     let updated=0,notFound=0;
     const ts=tours();
     rows.slice(1).forEach(r=>{
-      const tourId=Number(r[idx('tour_id')]||0), hotelName=String(r[idx('hotel_name_latin')]||'').trim(), star=Number(r[idx('hotel_star')]||0);
-      const price=Number(r[idx('price')]||0), cap=Number(r[idx('capacity')]||0);
-      const showRaw=String(r[idx('show_in_buyer')]||'TRUE').toLowerCase();
-      const oldPrice=Number(r[idx('special_old_price')]||0), newPrice=Number(r[idx('special_new_price')]||0), pct=Number(r[idx('special_discount_percent')]||0);
-      const endFa=String(r[idx('special_end_jalali')]||'').trim();
+      const tourId=Number(cellByKey(r,headers,'tour_id')||0), hotelName=String(cellByKey(r,headers,'hotel_name_latin')||'').trim(), star=Number(cellByKey(r,headers,'hotel_star')||0);
+      const price=Number(cellByKey(r,headers,'price')||0), cap=Number(cellByKey(r,headers,'capacity')||0);
+      const showRaw=String(cellByKey(r,headers,'show_in_buyer')||'TRUE').toLowerCase();
+      const oldPrice=Number(cellByKey(r,headers,'special_old_price')||0), newPrice=Number(cellByKey(r,headers,'special_new_price')||0), pct=Number(cellByKey(r,headers,'special_discount_percent')||0);
+      const endFa=String(cellByKey(r,headers,'special_end_jalali')||'').trim();
       const t=ts.find(x=>x.id===tourId);
       if(!t){notFound++;return}
       if(oldPrice)t.oldPrice=oldPrice;

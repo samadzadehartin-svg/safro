@@ -33,6 +33,26 @@ function parseCSV(text){
   return rows.filter(r=>r.some(x=>String(x).trim()!==''));
 }
 function normalizeHeader(h){return String(h||'').trim().toLowerCase().replace(/\s+/g,'_')}
+
+function headerAliases(){
+  return {
+    tour_id:['tour_id','آیدی_تور','کد_تور','شناسه_تور'],
+    tour_title:['tour_title','نام_تور','عنوان_تور'],
+    hotel_star:['hotel_star','ستاره_هتل','درجه_هتل'],
+    hotel_name_latin:['hotel_name_latin','نام_لاتین_هتل','اسم_لاتین_هتل','نام_هتل'],
+    price:['price','قیمت','قیمت_جدید'],
+    capacity:['capacity','ظرفیت'],
+    show_in_buyer:['show_in_buyer','نمایش_در_خریدار','نمایش'],
+    special_old_price:['special_old_price','مبلغ_قبل_تخفیف','قیمت_قبل'],
+    special_new_price:['special_new_price','مبلغ_بعد_تخفیف','قیمت_بعد'],
+    special_discount_percent:['special_discount_percent','درصد_تخفیف'],
+    special_end_jalali:['special_end_jalali','تاریخ_پایان_تخفیف_شمسی','پایان_تخفیف_شمسی'],
+    note:['note','یادداشت']
+  };
+}
+function headerIndex(headers,key){const aliases=headerAliases()[key]||[key];for(const a of aliases){const i=headers.indexOf(normalizeHeader(a));if(i>=0)return i}return -1}
+function cellByKey(row,headers,key){const i=headerIndex(headers,key);return i>=0?row[i]:''}
+
 function importPriceSheet(inputId,resultId){
   const file=$(inputId)?.files?.[0];if(!file){alert('فایل CSV را انتخاب کنید');return}
   const reader=new FileReader();
@@ -42,9 +62,9 @@ function importPriceSheet(inputId,resultId){
     const headers=rows[0].map(normalizeHeader),idx=k=>headers.indexOf(k);
     let updated=0,notFound=0;const user=currentStaffUser();const ts=tours();
     rows.slice(1).forEach(r=>{
-      const tourId=Number(r[idx('tour_id')]||0),hotelName=String(r[idx('hotel_name_latin')]||'').trim(),star=Number(r[idx('hotel_star')]||0);
-      const price=Number(r[idx('price')]||0),cap=Number(r[idx('capacity')]||0),showRaw=String(r[idx('show_in_buyer')]||'TRUE').toLowerCase();
-      const oldPrice=Number(r[idx('special_old_price')]||0),newPrice=Number(r[idx('special_new_price')]||0),pct=Number(r[idx('special_discount_percent')]||0),endFa=String(r[idx('special_end_jalali')]||'').trim();
+      const tourId=Number(cellByKey(r,headers,'tour_id')||0),hotelName=String(cellByKey(r,headers,'hotel_name_latin')||'').trim(),star=Number(cellByKey(r,headers,'hotel_star')||0);
+      const price=Number(cellByKey(r,headers,'price')||0),cap=Number(cellByKey(r,headers,'capacity')||0),showRaw=String(cellByKey(r,headers,'show_in_buyer')||'TRUE').toLowerCase();
+      const oldPrice=Number(cellByKey(r,headers,'special_old_price')||0),newPrice=Number(cellByKey(r,headers,'special_new_price')||0),pct=Number(cellByKey(r,headers,'special_discount_percent')||0),endFa=String(cellByKey(r,headers,'special_end_jalali')||'').trim();
       const t=ts.find(x=>x.id===tourId);if(!t){notFound++;return}
       if(oldPrice)t.oldPrice=oldPrice;if(newPrice)t.newPrice=newPrice;if(pct)t.dealPercent=pct;if(endFa){t.dealEndsAtFa=endFa;const g=parseFaDiscountDate(endFa);if(g)t.dealEndsAt=g.toISOString()}
       const h=(t.hotels||[]).find(x=>String(x.name).trim().toLowerCase()===hotelName.toLowerCase()&&Number(x.star)===star);

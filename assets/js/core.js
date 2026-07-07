@@ -2,6 +2,7 @@ const PREFIX='safarro_three_panels_';
 function $(id){return document.getElementById(id)}
 function money(n){return Number(n||0).toLocaleString('fa-IR')+' تومان'}
 function faNum(n){return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
+function reqStar(){return '<span class="req-star">*</span>'}
 function read(k,f){try{return JSON.parse(localStorage.getItem(PREFIX+k))??f}catch{return f}}
 function write(k,v){localStorage.setItem(PREFIX+k,JSON.stringify(v))}
 
