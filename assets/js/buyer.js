@@ -243,9 +243,13 @@ function aboutContactSection(){
   </section>`;
 }
 
+function referenceHeroSection(){
+  return `<section class="safarro-reference-hero"><img src="../assets/images/safarro-middle-hero.png" alt="سفر رو؛ تور دلخواهت با هتل دلخواهت"></section>`;
+}
+
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
- $('app').innerHTML=`${buyerTabs()}${consultationSection()}${trustSection()}${consultPopupHtml()}
+ $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${consultationSection()}${trustSection()}${consultPopupHtml()}
  <section><div class="row wrap"><h2>قسمت ویژه</h2></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
  <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
