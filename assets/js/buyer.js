@@ -126,39 +126,7 @@ function countTourViewAndMaybePopup(){
   }
 }
 
-function consultationSection(){
-  return `<section class="build-tour-hero">
-    <div class="build-tour-grid">
-      <div>
-        <span class="badge special">تور اختصاصی سفر رو</span>
-        <h1 class="build-tour-title">تور خودتو بساز</h1>
-        <p class="consult-sub"></p>
-        <div class="build-tour-steps">
-          <div class="build-tour-step"><i class="fa-solid fa-location-dot"></i> مقصد و تاریخ دلخواهت را بگو</div>
-          <div class="build-tour-step"><i class="fa-solid fa-hotel"></i> هتل ۳، ۴ یا ۵ ستاره انتخاب کن</div>
-          <div class="build-tour-step"><i class="fa-solid fa-phone-volume"></i> کارشناس سفر رو با تو تماس می‌گیرد</div>
-        </div>
-      </div>
-      <form class="build-tour-card" onsubmit="submitConsultation(event)"><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
-        <div class="grid g2">
-          <input id="leadName" class="field" placeholder="نام شما">
-          <input id="leadPhone" class="field" placeholder="شماره تماس *" required dir="ltr">
-          <input id="leadDest" class="field" placeholder="مقصد دلخواه">
-          <select id="leadPeople" class="field">
-            <option value="">تعداد نفرات</option>
-            <option>۱ نفر</option>
-            <option>۲ نفر</option>
-            <option>۳ نفر</option>
-            <option>۴ نفر یا بیشتر</option>
-          </select>
-        </div>
-        <textarea id="leadNote" class="field" rows="3" style="margin-top:10px" placeholder="مثلاً: استانبول، هتل ۵ ستاره، بودجه ۳۰ میلیون، آخر هفته"></textarea>
-        <button class="gold" style="width:100%;margin-top:12px" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> ساخت تور اختصاصی</button>
-        <div id="leadStatus" class="lead-status"></div>
-      </form>
-    </div>
-  </section>`;
-}
+function consultationSection(){return ``;}
 
 function trustSection(){
   return `<section class="trust-section">
@@ -265,12 +233,6 @@ function referenceHeroSection(){
       <form class="hero-custom-tour-card" onsubmit="submitConsultation(event)">
         <span class="badge special">تور اختصاصی سفر رو</span>
         <h2>تور خودتو بساز</h2>
-        <p>مقصد، تعداد نفرات و توضیحاتت را بفرست تا کارشناس سفر رو برای ساخت تور اختصاصی با تو تماس بگیرد.</p>
-        <div class="hero-mini-steps">
-          <div class="hero-mini-step"><i class="fa-solid fa-location-dot"></i> مقصد و تاریخ دلخواهت را بگو</div>
-          <div class="hero-mini-step"><i class="fa-solid fa-hotel"></i> هتل ۳، ۴ یا ۵ ستاره انتخاب کن</div>
-          <div class="hero-mini-step"><i class="fa-solid fa-phone-volume"></i> کارشناس سفر رو با تو تماس می‌گیرد</div>
-        </div>
         <div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
         <div class="grid g2">
           <input id="leadName" class="field" placeholder="نام شما">

@@ -830,12 +830,6 @@ html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,st
   margin:0 0 8px;
   color:var(--t);
 }
-.hero-custom-tour-card p{
-  color:var(--t2);
-  font-size:12px;
-  line-height:2;
-  margin:0 0 12px;
-}
 .hero-custom-tour-card .field{
   background:rgba(240,244,250,.95);
 }
@@ -855,27 +849,6 @@ html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,st
   align-items:center;
   justify-content:center;
   gap:8px;
-}
-.hero-mini-steps{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:8px;
-  margin:12px 0;
-}
-.hero-mini-step{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:11px;
-  font-weight:900;
-  color:var(--t2);
-  background:var(--bg);
-  border:1px solid var(--b);
-  border-radius:13px;
-  padding:8px 10px;
-}
-.hero-mini-step i{
-  color:var(--p);
 }
 @media(max-width:980px){
   .combined-hero-grid{
