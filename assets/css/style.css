@@ -953,3 +953,66 @@ html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,st
   .admin-side-nav{position:relative;top:auto;display:grid;grid-template-columns:repeat(2,1fr)}
   .hotel-edit-admin-grid{grid-template-columns:1fr}
 }
+
+
+/* Multi image and hotel booking manager */
+.admin-gallery-preview{
+  display:flex;gap:6px;flex-wrap:wrap;max-width:270px;
+}
+.admin-gallery-preview img{
+  width:54px;height:42px;object-fit:cover;border-radius:10px;border:1px solid var(--b);background:var(--bg);
+}
+.hotel-admin-list{display:flex;flex-direction:column;gap:12px}
+.hotel-admin-card{
+  border:1px solid var(--b);border-radius:18px;padding:12px;background:var(--c);
+}
+.hotel-admin-card-head{
+  display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px;
+}
+.hotel-admin-card-title{font-weight:1000;direction:ltr;text-align:left}
+.hotel-admin-card-grid{
+  display:grid;grid-template-columns:1.05fr 90px 130px 100px 1fr 1fr 110px;gap:8px;align-items:center;
+}
+.hotel-photo-preview{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.hotel-photo-preview img{
+  width:58px;height:44px;border-radius:10px;object-fit:cover;border:1px solid var(--b);background:var(--bg);
+}
+.booking-hotel-action{
+  border:1px solid var(--b);background:var(--bg);color:var(--p);border-radius:999px;
+  padding:6px 9px;font-size:11px;font-weight:1000;cursor:pointer;
+}
+.hotel-photos-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.56);z-index:9999;display:none;
+  align-items:center;justify-content:center;padding:18px;
+}
+.hotel-photos-modal.on{display:flex}
+.hotel-photos-box{
+  width:min(760px,96vw);max-height:86vh;overflow:auto;background:var(--c);color:var(--t);
+  border-radius:24px;padding:18px;border:1px solid var(--b);box-shadow:0 28px 80px rgba(0,0,0,.30);
+}
+.hotel-photos-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px;
+}
+.hotel-photos-grid img{
+  width:100%;height:145px;object-fit:cover;border-radius:16px;border:1px solid var(--b);
+}
+.date-chip.selected,.date-chip.active,.date-chip[aria-selected="true"]{
+  border-color:var(--p)!important;background:rgba(74,159,216,.12)!important;
+  box-shadow:0 0 0 4px rgba(74,159,216,.13)!important;color:var(--p)!important;
+}
+@media(max-width:1100px){.hotel-admin-card-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.hotel-admin-card-grid{grid-template-columns:1fr}}
+
+
+/* Customer trail + visa + no timer */
+.countdown,[data-countdown]{display:none!important}
+.visa-section{margin:22px 0}
+.visa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.visa-card{border:1px solid var(--b);background:var(--c);border-radius:20px;padding:14px;box-shadow:0 14px 35px rgba(15,23,42,.06)}
+.visa-card h3{margin:0 0 8px;font-size:16px}
+.visa-price{font-weight:1000;color:var(--p);font-size:18px}
+.visa-admin-grid{display:grid;grid-template-columns:1fr 1fr 130px 160px 1fr 100px;gap:8px;align-items:center}
+.customer-trail-box{border:1px dashed rgba(74,159,216,.5);background:rgba(74,159,216,.08);border-radius:16px;padding:10px;margin-top:10px}
+.customer-trail-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.customer-trail-chip{font-size:11px;font-weight:900;background:var(--c);border:1px solid var(--b);border-radius:999px;padding:6px 9px}
+@media(max-width:900px){.visa-admin-grid{grid-template-columns:1fr}}

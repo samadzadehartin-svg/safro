@@ -61,7 +61,54 @@ function visibleHotels(t){
   return hs.length?hs:(t.hotels||[]);
 }
 
-function seed(){if(!read('tours',null))write('tours',DEFAULT_TOURS);if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS);if(!read('hotelCatalog',null))write('hotelCatalog',defaultHotelCatalog());if(!read('staffAccounts',null))write('staffAccounts',defaultStaffAccounts())}
+
+const DEFAULT_VISAS=[
+  {id:'visa-1',country:'امارات',city:'دبی',price:4500000,duration:'۳ تا ۷ روز کاری',type:'توریستی',docs:'پاسپورت، عکس، فرم درخواست',active:true},
+  {id:'visa-2',country:'ترکیه',city:'استانبول',price:0,duration:'بدون ویزا برای پاسپورت ایران',type:'بدون ویزا',docs:'پاسپورت معتبر',active:true},
+  {id:'visa-3',country:'تایلند',city:'بانکوک',price:7800000,duration:'۷ تا ۱۴ روز کاری',type:'توریستی',docs:'پاسپورت، عکس، تمکن، رزرو هتل',active:true},
+  {id:'visa-4',country:'ارمنستان',city:'ایروان',price:0,duration:'بدون ویزا برای پاسپورت ایران',type:'بدون ویزا',docs:'پاسپورت معتبر',active:true},
+  {id:'visa-5',country:'مالزی',city:'کوالالامپور',price:0,duration:'بدون ویزا برای اقامت کوتاه',type:'بدون ویزا',docs:'پاسپورت معتبر و بلیط برگشت',active:true}
+];
+
+function visaServices(){return read('visaServices',DEFAULT_VISAS)}
+function saveVisaServices(v){write('visaServices',v)}
+
+function themedTourImage(t){
+  const s=String((t?.dest||'')+' '+(t?.title||'')).toLowerCase();
+  if(s.includes('دبی')||s.includes('dubai'))return '../assets/images/dubai-burj-khalifa.svg';
+  if(s.includes('آنتالیا')||s.includes('antalya'))return '../assets/images/antalya-beach.svg';
+  if(s.includes('کیش')||s.includes('kish'))return '../assets/images/kish-island.svg';
+  if(s.includes('مشهد')||s.includes('mashhad'))return '../assets/images/mashhad-shrine.svg';
+  if(s.includes('کاپادوکیا')||s.includes('cappadocia'))return '../assets/images/cappadocia-balloons.svg';
+  if(s.includes('شیراز')||s.includes('shiraz')||s.includes('persepolis'))return '../assets/images/shiraz-persepolis.svg';
+  if(s.includes('اصفهان')||s.includes('isfahan'))return '../assets/images/isfahan-bridge.svg';
+  if(s.includes('پاریس')||s.includes('paris'))return '../assets/images/paris-eiffel.svg';
+  if(s.includes('رم')||s.includes('rome'))return '../assets/images/rome-colosseum.svg';
+  if(s.includes('بانکوک')||s.includes('bangkok'))return '../assets/images/bangkok-temple.svg';
+  if(s.includes('ایروان')||s.includes('yerevan'))return '../assets/images/yerevan-cascade.svg';
+  if(s.includes('گرجستان')||s.includes('georgia')||s.includes('tbilisi'))return '../assets/images/georgia-caucasus.svg';
+  if(s.includes('مالزی')||s.includes('kuala')||s.includes('malaysia'))return '../assets/images/malaysia-towers.svg';
+  return '../assets/images/istanbul-hagia-sophia.svg';
+}
+function normalizeTourImagesTheme(){
+  if(read('imagesThemeV3Applied',false))return;
+  const ts=tours().map(t=>({...t,img:themedTourImage(t),gallery:[themedTourImage(t),...((t.gallery||[]).filter(x=>x!==t.img&&x!==themedTourImage(t))).slice(0,3)]}));
+  saveTours(ts);
+  write('imagesThemeV3Applied',true);
+}
+function customerTrail(){return read('customerTrail',[])}
+function saveCustomerTrail(v){write('customerTrail',v)}
+function addCustomerTrail(t){
+  if(!t)return;
+  const list=customerTrail().filter(x=>Number(x.tourId)!==Number(t.id));
+  list.unshift({tourId:t.id,tourTitle:t.title,dest:t.dest,visitedAt:new Date().toISOString()});
+  saveCustomerTrail(list.slice(0,30));
+}
+function trailSummary(){
+  return customerTrail().map(x=>x.tourTitle+' - '+x.dest).slice(0,12).join(' | ');
+}
+
+function seed(){if(!read('tours',null))write('tours',DEFAULT_TOURS);if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS);if(!read('visaServices',null))write('visaServices',DEFAULT_VISAS);if(!read('hotelCatalog',null))write('hotelCatalog',defaultHotelCatalog());if(!read('staffAccounts',null))write('staffAccounts',defaultStaffAccounts());normalizeTourImagesTheme()}
 function tours(){return read('tours',DEFAULT_TOURS)}function saveTours(v){write('tours',v)}
 function orders(){return read('orders',[])}function saveOrders(v){write('orders',v)}
 function leads(){return read('leads',[])}function saveLeads(v){write('leads',v)}
@@ -109,8 +156,8 @@ function layout(type){
   `;
 
   const privateLinks = `
-    <a href="../buyer/index.html">پنل خریدار</a>
-    <a href="../staff/index.html">پنل کارمند</a>
+    <a href="../buyer/index.html">پنل مشتری</a>
+    <a href="../staff/index.html">پنل فروش</a>
     <a href="../admin/index.html">پنل مدیریت</a>
   `;
 
@@ -142,12 +189,12 @@ function footer(type){
 
   const privateBottom = `
     <nav class="bottom-nav">
-      <a href="../buyer/index.html"><i class="fa-solid fa-house"></i>خریدار</a>
-      <a href="../staff/index.html"><i class="fa-regular fa-user-pen"></i>کارمند</a>
+      <a href="../buyer/index.html"><i class="fa-solid fa-house"></i>مشتری</a>
+      <a href="../staff/index.html"><i class="fa-regular fa-user-pen"></i>فروش</a>
       <a href="../admin/index.html"><i class="fa-solid fa-chart-line"></i>مدیریت</a>
     </nav>`;
 
-  return `<footer class="footer"><b>سفرو ایرانیان</b><br>${type === 'buyer' ? 'خرید و رزرو آنلاین تورهای داخلی و خارجی' : 'پنل داخلی سفر رو'}<br><span style="font-size:11px;color:var(--t2)">۰۲۱-۴۹۹۷۶ | تهران، بلوار فردوس شرق، بعد از عقیل، پلاک ۳۵۱</span></footer>${type === 'buyer' ? buyerBottom : privateBottom}`;
+  return `<footer class="footer"><b>سفرو ایرانیان</b><br>${type === 'buyer' ? 'مشاهده و رزرو آنلاین تورهای داخلی و خارجی' : 'پنل داخلی سفر رو'}<br><span style="font-size:11px;color:var(--t2)">۰۲۱-۴۹۹۷۶ | تهران، بلوار فردوس شرق، بعد از عقیل، پلاک ۳۵۱</span></footer>${type === 'buyer' ? buyerBottom : privateBottom}`;
 }
 
 function mount(type){
