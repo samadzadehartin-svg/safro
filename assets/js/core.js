@@ -43,6 +43,13 @@ function staffAccounts(){
 }
 function saveStaffAccounts(v){write('staffAccounts',v)}
 function currentStaffUser(){return read('currentStaffUser',null)}
+function normalizeLatinTourTitles(){
+  try{
+    if(typeof LATIN_TOUR_TITLES==='undefined')return;
+    const ts=tours().map(t=>LATIN_TOUR_TITLES[t.id]?{...t,title:LATIN_TOUR_TITLES[t.id]}:t);
+    saveTours(ts);
+  }catch(e){}
+}
 function visibleHotels(t){
   const hs=(t.hotels||[]).filter(h=>h && h.showInBuyer!==false);
   return hs.length?hs:(t.hotels||[]);

@@ -1,4 +1,8 @@
 let view='home',currentCat='all',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
+if(!sessionStorage.getItem('safarro_visit_start'))sessionStorage.setItem('safarro_visit_start',Date.now());
+function siteSeconds(){return Math.max(0,Math.round((Date.now()-Number(sessionStorage.getItem('safarro_visit_start')||Date.now()))/1000))}
+function siteTourViews(){return Number(localStorage.getItem('safarro_tour_views')||0)}
+function engagementPercent(seconds,views){return Math.min(100,Math.round((Number(views)||0)*18 + Math.min(50,(Number(seconds)||0)/12)))}
 function hotelStars(n){return `<span class="hotel-stars">${Array.from({length:Number(n)||0}).map(()=>'<i class="fa-solid fa-star"></i>').join('')}</span>`}
 function ratingStar(){return '<span class="rating-star">★</span>'}
 function defaultSections(){
@@ -57,6 +61,9 @@ function buildLeadFromForm(prefix){
     note:$(prefix+'Note')?.value?.trim() || '',
     source:prefix==='popupLead'?'پاپ‌آپ مشاوره بعد از مشاهده تور':'تور خودتو بساز / صفحه اول',
     status:'جدید',
+    siteSeconds:siteSeconds(),
+    tourViews:siteTourViews(),
+    engagementPercent:engagementPercent(siteSeconds(),siteTourViews()),
     createdAt:new Date().toISOString()
   };
 }
@@ -239,7 +246,7 @@ function aboutContactSection(){
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
  $('app').innerHTML=`${buyerTabs()}${consultationSection()}${trustSection()}${consultPopupHtml()}
- <section><div class="row wrap"><h2>قسمت ویژه</h2><span class="small">تورهای منتخب و زمان‌دار</span></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
+ <section><div class="row wrap"><h2>قسمت ویژه</h2></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
  <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
  <div class="row"><h2>تورها</h2><b id="tourCount">۰</b></div><section id="tourGrid" class="grid g3"></section>
@@ -248,6 +255,15 @@ function renderHome(){
  <div id="compareModal" class="modal" onclick="if(event.target===this)closeCompare()"><div class="modal-card pad"><div class="row"><h2>مقایسه تورها</h2><button class="soft" onclick="closeCompare()">بستن</button></div><div id="compareContent" class="table-wrap"></div></div></div>`;
  filterHome();
 }
+
+function specialPriceLine(t, fallbackPrice){
+  const oldP=Number(t.oldPrice||0), newP=Number(t.newPrice||0);
+  if(oldP>0 && newP>0){
+    return `<div class="manual-discount-line"><span class="old-price">${money(oldP)}</span><span class="price">${money(newP)}</span></div>`;
+  }
+  return `<div class="price">${money(fallbackPrice)}</div>`;
+}
+
 function lastCard(t){return `<article class="last-card"><span class="flash-badge">${faNum(t.dealPercent||0)}٪ ویژه</span><img src="${t.img||DEFAULT_IMG}"><div class="pad"><div class="row"><b>${t.title}</b><span class="countdown" data-countdown="${t.dealEndsAt}">${countdown(t.dealEndsAt)}</span></div><p class="small">${t.dest} | ${t.duration}</p><div class="row"><b class="price">${money(minHotel(t).price)}</b><button class="btn" onclick="route('detail',${t.id})">مشاهده</button></div></div></article>`}
 function filterHome(){
  let q=$('search')?.value?.trim().toLowerCase()||'',d=$('dest')?.value||'all',sort=$('sort')?.value||'default',star=$('star')?.value||'all',airline=$('airline')?.value?.trim().toLowerCase()||'',onlyCap=$('onlyCap')?.checked||false;
@@ -298,11 +314,11 @@ function renderDetail(t){
     ${policyHtml}
     ${reviewsHtml}
     <div class="row wrap" style="border-top:1px solid var(--b);margin-top:18px;padding-top:18px">
-      <div><small class="small">قیمت هتل انتخاب‌شده</small><div class="price">${money(selected.price)}</div></div>
+      <div><small class="small">قیمت هتل انتخاب‌شده</small>${specialPriceLine(t,selected.price)}</div>
       <button class="btn" onclick="route('booking',${t.id})">رزرو نهایی</button>
     </div>
   </section>
-  <div class="sticky-cta"><b>${money(selected.price)}</b><button class="btn" onclick="route('booking',${t.id})">رزرو سریع</button></div>`;
+  <div class="sticky-cta"><b>${Number(t.newPrice||0)>0?money(t.newPrice):money(selected.price)}</b><button class="btn" onclick="route('booking',${t.id})">رزرو سریع</button></div>`;
 }
 function info(l,v){return `<div class="info"><small>${l}</small><b>${v||'—'}</b></div>`}
 

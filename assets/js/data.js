@@ -3,7 +3,7 @@ const DEFAULT_IMG='../assets/images/istanbul-hagia-sophia.svg';
 const DEFAULT_TOURS = [
   {
     "id": 1,
-    "title": "بهاره استانبول",
+    "title": "Istanbul Spring Escape",
     "dest": "استانبول",
     "duration": "۵ روز و ۴ شب",
     "airline": "ترکیش ایرلاین",
@@ -93,7 +93,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 2,
-    "title": "سفر لوکس دبی",
+    "title": "Dubai Luxury Break",
     "dest": "دبی",
     "duration": "۴ روز و ۳ شب",
     "airline": "امارات",
@@ -183,7 +183,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 3,
-    "title": "تابستانی آنتالیا",
+    "title": "Antalya Summer Resort",
     "dest": "آنتالیا",
     "duration": "۶ روز و ۵ شب",
     "airline": "پگاسوس",
@@ -273,7 +273,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 4,
-    "title": "تعطیلات کیش",
+    "title": "Kish Island Holiday",
     "dest": "کیش",
     "duration": "۳ روز و ۲ شب",
     "airline": "کیش ایر",
@@ -363,7 +363,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 5,
-    "title": "زیارت مشهد",
+    "title": "Mashhad Pilgrimage Tour",
     "dest": "مشهد",
     "duration": "۴ روز و ۳ شب",
     "airline": "ایران‌ایر",
@@ -453,7 +453,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 6,
-    "title": "جادوی کاپادوکیا",
+    "title": "Cappadocia Balloon Experience",
     "dest": "کاپادوکیا",
     "duration": "۵ روز و ۴ شب",
     "airline": "ترکیش ایرلاین",
@@ -543,7 +543,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 7,
-    "title": "شیراز و تخت جمشید",
+    "title": "Shiraz & Persepolis Journey",
     "dest": "شیراز",
     "duration": "۳ روز و ۲ شب",
     "airline": "زاگرس",
@@ -633,7 +633,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 8,
-    "title": "اصفهان نصف جهان",
+    "title": "Isfahan Heritage Tour",
     "dest": "اصفهان",
     "duration": "۳ روز و ۲ شب",
     "airline": "قطار ویژه",
@@ -723,7 +723,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 9,
-    "title": "پاریس رویایی",
+    "title": "Paris Dream Vacation",
     "dest": "پاریس",
     "duration": "۷ روز و ۶ شب",
     "airline": "قطر ایرویز",
@@ -813,7 +813,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 10,
-    "title": "رم تاریخی",
+    "title": "Rome Historical Escape",
     "dest": "رم",
     "duration": "۶ روز و ۵ شب",
     "airline": "ترکیش ایرلاین",
@@ -903,7 +903,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 11,
-    "title": "بانکوک و معابد معروف",
+    "title": "Bangkok Temple Discovery",
     "dest": "بانکوک",
     "duration": "۶ روز و ۵ شب",
     "airline": "ماهان",
@@ -993,7 +993,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 12,
-    "title": "ارمنستان؛ ایروان",
+    "title": "Yerevan City Break",
     "dest": "ایروان",
     "duration": "۴ روز و ۳ شب",
     "airline": "آرمنیا ایر",
@@ -1083,7 +1083,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 13,
-    "title": "طبیعت گرجستان",
+    "title": "Georgia Nature Tour",
     "dest": "تفلیس",
     "duration": "۵ روز و ۴ شب",
     "airline": "قشم ایر",
@@ -1173,7 +1173,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 14,
-    "title": "کوالالامپور مدرن",
+    "title": "Kuala Lumpur Modern Trip",
     "dest": "کوالالامپور",
     "duration": "۷ روز و ۶ شب",
     "airline": "قطر ایرویز",
@@ -1298,3 +1298,21 @@ const DEFAULT_DISCOUNTS = [
     "expires": ""
   }
 ];
+
+
+const LATIN_TOUR_TITLES = {
+  "1": "Istanbul Spring Escape",
+  "2": "Dubai Luxury Break",
+  "3": "Antalya Summer Resort",
+  "4": "Kish Island Holiday",
+  "5": "Mashhad Pilgrimage Tour",
+  "6": "Cappadocia Balloon Experience",
+  "7": "Shiraz & Persepolis Journey",
+  "8": "Isfahan Heritage Tour",
+  "9": "Paris Dream Vacation",
+  "10": "Rome Historical Escape",
+  "11": "Bangkok Temple Discovery",
+  "12": "Yerevan City Break",
+  "13": "Georgia Nature Tour",
+  "14": "Kuala Lumpur Modern Trip"
+};

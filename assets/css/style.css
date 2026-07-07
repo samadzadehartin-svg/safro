@@ -617,3 +617,53 @@ html,body,button,input,select,textarea,a,div,span,p,h1,h2,h3,h4,h5,h6,small,b,st
   .admin-mini-grid{grid-template-columns:1fr}
   .hotel-edit-row{grid-template-columns:1fr}
 }
+
+
+.price-import-box{
+  border:1px dashed var(--p);
+  border-radius:22px;
+  padding:15px;
+  margin:16px 0;
+  background:rgba(74,159,216,.07);
+}
+.import-result{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--t2);
+  line-height:1.9;
+}
+.kpi-mini{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:62px;
+  border-radius:999px;
+  padding:6px 9px;
+  background:rgba(74,159,216,.10);
+  color:var(--p);
+  font-size:11px;
+  font-weight:1000;
+}
+.old-price{
+  color:var(--t3);
+  text-decoration:line-through;
+  font-size:12px;
+  margin-inline-end:6px;
+}
+.manual-discount-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+.current-hotels-box{
+  margin-top:16px;
+  border-top:1px solid var(--b);
+  padding-top:14px;
+}
+.jalali-input-help{
+  font-size:11px;
+  color:var(--t3);
+  margin-top:5px;
+}
