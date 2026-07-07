@@ -244,8 +244,25 @@ function aboutContactSection(){
 }
 
 function referenceHeroSection(){
-  return `<section class="safarro-reference-hero"><img src="../assets/images/safarro-middle-hero.png" alt="سفر رو؛ تور دلخواهت با هتل دلخواهت"></section>`;
+  const activeCount = tours().filter(t=>t.status==='active').length;
+  return `<div class="hero-experience relative overflow-hidden mb-7 text-white">
+    <div class="relative z-10 p-7 md:p-11">
+      <span class="inline-flex items-center gap-1.5 text-[.62rem] font-black px-3 py-1 rounded-full mb-3" style="background:var(--a);color:#78350f">
+        <i class="fa-solid fa-bolt"></i>بروزرسانی لحظه‌ای قیمت و ظرفیت
+      </span>
+      <div class="hero-copy">
+        <h1 class="text-2xl md:text-5xl font-black leading-tight mb-3">سفر رو؛ تور دلخواهت با <span style="color:var(--a)">هتل دلخواهت</span></h1>
+        <p class="text-white/80 text-sm leading-relaxed max-w-2xl">تورهای داخلی و خارجی را با قیمت، ظرفیت و هتل واقعی مقایسه کن؛ انتخاب نهایی دست خودت است.</p>
+      </div>
+      <div class="trust-strip">
+        <span class="trust-item"><i class="fa-solid fa-fire"></i><span>${faNum(activeCount)} تور فعال</span></span>
+        <span class="trust-item"><i class="fa-solid fa-star"></i><span>۴.۸ از ۵ رضایت مسافران</span></span>
+        <span class="trust-item"><i class="fa-solid fa-shield-halved"></i><span>قیمت شفاف و قابل مقایسه</span></span>
+      </div>
+    </div>
+  </div>`;
 }
+
 
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
