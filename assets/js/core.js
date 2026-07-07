@@ -37,6 +37,11 @@ function hotelCatalog(){
   return v;
 }
 function saveHotelCatalog(v){write('hotelCatalog',v)}
+function normalizeStaffAccounts(){
+  const list=staffAccounts().map(a=>({taskNote:'',...a}));
+  saveStaffAccounts(list);
+  return list;
+}
 function staffAccounts(){
   let v=read('staffAccounts',null);
   if(!v){v=defaultStaffAccounts();saveStaffAccounts(v)}
