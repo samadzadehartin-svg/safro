@@ -1198,3 +1198,18 @@ td,th{
   background:rgba(255,255,255,.24);
   pointer-events:none;
 }
+
+
+/* Sales panel safety fixes */
+.staff-account-table,.table-wrap{overflow:auto}
+.login-box pre{font-family:Consolas,monospace!important;font-size:12px}
+
+
+/* Admin customer trail chips */
+.admin-trail-cell{
+  min-width:180px;
+}
+.admin-trail-cell .customer-trail-chip{
+  display:inline-flex;
+  margin:2px;
+}

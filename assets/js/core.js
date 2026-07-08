@@ -108,6 +108,32 @@ function trailSummary(){
   return customerTrail().map(x=>x.tourTitle+' - '+x.dest).slice(0,12).join(' | ');
 }
 
+
+function toEnDigits(s){
+  return String(s||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+}
+function normalizeDurationNightFirst(v){
+  const s=String(v||'').trim();
+  if(!s)return s;
+  const en=toEnDigits(s);
+  const nightMatch=en.match(/(\d+)\s*شب/);
+  const dayMatch=en.match(/(\d+)\s*روز/);
+  if(nightMatch && dayMatch){
+    return `${faNum(nightMatch[1])} شب و ${faNum(dayMatch[1])} روز`;
+  }
+  const nums=[...en.matchAll(/\d+/g)].map(m=>Number(m[0])).filter(n=>!isNaN(n));
+  if(nums.length>=2 && /روز/.test(s) && /شب/.test(s)){
+    const day=/روز/.test(s.split(String(nums[0]))[1]||'')?nums[0]:nums[1];
+    const night=day===nums[0]?nums[1]:nums[0];
+    return `${faNum(night)} شب و ${faNum(day)} روز`;
+  }
+  return s.replace(/(\d+|[۰-۹]+)\s*روز\s*و\s*(\d+|[۰-۹]+)\s*شب/g,(m,d,n)=>`${faNum(toEnDigits(n))} شب و ${faNum(toEnDigits(d))} روز`);
+}
+function normalizeAllTourDurations(){
+  const ts=tours().map(t=>({...t,duration:normalizeDurationNightFirst(t.duration)}));
+  saveTours(ts);
+}
+
 function seed(){if(!read('tours',null))write('tours',DEFAULT_TOURS);if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS);if(!read('visaServices',null))write('visaServices',DEFAULT_VISAS);if(!read('hotelCatalog',null))write('hotelCatalog',defaultHotelCatalog());if(!read('staffAccounts',null))write('staffAccounts',defaultStaffAccounts());normalizeTourImagesTheme()}
 function tours(){return read('tours',DEFAULT_TOURS)}function saveTours(v){write('tours',v)}
 function orders(){return read('orders',[])}function saveOrders(v){write('orders',v)}
@@ -204,4 +230,4 @@ function mount(type){
   $('footerMount').innerHTML = footer(type);
   updateWishCount();
 }
-document.addEventListener('DOMContentLoaded',()=>{seed();initTheme()});
+document.addEventListener('DOMContentLoaded',()=>{seed();normalizeAllTourDurations();initTheme()});

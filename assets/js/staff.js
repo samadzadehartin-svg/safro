@@ -90,6 +90,14 @@ function excelTourImportBox(role){
 }
 
 
+function badges(t){
+  const arr=[];
+  if(t?.type==='domestic')arr.push('<span class="badge domestic">داخلی</span>');
+  if(t?.type==='international')arr.push('<span class="badge international">خارجی</span>');
+  if(t?.level)arr.push(`<span class="badge special">${t.level}</span>`);
+  if(t?.lastMinute)arr.push('<span class="badge special">ویژه</span>');
+  return arr.join(' ');
+}
 function hotelStars(n){return `<span class="hotel-stars">${Array.from({length:Number(n)||0}).map(()=>'<i class="fa-solid fa-star"></i>').join('')}</span>`}
 function defaultSections(){return{description:true,flightInfo:true,dates:true,hotels:true,gallery:true,itinerary:true,docs:true,includes:true,excludes:true,cancellation:true,childPolicy:true,reviews:true}}
 function sectionVal(id){return !!$(id)?.checked}
@@ -100,6 +108,10 @@ function currentStaffAccount(){
     if(!u)return null;
     return staffAccounts().find(a=>a.username===u.username || a.id===u.id) || null;
   }catch(e){return null}
+}
+function staffTaskNoteHtml(){
+  const acc=currentStaffAccount();
+  return acc?.taskNote?`<div class="staff-task-note"><b>توضیحات مدیریت برای شما:</b><br>${acc.taskNote}</div>`:'';
 }
 function initStaff(){
   mount('staff');
@@ -116,12 +128,15 @@ function initStaff(){
 function renderLogin(){$('app').innerHTML=`<div class="card pad login-box"><h2>ورود فروش</h2><p class="small">هر فروش با یوزرنیم و پسورد خودش وارد می‌شود. ورود دمو: فقط رمز staff123</p><input id="user" class="field" placeholder="یوزرنیم" dir="ltr"><input id="pass" class="field" type="password" placeholder="پسورد" dir="ltr"><button class="btn" style="width:100%;margin-top:12px" onclick="doLogin()">ورود</button></div>`}
 function doLogin(){if(loginRole('staff',$('pass').value,$('user').value))location.reload();else alert('یوزرنیم یا پسورد اشتباه است')}
 function renderStaff(){
+  try{
   const q=$('staffSearch')?.value?.trim().toLowerCase()||'', user=currentStaffUser();
   let list=tours();if(q)list=list.filter(t=>t.title.toLowerCase().includes(q)||t.dest.toLowerCase().includes(q));
-  $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge special">پنل فروش</span><h1>مدیریت تورها</h1><p class="small">وارد شده با: <b>${user?.name||user?.username||'فروش'}</b></p>${currentStaffAccount()?.taskNote?`<div class="staff-task-note"><b>توضیحات مدیریت برای شما:</b><br>${currentStaffAccount().taskNote}</div>`:''}</div><div class="actions"><button class="soft" onclick="logoutRole('staff')">خروج</button><button class="btn" onclick="openForm()">افزودن تور</button></div></div>
+  $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge special">پنل فروش</span><h1>مدیریت تورها</h1><p class="small">وارد شده با: <b>${user?.name||user?.username||'فروش'}</b></p>${staffTaskNoteHtml()}</div><div class="actions"><button class="soft" onclick="logoutRole('staff')">خروج</button><button class="btn" onclick="openForm()">افزودن تور</button></div></div>
   ${priceImportBox()}${batchPriceBox()}
   <div class="card pad" style="margin:16px 0"><input id="staffSearch" class="field" placeholder="جستجو..." oninput="renderStaff()" value="${q}"></div>
   <div class="card table-wrap"><table><thead><tr><th>عکس</th><th>عنوان</th><th>مقصد</th><th>قیمت شروع</th><th>ظرفیت</th><th>وضعیت</th><th>آخرین ویرایش</th><th>عملیات</th></tr></thead><tbody>${list.map(t=>`<tr><td><img src="${t.img}" style="width:55px;height:55px;object-fit:cover;border-radius:12px"></td><td><b>${t.title}</b><br><small>${badges(t)}</small></td><td>${t.dest}</td><td>${money(minHotel(t).price)}</td><td>${faNum(totalCapacity(t))}</td><td>${t.status}</td><td><span class="last-edited">${t.lastEditedBy||'—'}<br>${t.lastEditedAt?new Date(t.lastEditedAt).toLocaleString('fa-IR'):''}</span></td><td><button class="soft" onclick="openForm(${t.id})">ویرایش</button><button class="danger" onclick="delTour(${t.id})">حذف</button></td></tr>`).join('')}</tbody></table></div>`;
+
+  }catch(err){console.error('renderStaff error',err);$('app').innerHTML=`<div class="card pad login-box"><h2>خطای پنل فروش</h2><p class="small">یک خطا در نمایش پنل پیش آمد. یک بار خروج/ورود کن یا کش مرورگر را پاک کن.</p><pre style="direction:ltr;text-align:left;white-space:pre-wrap;background:var(--bg);padding:10px;border-radius:12px;max-height:160px;overflow:auto">${err.message||err}</pre><button class="btn" onclick="logoutRole('staff')">خروج و ورود دوباره</button></div>`}
 }
 function priceImportBox(){
   return `<section class="price-import-box"><h3>آپدیت قیمت با شیت</h3><p class="small">فایل CSV خروجی گرفته‌شده از شیت نمونه را آپلود کن تا قیمت‌ها و ظرفیت‌ها آپدیت شوند.</p><input id="staffPriceImport" class="field" type="file" accept=".csv,.txt"><button class="btn" style="margin-top:10px" onclick="importPriceSheet('staffPriceImport','staffImportResult')">آپلود و آپدیت قیمت‌ها</button><div id="staffImportResult" class="import-result"></div></section>${excelTourImportBox('staff')}`;
@@ -268,7 +283,7 @@ function saveTour(e){
     id,
     title:$('title').value,
     dest:$('dest').value,
-    duration:$('duration').value,
+    duration:normalizeDurationNightFirst($('duration').value),
     airline:$('airline').value,
     returnAirline:$('returnAirline').value||$('airline').value,
     flightTime:$('flightTime').value||'۰۸:۳۰',
