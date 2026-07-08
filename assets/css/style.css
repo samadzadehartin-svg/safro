@@ -1339,3 +1339,16 @@ td,th{
   .batch-clean-grid{grid-template-columns:1fr}
   .batch-head{flex-direction:column}
 }
+
+
+/* Admin batch price update panel */
+.admin-batch-box{
+  margin-top:14px;
+  border:1px solid var(--b);
+  background:rgba(74,159,216,.045);
+  border-radius:20px;
+  padding:14px;
+}
+.admin-batch-box .batch-tour-list{
+  max-height:230px;
+}

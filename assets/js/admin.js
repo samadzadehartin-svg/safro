@@ -94,6 +94,60 @@ function initAdmin(){mount('admin');if(!authGate('admin'))return renderLogin();r
 function renderLogin(){$('app').innerHTML=`<div class="card pad login-box"><h2>ورود مدیریت</h2><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div><p class="small">رمز دمو: admin123</p><input id="pass" class="field" type="password" placeholder="رمز *"><button class="btn" style="width:100%;margin-top:12px" onclick="doLogin()">ورود</button></div>`}
 function doLogin(){if(loginRole('admin',$('pass').value))location.reload();else alert('رمز اشتباه است')}
 
+
+function adminBatchPriceBox(){
+  const ts=tours();
+  return `<section class="batch-box batch-box-clean admin-batch-box">
+    <div class="batch-head">
+      <div>
+        <h3>آپدیت گروهی قیمت هتل‌ها</h3>
+        <p class="small">در مدیریت هم می‌توانی چند تور را انتخاب کنی و قیمت هتل‌های ۳، ۴ یا ۵ ستاره را یکجا افزایش بدهی.</p>
+      </div>
+      <div class="row wrap">
+        <button class="soft" type="button" onclick="adminToggleAllBatchTours(true)">انتخاب همه</button>
+        <button class="soft" type="button" onclick="adminToggleAllBatchTours(false)">لغو انتخاب</button>
+      </div>
+    </div>
+    <div class="batch-clean-grid">
+      <div>
+        <label class="label">انتخاب تورها</label>
+        <div class="batch-tour-list" id="adminBatchTourList">
+          ${ts.map(t=>`<label class="batch-tour-item"><input type="checkbox" class="admin-batch-tour-check" value="${t.id}"><span>${t.title}</span></label>`).join('')}
+        </div>
+      </div>
+      <div>
+        <label class="label">هتل‌ها</label>
+        <div class="batch-options clean-options">
+          <label><input type="checkbox" id="adminBatchStar3" checked> ۳ ستاره</label>
+          <label><input type="checkbox" id="adminBatchStar4" checked> ۴ ستاره</label>
+          <label><input type="checkbox" id="adminBatchStar5" checked> ۵ ستاره</label>
+        </div>
+      </div>
+      <div>
+        <label class="label">مبلغ افزایش برای هر نفر</label>
+        <input id="adminBatchAmount" class="field" type="number" placeholder="مثلاً 500000">
+        <button class="btn" style="width:100%;margin-top:10px" onclick="adminBatchUpdatePrices()">اعمال افزایش قیمت</button>
+      </div>
+    </div>
+    <div id="adminBatchResult" class="import-result"></div>
+  </section>`;
+}
+function adminToggleAllBatchTours(state){
+  document.querySelectorAll('.admin-batch-tour-check').forEach(x=>x.checked=state);
+}
+function adminBatchUpdatePrices(){
+  const ids=[...document.querySelectorAll('.admin-batch-tour-check:checked')].map(o=>Number(o.value));
+  const amount=Number($('adminBatchAmount').value)||0;
+  const stars=[3,4,5].filter(s=>$('adminBatchStar'+s)?.checked);
+  if(!ids.length||!amount||!stars.length){alert('تور، ستاره و مبلغ را انتخاب کنید');return}
+  const ts=tours().map(t=>ids.includes(t.id)?{...t,hotels:(t.hotels||[]).map(h=>stars.includes(Number(h.star))?{...h,price:Number(h.price||0)+amount}:h),lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()}:t);
+  saveTours(ts);
+  const result=$('adminBatchResult');
+  if(result)result.innerHTML=`<div>قیمت هتل‌های انتخاب‌شده برای ${faNum(ids.length)} تور آپدیت شد.</div>`;
+  showToast('قیمت‌ها در مدیریت آپدیت شد');
+  setTimeout(()=>{renderToursAdmin();},200);
+}
+
 function renderAdmin(){
   const os=orders(),sales=os.reduce((s,o)=>s+Number(o.totalPrice||0),0);
   $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge international">پنل مدیریت</span><h1>داشبورد مدیریت</h1></div><button class="soft" onclick="logoutRole('admin')">خروج</button></div>
@@ -137,7 +191,7 @@ function renderAdmin(){
     <div id="staffAccountsTable" class="table-wrap staff-account-table" style="margin-top:12px"></div>
   </section>
 
-  <section id="admin-price-sheet" class="card pad" style="margin-bottom:16px"><h3>آپدیت قیمت با شیت</h3><p class="small">فایل CSV خروجی گرفته‌شده از شیت نمونه را اینجا آپلود کن تا قیمت‌ها، ظرفیت‌ها و تخفیف دستی آپدیت شوند.</p><div class="price-import-box"><input id="adminPriceImport" class="field" type="file" accept=".csv,.txt"><button class="btn" onclick="importPriceSheet('adminPriceImport','adminImportResult')">آپلود و آپدیت قیمت‌ها</button><div id="adminImportResult" class="import-result"></div></div>${excelTourImportBox('admin')}</section>
+  <section id="admin-price-sheet" class="card pad" style="margin-bottom:16px"><h3>آپدیت قیمت با شیت</h3><p class="small">فایل CSV خروجی گرفته‌شده از شیت نمونه را اینجا آپلود کن تا قیمت‌ها، ظرفیت‌ها و تخفیف دستی آپدیت شوند.</p><div class="price-import-box"><input id="adminPriceImport" class="field" type="file" accept=".csv,.txt"><button class="btn" onclick="importPriceSheet('adminPriceImport','adminImportResult')">آپلود و آپدیت قیمت‌ها</button><div id="adminImportResult" class="import-result"></div></div>${excelTourImportBox('admin')}${adminBatchPriceBox()}</section>
 
   <section id="admin-hotels" class="card pad" style="margin-bottom:16px">
     <h3>مدیریت هتل‌ها برای قیمت‌گذاری فروشان</h3><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
