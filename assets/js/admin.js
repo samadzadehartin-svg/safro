@@ -379,11 +379,11 @@ function renderCustomerTrailAdmin(){
   const leadRows=leads().map(l=>({kind:'تماس/مشاوره',name:l.name,phone:l.phone,date:l.createdAt,trail:l.viewedTours||[],trailText:l.viewedToursText||''}));
   const orderRows=orders().map(o=>({kind:'رزرو',name:o.name,phone:o.phone,date:o.createdAt||o.date,trail:o.viewedTours||[],trailText:o.viewedToursText||''}));
   const rows=[...leadRows,...orderRows].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
-  box.innerHTML=`<table><thead><tr><th>نوع</th><th>مشتری</th><th>تاریخ</th><th>تورهای دیده‌شده</th></tr></thead><tbody>${rows.map(r=>`<tr>
+  box.innerHTML=`<table><thead><tr><th>نوع</th><th>مشتری</th><th>تاریخ</th><th>تورهای دیده‌شده مشتری</th></tr></thead><tbody>${rows.map(r=>`<tr>
     <td><span class="badge special">${r.kind}</span></td>
     <td><b>${r.name||'—'}</b><br><small dir="ltr">${r.phone||'—'}</small></td>
     <td>${r.date?new Date(r.date).toLocaleString('fa-IR'):''}</td>
-    <td class="admin-trail-cell">${(r.trail||[]).map(x=>`<span class="customer-trail-chip">${x.tourTitle}</span>`).join('')||r.trailText||'—'}</td>
+    <td class="admin-trail-cell">${(r.trail||[]).map(x=>`<span class="customer-trail-chip">${x.tourTitle||x.title||'تور'}</span>`).join('')||r.trailText||'—'}</td>
   </tr>`).join('')||'<tr><td colspan="4">هنوز ردپایی ثبت نشده است.</td></tr>'}</tbody></table>`;
 }
 

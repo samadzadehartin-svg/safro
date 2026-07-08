@@ -98,9 +98,6 @@ function normalizeTourImagesTheme(){
 }
 
 const TOUR_TITLE_FA_MAP = {
-  "Paris Dream Vacation": "تور رویایی پاریس",
-  "Rome Historical Escape": "تور تاریخی رم",
-  "Bangkok Temple Discovery": "تور معابد بانکوک",
   "Istanbul Spring Escape": "تور بهاره استانبول",
   "Dubai Luxury Break": "تور لوکس دبی",
   "Antalya Summer Resort": "تور تابستانی آنتالیا",
@@ -109,12 +106,18 @@ const TOUR_TITLE_FA_MAP = {
   "Cappadocia Balloon Experience": "تور بالون‌سواری کاپادوکیا",
   "Shiraz & Persepolis Journey": "تور شیراز و تخت جمشید",
   "Isfahan Heritage Tour": "تور میراث اصفهان",
+  "Paris Dream Vacation": "تور رویایی پاریس",
+  "Paris Classic Tour": "تور کلاسیک پاریس",
+  "Rome Historical Escape": "تور تاریخی رم",
+  "Rome Heritage Trip": "تور تاریخی رم",
+  "Bangkok Temple Discovery": "تور معابد بانکوک",
+  "Bangkok Temple Escape": "تور معابد بانکوک",
   "Yerevan City Break": "تور شهری ایروان",
   "Georgia Nature Tour": "تور طبیعت گرجستان",
   "Kuala Lumpur Modern Trip": "تور کوالالامپور مدرن"
 };
 function normalizeTourPersianNamesAndImages(){
-  if(read('persianTourNamesImagesV1Applied',false))return;
+  if(read('persianTourNamesImagesV2Applied',false))return;
   const ts=tours().map(t=>{
     const title=TOUR_TITLE_FA_MAP[t.title]||t.title;
     const nt={...t,title};
@@ -122,7 +125,7 @@ function normalizeTourPersianNamesAndImages(){
     return {...nt,img,gallery:[img,...((nt.gallery||[]).filter(x=>x&&x!==nt.img&&x!==img)).slice(0,3)]};
   });
   saveTours(ts);
-  write('persianTourNamesImagesV1Applied',true);
+  write('persianTourNamesImagesV2Applied',true);
 }
 
 function customerTrail(){return read('customerTrail',[])}

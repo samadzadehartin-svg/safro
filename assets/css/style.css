@@ -2452,3 +2452,9 @@ body:not(.dark) .hero-custom-tour-card input::placeholder{
 .tour-img{
   background:linear-gradient(135deg,#eaf6ff,#ffffff);
 }
+
+
+/* final admin-only customer trail and tour image polish */
+.admin-trail-cell{min-width:220px}
+.admin-trail-cell .customer-trail-chip{display:inline-flex;margin:2px}
+.tour-img{background:linear-gradient(135deg,#eaf6ff,#ffffff)}
