@@ -274,27 +274,44 @@ function renderBookingPhotoHotels(){
   <div class="booking-photo-list">${list.map((h,i)=>`<div class="booking-photo-card">
     <div class="booking-photo-head">
       <div><b dir="ltr">${h.name||'—'}</b><small>${hotelStars(h.star)} | ${money(h.price||0)}</small></div>
-      <button class="btn" onclick="saveBookingHotelPhotos(${tourId},${i})">ذخیره عکس‌های هتل</button>
+      <button class="btn" onclick="saveBookingHotelPhotos(${tourId},${i})">ذخیره اطلاعات Booking</button>
     </div>
-    <label class="label">URL صفحه Booking هتل</label>
-    <input id="bookingLink_${tourId}_${i}" class="field" dir="ltr" placeholder="https://booking.com/..." value="${h.bookingLink||''}">
-    <label class="label">انتخاب عکس از سیستم</label>
-    <input class="field" type="file" accept="image/*" multiple onchange="uploadBookingHotelPhotos(${tourId},${i},this.files)">
-    <label class="label">URL عکس‌ها؛ هر URL در یک خط</label>
-    <textarea id="bookingPhotos_${tourId}_${i}" class="field" dir="ltr" rows="4" placeholder="URL عکس ۱\nURL عکس ۲\nURL عکس ۳\nURL عکس ۴">${hotelPhotosText(h)}</textarea>
+
+    <div class="booking-url-grid">
+      <div>
+        <label class="label">URL صفحه Booking هتل</label>
+        <input id="bookingLink_${tourId}_${i}" class="field" dir="ltr" placeholder="https://www.booking.com/hotel/..." value="${h.bookingLink||''}">
+      </div>
+      <div>
+        <label class="label">انتخاب عکس از سیستم</label>
+        <input class="field" type="file" accept="image/*" multiple onchange="uploadBookingHotelPhotos(${tourId},${i},this.files)">
+      </div>
+    </div>
+
+    <div class="booking-url-row-title">URL عکس‌های Booking</div>
+    <div class="booking-url-inputs">
+      ${[0,1,2,3,4,5].map(n=>`<input id="bookingPhotoUrl_${tourId}_${i}_${n}" class="field" dir="ltr" placeholder="URL عکس ${n+1}" value="${((h.photos||h.images||[])[n])||''}">`).join('')}
+    </div>
+
+    <label class="label">یا همه URL عکس‌ها؛ هر URL در یک خط</label>
+    <textarea id="bookingPhotos_${tourId}_${i}" class="field" dir="ltr" rows="4" placeholder="URL عکس ۱&#10;URL عکس ۲&#10;URL عکس ۳&#10;URL عکس ۴">${hotelPhotosText(h)}</textarea>
+
     <div class="admin-gallery-preview booking-preview">${(h.photos||h.images||[]).filter(Boolean).slice(0,8).map(src=>`<img src="${src}">`).join('')||'<span class="small">هنوز عکسی ثبت نشده است.</span>'}</div>
   </div>`).join('')||'<div class="empty-state-mini">برای این تور هنوز هتلی ثبت نشده است.</div>'}</div>`;
 }
 function saveBookingHotelPhotos(tourId,index){
+  const singleUrls=[0,1,2,3,4,5].map(n=>$(`bookingPhotoUrl_${tourId}_${index}_${n}`)?.value?.trim()).filter(Boolean);
+  const bulkUrls=($(`bookingPhotos_${tourId}_${index}`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  const urls=[...new Set([...singleUrls,...bulkUrls])];
   saveTours(tours().map(t=>{
     if(Number(t.id)!==Number(tourId))return t;
     const hs=[...(t.hotels||[])];
     const h=hs[index]||{};
-    hs[index]={...h,bookingLink:$(`bookingLink_${tourId}_${index}`)?.value?.trim()||'',photos:($(`bookingPhotos_${tourId}_${index}`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean)};
+    hs[index]={...h,bookingLink:$(`bookingLink_${tourId}_${index}`)?.value?.trim()||'',photos:urls};
     return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
   }));
   renderBookingPhotoHotels();
-  showToast('عکس و لینک Booking هتل ذخیره شد');
+  showToast('URL و عکس‌های Booking هتل ذخیره شد');
 }
 function uploadBookingHotelPhotos(tourId,index,files){
   const arr=[...(files||[])];if(!arr.length)return;
