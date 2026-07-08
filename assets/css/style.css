@@ -1213,3 +1213,51 @@ td,th{
   display:inline-flex;
   margin:2px;
 }
+
+
+/* Final modal scroll fix for sales/admin edit forms */
+.modal{
+  position:fixed!important;
+  inset:0!important;
+  z-index:9999!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:24px 12px!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  overscroll-behavior:contain;
+}
+.modal.on{
+  display:flex!important;
+}
+.modal-card{
+  width:min(960px,calc(100vw - 24px))!important;
+  max-height:none!important;
+  height:auto!important;
+  margin:24px auto!important;
+  overflow:visible!important;
+}
+.modal-card form,
+.modal-card .stack{
+  max-height:none!important;
+  overflow:visible!important;
+}
+.modal-card > .row:first-child{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:var(--c);
+  padding:10px 0 12px;
+  border-bottom:1px solid var(--b);
+}
+.modal-card form button[type="submit"],
+.modal-card .btn[type="submit"]{
+  position:sticky;
+  bottom:12px;
+  z-index:20;
+  box-shadow:0 12px 30px rgba(74,159,216,.28);
+}
+@media(max-width:768px){
+  .modal{padding:12px 8px!important}
+  .modal-card{width:calc(100vw - 16px)!important;margin:12px auto!important;border-radius:18px!important}
+}
