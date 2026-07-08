@@ -166,7 +166,9 @@ function renderAdmin(){
       <a href="#admin-staff-accounts"><i class="fa-regular fa-user"></i> تیم فروش</a>
       <a href="#admin-price-sheet"><i class="fa-solid fa-file-csv"></i> آپدیت قیمت</a>
       <a href="#admin-hotels"><i class="fa-solid fa-hotel"></i> هتل‌ها</a>
+      <a href="#admin-hotel-booking-photos"><i class="fa-regular fa-images"></i> عکس Booking هتل‌ها</a>
       <a href="#admin-leads"><i class="fa-solid fa-phone"></i> شماره‌ها</a>
+      <a href="#admin-customer-trail"><i class="fa-solid fa-shoe-prints"></i> ردپای مشتری</a>
       <a href="#admin-visas"><i class="fa-solid fa-passport"></i> ویزا</a>
       <a href="#admin-discounts"><i class="fa-solid fa-percent"></i> تخفیف‌ها</a>
       <a href="#admin-orders"><i class="fa-solid fa-list-check"></i> رزروها</a>
@@ -206,6 +208,16 @@ function renderAdmin(){
     <div class="list-title-line"><h4>لیست تک‌تک هتل‌های مدیریت</h4><span class="small">با دکمه ویرایش کنار هر هتل</span></div><div id="hotelCatalogTable" class="hotel-admin-table"></div><div class="current-hotels-box"><h3>لیست تک‌تک هتل‌های ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل مشتری را فعال/غیرفعال کنی.</p><div class="row wrap" style="margin-bottom:10px"><button class="soft" onclick="renderCurrentTourHotels()">بروزرسانی لیست</button><button class="btn" onclick="syncCatalogHotelsToTours()">اعمال هتل‌های فعال مدیریت روی همه تورها</button><select id="addHotelTourId" class="field" style="max-width:260px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join("")}</select><button class="soft" onclick="addCurrentTourHotel(Number($('addHotelTourId').value))">افزودن هتل به تور</button></div><div id="currentTourHotelsTable" class="table-wrap"></div></div>
   </section>
 
+
+  <section id="admin-hotel-booking-photos" class="card pad" style="margin-bottom:16px">
+    <div class="row wrap"><div><span class="badge international">Booking</span><h3>مدیریت عکس‌های Booking هتل‌ها</h3><p class="small">اینجا برای هر تور و هر هتل می‌توانی لینک Booking و عکس‌های هتل را وارد یا آپلود کنی. این عکس‌ها با دکمه Booking در پنل مشتری نمایش داده می‌شوند.</p></div></div>
+    <div class="row wrap booking-admin-controls">
+      <select id="bookingPhotoTour" class="field" onchange="renderBookingPhotoHotels()" style="max-width:320px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join('')}</select>
+      <button class="soft" onclick="renderBookingPhotoHotels()">بروزرسانی لیست</button>
+    </div>
+    <div id="bookingPhotoHotels" class="booking-photo-admin-list"></div>
+  </section>
+
   <section id="admin-leads" class="card pad" style="margin-bottom:16px">
     <div class="row wrap"><div><h3>لیست تماس و مشاوره رایگان</h3><p class="small">شماره‌هایی که در بخش «تور خودتو بساز» ثبت می‌شوند اینجا می‌آیند.</p></div><button class="soft" onclick="clearLeads()">پاک کردن لیست تماس</button></div>
     <div class="lead-tools"><div><label class="label">افزودن مسئول فروش</label><input id="newContactStaff" class="field" placeholder="مثلاً: علی رضایی"></div><button class="btn" onclick="addContactStaff()">افزودن فروش</button></div>
@@ -214,6 +226,12 @@ function renderAdmin(){
   </section>
 
   
+
+  <section id="admin-customer-trail" class="card pad" style="margin-bottom:16px">
+    <div class="row wrap"><div><span class="badge special">ردپای مشتری</span><h3>ردپای مشتری‌ها در سایت</h3><p class="small">اینجا مشخص می‌شود هر مشتری قبل از ثبت شماره یا رزرو، کدام تورها را دیده است.</p></div></div>
+    <div id="customerTrailAdminTable" class="table-wrap" style="margin-top:12px"></div>
+  </section>
+
   <section id="admin-visas" class="card pad" style="margin-bottom:16px">
     <h3>مدیریت قیمت ویزا</h3>
     <p class="small">کشورها و شهرهایی که امکان گرفتن ویزا یا خدمات سفر برای آن‌ها دارید را اینجا اضافه و ویرایش کن. این لیست در پنل مشتری نمایش داده می‌شود.</p>
@@ -241,9 +259,116 @@ function renderAdmin(){
   </section>
     </div>
   </div>`;
-  renderTourImages();renderStaffAccounts();renderHotelCatalog();renderCurrentTourHotels();renderContactStaff();renderLeads();renderVisas();renderDiscounts();renderOrders();
+  renderTourImages();renderStaffAccounts();renderHotelCatalog();renderCurrentTourHotels();renderBookingPhotoHotels();renderContactStaff();renderLeads();renderCustomerTrailAdmin();renderVisas();renderDiscounts();renderOrders();
 }
 
+
+
+function renderBookingPhotoHotels(){
+  const tourId=Number($('bookingPhotoTour')?.value||tours()[0]?.id||0);
+  const box=$('bookingPhotoHotels');if(!box)return;
+  const t=findTour(tourId);
+  if(!t){box.innerHTML='<div class="empty-state-mini">تور انتخاب نشده است.</div>';return}
+  const list=t.hotels||[];
+  box.innerHTML=`<div class="current-tour-hotel-head"><b>تور انتخاب‌شده: ${t.title}</b><span class="small">${faNum(list.length)} هتل</span></div>
+  <div class="booking-photo-list">${list.map((h,i)=>`<div class="booking-photo-card">
+    <div class="booking-photo-head">
+      <div><b dir="ltr">${h.name||'—'}</b><small>${hotelStars(h.star)} | ${money(h.price||0)}</small></div>
+      <button class="btn" onclick="saveBookingHotelPhotos(${tourId},${i})">ذخیره عکس‌های هتل</button>
+    </div>
+    <label class="label">لینک Booking</label>
+    <input id="bookingLink_${tourId}_${i}" class="field" dir="ltr" placeholder="https://booking.com/..." value="${h.bookingLink||''}">
+    <label class="label">آپلود عکس‌های هتل</label>
+    <input class="field" type="file" accept="image/*" multiple onchange="uploadBookingHotelPhotos(${tourId},${i},this.files)">
+    <label class="label">یا لینک عکس‌ها، هر لینک در یک خط</label>
+    <textarea id="bookingPhotos_${tourId}_${i}" class="field" dir="ltr" rows="4" placeholder="هر لینک عکس در یک خط">${hotelPhotosText(h)}</textarea>
+    <div class="admin-gallery-preview booking-preview">${(h.photos||h.images||[]).filter(Boolean).slice(0,8).map(src=>`<img src="${src}">`).join('')||'<span class="small">هنوز عکسی ثبت نشده است.</span>'}</div>
+  </div>`).join('')||'<div class="empty-state-mini">برای این تور هنوز هتلی ثبت نشده است.</div>'}</div>`;
+}
+function saveBookingHotelPhotos(tourId,index){
+  saveTours(tours().map(t=>{
+    if(Number(t.id)!==Number(tourId))return t;
+    const hs=[...(t.hotels||[])];
+    const h=hs[index]||{};
+    hs[index]={...h,bookingLink:$(`bookingLink_${tourId}_${index}`)?.value?.trim()||'',photos:($(`bookingPhotos_${tourId}_${index}`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean)};
+    return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
+  }));
+  renderBookingPhotoHotels();
+  showToast('عکس و لینک Booking هتل ذخیره شد');
+}
+function uploadBookingHotelPhotos(tourId,index,files){
+  const arr=[...(files||[])];if(!arr.length)return;
+  Promise.all(arr.map(file=>new Promise(resolve=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.readAsDataURL(file)}))).then(urls=>{
+    saveTours(tours().map(t=>{
+      if(Number(t.id)!==Number(tourId))return t;
+      const hs=[...(t.hotels||[])];
+      const h=hs[index]||{};
+      hs[index]={...h,photos:urls};
+      return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
+    }));
+    renderBookingPhotoHotels();
+    showToast('عکس‌های Booking هتل آپلود شد');
+  });
+}
+function renderContactStaff(){
+  const box=$('staffChipList');if(!box)return;
+  const list=contactStaff();
+  box.innerHTML=list.map(x=>`<span class="customer-trail-chip">${x}<button class="chip-x" onclick="removeContactStaff('${x}')">×</button></span>`).join('')||'<span class="small">هنوز مسئولی ثبت نشده است.</span>';
+}
+function addContactStaff(){
+  const v=$('newContactStaff')?.value?.trim();
+  if(!v)return alert('نام مسئول فروش را وارد کنید');
+  const list=[...new Set([...contactStaff(),v])];
+  saveContactStaff(list);
+  $('newContactStaff').value='';
+  renderContactStaff();
+}
+function removeContactStaff(name){
+  saveContactStaff(contactStaff().filter(x=>x!==name));
+  renderContactStaff();
+}
+function renderLeads(){
+  const box=$('leadsTable');if(!box)return;
+  const list=leads();
+  const staff=contactStaff();
+  box.innerHTML=`<table><thead><tr><th>مشتری</th><th>درخواست</th><th>منبع</th><th>زمان/گشت</th><th>تورهای دیده‌شده</th><th>مسئول فروش</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody>${list.map(l=>`<tr>
+    <td><b>${l.name||'—'}</b><br><small dir="ltr">${l.phone||'—'}</small></td>
+    <td>${l.dest||'—'}<br><small>${l.people||''} ${l.note?` | ${l.note}`:''}</small></td>
+    <td>${l.source||'—'}</td>
+    <td>${l.createdAt?new Date(l.createdAt).toLocaleString('fa-IR'):''}<br><small>${faNum(l.tourViews||0)} بازدید | ${faNum(l.engagementPercent||0)}٪ علاقه</small></td>
+    <td class="admin-trail-cell">${(l.viewedTours||[]).map(x=>`<span class="customer-trail-chip">${x.tourTitle}</span>`).join('')||l.viewedToursText||'—'}</td>
+    <td><select class="field" onchange="updateLead('${l.id}','assignedTo',this.value)"><option value="">انتخاب نشده</option>${staff.map(s=>`<option ${l.assignedTo===s?'selected':''}>${s}</option>`).join('')}</select></td>
+    <td><select class="field" onchange="updateLead('${l.id}','status',this.value)">${['جدید','در حال پیگیری','تماس گرفته شد','رزرو شد','لغو شد'].map(s=>`<option ${l.status===s?'selected':''}>${s}</option>`).join('')}</select></td>
+    <td><button class="danger" onclick="deleteLead('${l.id}')">حذف</button></td>
+  </tr>`).join('')||'<tr><td colspan="8">هنوز شماره‌ای ثبت نشده است.</td></tr>'}</tbody></table>`;
+  renderCustomerTrailAdmin();
+}
+function updateLead(id,key,value){
+  saveLeads(leads().map(l=>l.id===id?{...l,[key]:value}:l));
+  renderLeads();
+}
+function deleteLead(id){
+  if(!confirm('این شماره حذف شود؟'))return;
+  saveLeads(leads().filter(l=>l.id!==id));
+  renderLeads();
+}
+function clearLeads(){
+  if(!confirm('کل لیست تماس پاک شود؟'))return;
+  saveLeads([]);
+  renderLeads();
+}
+function renderCustomerTrailAdmin(){
+  const box=$('customerTrailAdminTable');if(!box)return;
+  const leadRows=leads().map(l=>({kind:'تماس/مشاوره',name:l.name,phone:l.phone,date:l.createdAt,trail:l.viewedTours||[],trailText:l.viewedToursText||''}));
+  const orderRows=orders().map(o=>({kind:'رزرو',name:o.name,phone:o.phone,date:o.createdAt||o.date,trail:o.viewedTours||[],trailText:o.viewedToursText||''}));
+  const rows=[...leadRows,...orderRows].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+  box.innerHTML=`<table><thead><tr><th>نوع</th><th>مشتری</th><th>تاریخ</th><th>تورهای دیده‌شده</th></tr></thead><tbody>${rows.map(r=>`<tr>
+    <td><span class="badge special">${r.kind}</span></td>
+    <td><b>${r.name||'—'}</b><br><small dir="ltr">${r.phone||'—'}</small></td>
+    <td>${r.date?new Date(r.date).toLocaleString('fa-IR'):''}</td>
+    <td class="admin-trail-cell">${(r.trail||[]).map(x=>`<span class="customer-trail-chip">${x.tourTitle}</span>`).join('')||r.trailText||'—'}</td>
+  </tr>`).join('')||'<tr><td colspan="4">هنوز ردپایی ثبت نشده است.</td></tr>'}</tbody></table>`;
+}
 
 function renderTourImages(){
   const box=$('adminTourImagesTable');if(!box)return;
@@ -582,7 +707,7 @@ function toggleDiscount(i){const ds=discounts();ds[i].active=!ds[i].active;saveD
 function delDiscount(i){const ds=discounts();ds.splice(i,1);saveDiscounts(ds);renderDiscounts()}
 
 function renderOrders(){let os=orders();const q=$('q')?.value?.trim().toLowerCase()||'',sf=$('statusFilter')?.value||'all';if(q)os=os.filter(o=>o.name.toLowerCase().includes(q)||o.phone.includes(q)||o.id.toLowerCase().includes(q));if(sf!=='all')os=os.filter(o=>o.status===sf);$('ordersTable').innerHTML=`<table><thead><tr><th>کد/مسافر</th><th>تور</th><th>هتل</th><th>تاریخ</th><th>ردپای مشتری</th><th>مبلغ</th><th>وضعیت</th><th>یادداشت</th><th>عملیات</th></tr></thead><tbody>${os.map(o=>`<tr><td><b>${o.id}</b><br>${o.name}<br><small dir="ltr">${o.phone}</small></td><td>${o.tourTitle}</td><td>${o.hotelName}</td><td>${o.date}</td><td class="admin-trail-cell">${(o.viewedTours||[]).map(x=>`<span class="customer-trail-chip">${x.tourTitle}</span>`).join('')||o.viewedToursText||'—'}</td><td>${money(o.totalPrice)}</td><td><select class="field" onchange="changeStatus('${o.id}',this.value)">${['در انتظار تماس','تماس گرفته شد','تایید شده','لغو شده','پرداخت شده'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select></td><td><textarea class="field" rows="2" onchange="changeNote('${o.id}',this.value)">${o.adminNote||''}</textarea></td><td><button class="danger" onclick="delOrder('${o.id}')">حذف</button></td></tr>`).join('')}</tbody></table>`}
-function changeStatus(id,v){saveOrders(orders().map(o=>o.id===id?{...o,status:v}:o));renderOrders()}
+function changeStatus(id,v){saveOrders(orders().map(o=>o.id===id?{...o,status:v}:o));renderOrders();renderCustomerTrailAdmin()}
 function changeNote(id,v){saveOrders(orders().map(o=>o.id===id?{...o,adminNote:v}:o))}
-function delOrder(id){if(confirm('رزرو حذف شود؟')){saveOrders(orders().filter(o=>o.id!==id));renderOrders()}}
+function delOrder(id){if(confirm('رزرو حذف شود؟')){saveOrders(orders().filter(o=>o.id!==id));renderOrders();renderCustomerTrailAdmin()}}
 document.addEventListener('DOMContentLoaded',initAdmin);

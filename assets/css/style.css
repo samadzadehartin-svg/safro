@@ -2253,3 +2253,91 @@ body:not(.dark) .hero-custom-tour-card input::placeholder{
   color:#8a9aae!important;
   opacity:1!important;
 }
+
+
+/* New admin booking photos, staff tabs, popup/trail fixes */
+.staff-top-tabs{
+  position:sticky;
+  top:74px;
+  z-index:20;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:14px 0;
+  padding:10px;
+  border:1px solid var(--b);
+  border-radius:20px;
+  background:var(--gl);
+  backdrop-filter:blur(14px);
+  box-shadow:0 12px 30px rgba(15,23,42,.07);
+}
+.staff-top-tabs a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:42px;
+  padding:10px 16px;
+  border-radius:15px;
+  background:linear-gradient(135deg,rgba(57,167,223,.12),rgba(125,211,252,.16));
+  border:1px solid rgba(57,167,223,.18);
+  color:#0b6f9f;
+  font-weight:1000;
+  font-size:12px;
+}
+.staff-section-panel{scroll-margin-top:120px;margin-bottom:18px}
+.section-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:4px 0 12px}
+.staff-visa-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+  margin-top:12px;
+}
+.staff-visa-card{
+  border:1px solid var(--b);
+  background:var(--c);
+  border-radius:20px;
+  padding:14px;
+  box-shadow:0 10px 25px rgba(15,23,42,.05);
+}
+.staff-visa-card b{display:block;font-size:14px;margin-bottom:6px}
+.staff-visa-card span{display:block;color:var(--p);font-weight:1000;margin-bottom:5px}
+.staff-visa-card p{font-size:12px;color:var(--t2);line-height:1.9;margin:6px 0 0}
+.booking-admin-controls{margin:12px 0 16px}
+.booking-photo-list{display:flex;flex-direction:column;gap:14px}
+.booking-photo-card{
+  border:1px solid var(--b);
+  background:var(--c);
+  border-radius:22px;
+  padding:14px;
+  box-shadow:0 12px 28px rgba(15,23,42,.055);
+}
+.booking-photo-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.booking-photo-head b{display:block;font-size:15px}
+.booking-preview{margin-top:10px}
+.chip-x{
+  border:none;
+  background:transparent;
+  color:#dc2626;
+  font-weight:1000;
+  margin-right:6px;
+  cursor:pointer;
+}
+.beauty-trust-strip{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+@media(max-width:760px){
+  .staff-top-tabs{position:relative;top:auto}
+  .staff-top-tabs a{width:100%}
+  .beauty-trust-strip{grid-template-columns:1fr!important}
+}
+.dark .staff-top-tabs{background:rgba(8,15,28,.82);border-color:rgba(148,163,184,.14)}
+.dark .staff-top-tabs a{background:rgba(56,189,248,.10);color:#d7efff;border-color:rgba(56,189,248,.16)}
+.dark .staff-visa-card,.dark .booking-photo-card{background:rgba(15,23,42,.78);border-color:rgba(148,163,184,.14)}

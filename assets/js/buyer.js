@@ -3,7 +3,6 @@ function beautyTrustStrip(){
   return `<div class="beauty-trust-strip">
     <div><b>رزرو آسان</b><span>فرم سریع و پیگیری کارشناس</span></div>
     <div><b>قیمت شفاف</b><span>هتل، ظرفیت و ویزا مشخص</span></div>
-    <div><b>پنل هوشمند</b><span>ردپای مشتری برای مدیریت</span></div>
   </div>`;
 }
 
@@ -153,7 +152,18 @@ function submitPopupConsultation(e){
 function closeConsultPopup(){
   const p=$('consultPopup');
   if(p) p.classList.remove('on');
-  localStorage.setItem('safarro_popup_closed','1');
+  sessionStorage.setItem('safarro_popup_closed','1');
+}
+
+function scheduleOneMinuteConsultPopup(){
+  if(sessionStorage.getItem('safarro_minute_popup_scheduled')==='1')return;
+  sessionStorage.setItem('safarro_minute_popup_scheduled','1');
+  setTimeout(()=>{
+    if(localStorage.getItem('safarro_popup_done')==='1')return;
+    if(sessionStorage.getItem('safarro_popup_closed')==='1')return;
+    if(!$('consultPopup'))return;
+    openConsultPopup();
+  },60000);
 }
 
 function openConsultPopup(){
@@ -165,7 +175,7 @@ function openConsultPopup(){
 function countTourViewAndMaybePopup(){
   const n = Number(localStorage.getItem('safarro_tour_views')||0) + 1;
   localStorage.setItem('safarro_tour_views', String(n));
-  if(n>=2 && localStorage.getItem('safarro_popup_done')!=='1' && localStorage.getItem('safarro_popup_closed')!=='1'){
+  if(n>=2 && localStorage.getItem('safarro_popup_done')!=='1' && sessionStorage.getItem('safarro_popup_closed')!=='1'){
     setTimeout(openConsultPopup, 900);
   }
 }
@@ -333,6 +343,7 @@ function renderHome(){
  <div id="compareDock" class="dock"><b><i class="fa-solid fa-code-compare"></i> <span id="compareCount">۰</span> تور برای مقایسه</b><div class="actions"><button class="soft" onclick="openCompare()">مقایسه</button><button class="danger" onclick="clearCompare()">پاک کردن</button></div></div>
  <div id="compareModal" class="modal" onclick="if(event.target===this)closeCompare()"><div class="modal-card pad"><div class="row"><h2>مقایسه تورها</h2><button class="soft" onclick="closeCompare()">بستن</button></div><div id="compareContent" class="table-wrap"></div></div></div>`;
  filterHome();
+ scheduleOneMinuteConsultPopup();
 }
 
 function specialPriceLine(t, fallbackPrice){
