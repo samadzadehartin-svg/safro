@@ -263,9 +263,9 @@ function referenceHeroSection(){
         <span class="inline-flex items-center gap-1.5 text-[.62rem] font-black px-3 py-1 rounded-full mb-3" style="background:var(--a);color:#78350f">
           <i class="fa-solid fa-bolt"></i>بروزرسانی لحظه‌ای قیمت و ظرفیت
         </span>
-        <div class="hero-copy">
-          <h1 class="text-2xl md:text-5xl font-black leading-tight mb-3">سفرو؛ تور دلخواهت با <span style="color:var(--a)">هتل دلخواهت</span></h1>
-          <p class="text-white/80 text-sm leading-relaxed max-w-2xl">تورهای داخلی و خارجی را با قیمت، ظرفیت و هتل واقعی مقایسه کن؛ انتخاب نهایی دست خودت است.</p>
+        <div class="hero-copy buyer-hero-copy">
+          <h1 class="buyer-hero-title">سفرو؛ تور دلخواهت با <span style="color:var(--a)">هتل دلخواهت</span></h1>
+          <p class="buyer-hero-subtitle">تورهای داخلی و خارجی را با قیمت، ظرفیت و هتل واقعی مقایسه کن؛ انتخاب نهایی دست خودت است.</p>
         </div>
         <div class="trust-strip">
           <span class="trust-item"><i class="fa-solid fa-fire"></i><span>${faNum(activeCount)} تور فعال</span></span>
