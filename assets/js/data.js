@@ -26,8 +26,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/istanbul-hagia-sophia.svg",
     "gallery": [
-      "../assets/images/istanbul-hagia-sophia.svg"
-    ],
+    "../assets/images/istanbul-hagia-sophia.svg",
+    "../assets/images/istanbul-hagia-sophia-2.svg",
+    "../assets/images/istanbul-hagia-sophia-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۴/۱۵",
       "۱۴۰۵/۰۴/۲۲",
@@ -115,8 +117,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/dubai-burj-khalifa.svg",
     "gallery": [
-      "../assets/images/dubai-burj-khalifa.svg"
-    ],
+    "../assets/images/dubai-burj-khalifa.svg",
+    "../assets/images/dubai-burj-khalifa-2.svg",
+    "../assets/images/dubai-burj-khalifa-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۴/۱۸",
       "۱۴۰۵/۰۴/۲۵",
@@ -204,8 +208,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/antalya-beach.svg",
     "gallery": [
-      "../assets/images/antalya-beach.svg"
-    ],
+    "../assets/images/antalya-beach.svg",
+    "../assets/images/antalya-beach-2.svg",
+    "../assets/images/antalya-beach-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۴/۲۰",
       "۱۴۰۵/۰۴/۲۸",
@@ -293,8 +299,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/kish-island.svg",
     "gallery": [
-      "../assets/images/kish-island.svg"
-    ],
+    "../assets/images/kish-island.svg",
+    "../assets/images/kish-island-2.svg",
+    "../assets/images/kish-island-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۵/۰۵",
       "۱۴۰۵/۰۵/۱۲",
@@ -382,8 +390,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/mashhad-shrine.svg",
     "gallery": [
-      "../assets/images/mashhad-shrine.svg"
-    ],
+    "../assets/images/mashhad-shrine.svg",
+    "../assets/images/mashhad-shrine-2.svg",
+    "../assets/images/mashhad-shrine-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۴/۱۰",
       "۱۴۰۵/۰۴/۲۵",
@@ -471,8 +481,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/cappadocia-balloons.svg",
     "gallery": [
-      "../assets/images/cappadocia-balloons.svg"
-    ],
+    "../assets/images/cappadocia-balloons.svg",
+    "../assets/images/cappadocia-balloons-2.svg",
+    "../assets/images/cappadocia-balloons-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۵/۰۶",
       "۱۴۰۵/۰۵/۱۴",
@@ -560,8 +572,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/shiraz-persepolis.svg",
     "gallery": [
-      "../assets/images/shiraz-persepolis.svg"
-    ],
+    "../assets/images/shiraz-persepolis.svg",
+    "../assets/images/shiraz-persepolis-2.svg",
+    "../assets/images/shiraz-persepolis-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۴/۲۹",
       "۱۴۰۵/۰۵/۰۹",
@@ -649,8 +663,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/isfahan-bridge.svg",
     "gallery": [
-      "../assets/images/isfahan-bridge.svg"
-    ],
+    "../assets/images/isfahan-bridge.svg",
+    "../assets/images/isfahan-bridge-2.svg",
+    "../assets/images/isfahan-bridge-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۵/۰۳",
       "۱۴۰۵/۰۵/۱۳",
@@ -738,8 +754,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/paris-eiffel.svg",
     "gallery": [
-      "../assets/images/paris-eiffel.svg"
-    ],
+    "../assets/images/paris-eiffel.svg",
+    "../assets/images/paris-eiffel-2.svg",
+    "../assets/images/paris-eiffel-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۶/۰۵",
       "۱۴۰۵/۰۶/۱۵",
@@ -827,8 +845,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/rome-colosseum.svg",
     "gallery": [
-      "../assets/images/rome-colosseum.svg"
-    ],
+    "../assets/images/rome-colosseum.svg",
+    "../assets/images/rome-colosseum-2.svg",
+    "../assets/images/rome-colosseum-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۶/۰۲",
       "۱۴۰۵/۰۶/۱۲",
@@ -916,8 +936,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/bangkok-temple.svg",
     "gallery": [
-      "../assets/images/bangkok-temple.svg"
-    ],
+    "../assets/images/bangkok-temple.svg",
+    "../assets/images/bangkok-temple-2.svg",
+    "../assets/images/bangkok-temple-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۵/۱۱",
       "۱۴۰۵/۰۵/۲۱",
@@ -1005,8 +1027,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/yerevan-cascade.svg",
     "gallery": [
-      "../assets/images/yerevan-cascade.svg"
-    ],
+    "../assets/images/yerevan-cascade.svg",
+    "../assets/images/yerevan-cascade-2.svg",
+    "../assets/images/yerevan-cascade-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۴/۳۰",
       "۱۴۰۵/۰۵/۱۰",
@@ -1094,8 +1118,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/georgia-caucasus.svg",
     "gallery": [
-      "../assets/images/georgia-caucasus.svg"
-    ],
+    "../assets/images/georgia-caucasus.svg",
+    "../assets/images/georgia-caucasus-2.svg",
+    "../assets/images/georgia-caucasus-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۵/۰۷",
       "۱۴۰۵/۰۵/۱۷",
@@ -1183,8 +1209,10 @@ const DEFAULT_TOURS = [
     "dealEndsAt": "2099-12-30T20:00:00.000Z",
     "img": "../assets/images/malaysia-towers.svg",
     "gallery": [
-      "../assets/images/malaysia-towers.svg"
-    ],
+    "../assets/images/malaysia-towers.svg",
+    "../assets/images/malaysia-towers-2.svg",
+    "../assets/images/malaysia-towers-3.svg"
+],
     "dates": [
       "۱۴۰۵/۰۶/۰۳",
       "۱۴۰۵/۰۶/۱۳",

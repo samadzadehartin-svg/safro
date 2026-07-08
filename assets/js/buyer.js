@@ -299,19 +299,53 @@ function referenceHeroSection(){
 
 
 
+
+function toggleBuyerVisaList(){
+  const box=$('buyerVisaList');
+  const btn=$('buyerVisaToggleBtn');
+  if(!box)return;
+  const open=!box.classList.contains('open');
+  box.classList.toggle('open',open);
+  if(btn)btn.innerHTML=open?'<i class="fa-solid fa-chevron-up"></i> بستن لیست ویزا':'<i class="fa-solid fa-passport"></i> مشاهده ویزاها و توضیحات';
+}
+function toggleBuyerVisaDetails(id){
+  const box=$('buyerVisaDetails_'+id);
+  if(!box)return;
+  box.classList.toggle('open');
+}
 function visaSection(){
   const list=visaServices().filter(v=>v.active!==false);
   if(!list.length)return '';
-  return `<section class="visa-section card pad">
-    <div class="row wrap"><div><span class="badge international">ویزا و خدمات سفر</span><h2>قیمت ویزا و مقصدهایی که انجام می‌دهیم</h2></div></div>
-    <div class="visa-grid">${list.map(v=>`<div class="visa-card">
-      <h3>${v.country} ${v.city?`- ${v.city}`:''}</h3>
-      <p class="small">${v.type||'توریستی'} | ${v.duration||'—'}</p>
-      <div class="visa-price">${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'}</div>
-      <p class="small">مدارک: ${v.docs||'—'}</p>
-    </div>`).join('')}</div>
+  return `<section class="visa-section card pad buyer-visa-section">
+    <div class="buyer-visa-hero">
+      <div>
+        <span class="badge international">ویزا و خدمات سفر</span>
+        <h2>خدمات ویزا را راحت ببین</h2>
+        <p class="small">روی دکمه زیر بزن؛ لیست ویزاها باز می‌شود و می‌توانی قیمت، مدارک، زمان انجام و توضیحات لازم را ببینی.</p>
+      </div>
+      <button id="buyerVisaToggleBtn" class="btn visa-main-toggle" onclick="toggleBuyerVisaList()"><i class="fa-solid fa-passport"></i> مشاهده ویزاها و توضیحات</button>
+    </div>
+    <div id="buyerVisaList" class="buyer-visa-list">
+      ${list.map((v,i)=>`<div class="visa-card buyer-visa-card">
+        <div class="buyer-visa-card-head" onclick="toggleBuyerVisaDetails('${i}')">
+          <div>
+            <h3>${v.country||'—'} ${v.city?`- ${v.city}`:''}</h3>
+            <p class="small">${v.type||'توریستی'} | ${v.duration||'—'}</p>
+          </div>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <div class="visa-price">${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'}</div>
+        <button class="soft" style="width:100%;margin-top:10px" onclick="toggleBuyerVisaDetails('${i}')">مشاهده مدارک و توضیحات</button>
+        <div id="buyerVisaDetails_${i}" class="buyer-visa-details">
+          <div><b>مدارک لازم:</b><p>${v.docs||'بعداً از بخش مدیریت تکمیل می‌شود.'}</p></div>
+          <div><b>مدت زمان انجام:</b><p>${v.duration||'—'}</p></div>
+          <div><b>توضیحات تکمیلی:</b><p>${v.details||v.description||v.note||'در این قسمت می‌توانید توضیحات کامل ویزا، شرایط، مدارک تکمیلی و نکات مهم را بعداً از پنل مدیریت اضافه کنید.'}</p></div>
+        </div>
+      </div>`).join('')}
+    </div>
   </section>`;
 }
+
 function customerTrailMini(){
   const list=customerTrail();
   if(!list.length)return '';

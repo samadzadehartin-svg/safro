@@ -241,6 +241,7 @@ function renderAdmin(){
       <input id="visaPrice" class="field" type="number" placeholder="قیمت">
       <input id="visaDuration" class="field" placeholder="مدت زمان">
       <input id="visaDocs" class="field" placeholder="مدارک لازم">
+      <textarea id="visaDetails" class="field visa-details-admin-field" rows="3" placeholder="توضیحات تکمیلی ویزا؛ شرایط، نکات مهم، زمان‌بندی، مدارک اضافه"></textarea>
       <button class="btn" onclick="saveVisaItem()">ذخیره ویزا</button>
     </div>
     <input id="visaId" type="hidden">
@@ -282,27 +283,30 @@ function renderBookingPhotoHotels(){
         <label class="label">URL صفحه Booking هتل</label>
         <input id="bookingLink_${tourId}_${i}" class="field" dir="ltr" placeholder="https://www.booking.com/hotel/..." value="${h.bookingLink||''}">
       </div>
-      <div>
-        <label class="label">انتخاب عکس از سیستم</label>
-        <input class="field" type="file" accept="image/*" multiple onchange="uploadBookingHotelPhotos(${tourId},${i},this.files)">
+      <div class="booking-upload-box">
+        <label class="label">آپلود چند عکس هتل</label>
+        <input id="bookingMultiUpload_${tourId}_${i}" class="field" type="file" accept="image/*" multiple onchange="uploadBookingHotelPhotos(${tourId},${i},this.files)">
+        <small class="small">چند عکس را همزمان انتخاب کن. عکس‌ها داخل همین هتل ذخیره می‌شوند.</small>
       </div>
     </div>
 
     <div class="booking-url-row-title">URL عکس‌های Booking</div>
     <div class="booking-url-inputs">
-      ${[0,1,2,3,4,5].map(n=>`<input id="bookingPhotoUrl_${tourId}_${i}_${n}" class="field" dir="ltr" placeholder="URL عکس ${n+1}" value="${((h.photos||h.images||[])[n])||''}">`).join('')}
+      ${[0,1,2,3,4,5,6,7].map(n=>`<input id="bookingPhotoUrl_${tourId}_${i}_${n}" class="field" dir="ltr" placeholder="URL عکس ${n+1}" value="${((h.photos||h.images||[])[n])||''}">`).join('')}
     </div>
 
     <label class="label">یا همه URL عکس‌ها؛ هر URL در یک خط</label>
     <textarea id="bookingPhotos_${tourId}_${i}" class="field" dir="ltr" rows="4" placeholder="URL عکس ۱&#10;URL عکس ۲&#10;URL عکس ۳&#10;URL عکس ۴">${hotelPhotosText(h)}</textarea>
 
-    <div class="admin-gallery-preview booking-preview">${(h.photos||h.images||[]).filter(Boolean).slice(0,8).map(src=>`<img src="${src}">`).join('')||'<span class="small">هنوز عکسی ثبت نشده است.</span>'}</div>
+    <div class="booking-preview-title">پیش‌نمایش عکس‌های ثبت‌شده</div>
+    <div class="admin-gallery-preview booking-preview">${(h.photos||h.images||[]).filter(Boolean).slice(0,12).map((src,pIndex)=>`<span class="booking-preview-item"><img src="${src}"><button onclick="removeBookingHotelPhoto(${tourId},${i},${pIndex})">×</button></span>`).join('')||'<span class="small">هنوز عکسی ثبت نشده است.</span>'}</div>
   </div>`).join('')||'<div class="empty-state-mini">برای این تور هنوز هتلی ثبت نشده است.</div>'}</div>`;
 }
 function saveBookingHotelPhotos(tourId,index){
-  const singleUrls=[0,1,2,3,4,5].map(n=>$(`bookingPhotoUrl_${tourId}_${index}_${n}`)?.value?.trim()).filter(Boolean);
+  const singleUrls=[0,1,2,3,4,5,6,7].map(n=>$(`bookingPhotoUrl_${tourId}_${index}_${n}`)?.value?.trim()).filter(Boolean);
   const bulkUrls=($(`bookingPhotos_${tourId}_${index}`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
-  const urls=[...new Set([...singleUrls,...bulkUrls])];
+  const current=(findTour(tourId)?.hotels?.[index]?.photos||[]).filter(Boolean).filter(x=>String(x).startsWith('data:image/'));
+  const urls=[...new Set([...current,...singleUrls,...bulkUrls])];
   saveTours(tours().map(t=>{
     if(Number(t.id)!==Number(tourId))return t;
     const hs=[...(t.hotels||[])];
@@ -320,13 +324,27 @@ function uploadBookingHotelPhotos(tourId,index,files){
       if(Number(t.id)!==Number(tourId))return t;
       const hs=[...(t.hotels||[])];
       const h=hs[index]||{};
-      hs[index]={...h,photos:urls};
+      const old=(h.photos||h.images||[]).filter(Boolean);
+      hs[index]={...h,photos:[...old,...urls].slice(0,30)};
       return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
     }));
     renderBookingPhotoHotels();
-    showToast('عکس‌های Booking هتل آپلود شد');
+    showToast(`${faNum(urls.length)} عکس برای هتل آپلود شد`);
   });
 }
+function removeBookingHotelPhoto(tourId,index,photoIndex){
+  saveTours(tours().map(t=>{
+    if(Number(t.id)!==Number(tourId))return t;
+    const hs=[...(t.hotels||[])];
+    const h=hs[index]||{};
+    const photos=(h.photos||h.images||[]).filter(Boolean).filter((_,i)=>i!==Number(photoIndex));
+    hs[index]={...h,photos};
+    return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
+  }));
+  renderBookingPhotoHotels();
+  showToast('عکس حذف شد');
+}
+
 function renderContactStaff(){
   const box=$('staffChipList');if(!box)return;
   const list=contactStaff();
@@ -710,9 +728,61 @@ function renderHotelCatalog(){
     </div>
   </div>`).join('')||'<div class="empty-state-mini">هنوز هتلی در مدیریت ثبت نشده است.</div>'}</div>`;
 }
+
+function toggleVisaItem(id){saveVisaServices(visaServices().map(v=>v.id===id?{...v,active:v.active===false}:v));renderVisas()}
+function deleteVisaItem(id){if(confirm('حذف شود؟')){saveVisaServices(visaServices().filter(v=>v.id!==id));renderVisas()}}
+
+
+function renderVisas(){
+  const box=$('visaTable');if(!box)return;
+  const list=visaServices();
+  box.innerHTML=`<div class="list-title-line"><h4>لیست ویزاها</h4><span class="small">هر ویزا را ویرایش کن تا در پنل مشتری به صورت بازشو نمایش داده شود.</span></div>
+  <div class="admin-edit-list">${list.map(v=>`<div class="admin-edit-row visa-admin-row">
+    <div>
+      <b>${v.country||'—'} ${v.city?`- ${v.city}`:''}</b>
+      <div class="muted-line">مدارک: ${v.docs||'—'}</div>
+      <div class="muted-line">توضیحات: ${v.details||'—'}</div>
+    </div>
+    <div><b>${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'}</b></div>
+    <div><span class="kpi-mini">${v.active!==false?'فعال':'غیرفعال'}</span><div class="muted-line">${v.duration||'—'}</div></div>
+    <div class="admin-edit-row-actions">
+      <button class="soft" onclick="editVisaItem('${v.id}')">ویرایش</button>
+      <button class="soft" onclick="toggleVisaItem('${v.id}')">${v.active!==false?'غیرفعال':'فعال'}</button>
+      <button class="danger" onclick="deleteVisaItem('${v.id}')">حذف</button>
+    </div>
+  </div>`).join('')||'<div class="empty-state-mini">هنوز ویزایی ثبت نشده است.</div>'}</div>`;
+}
+function saveVisaItem(){
+  const id=$('visaId')?.value||'visa-'+Date.now();
+  const item={
+    id,
+    country:$('visaCountry')?.value?.trim()||'',
+    city:$('visaCity')?.value?.trim()||'',
+    price:Number($('visaPrice')?.value)||0,
+    duration:$('visaDuration')?.value?.trim()||'',
+    type:'توریستی',
+    docs:$('visaDocs')?.value?.trim()||'',
+    details:$('visaDetails')?.value?.trim()||'',
+    active:true
+  };
+  if(!item.country)return alert('کشور را وارد کنید');
+  const list=visaServices();
+  const i=list.findIndex(v=>v.id===id);
+  if(i>=0)list[i]={...list[i],...item,active:list[i].active!==false};else list.push(item);
+  saveVisaServices(list);
+  ['visaId','visaCountry','visaCity','visaPrice','visaDuration','visaDocs','visaDetails'].forEach(id=>{if($(id))$(id).value=''});
+  renderVisas();
+  showToast('ویزای مورد نظر ذخیره شد');
+}
 function editVisaItem(id){
   const v=visaServices().find(x=>x.id===id);if(!v)return;
-  $('visaId').value=v.id;$('visaCountry').value=v.country||'';$('visaCity').value=v.city||'';$('visaPrice').value=v.price||0;$('visaDuration').value=v.duration||'';$('visaDocs').value=v.docs||'';
+  if($('visaId'))$('visaId').value=v.id;
+  if($('visaCountry'))$('visaCountry').value=v.country||'';
+  if($('visaCity'))$('visaCity').value=v.city||'';
+  if($('visaPrice'))$('visaPrice').value=v.price||0;
+  if($('visaDuration'))$('visaDuration').value=v.duration||'';
+  if($('visaDocs'))$('visaDocs').value=v.docs||'';
+  if($('visaDetails'))$('visaDetails').value=v.details||v.description||v.note||'';
   document.getElementById('admin-visas')?.scrollIntoView({behavior:'smooth'});
 }
 function toggleVisaItem(id){saveVisaServices(visaServices().map(v=>v.id===id?{...v,active:v.active===false}:v));renderVisas()}

@@ -114,18 +114,22 @@ const TOUR_TITLE_FA_MAP = {
   "Bangkok Temple Escape": "تور معابد بانکوک",
   "Yerevan City Break": "تور شهری ایروان",
   "Georgia Nature Tour": "تور طبیعت گرجستان",
-  "Kuala Lumpur Modern Trip": "تور کوالالامپور مدرن"
+  "Kuala Lumpur Modern Trip": "تور کوالالامپور مدرن",
+  "Kuala Lumpur Modern Tour": "تور کوالالامپور مدرن",
+  "Malaysia Towers Tour": "تور مالزی و برج‌های دوقلو",
+  "Turkey Family Trip": "تور خانوادگی ترکیه",
+  "Armenia Weekend Tour": "تور آخر هفته ارمنستان",
+  "Thailand Beach Tour": "تور ساحلی تایلند",
+  "Georgia Caucasus Tour": "تور قفقاز گرجستان"
 };
 function normalizeTourPersianNamesAndImages(){
-  if(read('persianTourNamesImagesV2Applied',false))return;
   const ts=tours().map(t=>{
     const title=TOUR_TITLE_FA_MAP[t.title]||t.title;
     const nt={...t,title};
     const img=themedTourImage(nt);
-    return {...nt,img,gallery:[img,...((nt.gallery||[]).filter(x=>x&&x!==nt.img&&x!==img)).slice(0,3)]};
+    return {...nt,img:nt.img||img,gallery:(nt.gallery&&nt.gallery.length)?nt.gallery:[img]};
   });
   saveTours(ts);
-  write('persianTourNamesImagesV2Applied',true);
 }
 
 function customerTrail(){return read('customerTrail',[])}
