@@ -96,6 +96,35 @@ function normalizeTourImagesTheme(){
   saveTours(ts);
   write('imagesThemeV3Applied',true);
 }
+
+const TOUR_TITLE_FA_MAP = {
+  "Paris Dream Vacation": "تور رویایی پاریس",
+  "Rome Historical Escape": "تور تاریخی رم",
+  "Bangkok Temple Discovery": "تور معابد بانکوک",
+  "Istanbul Spring Escape": "تور بهاره استانبول",
+  "Dubai Luxury Break": "تور لوکس دبی",
+  "Antalya Summer Resort": "تور تابستانی آنتالیا",
+  "Kish Island Holiday": "تور تعطیلات کیش",
+  "Mashhad Pilgrimage Tour": "تور زیارتی مشهد",
+  "Cappadocia Balloon Experience": "تور بالون‌سواری کاپادوکیا",
+  "Shiraz & Persepolis Journey": "تور شیراز و تخت جمشید",
+  "Isfahan Heritage Tour": "تور میراث اصفهان",
+  "Yerevan City Break": "تور شهری ایروان",
+  "Georgia Nature Tour": "تور طبیعت گرجستان",
+  "Kuala Lumpur Modern Trip": "تور کوالالامپور مدرن"
+};
+function normalizeTourPersianNamesAndImages(){
+  if(read('persianTourNamesImagesV1Applied',false))return;
+  const ts=tours().map(t=>{
+    const title=TOUR_TITLE_FA_MAP[t.title]||t.title;
+    const nt={...t,title};
+    const img=themedTourImage(nt);
+    return {...nt,img,gallery:[img,...((nt.gallery||[]).filter(x=>x&&x!==nt.img&&x!==img)).slice(0,3)]};
+  });
+  saveTours(ts);
+  write('persianTourNamesImagesV1Applied',true);
+}
+
 function customerTrail(){return read('customerTrail',[])}
 function saveCustomerTrail(v){write('customerTrail',v)}
 function addCustomerTrail(t){
@@ -134,7 +163,7 @@ function normalizeAllTourDurations(){
   saveTours(ts);
 }
 
-function seed(){if(!read('tours',null))write('tours',DEFAULT_TOURS);if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS);if(!read('visaServices',null))write('visaServices',DEFAULT_VISAS);if(!read('hotelCatalog',null))write('hotelCatalog',defaultHotelCatalog());if(!read('staffAccounts',null))write('staffAccounts',defaultStaffAccounts());normalizeTourImagesTheme()}
+function seed(){if(!read('tours',null))write('tours',DEFAULT_TOURS);if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS);if(!read('visaServices',null))write('visaServices',DEFAULT_VISAS);if(!read('hotelCatalog',null))write('hotelCatalog',defaultHotelCatalog());if(!read('staffAccounts',null))write('staffAccounts',defaultStaffAccounts());normalizeTourImagesTheme();normalizeTourPersianNamesAndImages()}
 function tours(){return read('tours',DEFAULT_TOURS)}function saveTours(v){write('tours',v)}
 function orders(){return read('orders',[])}function saveOrders(v){write('orders',v)}
 function leads(){return read('leads',[])}function saveLeads(v){write('leads',v)}

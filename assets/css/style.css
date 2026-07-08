@@ -2439,3 +2439,16 @@ body:not(.dark) .hero-custom-tour-card input::placeholder{
 @media(max-width:760px){
   .booking-url-grid,.booking-url-inputs{grid-template-columns:1fr}
 }
+
+
+/* Persian tour names + admin-only customer trail */
+.admin-trail-cell{
+  min-width:210px;
+}
+.admin-trail-cell .customer-trail-chip{
+  display:inline-flex;
+  margin:2px;
+}
+.tour-img{
+  background:linear-gradient(135deg,#eaf6ff,#ffffff);
+}

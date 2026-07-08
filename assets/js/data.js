@@ -3,7 +3,7 @@ const DEFAULT_IMG='../assets/images/istanbul-hagia-sophia.svg';
 const DEFAULT_TOURS = [
   {
     "id": 1,
-    "title": "Istanbul Spring Escape",
+    "title": "تور بهاره استانبول",
     "dest": "استانبول",
     "duration": "۴ شب و ۵ روز",
     "airline": "ترکیش ایرلاین",
@@ -92,7 +92,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 2,
-    "title": "Dubai Luxury Break",
+    "title": "تور لوکس دبی",
     "dest": "دبی",
     "duration": "۳ شب و ۴ روز",
     "airline": "امارات",
@@ -181,7 +181,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 3,
-    "title": "Antalya Summer Resort",
+    "title": "تور تابستانی آنتالیا",
     "dest": "آنتالیا",
     "duration": "۵ شب و ۶ روز",
     "airline": "پگاسوس",
@@ -270,7 +270,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 4,
-    "title": "Kish Island Holiday",
+    "title": "تور تعطیلات کیش",
     "dest": "کیش",
     "duration": "۲ شب و ۳ روز",
     "airline": "کیش ایر",
@@ -359,7 +359,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 5,
-    "title": "Mashhad Pilgrimage Tour",
+    "title": "تور زیارتی مشهد",
     "dest": "مشهد",
     "duration": "۳ شب و ۴ روز",
     "airline": "ایران‌ایر",
@@ -448,7 +448,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 6,
-    "title": "Cappadocia Balloon Experience",
+    "title": "تور بالون‌سواری کاپادوکیا",
     "dest": "کاپادوکیا",
     "duration": "۴ شب و ۵ روز",
     "airline": "ترکیش ایرلاین",
@@ -537,7 +537,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 7,
-    "title": "Shiraz & Persepolis Journey",
+    "title": "تور شیراز و تخت جمشید",
     "dest": "شیراز",
     "duration": "۲ شب و ۳ روز",
     "airline": "زاگرس",
@@ -626,7 +626,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 8,
-    "title": "Isfahan Heritage Tour",
+    "title": "تور میراث اصفهان",
     "dest": "اصفهان",
     "duration": "۲ شب و ۳ روز",
     "airline": "قطار ویژه",
@@ -715,7 +715,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 9,
-    "title": "Paris Dream Vacation",
+    "title": "تور رویایی پاریس",
     "dest": "پاریس",
     "duration": "۶ شب و ۷ روز",
     "airline": "قطر ایرویز",
@@ -804,7 +804,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 10,
-    "title": "Rome Historical Escape",
+    "title": "تور تاریخی رم",
     "dest": "رم",
     "duration": "۵ شب و ۶ روز",
     "airline": "ترکیش ایرلاین",
@@ -893,7 +893,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 11,
-    "title": "Bangkok Temple Discovery",
+    "title": "تور معابد بانکوک",
     "dest": "بانکوک",
     "duration": "۵ شب و ۶ روز",
     "airline": "ماهان",
@@ -982,7 +982,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 12,
-    "title": "Yerevan City Break",
+    "title": "تور شهری ایروان",
     "dest": "ایروان",
     "duration": "۳ شب و ۴ روز",
     "airline": "آرمنیا ایر",
@@ -1071,7 +1071,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 13,
-    "title": "Georgia Nature Tour",
+    "title": "تور طبیعت گرجستان",
     "dest": "تفلیس",
     "duration": "۴ شب و ۵ روز",
     "airline": "قشم ایر",
@@ -1160,7 +1160,7 @@ const DEFAULT_TOURS = [
   },
   {
     "id": 14,
-    "title": "Kuala Lumpur Modern Trip",
+    "title": "تور کوالالامپور مدرن",
     "dest": "کوالالامپور",
     "duration": "۶ شب و ۷ روز",
     "airline": "قطر ایرویز",
@@ -1287,18 +1287,18 @@ const DEFAULT_DISCOUNTS = [
 
 
 const LATIN_TOUR_TITLES = {
-  "1": "Istanbul Spring Escape",
-  "2": "Dubai Luxury Break",
-  "3": "Antalya Summer Resort",
-  "4": "Kish Island Holiday",
-  "5": "Mashhad Pilgrimage Tour",
-  "6": "Cappadocia Balloon Experience",
-  "7": "Shiraz & Persepolis Journey",
-  "8": "Isfahan Heritage Tour",
-  "9": "Paris Dream Vacation",
-  "10": "Rome Historical Escape",
-  "11": "Bangkok Temple Discovery",
-  "12": "Yerevan City Break",
-  "13": "Georgia Nature Tour",
-  "14": "Kuala Lumpur Modern Trip"
+  "1": "تور بهاره استانبول",
+  "2": "تور لوکس دبی",
+  "3": "تور تابستانی آنتالیا",
+  "4": "تور تعطیلات کیش",
+  "5": "تور زیارتی مشهد",
+  "6": "تور بالون‌سواری کاپادوکیا",
+  "7": "تور شیراز و تخت جمشید",
+  "8": "تور میراث اصفهان",
+  "9": "تور رویایی پاریس",
+  "10": "تور تاریخی رم",
+  "11": "تور معابد بانکوک",
+  "12": "تور شهری ایروان",
+  "13": "تور طبیعت گرجستان",
+  "14": "تور کوالالامپور مدرن"
 };

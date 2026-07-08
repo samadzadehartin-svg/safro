@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safaro-v2.0.1';
+const CACHE_NAME = 'safaro-v2.0.2';
 const ASSETS = [
   '/',
   '/buyer/',

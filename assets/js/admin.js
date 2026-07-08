@@ -259,7 +259,7 @@ function renderAdmin(){
   </section>
     </div>
   </div>`;
-  renderTourImages();renderStaffAccounts();renderHotelCatalog();renderCurrentTourHotels();renderBookingPhotoHotels();renderContactStaff();renderLeads();renderCustomerTrailAdmin();renderVisas();renderDiscounts();renderOrders();
+  renderTourImages();renderStaffAccounts();renderHotelCatalog();renderCurrentTourHotels();renderBookingPhotoHotels();renderContactStaff();renderLeads();renderCustomerTrailAdmin();renderCustomerTrailAdmin();renderVisas();renderDiscounts();renderOrders();
 }
 
 
