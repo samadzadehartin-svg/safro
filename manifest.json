@@ -1,6 +1,6 @@
 {
   "name": "Safarro Three Panels",
-  "short_name": "سفر رو",
+  "short_name": "سفرو",
   "start_url": "./buyer/index.html",
   "display": "standalone",
   "background_color": "#f0f4fa",

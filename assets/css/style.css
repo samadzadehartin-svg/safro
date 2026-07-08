@@ -1152,3 +1152,49 @@ td,th{
   .admin-edit-row{grid-template-columns:1fr}
   .admin-edit-row-actions{justify-content:flex-start}
 }
+
+
+/* Final hotel-only transparent red embossed sold-out stamp */
+.soldout-stamp{
+  position:absolute;
+  z-index:9;
+  transform:rotate(-12deg);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:3px solid rgba(220,38,38,.82);
+  color:rgba(185,28,28,.95);
+  background:rgba(255,255,255,.42);
+  border-radius:15px;
+  padding:8px 15px;
+  font-weight:1000;
+  font-size:18px;
+  letter-spacing:-.4px;
+  box-shadow:
+    0 10px 26px rgba(185,28,28,.20),
+    inset 0 0 0 2px rgba(255,255,255,.45),
+    inset 0 10px 20px rgba(255,255,255,.22);
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.95),
+    0 -1px 0 rgba(127,29,29,.12);
+  backdrop-filter:blur(4px);
+}
+.soldout-stamp.small-stamp{
+  top:10px;
+  left:10px;
+  font-size:13px;
+  border-width:2px;
+  padding:6px 11px;
+  border-radius:12px;
+}
+.hotel.disabled{
+  opacity:.86;
+}
+.hotel.disabled::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:rgba(255,255,255,.24);
+  pointer-events:none;
+}

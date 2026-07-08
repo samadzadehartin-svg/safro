@@ -170,7 +170,7 @@ function layout(type){
   <div class="container nav">
     <a class="logo" href="../buyer/index.html">
       <span class="logo-icon"><i class="fa-solid fa-plane-departure"></i></span>
-      <span>سفر رو<small style="display:block;color:var(--p);font-size:9px;letter-spacing:2px">SAFARRO</small></span>
+      <span>سفرو<small style="display:block;color:var(--p);font-size:9px;letter-spacing:2px">SAFARRO</small></span>
     </a>
     <nav class="links">${links}</nav>
     <div class="actions">
@@ -196,7 +196,7 @@ function footer(type){
       <a href="../admin/index.html"><i class="fa-solid fa-chart-line"></i>مدیریت</a>
     </nav>`;
 
-  return `<footer class="footer"><b>سفرو ایرانیان</b><br>${type === 'buyer' ? 'مشاهده و رزرو آنلاین تورهای داخلی و خارجی' : 'پنل داخلی سفر رو'}<br><span style="font-size:11px;color:var(--t2)">۰۲۱-۴۹۹۷۶ | تهران، بلوار فردوس شرق، بعد از عقیل، پلاک ۳۵۱</span></footer>${type === 'buyer' ? buyerBottom : privateBottom}`;
+  return `<footer class="footer"><b>سفرو ایرانیان</b><br>${type === 'buyer' ? 'مشاهده و رزرو آنلاین تورهای داخلی و خارجی' : 'پنل داخلی سفرو'}<br><span style="font-size:11px;color:var(--t2)">۰۲۱-۴۹۹۷۶ | تهران، بلوار فردوس شرق، بعد از عقیل، پلاک ۳۵۱</span></footer>${type === 'buyer' ? buyerBottom : privateBottom}`;
 }
 
 function mount(type){
