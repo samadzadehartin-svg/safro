@@ -2193,3 +2193,63 @@ body{line-height:1.8;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:
   .trust-section .trust-items{grid-template-columns:1fr!important}
   .trust-section .trust-item{min-height:auto!important}
 }
+
+
+/* =========================================================
+   Final font readability fix for buyer page
+   ========================================================= */
+body:not(.dark) .trust-section .trust-card,
+body:not(.dark) .trust-card{
+  background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%)!important;
+  border:1px solid rgba(203,213,225,.78)!important;
+}
+body:not(.dark) .trust-section .trust-head h2,
+body:not(.dark) .trust-head h2{
+  color:#0f2740!important;
+  text-shadow:none!important;
+}
+body:not(.dark) .trust-section .trust-item,
+body:not(.dark) .trust-item{
+  background:#ffffff!important;
+  border:1px solid rgba(226,232,240,.95)!important;
+}
+body:not(.dark) .trust-section .trust-item b,
+body:not(.dark) .trust-item b{
+  color:#14334d!important;
+  font-weight:900!important;
+}
+body:not(.dark) .trust-section .trust-item p,
+body:not(.dark) .trust-item p{
+  color:#5e7388!important;
+  opacity:1!important;
+}
+body:not(.dark) .trust-section .trust-icon,
+body:not(.dark) .trust-icon{
+  background:linear-gradient(135deg,#ebb13d,#f7cf74)!important;
+  color:#6f4a06!important;
+  box-shadow:0 10px 20px rgba(235,177,61,.20)!important;
+}
+body:not(.dark) .trust-section .trust-item i,
+body:not(.dark) .trust-item i{
+  color:#6f4a06!important;
+}
+
+/* Buyer feature section specific fix */
+body:not(.dark) .trust-section .section-badge,
+body:not(.dark) .trust-card .section-badge{
+  background:rgba(57,167,223,.10)!important;
+  color:#0d6ea3!important;
+  border-color:rgba(57,167,223,.16)!important;
+}
+
+/* Slightly stronger readability for buyer custom-tour card */
+body:not(.dark) .hero-custom-tour-card h2{color:#10243a!important}
+body:not(.dark) .hero-custom-tour-card .form-note-required,
+body:not(.dark) .hero-custom-tour-card .small,
+body:not(.dark) .hero-custom-tour-card .muted{color:#6b7f93!important}
+body:not(.dark) .hero-custom-tour-card .field::placeholder,
+body:not(.dark) .hero-custom-tour-card textarea::placeholder,
+body:not(.dark) .hero-custom-tour-card input::placeholder{
+  color:#8a9aae!important;
+  opacity:1!important;
+}
