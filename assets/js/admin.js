@@ -149,7 +149,7 @@ function renderAdmin(){
       <button class="btn" onclick="saveHotelItem()">افزودن هتل</button>
       <button class="soft" onclick="resetDefaultHotels()">بازگردانی نمونه‌ها</button>
     </div>
-    <div id="hotelCatalogTable" class="table-wrap hotel-admin-table" style="margin-top:12px"></div><div class="current-hotels-box"><h3>هتل‌های فعلی ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل مشتری را فعال/غیرفعال کنی.</p><div class="row wrap" style="margin-bottom:10px"><button class="soft" onclick="renderCurrentTourHotels()">بروزرسانی لیست</button><button class="btn" onclick="syncCatalogHotelsToTours()">اعمال هتل‌های فعال مدیریت روی همه تورها</button><select id="addHotelTourId" class="field" style="max-width:260px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join("")}</select><button class="soft" onclick="addCurrentTourHotel(Number($('addHotelTourId').value))">افزودن هتل به تور</button></div><div id="currentTourHotelsTable" class="table-wrap"></div></div>
+    <div class="list-title-line"><h4>لیست تک‌تک هتل‌های مدیریت</h4><span class="small">با دکمه ویرایش کنار هر هتل</span></div><div id="hotelCatalogTable" class="hotel-admin-table"></div><div class="current-hotels-box"><h3>لیست تک‌تک هتل‌های ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل مشتری را فعال/غیرفعال کنی.</p><div class="row wrap" style="margin-bottom:10px"><button class="soft" onclick="renderCurrentTourHotels()">بروزرسانی لیست</button><button class="btn" onclick="syncCatalogHotelsToTours()">اعمال هتل‌های فعال مدیریت روی همه تورها</button><select id="addHotelTourId" class="field" style="max-width:260px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join("")}</select><button class="soft" onclick="addCurrentTourHotel(Number($('addHotelTourId').value))">افزودن هتل به تور</button></div><div id="currentTourHotelsTable" class="table-wrap"></div></div>
   </section>
 
   <section id="admin-leads" class="card pad" style="margin-bottom:16px">
@@ -172,7 +172,7 @@ function renderAdmin(){
       <button class="btn" onclick="saveVisaItem()">ذخیره ویزا</button>
     </div>
     <input id="visaId" type="hidden">
-    <div id="visaTable" class="table-wrap" style="margin-top:12px"></div>
+    <div id="visaTable" style="margin-top:12px"></div>
   </section>
 
   <section id="admin-discounts" class="card pad" style="margin-bottom:16px">
@@ -252,22 +252,40 @@ function renderStaffAccounts(){
 }
 
 
-function editCatalogHotel(id){
+function editCatalogHotel(id){editHotelItem(id)}
+
+
+function editHotelItem(id){
   const list=hotelCatalog();
   const h=list.find(x=>x.id===id);if(!h)return;
-  const name=prompt('نام لاتین هتل:',h.nameLatin||'');if(name===null)return;
-  const star=Number(prompt('ستاره هتل:',h.star||3));if(!star)return;
-  h.nameLatin=name;h.star=star;
-  saveHotelCatalog(list);renderHotelCatalog();renderCurrentTourHotels();showToast('هتل مدیریت ویرایش شد');
+  $('hotelLatinName').value=h.nameLatin||'';
+  $('hotelStar').value=String(h.star||3);
+  $('hotelEnabled').value=String(h.enabledForStaff!==false);
+  $('hotelLatinName').dataset.editId=id;
+  document.getElementById('admin-hotels')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function deleteHotelItem(id){
+  if(!confirm('این هتل از لیست مدیریت حذف شود؟'))return;
+  saveHotelCatalog(hotelCatalog().filter(h=>h.id!==id));
+  renderHotelCatalog();
+  renderCurrentTourHotels();
+  showToast('هتل حذف شد');
 }
 
 function saveHotelItem(){
-  const name=$('hotelLatinName').value.trim(),star=Number($('hotelStar').value),enabled=$('hotelEnabled').value==='true';
+  const name=$('hotelLatinName').value.trim();
   if(!name){alert('نام لاتین هتل را وارد کنید');return}
+  const editId=$('hotelLatinName').dataset.editId||'';
   const list=hotelCatalog();
-  const existing=list.find(x=>x.nameLatin.toLowerCase()===name.toLowerCase()&&Number(x.star)===star);
-  if(existing){existing.enabledForStaff=enabled}else list.push({id:'hotel-'+Date.now(),star,nameLatin:name,enabledForStaff:enabled});
-  saveHotelCatalog(list);$('hotelLatinName').value='';renderHotelCatalog();renderCurrentTourHotels();showToast('هتل ذخیره شد');
+  const item={id:editId||'h-'+Date.now(),nameLatin:name,star:Number($('hotelStar').value),enabledForStaff:$('hotelEnabled').value==='true'};
+  const i=list.findIndex(h=>h.id===editId);
+  if(i>=0)list[i]={...list[i],...item};else list.push(item);
+  saveHotelCatalog(list);
+  $('hotelLatinName').value='';
+  $('hotelLatinName').dataset.editId='';
+  renderHotelCatalog();
+  renderCurrentTourHotels();
+  showToast(editId?'هتل ویرایش شد':'هتل اضافه شد');
 }
 function toggleHotelItem(id){
   const list=hotelCatalog().map(h=>h.id===id?{...h,enabledForStaff:!h.enabledForStaff}:h);saveHotelCatalog(list);renderHotelCatalog();renderCurrentTourHotels();
@@ -534,19 +552,34 @@ function clearLeads(){if(confirm('لیست تماس‌ها پاک شود؟')){sa
 
 function renderVisas(){
   const box=$('visaTable');if(!box)return;
-  const list=visaServices();
-  box.innerHTML=`<table><thead><tr><th>کشور</th><th>شهر</th><th>قیمت</th><th>مدت</th><th>مدارک</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody>${list.map(v=>`<tr><td><b>${v.country}</b></td><td>${v.city||'—'}</td><td>${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'}</td><td>${v.duration||'—'}</td><td>${v.docs||'—'}</td><td>${v.active!==false?'فعال':'غیرفعال'}</td><td><button class="soft" onclick="editVisaItem('${v.id}')">ویرایش</button><button class="soft" onclick="toggleVisaItem('${v.id}')">${v.active!==false?'غیرفعال':'فعال'}</button><button class="danger" onclick="deleteVisaItem('${v.id}')">حذف</button></td></tr>`).join('')||'<tr><td colspan="7">هنوز ویزایی ثبت نشده است.</td></tr>'}</tbody></table>`;
+  const list=visaServices().slice().sort((a,b)=>String(a.country||'').localeCompare(String(b.country||''))||String(a.city||'').localeCompare(String(b.city||'')));
+  box.innerHTML=`<div class="list-title-line"><h4>لیست تک‌تک ویزاها</h4><span class="small">ویرایش، فعال/غیرفعال و حذف کنار هر ویزا</span></div>
+  <div class="admin-edit-list">${list.map(v=>`<div class="admin-edit-row">
+    <div>
+      <b>${v.country||'—'} ${v.city?`- ${v.city}`:''}</b>
+      <div class="muted-line">مدارک: ${v.docs||'—'}</div>
+    </div>
+    <div><b>${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'}</b></div>
+    <div><span class="kpi-mini">${v.active!==false?'فعال':'غیرفعال'}</span><div class="muted-line">${v.duration||'—'}</div></div>
+    <div class="admin-edit-row-actions">
+      <button class="soft" onclick="editVisaItem('${v.id}')">ویرایش</button>
+      <button class="soft" onclick="toggleVisaItem('${v.id}')">${v.active!==false?'غیرفعال':'فعال'}</button>
+      <button class="danger" onclick="deleteVisaItem('${v.id}')">حذف</button>
+    </div>
+  </div>`).join('')||'<div class="card pad">هنوز ویزایی ثبت نشده است.</div>'}</div>`;
 }
+
 function saveVisaItem(){
   const id=$('visaId').value||'visa-'+Date.now();
   const item={id,country:$('visaCountry').value.trim(),city:$('visaCity').value.trim(),price:Number($('visaPrice').value)||0,duration:$('visaDuration').value.trim(),type:'توریستی',docs:$('visaDocs').value.trim(),active:true};
   if(!item.country)return alert('کشور را وارد کنید');
   const list=visaServices();
   const i=list.findIndex(v=>v.id===id);
-  if(i>=0)list[i]={...list[i],...item};else list.push(item);
+  if(i>=0)list[i]={...list[i],...item,active:list[i].active!==false};else list.push(item);
   saveVisaServices(list);
-  ['visaId','visaCountry','visaCity','visaPrice','visaDuration','visaDocs'].forEach(id=>$(id).value='');
-  renderVisas();showToast('ویزای مورد نظر ذخیره شد');
+  ['visaId','visaCountry','visaCity','visaPrice','visaDuration','visaDocs'].forEach(id=>{if($(id))$(id).value=''});
+  renderVisas();
+  showToast('ویزای مورد نظر ذخیره شد');
 }
 function editVisaItem(id){
   const v=visaServices().find(x=>x.id===id);if(!v)return;

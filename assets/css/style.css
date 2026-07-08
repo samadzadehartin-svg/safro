@@ -1103,3 +1103,52 @@ td,th{
   border-radius:18px;padding:14px;margin-top:12px;
 }
 .excel-tour-import-box .import-result{margin-top:10px;font-size:12px;line-height:2}
+
+
+/* Clear editable hotel and visa lists */
+.admin-edit-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:14px;
+}
+.admin-edit-row{
+  display:grid;
+  grid-template-columns:1.3fr .7fr .7fr auto;
+  gap:10px;
+  align-items:center;
+  border:1px solid var(--b);
+  background:var(--c);
+  border-radius:18px;
+  padding:12px;
+}
+.admin-edit-row b{
+  font-weight:1000;
+}
+.admin-edit-row .muted-line{
+  color:var(--t2);
+  font-size:12px;
+  line-height:1.8;
+}
+.admin-edit-row-actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.hotel-name-latin{
+  direction:ltr;
+  text-align:left;
+  display:block;
+}
+.list-title-line{
+  margin:18px 0 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+@media(max-width:900px){
+  .admin-edit-row{grid-template-columns:1fr}
+  .admin-edit-row-actions{justify-content:flex-start}
+}
