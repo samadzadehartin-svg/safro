@@ -208,10 +208,42 @@ function jalaliToGregorian(jy,jm,jd){jy-=979;let days=365*jy+Math.floor(jy/33)*8
 
 function batchPriceBox(){
   const ts=tours();
-  return `<section class="batch-box"><h3>آپدیت گروهی قیمت هتل‌ها</h3><p class="small">تورهای موردنظر، ستاره هتل و مبلغ افزایش قیمت را انتخاب کن.</p><div class="grid g3"><div><label class="label">انتخاب تورها</label><select id="batchTours" class="field" multiple size="5">${ts.map(t=>`<option value="${t.id}">${t.title}</option>`).join('')}</select></div><div><label class="label">هتل‌ها</label><div class="batch-options"><label><input type="checkbox" id="batchStar3" checked> ۳ ستاره</label><label><input type="checkbox" id="batchStar4" checked> ۴ ستاره</label><label><input type="checkbox" id="batchStar5" checked> ۵ ستاره</label></div></div><div><label class="label">مبلغ افزایش برای هر نفر</label><input id="batchAmount" class="field" type="number" placeholder="مثلاً 500000"><button class="btn" style="width:100%;margin-top:10px" onclick="batchUpdatePrices()">اعمال افزایش قیمت</button></div></div></section>`;
+  return `<section class="batch-box batch-box-clean">
+    <div class="batch-head">
+      <div>
+        <h3>آپدیت گروهی قیمت هتل‌ها</h3>
+        <p class="small">تورهای موردنظر، ستاره هتل و مبلغ افزایش قیمت را انتخاب کن.</p>
+      </div>
+      <button class="soft" type="button" onclick="toggleAllBatchTours(true)">انتخاب همه</button>
+    </div>
+    <div class="batch-clean-grid">
+      <div>
+        <label class="label">انتخاب تورها</label>
+        <div class="batch-tour-list" id="batchTourList">
+          ${ts.map(t=>`<label class="batch-tour-item"><input type="checkbox" class="batch-tour-check" value="${t.id}"><span>${t.title}</span></label>`).join('')}
+        </div>
+      </div>
+      <div>
+        <label class="label">هتل‌ها</label>
+        <div class="batch-options clean-options">
+          <label><input type="checkbox" id="batchStar3" checked> ۳ ستاره</label>
+          <label><input type="checkbox" id="batchStar4" checked> ۴ ستاره</label>
+          <label><input type="checkbox" id="batchStar5" checked> ۵ ستاره</label>
+        </div>
+      </div>
+      <div>
+        <label class="label">مبلغ افزایش برای هر نفر</label>
+        <input id="batchAmount" class="field" type="number" placeholder="مثلاً 500000">
+        <button class="btn" style="width:100%;margin-top:10px" onclick="batchUpdatePrices()">اعمال افزایش قیمت</button>
+      </div>
+    </div>
+  </section>`;
+}
+function toggleAllBatchTours(state){
+  document.querySelectorAll('.batch-tour-check').forEach(x=>x.checked=state);
 }
 function batchUpdatePrices(){
-  const ids=[...$('batchTours').selectedOptions].map(o=>Number(o.value));
+  const ids=[...document.querySelectorAll('.batch-tour-check:checked')].map(o=>Number(o.value));
   const amount=Number($('batchAmount').value)||0;
   const stars=[3,4,5].filter(s=>$('batchStar'+s)?.checked);
   if(!ids.length||!amount||!stars.length){alert('تور، ستاره و مبلغ را انتخاب کنید');return}

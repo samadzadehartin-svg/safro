@@ -1261,3 +1261,81 @@ td,th{
   .modal{padding:12px 8px!important}
   .modal-card{width:calc(100vw - 16px)!important;margin:12px auto!important;border-radius:18px!important}
 }
+
+
+/* Clean batch price update panel */
+.batch-box-clean{
+  overflow:visible!important;
+}
+.batch-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.batch-clean-grid{
+  display:grid;
+  grid-template-columns:1.35fr .8fr 1fr;
+  gap:16px;
+  align-items:start;
+}
+.batch-tour-list{
+  border:1px solid var(--b);
+  background:var(--bg);
+  border-radius:18px;
+  padding:10px;
+  max-height:210px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.batch-tour-item{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:9px;
+  padding:9px 10px;
+  border-radius:13px;
+  background:var(--c);
+  border:1px solid rgba(148,163,184,.22);
+  cursor:pointer;
+  font-size:12px;
+  line-height:1.7;
+}
+.batch-tour-item:hover{
+  border-color:rgba(74,159,216,.55);
+  background:rgba(74,159,216,.08);
+}
+.batch-tour-item input,
+.clean-options input{
+  width:16px;
+  height:16px;
+  flex:0 0 auto;
+}
+.clean-options{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+  border:1px solid var(--b);
+  background:var(--bg);
+  border-radius:18px;
+  padding:12px;
+  min-height:130px;
+}
+.clean-options label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--c);
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:13px;
+  padding:9px 11px;
+  width:100%;
+}
+@media(max-width:900px){
+  .batch-clean-grid{grid-template-columns:1fr}
+  .batch-head{flex-direction:column}
+}
