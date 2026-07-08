@@ -259,18 +259,20 @@ function referenceHeroSection(){
   const activeCount = tours().filter(t=>t.status==='active').length;
   return `<section class="hero-experience combined-hero-card">
     <div class="combined-hero-grid">
-      <div class="combined-hero-copy">
-        <span class="inline-flex items-center gap-1.5 text-[.62rem] font-black px-3 py-1 rounded-full mb-3" style="background:var(--a);color:#78350f">
-          <i class="fa-solid fa-bolt"></i>بروزرسانی لحظه‌ای قیمت و ظرفیت
-        </span>
-        <div class="hero-copy buyer-hero-copy">
-          <h1 class="buyer-hero-title">سفرو؛ تور دلخواهت با <span style="color:var(--a)">هتل دلخواهت</span></h1>
-          <p class="buyer-hero-subtitle">تورهای داخلی و خارجی را با قیمت، ظرفیت و هتل واقعی مقایسه کن؛ انتخاب نهایی دست خودت است.</p>
+      <div class="combined-hero-copy hero-copy-panel">
+        <div class="hero-copy-top">
+          <span class="hero-copy-kicker"><i class="fa-solid fa-bolt"></i> بروزرسانی لحظه‌ای قیمت و ظرفیت</span>
+          <div class="hero-copy buyer-hero-copy">
+            <h1 class="buyer-hero-title">سفرو؛ تور دلخواهت با <span>هتل دلخواهت</span></h1>
+            <p class="buyer-hero-subtitle">تورهای داخلی و خارجی را با قیمت، ظرفیت و هتل واقعی مقایسه کن؛ انتخاب نهایی دست خودت است.</p>
+          </div>
         </div>
-        <div class="trust-strip">
-          <span class="trust-item"><i class="fa-solid fa-fire"></i><span>${faNum(activeCount)} تور فعال</span></span>
-          <span class="trust-item"><i class="fa-solid fa-star"></i><span>۴.۸ از ۵ رضایت مسافران</span></span>
-          <span class="trust-item"><i class="fa-solid fa-shield-halved"></i><span>قیمت شفاف و قابل مقایسه</span></span>
+        <div class="hero-copy-bottom">
+          <div class="trust-strip">
+            <span class="trust-item"><i class="fa-solid fa-fire"></i><span>${faNum(activeCount)} تور فعال</span></span>
+            <span class="trust-item"><i class="fa-solid fa-star"></i><span>۴.۸ از ۵ رضایت مسافران</span></span>
+            <span class="trust-item"><i class="fa-solid fa-shield-halved"></i><span>قیمت شفاف و قابل مقایسه</span></span>
+          </div>
         </div>
       </div>
 

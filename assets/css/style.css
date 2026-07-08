@@ -1881,3 +1881,165 @@ body.dark{
 .dark .buyer-hero-title{color:#f3f7fd!important}
 .dark .buyer-hero-subtitle{color:#b7c6d8!important}
 @media(max-width:900px){.buyer-hero-title{font-size:31px}}
+
+
+/* =========================================================
+   Full UX polish + universal Vazirmatn + strong hero fix
+   ========================================================= */
+html,body,button,input,select,textarea,option,label,table,th,td,small,span,p,b,strong,h1,h2,h3,h4,h5,h6,div,a{
+  font-family:"Vazirmatn","Vazir","Tahoma","Segoe UI",sans-serif !important;
+}
+pre,code,kbd,samp{font-family:Consolas,Monaco,monospace!important}
+body{line-height:1.8;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+.header{box-shadow:0 8px 30px rgba(15,23,42,.06)}
+.links a{padding:8px 10px;border-radius:999px;transition:all .2s ease}
+.links a:hover{background:rgba(74,159,216,.08)}
+.card,.hero-custom-tour-card,.modal-card,.tour,.hotel,.visa-card,.trust-card,.last-card,.admin-side-nav,.table-wrap,.info{
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+}
+.card:hover,.visa-card:hover,.trust-card:hover,.last-card:hover{transform:translateY(-3px)}
+.field,input,select,textarea{transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
+.field:focus,input:focus,select:focus,textarea:focus{border-color:rgba(74,159,216,.58)!important;box-shadow:0 0 0 4px rgba(74,159,216,.14)!important}
+
+/* Strong buyer hero rebuild */
+.combined-hero-card{
+  background:linear-gradient(135deg,#f7fbff 0%,#eef6fd 40%,#edf6ff 100%)!important;
+  border:1px solid rgba(74,159,216,.14)!important;
+  border-radius:34px!important;
+  box-shadow:0 20px 55px rgba(15,23,42,.10)!important;
+  overflow:hidden!important;
+  margin:24px 0 18px!important;
+}
+.combined-hero-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 86% 16%, rgba(232,168,56,.13), transparent 20%),radial-gradient(circle at 18% 78%, rgba(74,159,216,.11), transparent 24%);
+  pointer-events:none;
+}
+.combined-hero-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(350px,.78fr);
+  gap:24px;
+  align-items:stretch;
+  padding:26px;
+}
+.hero-copy-panel{
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:26px 28px;
+  border-radius:28px;
+  background:linear-gradient(135deg,#0e3a56 0%, #1f5f8b 48%, #58aee1 100%);
+  box-shadow:0 18px 40px rgba(9,30,66,.18);
+  color:#fff!important;
+  position:relative;
+  overflow:hidden;
+}
+.hero-copy-panel::after{
+  content:"";
+  position:absolute;
+  width:250px;height:250px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.18), transparent 62%);
+  bottom:-90px;left:-80px;
+}
+.hero-copy-top,.hero-copy-bottom{position:relative;z-index:1}
+.hero-copy-kicker{
+  display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
+  padding:8px 14px;border-radius:999px;background:linear-gradient(135deg,#f2bf53,#f9d57a);
+  color:#6c4202;font-size:11px;font-weight:900;box-shadow:0 8px 18px rgba(248,183,63,.22);
+}
+.hero-copy-panel .buyer-hero-title,
+.hero-copy-panel .buyer-hero-title span,
+.hero-copy-panel .buyer-hero-subtitle,
+.hero-copy-panel .trust-item,
+.hero-copy-panel .trust-item span{color:#fff!important}
+.hero-copy-panel .buyer-hero-title{
+  font-size:clamp(32px,4vw,54px)!important;
+  line-height:1.4!important;
+  font-weight:1000!important;
+  margin:14px 0 10px!important;
+  letter-spacing:-.3px;
+}
+.hero-copy-panel .buyer-hero-title span{color:#ffd57b!important}
+.hero-copy-panel .buyer-hero-subtitle{
+  font-size:14px!important;
+  line-height:2.05!important;
+  max-width:47rem;
+  opacity:.92;
+}
+.hero-copy-panel .trust-strip{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:22px;
+}
+.hero-copy-panel .trust-item{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  min-height:56px;
+  padding:12px 14px;
+  border-radius:18px;
+  background:rgba(255,255,255,.12)!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:none!important;
+  text-align:center;
+  font-size:12px;
+  font-weight:900;
+  backdrop-filter:blur(10px);
+}
+.hero-copy-panel .trust-item i{color:#ffd57b!important;font-size:14px}
+.hero-custom-tour-card{
+  align-self:stretch;
+  border-radius:28px!important;
+  padding:22px!important;
+}
+.hero-custom-tour-card .badge.special{
+  background:rgba(232,168,56,.16)!important;
+  color:#b66902!important;
+  border:1px solid rgba(232,168,56,.22)!important;
+}
+.hero-custom-tour-card .grid.g2{gap:12px}
+.hero-custom-tour-card textarea.field{min-height:92px;resize:vertical}
+.hero-custom-tour-card .gold,
+.hero-custom-tour-card button.gold{min-height:46px;font-size:13px}
+
+/* Better dark mode across the site */
+.dark .header{box-shadow:0 10px 34px rgba(0,0,0,.24)!important}
+.dark .links a:hover{background:rgba(56,189,248,.08)!important;color:#ccecff!important}
+.dark .card:hover,.dark .visa-card:hover,.dark .trust-card:hover,.dark .last-card:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(0,0,0,.32)!important}
+.dark .combined-hero-card{
+  background:linear-gradient(180deg,#0f1a2c 0%,#111f33 100%)!important;
+  border-color:rgba(148,163,184,.12)!important;
+}
+.dark .hero-copy-panel{
+  background:linear-gradient(135deg,#0d2740 0%, #17476b 48%, #2f78aa 100%)!important;
+  box-shadow:0 20px 48px rgba(0,0,0,.30)!important;
+}
+.dark .hero-copy-panel .trust-item{
+  background:rgba(8,15,28,.28)!important;
+  border-color:rgba(255,255,255,.10)!important;
+}
+.dark .hero-custom-tour-card{
+  background:linear-gradient(180deg,rgba(13,24,39,.96),rgba(13,24,39,.92))!important;
+}
+.dark .hero-custom-tour-card .field{
+  background:rgba(8,15,28,.82)!important;
+}
+.dark .badge.special{background:rgba(245,158,11,.16)!important;color:#ffd687!important}
+.dark .bottom-nav a,.dark .links,.dark .small,.dark .meta,.dark .label{color:#aebed2!important}
+.dark .btn,.dark .gold{filter:saturate(1.02)}
+
+/* Responsive hero */
+@media(max-width:1100px){
+  .combined-hero-grid{grid-template-columns:1fr;gap:18px;padding:18px}
+  .hero-copy-panel{min-height:auto;padding:22px}
+}
+@media(max-width:760px){
+  .hero-copy-panel .trust-strip{grid-template-columns:1fr}
+  .hero-copy-panel .buyer-hero-title{font-size:28px!important}
+  .hero-custom-tour-card{padding:18px!important}
+}
