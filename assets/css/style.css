@@ -2043,3 +2043,68 @@ body{line-height:1.8;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:
   .hero-copy-panel .buyer-hero-title{font-size:28px!important}
   .hero-custom-tour-card{padding:18px!important}
 }
+
+
+/* =========================================================
+   Hero color contrast hotfix
+   ========================================================= */
+.combined-hero-card{
+  background:linear-gradient(135deg,#f8fbff 0%,#eef6ff 48%,#f8fbff 100%)!important;
+}
+.hero-copy-panel,
+.combined-hero-copy.hero-copy-panel{
+  background:
+    radial-gradient(circle at 85% 18%, rgba(255,214,123,.16), transparent 20%),
+    radial-gradient(circle at 18% 82%, rgba(125,211,252,.12), transparent 24%),
+    linear-gradient(135deg,#0b2f47 0%, #13486b 46%, #1a6a98 100%)!important;
+  color:#fff!important;
+}
+.hero-copy-panel .buyer-hero-title,
+.combined-hero-copy.hero-copy-panel .buyer-hero-title{
+  color:#ffffff!important;
+  text-shadow:0 2px 14px rgba(0,0,0,.12);
+}
+.hero-copy-panel .buyer-hero-title span,
+.combined-hero-copy.hero-copy-panel .buyer-hero-title span{
+  color:#ffd978!important;
+}
+.hero-copy-panel .buyer-hero-subtitle,
+.combined-hero-copy.hero-copy-panel .buyer-hero-subtitle{
+  color:rgba(255,255,255,.94)!important;
+}
+.hero-copy-panel .trust-item,
+.combined-hero-copy.hero-copy-panel .trust-item{
+  background:rgba(255,255,255,.16)!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  color:#fff!important;
+}
+.hero-copy-panel .trust-item i,
+.combined-hero-copy.hero-copy-panel .trust-item i{
+  color:#ffd978!important;
+}
+.hero-copy-kicker{
+  background:linear-gradient(135deg,#f3bf4e,#ffdb86)!important;
+  color:#6b4300!important;
+}
+.hero-custom-tour-card{
+  background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%)!important;
+}
+.dark .combined-hero-card{
+  background:linear-gradient(180deg,#0b1525 0%,#0f1c31 100%)!important;
+}
+.dark .hero-copy-panel,
+.dark .combined-hero-copy.hero-copy-panel{
+  background:
+    radial-gradient(circle at 80% 18%, rgba(255,214,123,.12), transparent 20%),
+    radial-gradient(circle at 16% 80%, rgba(56,189,248,.10), transparent 22%),
+    linear-gradient(135deg,#0a2137 0%, #113553 46%, #1c5f87 100%)!important;
+}
+.dark .hero-copy-panel .buyer-hero-title,
+.dark .combined-hero-copy.hero-copy-panel .buyer-hero-title,
+.dark .hero-copy-panel .buyer-hero-subtitle,
+.dark .combined-hero-copy.hero-copy-panel .buyer-hero-subtitle{color:#f8fbff!important}
+.dark .hero-copy-panel .trust-item,
+.dark .combined-hero-copy.hero-copy-panel .trust-item{
+  background:rgba(255,255,255,.10)!important;
+  border-color:rgba(255,255,255,.12)!important;
+}
