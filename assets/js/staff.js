@@ -134,10 +134,31 @@ function staffTopTabs(){
     <a href="#staffVisaSection"><i class="fa-solid fa-passport"></i> بخش ویزا و توضیحات</a>
   </div>`;
 }
+function renderStaffVisaChoice(){
+  const id=Number($('staffVisaSelect')?.value||0);
+  const v=visaServices().filter(x=>x.active!==false)[id];
+  const box=$('staffVisaResult');if(!box)return;
+  if(!v){box.innerHTML='<div class="empty-state-mini">ویزایی انتخاب نشده است.</div>';return}
+  box.innerHTML=`<div class="staff-visa-selected">
+    <b>${v.country||'—'} ${v.city?`- ${v.city}`:''}</b>
+    <span>${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'}</span>
+    <p>مدت زمان: ${v.duration||'—'}</p>
+    <p>مدارک: ${v.docs||'—'}</p>
+    <button class="soft" onclick="navigator.clipboard?.writeText('${(v.country||'') + ' ' + (v.city||'')} - ${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'} - مدارک: ${v.docs||'—'}');showToast('متن ویزا کپی شد')">کپی متن برای مشتری</button>
+  </div>`;
+}
 function staffVisaInfoBox(){
   const list=visaServices().filter(v=>v.active!==false);
   return `<section id="staffVisaSection" class="card pad staff-section-panel">
-    <div class="row wrap"><div><span class="badge international">بخش ویزا</span><h3>ویزا و توضیحات قابل مشاهده برای فروش</h3><p class="small">برای دیدن قیمت ویزا، مدارک، مدت زمان و توضیحات هر مقصد از این بخش استفاده کن.</p></div></div>
+    <div class="row wrap"><div><span class="badge international">بخش ویزا</span><h3>انتخاب ویزا برای مشتری</h3><p class="small">فروش می‌تواند با انتخاب گزینه ویزا، قیمت، مدارک و توضیحات را سریع ببیند و برای مشتری ارسال کند.</p></div></div>
+    <div class="staff-visa-select-box">
+      <select id="staffVisaSelect" class="field" onchange="renderStaffVisaChoice()">
+        <option value="">انتخاب ویزا</option>
+        ${list.map((v,i)=>`<option value="${i}">${v.country||'—'} ${v.city?`- ${v.city}`:''}</option>`).join('')}
+      </select>
+      <button class="soft" onclick="renderStaffVisaChoice()">نمایش توضیحات ویزا</button>
+    </div>
+    <div id="staffVisaResult" class="staff-visa-result"><div class="empty-state-mini">یک ویزا را انتخاب کن.</div></div>
     <div class="staff-visa-grid">${list.map(v=>`<div class="staff-visa-card">
       <b>${v.country||'—'} ${v.city?`- ${v.city}`:''}</b>
       <span>${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'}</span>

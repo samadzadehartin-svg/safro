@@ -211,7 +211,7 @@ function renderAdmin(){
 
   <section id="admin-hotel-booking-photos" class="card pad" style="margin-bottom:16px">
     <div class="row wrap"><div><span class="badge international">Booking</span><h3>مدیریت عکس‌های Booking هتل‌ها</h3><p class="small">اینجا برای هر تور و هر هتل می‌توانی لینک Booking و عکس‌های هتل را وارد یا آپلود کنی. این عکس‌ها با دکمه Booking در پنل مشتری نمایش داده می‌شوند.</p></div></div>
-    <div class="row wrap booking-admin-controls">
+    <div class="admin-url-help">برای هر هتل می‌توانی یا عکس را انتخاب کنی، یا چند URL عکس وارد کنی. لینک Booking هم جدا ذخیره می‌شود.</div><div class="row wrap booking-admin-controls">
       <select id="bookingPhotoTour" class="field" onchange="renderBookingPhotoHotels()" style="max-width:320px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join('')}</select>
       <button class="soft" onclick="renderBookingPhotoHotels()">بروزرسانی لیست</button>
     </div>
@@ -276,12 +276,12 @@ function renderBookingPhotoHotels(){
       <div><b dir="ltr">${h.name||'—'}</b><small>${hotelStars(h.star)} | ${money(h.price||0)}</small></div>
       <button class="btn" onclick="saveBookingHotelPhotos(${tourId},${i})">ذخیره عکس‌های هتل</button>
     </div>
-    <label class="label">لینک Booking</label>
+    <label class="label">URL صفحه Booking هتل</label>
     <input id="bookingLink_${tourId}_${i}" class="field" dir="ltr" placeholder="https://booking.com/..." value="${h.bookingLink||''}">
-    <label class="label">آپلود عکس‌های هتل</label>
+    <label class="label">انتخاب عکس از سیستم</label>
     <input class="field" type="file" accept="image/*" multiple onchange="uploadBookingHotelPhotos(${tourId},${i},this.files)">
-    <label class="label">یا لینک عکس‌ها، هر لینک در یک خط</label>
-    <textarea id="bookingPhotos_${tourId}_${i}" class="field" dir="ltr" rows="4" placeholder="هر لینک عکس در یک خط">${hotelPhotosText(h)}</textarea>
+    <label class="label">URL عکس‌ها؛ هر URL در یک خط</label>
+    <textarea id="bookingPhotos_${tourId}_${i}" class="field" dir="ltr" rows="4" placeholder="URL عکس ۱\nURL عکس ۲\nURL عکس ۳\nURL عکس ۴">${hotelPhotosText(h)}</textarea>
     <div class="admin-gallery-preview booking-preview">${(h.photos||h.images||[]).filter(Boolean).slice(0,8).map(src=>`<img src="${src}">`).join('')||'<span class="small">هنوز عکسی ثبت نشده است.</span>'}</div>
   </div>`).join('')||'<div class="empty-state-mini">برای این تور هنوز هتلی ثبت نشده است.</div>'}</div>`;
 }
@@ -378,7 +378,7 @@ function renderTourImages(){
     <td><b>${t.title}</b><br><small>ID: ${t.id}</small><br><small>${t.dest}</small></td>
     <td><div class="admin-gallery-preview">${([t.img,...(t.gallery||[])].filter(Boolean)).slice(0,8).map(src=>`<img src="${src}">`).join('')||'—'}</div></td>
     <td><input class="field" type="file" accept="image/*" multiple onchange="uploadTourImages(${t.id},this.files)"><small class="small">چند عکس را با هم انتخاب کن. عکس اول، عکس اصلی تور می‌شود.</small></td>
-    <td><textarea id="tourGalleryUrls_${t.id}" class="field" rows="4" dir="ltr" placeholder="هر لینک عکس در یک خط">${[t.img,...(t.gallery||[])].filter(Boolean).join('\n')}</textarea></td>
+    <td><textarea id="tourGalleryUrls_${t.id}" class="field" rows="4" dir="ltr" placeholder="URL عکس ۱\nURL عکس ۲\nURL عکس ۳\nURL عکس ۴">${[t.img,...(t.gallery||[])].filter(Boolean).join('\n')}</textarea></td>
     <td><button class="btn" onclick="saveTourGalleryUrls(${t.id})">ذخیره عکس‌ها</button></td>
   </tr>`).join('')}</tbody></table>`;
 }

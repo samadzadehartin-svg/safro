@@ -195,11 +195,12 @@ function layout(type){
 <header class="header">
   <div class="container nav">
     <a class="logo" href="../buyer/index.html">
-      <span class="logo-icon"><i class="fa-solid fa-plane-departure"></i></span>
-      <span>سفرو<small style="display:block;color:var(--p);font-size:9px;letter-spacing:2px">SAFARRO</small></span>
+      <span class="logo-icon logo-img-box"><img src="../assets/images/logo-safaro.png" alt="Safaro logo"></span>
+      <span>سفرو<small style="display:block;color:var(--p);font-size:9px;letter-spacing:2px">SAFARO</small></span>
     </a>
     <nav class="links">${links}</nav>
     <div class="actions">
+      <button class="soft safaro-back-btn" title="بازگشت: Alt+Left یا Esc" onclick="goBackSafaro()"><i class="fa-solid fa-arrow-right"></i> بک</button>
       <button class="soft" onclick="toggleDark()"><i class="fa-solid fa-moon"></i></button>
       <span class="soft"><i class="fa-regular fa-heart"></i><span id="wishCount">۰</span></span>
     </div>
@@ -231,3 +232,13 @@ function mount(type){
   updateWishCount();
 }
 document.addEventListener('DOMContentLoaded',()=>{seed();normalizeAllTourDurations();initTheme()});
+
+document.addEventListener('keydown',e=>{
+  if(e.__safaro_back_keyboard)return;
+  if((e.altKey&&e.key==='ArrowLeft') || e.key==='Escape'){
+    const tag=(document.activeElement?.tagName||'').toLowerCase();
+    if(['input','textarea','select'].includes(tag))return;
+    e.preventDefault();
+    goBackSafaro();
+  }
+});

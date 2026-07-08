@@ -1,10 +1,5 @@
 
-function beautyTrustStrip(){
-  return `<div class="beauty-trust-strip">
-    <div><b>رزرو آسان</b><span>فرم سریع و پیگیری کارشناس</span></div>
-    <div><b>قیمت شفاف</b><span>هتل، ظرفیت و ویزا مشخص</span></div>
-  </div>`;
-}
+function beautyTrustStrip(){return ``;}
 
 let view='home',currentCat='all',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
 if(!sessionStorage.getItem('safarro_visit_start'))sessionStorage.setItem('safarro_visit_start',Date.now());
@@ -100,7 +95,7 @@ function buildLeadFromForm(prefix){
     dest:$(prefix+'Dest')?.value?.trim() || '',
     people:$(prefix+'People')?.value || '',
     note:$(prefix+'Note')?.value?.trim() || '',
-    source:prefix==='popupLead'?'پاپ‌آپ مشاوره بعد از مشاهده تور':'تور خودتو بساز / صفحه اول',
+    source:prefix==='popupLead'?'پاپ‌آپ مشاوره رایگان بعد از ۳۵ ثانیه':'تور خودتو بساز / صفحه اول',
     status:'جدید',
     siteSeconds:siteSeconds(),
     tourViews:siteTourViews(),
@@ -163,7 +158,7 @@ function scheduleOneMinuteConsultPopup(){
     if(sessionStorage.getItem('safarro_popup_closed')==='1')return;
     if(!$('consultPopup'))return;
     openConsultPopup();
-  },60000);
+  },35000);
 }
 
 function openConsultPopup(){
@@ -195,7 +190,7 @@ function trustSection(){
         <div class="trust-items">
           <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-headset"></i></div><b>پشتیبانی قبل و بعد از خرید</b><p>کارشناس‌ها از انتخاب تور تا زمان سفر همراهت هستند.</p></div>
           <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-hotel"></i></div><b>انتخاب آزاد هتل</b><p>برای هر تور می‌توانی هتل ۳، ۴ یا ۵ ستاره را انتخاب کنی.</p></div>
-          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-shield-heart"></i></div><b>شفافیت قیمت و ظرفیت</b><p>قیمت، ظرفیت و خدمات تور واضح نمایش داده می‌شود.</p></div>
+          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-shield-heart"></i></div><b>نمایش ظرفیت و خدمات</b><p>ظرفیت، خدمات و جزئیات تور واضح نمایش داده می‌شود.</p></div>
           <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-ticket"></i></div><b>پیگیری رزرو</b><p>با شماره موبایل یا کد پیگیری، وضعیت رزروت را ببین.</p></div>
         </div>
       </div>
@@ -211,27 +206,18 @@ function consultPopupHtml(){
       <span class="badge special">مشاوره رایگان</span>
       <div class="popup-title">برای انتخاب تور کمک می‌خوای؟</div>
       <p class="popup-desc">شماره‌ات را وارد کن تا کارشناس سفرو با تو تماس بگیرد.</p>
-      <form onsubmit="submitPopupConsultation(event)"><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
+      <form onsubmit="submitPopupConsultation(event)"><div class="form-note-required">شماره تماس الزامی است <span class="req-star">*</span></div>
         <div class="grid g2">
           <input id="popupLeadName" class="field" placeholder="نام شما">
           <input id="popupLeadPhone" class="field" placeholder="شماره تماس *" required dir="ltr">
           <input id="popupLeadDest" class="field" placeholder="مقصد موردنظر">
-          <select id="popupLeadPeople" class="field">
-            <option value="">تعداد نفرات</option>
-            <option>۱ نفر</option>
-            <option>۲ نفر</option>
-            <option>۳ نفر</option>
-            <option>۴ نفر یا بیشتر</option>
-          </select>
         </div>
-        <textarea id="popupLeadNote" class="field" rows="3" style="margin-top:10px" placeholder="توضیح کوتاه، بودجه یا تاریخ دلخواه"></textarea>
         <button class="btn" style="width:100%;margin-top:12px" type="submit"><i class="fa-brands fa-whatsapp"></i> ثبت درخواست مشاوره</button>
         <div id="popupLeadStatus" class="lead-status"></div>
       </form>
     </div>
   </div>`;
 }
-
 
 function aboutContactSection(){
   return `<section class="about-contact-section">
@@ -281,7 +267,7 @@ function referenceHeroSection(){
           <div class="trust-strip">
             <span class="trust-item"><i class="fa-solid fa-fire"></i><span>${faNum(activeCount)} تور فعال</span></span>
             <span class="trust-item"><i class="fa-solid fa-star"></i><span>۴.۸ از ۵ رضایت مسافران</span></span>
-            <span class="trust-item"><i class="fa-solid fa-shield-halved"></i><span>قیمت شفاف و قابل مقایسه</span></span>
+            <span class="trust-item"><i class="fa-solid fa-shield-halved"></i><span>هتل و ظرفیت قابل مقایسه</span></span>
           </div>
         </div>
       </div>

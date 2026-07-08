@@ -2341,3 +2341,60 @@ body:not(.dark) .hero-custom-tour-card input::placeholder{
 .dark .staff-top-tabs{background:rgba(8,15,28,.82);border-color:rgba(148,163,184,.14)}
 .dark .staff-top-tabs a{background:rgba(56,189,248,.10);color:#d7efff;border-color:rgba(56,189,248,.16)}
 .dark .staff-visa-card,.dark .booking-photo-card{background:rgba(15,23,42,.78);border-color:rgba(148,163,184,.14)}
+
+
+/* Final requests: logo, back button, booking URL, visa selection */
+.logo-img-box{
+  overflow:hidden!important;
+  background:#fff!important;
+  border:1px solid rgba(226,232,240,.9)!important;
+  padding:3px!important;
+}
+.logo-img-box img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+.safaro-back-btn{
+  gap:6px!important;
+}
+.staff-visa-select-box{
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) auto;
+  gap:10px;
+  margin:14px 0;
+  align-items:center;
+}
+.staff-visa-result{
+  margin:10px 0 14px;
+}
+.staff-visa-selected{
+  border:1px solid rgba(57,167,223,.22);
+  background:rgba(57,167,223,.07);
+  border-radius:18px;
+  padding:14px;
+}
+.staff-visa-selected b{display:block;font-size:15px;margin-bottom:7px}
+.staff-visa-selected span{display:block;color:var(--p);font-weight:1000;margin-bottom:7px}
+.staff-visa-selected p{font-size:12px;color:var(--t2);line-height:1.9;margin:4px 0}
+.admin-url-help{
+  margin:12px 0;
+  border:1px dashed rgba(57,167,223,.35);
+  background:rgba(57,167,223,.07);
+  color:#1d5f86;
+  border-radius:16px;
+  padding:10px 12px;
+  font-size:12px;
+  font-weight:900;
+  line-height:1.9;
+}
+.beauty-trust-strip:empty{
+  display:none!important;
+}
+.dark .logo-img-box{background:#fff!important}
+.dark .admin-url-help{background:rgba(56,189,248,.09);color:#d8f0ff;border-color:rgba(56,189,248,.18)}
+.dark .staff-visa-selected{background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.18)}
+@media(max-width:760px){
+  .staff-visa-select-box{grid-template-columns:1fr}
+}
