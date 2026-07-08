@@ -118,6 +118,8 @@ function wishlist(){return read('wish',[])}function saveWish(v){write('wish',v)}
 function findTour(id){return tours().find(t=>Number(t.id)===Number(id))}
 function minHotel(t){const hs=visibleHotels(t);return (hs.length?hs:[{price:t.price}]).slice().sort((a,b)=>Number(a.price||0)-Number(b.price||0))[0]}
 function totalCapacity(t){return visibleHotels(t).reduce((s,h)=>s+Number(h.capacity||0),0)}
+function isTourSoldOut(t){return totalCapacity(t)<=0}
+function isHotelSoldOut(h){return Number(h?.capacity||0)<=0}
 function showToast(msg){let e=$('toast');if(!e){e=document.createElement('div');e.id='toast';e.className='toast';document.body.appendChild(e)}e.textContent=msg;e.classList.add('on');clearTimeout(showToast.t);showToast.t=setTimeout(()=>e.classList.remove('on'),2300)}
 function initTheme(){if(localStorage.getItem(PREFIX+'dark')==='1')document.body.classList.add('dark')}
 function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem(PREFIX+'dark',document.body.classList.contains('dark')?'1':'0')}

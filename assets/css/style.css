@@ -1085,3 +1085,21 @@ td,th{
   h3{font-size:18px!important}
   .hero-custom-tour-card h2{font-size:21px!important}
 }
+
+
+/* Excel sheet importer + sold-out stamp */
+.soldout-wrap{position:relative}
+.soldout-stamp{
+  position:absolute;top:14px;left:14px;z-index:5;transform:rotate(-13deg);
+  border:3px solid rgba(220,38,38,.92);color:#b91c1c;background:rgba(255,255,255,.78);
+  border-radius:14px;padding:8px 14px;font-weight:1000;font-size:17px;
+  box-shadow:0 10px 30px rgba(127,29,29,.20);backdrop-filter:blur(4px);
+}
+.soldout-stamp.small-stamp{top:8px;left:8px;font-size:12px;border-width:2px;padding:5px 9px;border-radius:10px}
+.hotel{position:relative}
+.hotel .soldout-stamp{top:9px;left:10px}
+.excel-tour-import-box{
+  border:1px dashed rgba(74,159,216,.55);background:rgba(74,159,216,.07);
+  border-radius:18px;padding:14px;margin-top:12px;
+}
+.excel-tour-import-box .import-result{margin-top:10px;font-size:12px;line-height:2}

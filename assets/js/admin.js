@@ -1,4 +1,95 @@
 
+function excelCell(row, idx){return row && row[idx]!==undefined && row[idx]!==null ? row[idx] : ''}
+function excelNum(v){const n=Number(String(v??'').replace(/[^\d.-]/g,''));return isNaN(n)?0:n}
+function excelStar(v){const m=String(v||'').match(/\d/);return m?Number(m[0]):3}
+function normalizeTourMatchName(s){return String(s||'').toLowerCase().replace(/\s+/g,' ').trim()}
+function sheetRowsToHotels(rows){
+  const hotels=[];
+  for(let r=2;r<rows.length;r++){
+    const row=rows[r]||[];
+    const name=String(excelCell(row,2)||'').trim();
+    if(!name || name.toLowerCase()==='hotel')continue;
+    const star=excelStar(excelCell(row,1));
+    const location=String(excelCell(row,23)||'').trim();
+    const capCols=[3,5,7,10,12,14,17,19,21];
+    const priceCols=[4,6,8,11,13,15,18,20,22];
+    const caps=capCols.map(i=>excelNum(row[i])).filter(n=>n>0);
+    const prices=priceCols.map(i=>excelNum(row[i])).filter(n=>n>0);
+    const capacity=caps.reduce((a,b)=>a+b,0);
+    const price=prices.length?Math.min(...prices):0;
+    hotels.push({
+      hotelId:'excel-'+Date.now()+'-'+r+'-'+Math.random().toString(16).slice(2),
+      star,name,price,capacity,location,showInBuyer:true,
+      roomSheet:{
+        double:{capacity:excelNum(row[3]),price:excelNum(row[4])},
+        single:{capacity:excelNum(row[5]),price:excelNum(row[6])},
+        triple:{capacity:excelNum(row[7]),price:excelNum(row[8])}
+      }
+    });
+  }
+  return hotels;
+}
+function applyExcelRowsToTour(tourId,rows,sheetName){
+  const hotels=sheetRowsToHotels(rows);
+  if(!hotels.length)return {ok:false,msg:`در شیت ${sheetName} هتلی پیدا نشد`};
+  const ts=tours().map(t=>{
+    if(Number(t.id)!==Number(tourId))return t;
+    const minPrice=hotels.map(h=>h.price).filter(Boolean).sort((a,b)=>a-b)[0] || t.price || 0;
+    return {...t,hotels,price:minPrice,lastEditedBy:'Excel Sheet',lastEditedAt:new Date().toISOString()};
+  });
+  saveTours(ts);
+  return {ok:true,msg:`${sheetName}: ${faNum(hotels.length)} هتل روی تور ذخیره شد`};
+}
+function findTourForSheet(sheetName){
+  const n=normalizeTourMatchName(sheetName);
+  return tours().find(t=>normalizeTourMatchName(t.title)===n)
+      || tours().find(t=>normalizeTourMatchName(t.title).includes(n)||n.includes(normalizeTourMatchName(t.title)))
+      || null;
+}
+function importExcelTourSheet(inputId,resultId,targetSelectId){
+  const file=$(inputId)?.files?.[0];
+  const result=$(resultId);
+  if(!file){alert('فایل اکسل را انتخاب کنید');return}
+  if(typeof XLSX==='undefined'){alert('کتابخانه خواندن اکسل لود نشده است. اینترنت یا CDN را چک کنید.');return}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+    const messages=[];
+    wb.SheetNames.forEach(name=>{
+      const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,defval:''});
+      let tour=findTourForSheet(name);
+      if((!tour || name.toUpperCase()==='TOUR' || name==='راهنما') && targetSelectId && $(targetSelectId)){
+        tour=findTour(Number($(targetSelectId).value));
+      }
+      if(!tour || name==='راهنما'){messages.push(`${name}: تور متناظر پیدا نشد`);return}
+      const res=applyExcelRowsToTour(tour.id,rows,name);
+      messages.push(`${tour.title} ← ${res.msg}`);
+    });
+    if(result)result.innerHTML=messages.map(x=>`<div>${x}</div>`).join('');
+    if(typeof renderTourImages==='function')renderTourImages();
+    if(typeof renderCurrentTourHotels==='function')renderCurrentTourHotels();
+    if(typeof renderStaff==='function')setTimeout(renderStaff,500);
+    showToast('آپلود شیت اکسل انجام شد');
+  };
+  reader.readAsArrayBuffer(file);
+}
+function excelTourImportBox(role){
+  const id=role==='admin'?'adminExcelTourImport':'staffExcelTourImport';
+  const result=role==='admin'?'adminExcelTourImportResult':'staffExcelTourImportResult';
+  const select=role==='admin'?'adminExcelTourTarget':'staffExcelTourTarget';
+  return `<section class="excel-tour-import-box">
+    <h3>آپلود شیت اکسل تورها</h3>
+    <p class="small">فرمت فایل استانبول پشتیبانی می‌شود. اگر فایل چند Sheet داشته باشد، اسم هر Sheet باید اسم همان تور باشد. اگر فقط Sheet با نام TOUR دارد، تور هدف را انتخاب کن.</p>
+    <div class="row wrap">
+      <select id="${select}" class="field" style="max-width:280px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join('')}</select>
+      <input id="${id}" class="field" type="file" accept=".xlsx,.xls">
+      <button class="btn" onclick="importExcelTourSheet('${id}','${result}','${select}')">آپلود و اعمال شیت</button>
+    </div>
+    <div id="${result}" class="import-result"></div>
+  </section>`;
+}
+
+
 function initAdmin(){mount('admin');if(!authGate('admin'))return renderLogin();renderAdmin()}
 function renderLogin(){$('app').innerHTML=`<div class="card pad login-box"><h2>ورود مدیریت</h2><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div><p class="small">رمز دمو: admin123</p><input id="pass" class="field" type="password" placeholder="رمز *"><button class="btn" style="width:100%;margin-top:12px" onclick="doLogin()">ورود</button></div>`}
 function doLogin(){if(loginRole('admin',$('pass').value))location.reload();else alert('رمز اشتباه است')}
@@ -46,7 +137,7 @@ function renderAdmin(){
     <div id="staffAccountsTable" class="table-wrap staff-account-table" style="margin-top:12px"></div>
   </section>
 
-  <section id="admin-price-sheet" class="card pad" style="margin-bottom:16px"><h3>آپدیت قیمت با شیت</h3><p class="small">فایل CSV خروجی گرفته‌شده از شیت نمونه را اینجا آپلود کن تا قیمت‌ها، ظرفیت‌ها و تخفیف دستی آپدیت شوند.</p><div class="price-import-box"><input id="adminPriceImport" class="field" type="file" accept=".csv,.txt"><button class="btn" onclick="importPriceSheet('adminPriceImport','adminImportResult')">آپلود و آپدیت قیمت‌ها</button><div id="adminImportResult" class="import-result"></div></div></section>
+  <section id="admin-price-sheet" class="card pad" style="margin-bottom:16px"><h3>آپدیت قیمت با شیت</h3><p class="small">فایل CSV خروجی گرفته‌شده از شیت نمونه را اینجا آپلود کن تا قیمت‌ها، ظرفیت‌ها و تخفیف دستی آپدیت شوند.</p><div class="price-import-box"><input id="adminPriceImport" class="field" type="file" accept=".csv,.txt"><button class="btn" onclick="importPriceSheet('adminPriceImport','adminImportResult')">آپلود و آپدیت قیمت‌ها</button><div id="adminImportResult" class="import-result"></div></div>${excelTourImportBox('admin')}</section>
 
   <section id="admin-hotels" class="card pad" style="margin-bottom:16px">
     <h3>مدیریت هتل‌ها برای قیمت‌گذاری فروشان</h3><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
