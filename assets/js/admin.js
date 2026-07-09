@@ -265,6 +265,25 @@ function renderAdmin(){
 
 
 
+function bookingPhotoEditorHtml(tourId,index,h){
+  const photos=(h.photos||h.images||[]).filter(Boolean);
+  if(!photos.length)return '<div class="empty-state-mini">هنوز عکسی برای ادیت ثبت نشده است.</div>';
+  return `<div class="booking-edit-photo-list">${photos.slice(0,18).map((src,pIndex)=>`
+    <div class="booking-edit-photo-item">
+      <img src="${src}">
+      <div class="booking-edit-fields">
+        <label class="label">ادیت URL عکس ${faNum(pIndex+1)}</label>
+        <input id="bookingEditPhoto_${tourId}_${index}_${pIndex}" class="field" dir="ltr" placeholder="${String(src).startsWith('data:image/')?'عکس آپلودی است؛ برای تبدیل به URL اینجا لینک جدید وارد کن':'URL عکس'}" value="${String(src).startsWith('data:image/')?'':src}">
+        <input class="field" type="file" accept="image/*" onchange="replaceBookingHotelPhotoFile(${tourId},${index},${pIndex},this.files)">
+      </div>
+      <div class="booking-edit-actions">
+        <button class="soft" onclick="saveBookingHotelPhotoUrl(${tourId},${index},${pIndex})">ذخیره URL</button>
+        <button class="soft" onclick="moveBookingHotelPhoto(${tourId},${index},${pIndex},-1)">بالا</button>
+        <button class="soft" onclick="moveBookingHotelPhoto(${tourId},${index},${pIndex},1)">پایین</button>
+        <button class="danger" onclick="removeBookingHotelPhoto(${tourId},${index},${pIndex})">حذف</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
 function renderBookingPhotoHotels(){
   const tourId=Number($('bookingPhotoTour')?.value||tours()[0]?.id||0);
   const box=$('bookingPhotoHotels');if(!box)return;
@@ -286,69 +305,97 @@ function renderBookingPhotoHotels(){
       <div class="booking-upload-box">
         <label class="label">آپلود چند عکس هتل</label>
         <input id="bookingMultiUpload_${tourId}_${i}" class="field" type="file" accept="image/*" multiple onchange="uploadBookingHotelPhotos(${tourId},${i},this.files)">
-        <small class="small">چند عکس را همزمان انتخاب کن. عکس‌ها داخل همین هتل ذخیره می‌شوند.</small>
+        <small class="small">چند عکس را همزمان انتخاب کن. عکس‌ها قبل از ذخیره فشرده می‌شوند.</small>
       </div>
     </div>
 
-    <div class="booking-url-row-title">URL عکس‌های Booking</div>
+    <div class="booking-url-row-title">افزودن URL عکس‌های جدید Booking</div>
     <div class="booking-url-inputs">
-      ${[0,1,2,3,4,5,6,7].map(n=>`<input id="bookingPhotoUrl_${tourId}_${i}_${n}" class="field" dir="ltr" placeholder="URL عکس ${n+1}" value="${((h.photos||h.images||[])[n])||''}">`).join('')}
+      ${[0,1,2,3,4,5,6,7].map(n=>`<input id="bookingPhotoUrl_${tourId}_${i}_${n}" class="field" dir="ltr" placeholder="URL عکس جدید ${n+1}" value="">`).join('')}
     </div>
 
-    <label class="label">یا همه URL عکس‌ها؛ هر URL در یک خط</label>
-    <textarea id="bookingPhotos_${tourId}_${i}" class="field" dir="ltr" rows="4" placeholder="URL عکس ۱&#10;URL عکس ۲&#10;URL عکس ۳&#10;URL عکس ۴">${hotelPhotosText(h)}</textarea>
+    <label class="label">یا همه URL عکس‌های جدید؛ هر URL در یک خط</label>
+    <textarea id="bookingPhotos_${tourId}_${i}" class="field" dir="ltr" rows="4" placeholder="URL عکس ۱&#10;URL عکس ۲&#10;URL عکس ۳&#10;URL عکس ۴"></textarea>
 
-    <div class="booking-preview-title">پیش‌نمایش عکس‌های ثبت‌شده</div>
-    <div class="admin-gallery-preview booking-preview">${(h.photos||h.images||[]).filter(Boolean).slice(0,12).map((src,pIndex)=>`<span class="booking-preview-item"><img src="${src}"><button onclick="removeBookingHotelPhoto(${tourId},${i},${pIndex})">×</button></span>`).join('')||'<span class="small">هنوز عکسی ثبت نشده است.</span>'}</div>
+    <div class="booking-preview-title">ادیت عکس‌های Booking این هتل</div>
+    ${bookingPhotoEditorHtml(tourId,i,h)}
   </div>`).join('')||'<div class="empty-state-mini">برای این تور هنوز هتلی ثبت نشده است.</div>'}</div>`;
 }
-function saveBookingHotelPhotos(tourId,index){
-  const singleUrls=[0,1,2,3,4,5,6,7].map(n=>$(`bookingPhotoUrl_${tourId}_${index}_${n}`)?.value?.trim()).filter(Boolean);
-  const bulkUrls=($(`bookingPhotos_${tourId}_${index}`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
-  const current=(findTour(tourId)?.hotels?.[index]?.photos||[]).filter(Boolean).filter(x=>String(x).startsWith('data:image/'));
-  const urls=[...new Set([...current,...singleUrls,...bulkUrls])].slice(0,18);
-  const ok=saveTours(tours().map(t=>{
+function currentBookingPhotos(tourId,index){
+  return (findTour(tourId)?.hotels?.[index]?.photos||findTour(tourId)?.hotels?.[index]?.images||[]).filter(Boolean);
+}
+function collectEditedBookingPhotos(tourId,index){
+  return currentBookingPhotos(tourId,index).map((src,pIndex)=>{
+    const v=$(`bookingEditPhoto_${tourId}_${index}_${pIndex}`)?.value?.trim();
+    return v||src;
+  }).filter(Boolean);
+}
+function updateBookingHotelPhotos(tourId,index,photos,extra={}){
+  return saveTours(tours().map(t=>{
     if(Number(t.id)!==Number(tourId))return t;
     const hs=[...(t.hotels||[])];
     const h=hs[index]||{};
-    hs[index]={...h,bookingLink:$(`bookingLink_${tourId}_${index}`)?.value?.trim()||'',photos:urls};
+    hs[index]={...h,...extra,photos:[...new Set((photos||[]).filter(Boolean))].slice(0,18)};
     return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
   }));
+}
+function saveBookingHotelPhotos(tourId,index){
+  const edited=collectEditedBookingPhotos(tourId,index);
+  const singleUrls=[0,1,2,3,4,5,6,7].map(n=>$(`bookingPhotoUrl_${tourId}_${index}_${n}`)?.value?.trim()).filter(Boolean);
+  const bulkUrls=($(`bookingPhotos_${tourId}_${index}`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  const urls=[...new Set([...edited,...singleUrls,...bulkUrls])].slice(0,18);
+  const ok=updateBookingHotelPhotos(tourId,index,urls,{bookingLink:$(`bookingLink_${tourId}_${index}`)?.value?.trim()||''});
   if(!ok)return;
   renderBookingPhotoHotels();
-  showToast('URL و عکس‌های Booking هتل ذخیره شد');
+  showToast('اطلاعات و عکس‌های Booking هتل ذخیره شد');
 }
 function uploadBookingHotelPhotos(tourId,index,files){
   const arr=[...(files||[])].slice(0,12);if(!arr.length)return;
   Promise.all(arr.map(file=>resizeImageFile(file,900,.72))).then(urls=>{
     urls=urls.filter(Boolean);
     if(!urls.length)return alert('عکس معتبری انتخاب نشد');
-    const ok=saveTours(tours().map(t=>{
-      if(Number(t.id)!==Number(tourId))return t;
-      const hs=[...(t.hotels||[])];
-      const h=hs[index]||{};
-      const old=(h.photos||h.images||[]).filter(Boolean);
-      hs[index]={...h,photos:[...old,...urls].slice(0,18)};
-      return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
-    }));
+    const old=currentBookingPhotos(tourId,index);
+    const ok=updateBookingHotelPhotos(tourId,index,[...old,...urls]);
     if(!ok)return;
     renderBookingPhotoHotels();
     showToast(`${faNum(urls.length)} عکس فشرده برای هتل آپلود شد`);
   }).catch(err=>{console.error(err);alert('خطا در آپلود عکس‌ها')});
 }
+function saveBookingHotelPhotoUrl(tourId,index,photoIndex){
+  const list=collectEditedBookingPhotos(tourId,index);
+  const ok=updateBookingHotelPhotos(tourId,index,list,{bookingLink:$(`bookingLink_${tourId}_${index}`)?.value?.trim()||''});
+  if(!ok)return;
+  renderBookingPhotoHotels();
+  showToast('URL عکس ذخیره شد');
+}
+function replaceBookingHotelPhotoFile(tourId,index,photoIndex,files){
+  const file=[...(files||[])][0];if(!file)return;
+  resizeImageFile(file,900,.72).then(url=>{
+    if(!url)return alert('عکس معتبر انتخاب نشد');
+    const list=currentBookingPhotos(tourId,index);
+    list[photoIndex]=url;
+    const ok=updateBookingHotelPhotos(tourId,index,list);
+    if(!ok)return;
+    renderBookingPhotoHotels();
+    showToast('عکس جایگزین شد');
+  });
+}
+function moveBookingHotelPhoto(tourId,index,photoIndex,dir){
+  const list=collectEditedBookingPhotos(tourId,index);
+  const ni=photoIndex+dir;
+  if(ni<0||ni>=list.length)return;
+  const tmp=list[photoIndex];list[photoIndex]=list[ni];list[ni]=tmp;
+  const ok=updateBookingHotelPhotos(tourId,index,list);
+  if(!ok)return;
+  renderBookingPhotoHotels();
+}
 function removeBookingHotelPhoto(tourId,index,photoIndex){
-  saveTours(tours().map(t=>{
-    if(Number(t.id)!==Number(tourId))return t;
-    const hs=[...(t.hotels||[])];
-    const h=hs[index]||{};
-    const photos=(h.photos||h.images||[]).filter(Boolean).filter((_,i)=>i!==Number(photoIndex));
-    hs[index]={...h,photos};
-    return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
-  }));
+  const list=currentBookingPhotos(tourId,index).filter((_,i)=>i!==Number(photoIndex));
+  const ok=updateBookingHotelPhotos(tourId,index,list);
+  if(!ok)return;
   renderBookingPhotoHotels();
   showToast('عکس حذف شد');
 }
-
 function renderContactStaff(){
   const box=$('staffChipList');if(!box)return;
   const list=contactStaff();

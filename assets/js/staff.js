@@ -186,6 +186,35 @@ function staffVisaInfoBox(){
   </section>`;
 }
 
+
+function staffDebugBox(){
+  return `<section class="card pad staff-debug-box">
+    <div class="row wrap">
+      <div>
+        <span class="badge special">Debug</span>
+        <h3>ابزار دیباگ پنل کارشناس</h3>
+        <p class="small">اگر تورها ذخیره نشدند یا نمایش داده نشدند، از این ابزارها استفاده کن.</p>
+      </div>
+      <button class="soft" onclick="staffRepairData()">Repair Data</button>
+      <button class="soft" onclick="staffClearCacheHint()">راهنمای پاک کردن کش</button>
+    </div>
+    <div id="staffDebugResult" class="small" style="margin-top:8px"></div>
+  </section>`;
+}
+function staffRepairData(){
+  try{
+    repairAppData();
+    renderStaff();
+    showToast('دیتای تورها بررسی و تعمیر شد');
+  }catch(e){
+    console.error(e);
+    alert('خطا در تعمیر دیتا: '+(e?.message||e));
+  }
+}
+function staffClearCacheHint(){
+  alert('بعد از آپلود نسخه جدید در Vercel، روی صفحه Ctrl + F5 بزن. اگر هنوز نسخه قدیمی بود، از DevTools > Application > Service Workers گزینه Unregister را بزن.');
+}
+
 function renderStaff(){
   try{
   const q=$('staffSearch')?.value?.trim().toLowerCase()||'', user=currentStaffUser();
@@ -383,7 +412,11 @@ function saveTour(e){
     const i=ts.findIndex(x=>Number(x.id)===Number(id)); if(i>=0)ts[i]=data; else ts.push(data);
     if(!saveTours(ts))return;
     closeForm();renderStaff();showToast('تور ذخیره شد');
-  }catch(err){console.error('saveTour failed',err);alert('خطا در ذخیره تور: '+(err?.message||err))}
+  }catch(err){
+    console.error('saveTour debug stable failed',err);
+    alert('خطا در ذخیره تور: '+(err?.message||err));
+  }
 }
+
 function delTour(id){if(confirm('تور حذف شود؟')){saveTours(tours().filter(t=>t.id!==id));renderStaff()}}
 document.addEventListener('DOMContentLoaded',initStaff);
