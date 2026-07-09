@@ -306,55 +306,35 @@ function saveBookingHotelPhotos(tourId,index){
   const singleUrls=[0,1,2,3,4,5,6,7].map(n=>$(`bookingPhotoUrl_${tourId}_${index}_${n}`)?.value?.trim()).filter(Boolean);
   const bulkUrls=($(`bookingPhotos_${tourId}_${index}`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
   const current=(findTour(tourId)?.hotels?.[index]?.photos||[]).filter(Boolean).filter(x=>String(x).startsWith('data:image/'));
-  const urls=[...new Set([...current,...singleUrls,...bulkUrls])];
-  saveTours(tours().map(t=>{
+  const urls=[...new Set([...current,...singleUrls,...bulkUrls])].slice(0,18);
+  const ok=saveTours(tours().map(t=>{
     if(Number(t.id)!==Number(tourId))return t;
     const hs=[...(t.hotels||[])];
     const h=hs[index]||{};
     hs[index]={...h,bookingLink:$(`bookingLink_${tourId}_${index}`)?.value?.trim()||'',photos:urls};
     return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
   }));
+  if(!ok)return;
   renderBookingPhotoHotels();
   showToast('URL و عکس‌های Booking هتل ذخیره شد');
 }
-
-function resizeImageFile(file,maxSize=900,quality=.72){
-  return new Promise(resolve=>{
-    if(!file || !String(file.type||'').startsWith('image/'))return resolve(null);
-    const reader=new FileReader();
-    reader.onload=()=>{
-      const img=new Image();
-      img.onload=()=>{
-        const scale=Math.min(1,maxSize/Math.max(img.width,img.height));
-        const canvas=document.createElement('canvas');
-        canvas.width=Math.max(1,Math.round(img.width*scale));
-        canvas.height=Math.max(1,Math.round(img.height*scale));
-        const ctx=canvas.getContext('2d');
-        ctx.drawImage(img,0,0,canvas.width,canvas.height);
-        resolve(canvas.toDataURL('image/jpeg',quality));
-      };
-      img.onerror=()=>resolve(reader.result);
-      img.src=reader.result;
-    };
-    reader.onerror=()=>resolve(null);
-    reader.readAsDataURL(file);
-  });
-}
-
 function uploadBookingHotelPhotos(tourId,index,files){
-  const arr=[...(files||[])];if(!arr.length)return;
-  Promise.all(arr.map(file=>new Promise(resolve=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.readAsDataURL(file)}))).then(urls=>{
-    saveTours(tours().map(t=>{
+  const arr=[...(files||[])].slice(0,12);if(!arr.length)return;
+  Promise.all(arr.map(file=>resizeImageFile(file,900,.72))).then(urls=>{
+    urls=urls.filter(Boolean);
+    if(!urls.length)return alert('عکس معتبری انتخاب نشد');
+    const ok=saveTours(tours().map(t=>{
       if(Number(t.id)!==Number(tourId))return t;
       const hs=[...(t.hotels||[])];
       const h=hs[index]||{};
       const old=(h.photos||h.images||[]).filter(Boolean);
-      hs[index]={...h,photos:[...old,...urls].slice(0,30)};
+      hs[index]={...h,photos:[...old,...urls].slice(0,18)};
       return {...t,hotels:hs,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
     }));
+    if(!ok)return;
     renderBookingPhotoHotels();
-    showToast(`${faNum(urls.length)} عکس برای هتل آپلود شد`);
-  });
+    showToast(`${faNum(urls.length)} عکس فشرده برای هتل آپلود شد`);
+  }).catch(err=>{console.error(err);alert('خطا در آپلود عکس‌ها')});
 }
 function removeBookingHotelPhoto(tourId,index,photoIndex){
   saveTours(tours().map(t=>{
@@ -429,38 +409,105 @@ function renderCustomerTrailAdmin(){
   </tr>`).join('')||'<tr><td colspan="4">هنوز ردپایی ثبت نشده است.</td></tr>'}</tbody></table>`;
 }
 
+function galleryText(t){return [t.img,...(t.gallery||[])].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join('\n')}
+function tourGalleryList(t){return [t.img,...(t.gallery||[])].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i)}
 function renderTourImages(){
   const box=$('adminTourImagesTable');if(!box)return;
   const list=tours();
-  box.innerHTML=`<table><thead><tr><th>عکس اصلی</th><th>نام تور</th><th>گالری فعلی</th><th>آپلود چند عکس</th><th>لینک‌های عکس</th><th>عملیات</th></tr></thead><tbody>${list.map(t=>`<tr>
-    <td><img class="tour-image-admin" src="${t.img||DEFAULT_IMG}" alt=""></td>
-    <td><b>${t.title}</b><br><small>ID: ${t.id}</small><br><small>${t.dest}</small></td>
-    <td><div class="admin-gallery-preview">${([t.img,...(t.gallery||[])].filter(Boolean)).slice(0,8).map(src=>`<img src="${src}">`).join('')||'—'}</div></td>
-    <td><input class="field" type="file" accept="image/*" multiple onchange="uploadTourImages(${t.id},this.files)"><small class="small">چند عکس را با هم انتخاب کن. عکس اول، عکس اصلی تور می‌شود.</small></td>
-    <td><textarea id="tourGalleryUrls_${t.id}" class="field" rows="4" dir="ltr" placeholder="URL عکس ۱\nURL عکس ۲\nURL عکس ۳\nURL عکس ۴">${[t.img,...(t.gallery||[])].filter(Boolean).join('\n')}</textarea></td>
-    <td><button class="btn" onclick="saveTourGalleryUrls(${t.id})">ذخیره عکس‌ها</button></td>
-  </tr>`).join('')}</tbody></table>`;
+  box.innerHTML=`<div class="image-manager-note">
+    این بخش برای عکس اصلی تور، گالری صفحه جزئیات تور، URL عکس‌ها و آپلود چند عکس است. عکس‌های آپلودی قبل از ذخیره فشرده می‌شوند.
+  </div>
+  <div class="tour-image-manager">${list.map(t=>{
+    const gallery=tourGalleryList(t);
+    return `<div class="tour-image-card-admin">
+      <div class="tour-image-card-head">
+        <img class="tour-image-admin big" src="${t.img||DEFAULT_IMG}" alt="">
+        <div>
+          <h3>${t.title}</h3>
+          <p class="small">${t.dest} | ID: ${t.id}</p>
+          <button class="btn" onclick="saveTourImageSettings(${t.id})">ذخیره همه عکس‌های این تور</button>
+        </div>
+      </div>
+
+      <div class="image-upload-grid">
+        <div class="image-upload-box">
+          <label class="label">URL عکس اصلی تور</label>
+          <input id="tourMainUrl_${t.id}" class="field" dir="ltr" placeholder="https://..." value="${t.img||''}">
+          <label class="label">آپلود عکس اصلی تور</label>
+          <input class="field" type="file" accept="image/*" onchange="uploadTourMainImage(${t.id},this.files)">
+          <small class="small">این عکس روی کارت تور و بالای صفحه جزئیات نمایش داده می‌شود.</small>
+        </div>
+
+        <div class="image-upload-box">
+          <label class="label">آپلود چند عکس گالری تور</label>
+          <input class="field" type="file" accept="image/*" multiple onchange="uploadTourGalleryImages(${t.id},this.files)">
+          <small class="small">برای گالری صفحه جزئیات تور؛ چند عکس را همزمان انتخاب کن.</small>
+        </div>
+      </div>
+
+      <div class="booking-url-row-title">URLهای گالری تور</div>
+      <div class="booking-url-inputs">
+        ${[0,1,2,3,4,5,6,7].map(n=>`<input id="tourGalleryUrl_${t.id}_${n}" class="field" dir="ltr" placeholder="URL عکس گالری ${n+1}" value="${gallery[n]||''}">`).join('')}
+      </div>
+
+      <label class="label">یا همه URLهای گالری؛ هر URL در یک خط</label>
+      <textarea id="tourGalleryUrls_${t.id}" class="field" rows="4" dir="ltr" placeholder="URL عکس ۱&#10;URL عکس ۲&#10;URL عکس ۳">${galleryText(t)}</textarea>
+
+      <div class="booking-preview-title">پیش‌نمایش گالری تور</div>
+      <div class="admin-gallery-preview booking-preview">${gallery.slice(0,12).map((src,i)=>`<span class="booking-preview-item"><img src="${src}"><button onclick="removeTourGalleryImage(${t.id},${i})">×</button></span>`).join('')||'<span class="small">هنوز عکسی ثبت نشده است.</span>'}</div>
+    </div>`;
+  }).join('')}</div>`;
 }
-function uploadTourImages(id,files){
-  const arr=[...(files||[])];if(!arr.length)return;
-  Promise.all(arr.map(file=>new Promise(resolve=>{
-    const reader=new FileReader();
-    reader.onload=()=>resolve(reader.result);
-    reader.readAsDataURL(file);
-  }))).then(urls=>{
-    saveTours(tours().map(t=>t.id===id?{...t,img:urls[0]||t.img,gallery:urls}:t));
-    renderTourImages();
-    showToast('عکس‌های تور ذخیره شد');
-  });
-}
-function saveTourGalleryUrls(id){
-  const urls=($('tourGalleryUrls_'+id)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
-  if(!urls.length){alert('حداقل یک لینک عکس وارد کنید');return}
-  saveTours(tours().map(t=>t.id===id?{...t,img:urls[0],gallery:urls}:t));
+function saveTourImageSettings(id){
+  const main=($(`tourMainUrl_${id}`)?.value||'').trim();
+  const single=[0,1,2,3,4,5,6,7].map(n=>$(`tourGalleryUrl_${id}_${n}`)?.value?.trim()).filter(Boolean);
+  const bulk=($(`tourGalleryUrls_${id}`)?.value||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  const urls=[...new Set([main,...single,...bulk].filter(Boolean))];
+  if(!urls.length)return alert('حداقل یک عکس یا URL وارد کنید');
+  const ok=saveTours(tours().map(t=>Number(t.id)===Number(id)?{...t,img:urls[0],gallery:urls,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()}:t));
+  if(!ok)return;
   renderTourImages();
   showToast('عکس‌های تور ذخیره شد');
 }
-
+function uploadTourMainImage(id,files){
+  const file=[...(files||[])][0];if(!file)return;
+  resizeImageFile(file,1100,.76).then(url=>{
+    if(!url)return alert('عکس معتبر انتخاب نشد');
+    const ok=saveTours(tours().map(t=>{
+      if(Number(t.id)!==Number(id))return t;
+      const gallery=[url,...(t.gallery||[]).filter(x=>x!==url)].slice(0,12);
+      return {...t,img:url,gallery,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
+    }));
+    if(!ok)return;
+    renderTourImages();
+    showToast('عکس اصلی تور آپلود شد');
+  });
+}
+function uploadTourGalleryImages(id,files){
+  const arr=[...(files||[])].slice(0,12);if(!arr.length)return;
+  Promise.all(arr.map(f=>resizeImageFile(f,1000,.74))).then(urls=>{
+    urls=urls.filter(Boolean);
+    if(!urls.length)return alert('عکس معتبر انتخاب نشد');
+    const ok=saveTours(tours().map(t=>{
+      if(Number(t.id)!==Number(id))return t;
+      const gallery=[...(t.gallery||[]),...urls].filter(Boolean).slice(0,18);
+      return {...t,img:t.img||gallery[0]||DEFAULT_IMG,gallery,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
+    }));
+    if(!ok)return;
+    renderTourImages();
+    showToast(`${faNum(urls.length)} عکس به گالری تور اضافه شد`);
+  });
+}
+function removeTourGalleryImage(id,index){
+  const ok=saveTours(tours().map(t=>{
+    if(Number(t.id)!==Number(id))return t;
+    const list=tourGalleryList(t).filter((_,i)=>i!==Number(index));
+    return {...t,img:list[0]||DEFAULT_IMG,gallery:list,lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
+  }));
+  if(!ok)return;
+  renderTourImages();
+  showToast('عکس از گالری تور حذف شد');
+}
 function saveStaffAccount(){
   const name=$('staffFullName').value.trim(), username=$('staffUsername').value.trim(), password=$('staffPassword').value.trim(), taskNote=($('staffTaskNote')?.value||'').trim(), active=$('staffActive').value==='true';
   if(!username||!password){alert('یوزرنیم و پسورد را وارد کنید');return}

@@ -2591,3 +2591,61 @@ body:not(.dark) .hero-custom-tour-card input::placeholder{
 .clickable-tour-card{cursor:pointer}
 body:not(.admin-page) .customer-trail-box,
 body:not(.admin-page) .customer-trail-list{display:none!important}
+
+
+/* All image upload manager */
+.image-manager-note{
+  border:1px dashed rgba(57,167,223,.35);
+  background:rgba(57,167,223,.07);
+  color:#1d5f86;
+  border-radius:18px;
+  padding:12px;
+  font-size:12px;
+  font-weight:900;
+  line-height:1.9;
+  margin:12px 0 16px;
+}
+.tour-image-manager{
+  display:grid;
+  gap:16px;
+}
+.tour-image-card-admin{
+  border:1px solid var(--b);
+  background:var(--s);
+  border-radius:22px;
+  padding:14px;
+}
+.tour-image-card-head{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.tour-image-admin.big{
+  width:170px!important;
+  height:105px!important;
+  object-fit:cover!important;
+  border-radius:18px!important;
+  border:1px solid var(--b)!important;
+}
+.image-upload-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:12px 0;
+}
+.image-upload-box{
+  border:1px dashed rgba(57,167,223,.34);
+  background:rgba(57,167,223,.06);
+  border-radius:16px;
+  padding:10px;
+}
+.dark .image-manager-note{background:rgba(56,189,248,.09);color:#d8f0ff;border-color:rgba(56,189,248,.18)}
+.dark .image-upload-box{background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.18)}
+@media(max-width:760px){
+  .image-upload-grid{grid-template-columns:1fr}
+  .tour-image-card-head{align-items:flex-start}
+  .tour-image-admin.big{width:100%!important;height:180px!important}
+}
