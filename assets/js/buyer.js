@@ -346,11 +346,7 @@ function visaSection(){
   </section>`;
 }
 
-function customerTrailMini(){
-  const list=customerTrail();
-  if(!list.length)return '';
-  return `<div class="customer-trail-box"><b>ردپای مشتری</b><p class="small">تورهایی که این مشتری دیده است:</p><div class="customer-trail-list">${list.slice(0,6).map(x=>`<span class="customer-trail-chip">${x.tourTitle}</span>`).join('')}</div></div>`;
-}
+function customerTrailMini(){return '';}
 
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
@@ -374,62 +370,16 @@ function specialPriceLine(t, fallbackPrice){
   return `<div class="price">${money(fallbackPrice)}</div>`;
 }
 
-function lastCard(t){return `<article class="last-card soldout-wrap"><span class="flash-badge">${faNum(t.dealPercent||0)}٪ ویژه</span><img src="${t.img||DEFAULT_IMG}"><div class="pad"><div class="row"><b>${t.title}</b><span class="badge special">قسمت ویژه</span></div><p class="small">${t.dest} | ${normalizeDurationNightFirst(t.duration)}</p><div class="row"><b class="price">${money(minHotel(t).price)}</b><button class="btn" onclick="route('detail',${t.id})">مشاهده</button></div></div></article>`}
-function filterHome(){
- let q=$('search')?.value?.trim().toLowerCase()||'',d=$('dest')?.value||'all',sort=$('sort')?.value||'default',star=$('star')?.value||'all',airline=$('airline')?.value?.trim().toLowerCase()||'',onlyCap=$('onlyCap')?.checked||false;
- let list=tours().filter(t=>t.status==='active'&&(currentCat==='all'||(t.categories||[]).includes(currentCat))&&(d==='all'||t.dest===d)&&(!q||t.title.toLowerCase().includes(q)||t.dest.toLowerCase().includes(q))&&(!airline||String(t.airline).toLowerCase().includes(airline))&&(star==='all'||(t.hotels||[]).some(h=>Number(h.star)===Number(star)))&&(!onlyCap||totalCapacity(t)>0));
- if(sort==='asc')list.sort((a,b)=>minHotel(a).price-minHotel(b).price);if(sort==='desc')list.sort((a,b)=>minHotel(b).price-minHotel(a).price);if(sort==='rate')list.sort((a,b)=>b.rating-a.rating);
- $('tourCount').textContent=faNum(list.length);$('tourGrid').innerHTML=list.map(tourCard).join('')||'<div class="card pad">توری پیدا نشد.</div>';renderCompareDock()
+
+function cardClickDetail(e,id){
+  const target=e.target;
+  if(target.closest('button,a,input,select,textarea,label'))return;
+  route('detail',id);
 }
+
+function lastCard(t){return `<article class="last-card soldout-wrap clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><span class="flash-badge">${faNum(t.dealPercent||0)}٪ ویژه</span><img src="${t.img||DEFAULT_IMG}"><div class="pad"><div class="row"><b>${t.title}</b><span class="badge special">قسمت ویژه</span></div><p class="small">${t.dest} | ${normalizeDurationNightFirst(t.duration)}</p><div class="row"><b class="price">${money(minHotel(t).price)}</b><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">مشاهده</button></div></div></article>`}
 function resetHome(){currentCat='all';renderHome()}
-function tourCard(t){const w=wishlist().includes(t.id);return `<article class="card"><div class="soldout-wrap" style="position:relative;overflow:hidden"><img class="tour-img" src="${t.img||DEFAULT_IMG}">${t.lastMinute?'<span class="flash-badge">لحظه آخری</span>':''}</div><div class="pad"><div class="badges">${badges(t)} ${t.label?`<span class="badge special">${t.label}</span>`:''}</div><h3 class="tour-title">${t.title}</h3><div class="meta"><span>${t.dest}</span><span>${normalizeDurationNightFirst(t.duration)}</span><span>${ratingStar()} ${t.rating}</span><span>${faNum(totalCapacity(t))} ظرفیت</span></div><div class="row" style="margin-top:14px;border-top:1px solid var(--b);padding-top:14px"><b class="price">${money(minHotel(t).price)}</b><div class="actions"><button class="soft" onclick="toggleWish(${t.id})"><i class="${w?'fa-solid':'fa-regular'} fa-heart" style="${w?'color:#ef4444':''}"></i></button><button class="btn" onclick="route('detail',${t.id})">جزئیات</button></div></div><button class="compare-btn ${compare.has(t.id)?'active':''}" onclick="toggleCompare(${t.id})">${compare.has(t.id)?'در مقایسه':'افزودن به مقایسه'}</button></div></article>`}
-function toggleCompare(id){if(compare.has(id))compare.delete(id);else{if(compare.size>=3)return showToast('حداکثر ۳ تور قابل مقایسه است');compare.add(id)}filterHome()}
-function renderCompareDock(){const d=$('compareDock');if(!d)return;$('compareCount').textContent=faNum(compare.size);d.classList.toggle('on',compare.size>0)}
-function clearCompare(){compare.clear();filterHome()}
-function openCompare(){const list=[...compare].map(id=>findTour(id)).filter(Boolean);if(!list.length)return;const rows=[['تصویر',...list.map(t=>`<img src="${t.img}" style="width:160px;height:95px;object-fit:cover;border-radius:12px">`)],['عنوان',...list.map(t=>`<b>${t.title}</b>`)],['مقصد',...list.map(t=>t.dest)],['مدت',...list.map(t=>t.duration)],['ایرلاین',...list.map(t=>t.airline)],['شروع قیمت',...list.map(t=>`<b class="price">${money(minHotel(t).price)}</b>`)],['ظرفیت',...list.map(t=>faNum(totalCapacity(t))+' نفر')],['هتل‌ها',...list.map(t=>(t.hotels||[]).map(h=>`${h.star}★ ${h.name}`).join('<br>'))]];$('compareContent').innerHTML=`<table><tbody>${rows.map(r=>`<tr>${r.map((c,i)=>`<td style="min-width:${i?190:120}px">${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;$('compareModal').classList.add('on')}
-function closeCompare(){$('compareModal').classList.remove('on')}
-function renderDetail(t){
-  if(!t)return;
-  countTourViewAndMaybePopup();
-  const entries=visibleHotelEntries(t); if(!entries.some(e=>e.i===selectedHotel)) selectedHotel=entries[0]?.i||0; const selected = t.hotels[selectedHotel] || entries[0]?.h || minHotel(t);
-  const detailGallery = sectionOn(t,'gallery') ? `<div class="gallery">${[t.img,...(t.gallery||[])].slice(0,5).map(x=>`<img src="${x}" onclick="lightbox('${x}')">`).join('')}</div>` : '';
-  const descHtml = sectionOn(t,'description') ? `<p class="small">${t.desc||''}</p>` : '';
-  const flightHtml = sectionOn(t,'flightInfo') ? `<div class="info-grid">${info('مقصد',t.dest)}${info('مدت',t.duration)}${info('ایرلاین رفت',t.airline)}${info('ایرلاین برگشت',t.returnAirline||t.airline)}${info('زمان پرواز رفت',t.flightTime)}${info('زمان پرواز برگشت',t.returnFlightTime||t.landingTime)}</div>` : '';
-  const datesHtml = sectionOn(t,'dates') ? dateOnly(t) : '';
-  const hotelsHtml = sectionOn(t,'hotels') ? hotelGroupsHtml(t) : '';
-  const itineraryHtml = sectionOn(t,'itinerary') ? `<div class="info"><small>برنامه سفر</small>${(t.itinerary||[]).map(x=>`<p class="small">• ${x}</p>`).join('')}</div>` : '';
-  const docsHtml = sectionOn(t,'docs') ? `<div class="info"><small>مدارک لازم</small>${(t.docs||[]).map(x=>`<p class="small">• ${x}</p>`).join('')}</div>` : '';
-  const includesHtml = sectionOn(t,'includes') ? `<div class="info"><small>خدمات شامل</small>${(t.includes||[]).map(x=>`<p class="small">✓ ${x}</p>`).join('')}</div>` : '';
-  const excludesHtml = sectionOn(t,'excludes') ? `<div class="info"><small>خدمات غیرشامل</small>${(t.excludes||[]).map(x=>`<p class="small">× ${x}</p>`).join('')}</div>` : '';
-  const blocks = [itineraryHtml,docsHtml,includesHtml,excludesHtml].filter(Boolean).join('');
-  const blocksHtml = blocks ? `<div class="g2 grid" style="margin-top:18px">${blocks}</div>` : '';
-  const policyBits = [];
-  if(sectionOn(t,'cancellation')) policyBits.push(`<p class="small">قوانین کنسلی: ${t.cancellation||'—'}</p>`);
-  if(sectionOn(t,'childPolicy')) policyBits.push(`<p class="small">شرایط کودک: ${t.childPolicy||'—'}</p>`);
-  const policyHtml = policyBits.length ? `<div class="info" style="margin-top:14px"><small>قوانین و شرایط</small>${policyBits.join('')}</div>` : '';
-  const reviewsHtml = sectionOn(t,'reviews') && (t.reviews||[]).length ? `<h3>نظر مسافران</h3><div class="g2 grid">${(t.reviews||[]).map(r=>`<div class="info"><div class="row"><b>${r.name}</b><span style="color:#f59e0b">${'★'.repeat(r.rate||5)}</span></div><p class="small">${r.text}</p></div>`).join('')}</div>` : '';
-  $('app').innerHTML=`${buyerTabs()}<button class="soft" onclick="goBack()">بازگشت</button>
-  <section class="card pad" style="margin-top:16px">
-    <div class="badges">${badges(t)}</div>
-    <img class="detail-img" src="${t.img||DEFAULT_IMG}">
-    ${detailGallery}
-    <div class="row wrap" style="margin-top:18px">
-      <div><h1>${t.title}</h1>${descHtml}${customerTrailMini()}</div>
-      <button class="soft" onclick="toggleWish(${t.id})">♡ علاقه‌مندی</button>
-    </div>
-    ${flightHtml}
-    ${datesHtml}
-    ${hotelsHtml}
-    ${blocksHtml}
-    ${policyHtml}
-    ${reviewsHtml}
-    <div class="row wrap" style="border-top:1px solid var(--b);margin-top:18px;padding-top:18px">
-      <div><small class="small">قیمت هتل انتخاب‌شده</small>${specialPriceLine(t,selected.price)}</div>
-      <button class="btn" onclick="route('booking',${t.id})">رزرو نهایی</button>
-    </div>
-  </section>
-  <div class="sticky-cta"><b>${Number(t.newPrice||0)>0?money(t.newPrice):money(selected.price)}</b><button class="btn" onclick="route('booking',${t.id})">رزرو سریع</button></div>${hotelPhotosModalHtml()}`;
-}
+function tourCard(t){const w=wishlist().includes(t.id);return `<article class="card clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><div class="soldout-wrap" style="position:relative;overflow:hidden"><img class="tour-img" src="${t.img||DEFAULT_IMG}">${t.lastMinute?'<span class="flash-badge">لحظه آخری</span>':''}</div><div class="pad"><div class="badges">${badges(t)} ${t.label?`<span class="badge special">${t.label}</span>`:''}</div><h3 class="tour-title">${t.title}</h3><div class="meta"><span>${t.dest}</span><span>${normalizeDurationNightFirst(t.duration)}</span><span>${ratingStar()} ${t.rating}</span><span>${faNum(totalCapacity(t))} ظرفیت</span></div><div class="row" style="margin-top:14px;border-top:1px solid var(--b);padding-top:14px"><b class="price">${money(minHotel(t).price)}</b><div class="actions"><button class="soft" onclick="event.stopPropagation();toggleWish(${t.id})"><i class="${w?'fa-solid':'fa-regular'} fa-heart" style="${w?'color:#ef4444':''}"></i></button><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">جزئیات</button></div></div><button class="compare-btn ${compare.has(t.id)?'active':''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id)?'در مقایسه':'افزودن به مقایسه'}</button></div></article>`}
 function info(l,v){return `<div class="info"><small>${l}</small><b>${v||'—'}</b></div>`}
 
 function dateOnly(t){return `<div class="date-only-title">تاریخ‌های حرکت <span class="small">(نمایشی)</span></div><div class="date-list">${(t.dates||[]).map((d,i)=>`<button type="button" data-date="${d}" class="date-chip ${i===0?'selected active':''}" aria-selected="${i===0?'true':'false'}" onclick="selectTourDateChip(this,'${d}')">${d}</button>`).join('')}</div>`}
