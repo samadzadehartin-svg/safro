@@ -220,13 +220,30 @@ function renderStaff(){
   const q=$('staffSearch')?.value?.trim().toLowerCase()||'', user=currentStaffUser();
   let list=tours();if(q)list=list.filter(t=>t.title.toLowerCase().includes(q)||t.dest.toLowerCase().includes(q));
   $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge special">پنل فروش</span><h1>مدیریت تورها</h1><p class="small">وارد شده با: <b>${user?.name||user?.username||'فروش'}</b></p>${staffTaskNoteHtml()}</div><div class="actions"><button class="soft" onclick="logoutRole('staff')">خروج</button><button class="btn" onclick="openForm()">افزودن تور</button></div></div>
-  ${staffTopTabs()}
+  ${staffTopTabs()}${staffDebugBox()}
   ${staffVisaInfoBox()}
   <section id="staffToursSection" class="staff-section-panel">
     <div class="section-title-row"><span class="badge domestic">بخش تورها</span><h3>مدیریت تورها و قیمت‌ها</h3></div>
     ${priceImportBox()}${batchPriceBox()}
     <div class="card pad" style="margin:16px 0"><input id="staffSearch" class="field" placeholder="جستجو..." oninput="renderStaff()" value="${q}"></div>
-    <div class="card table-wrap"><table><thead><tr><th>عکس</th><th>عنوان</th><th>مقصد</th><th>قیمت شروع</th><th>ظرفیت</th><th>وضعیت</th><th>آخرین ویرایش</th><th>عملیات</th></tr></thead><tbody>${list.map(t=>`<tr><td><img src="${t.img}" style="width:55px;height:55px;object-fit:cover;border-radius:12px"></td><td><b>${t.title}</b><br><small>${badges(t)}</small></td><td>${t.dest}</td><td>${money(minHotel(t).price)}</td><td>${faNum(totalCapacity(t))}</td><td>${t.status}</td><td><span class="last-edited">${t.lastEditedBy||'—'}<br>${t.lastEditedAt?new Date(t.lastEditedAt).toLocaleString('fa-IR'):''}</span></td><td><button class="soft" onclick="openForm(${t.id})">ویرایش</button><button class="danger" onclick="delTour(${t.id})">حذف</button></td></tr>`).join('')}</tbody></table></div>
+    <div class="card table-wrap"><table><thead><tr><th>عکس</th><th>عنوان</th><th>مقصد</th><th>قیمت شروع</th><th>ظرفیت</th><th>وضعیت</th><th>آخرین ویرایش</th><th>عملیات</th></tr></thead><tbody>${list.map(t=>`<tr><td><img src="${t.img}" style="width:55px;height:55px;object-fit:cover;border-radius:12px"></td><td class="staff-tour-title-cell">
+  <b>${t.title}</b><br>
+  <small>${badges(t)}</small>
+  <div class="staff-inline-actions">
+    <button class="btn staff-edit-main" onclick="openForm(${t.id})"><i class="fa-regular fa-pen-to-square"></i> ویرایش تور</button>
+  </div>
+</td><td>${t.dest}</td><td>${money(minHotel(t).price)}</td><td>${faNum(totalCapacity(t))}</td><td>${t.status}</td><td><span class="last-edited">${t.lastEditedBy||'—'}<br>${t.lastEditedAt?new Date(t.lastEditedAt).toLocaleString('fa-IR'):''}</span></td><td class="staff-actions-cell">
+      <button class="btn staff-edit-op" onclick="openForm(${t.id})"><i class="fa-regular fa-pen-to-square"></i> ویرایش تور</button>
+      <button class="danger" onclick="delTour(${t.id})"><i class="fa-regular fa-trash-can"></i> حذف</button>
+    </td></tr>`).join('')}</tbody></table></div>
+    <div class="staff-edit-card-list">${list.map(t=>`<div class="staff-edit-card">
+      <img src="${t.img||DEFAULT_IMG}" alt="">
+      <div>
+        <b>${t.title}</b>
+        <small>${t.dest} | ${money(minHotel(t).price)}</small>
+      </div>
+      <button class="btn" onclick="openForm(${t.id})"><i class="fa-regular fa-pen-to-square"></i> ویرایش تور</button>
+    </div>`).join('')}</div>
   </section>`;
 
   }catch(err){console.error('renderStaff error',err);$('app').innerHTML=`<div class="card pad login-box"><h2>خطای پنل فروش</h2><p class="small">یک خطا در نمایش پنل پیش آمد. یک بار خروج/ورود کن یا کش مرورگر را پاک کن.</p><pre style="direction:ltr;text-align:left;white-space:pre-wrap;background:var(--bg);padding:10px;border-radius:12px;max-height:160px;overflow:auto">${err.message||err}</pre><button class="btn" onclick="logoutRole('staff')">خروج و ورود دوباره</button></div>`}

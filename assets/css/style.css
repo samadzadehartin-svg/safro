@@ -2678,3 +2678,67 @@ body:not(.admin-page) .customer-trail-list{display:none!important}
   .booking-edit-photo-item>img{width:100%;height:170px}
   .booking-edit-actions{justify-content:flex-start}
 }
+
+
+/* Staff edit button visibility fix */
+.staff-tour-title-cell{
+  min-width:230px;
+}
+.staff-inline-actions{
+  margin-top:8px;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.staff-edit-main,
+.staff-edit-op{
+  white-space:nowrap;
+  font-weight:1000!important;
+}
+.staff-actions-cell{
+  min-width:180px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.staff-edit-card-list{
+  display:none;
+  gap:10px;
+  margin-top:14px;
+}
+.staff-edit-card{
+  display:grid;
+  grid-template-columns:64px 1fr auto;
+  gap:10px;
+  align-items:center;
+  border:1px solid var(--b);
+  background:var(--s);
+  border-radius:18px;
+  padding:10px;
+}
+.staff-edit-card img{
+  width:64px;
+  height:64px;
+  object-fit:cover;
+  border-radius:14px;
+}
+.staff-edit-card b{
+  display:block;
+  margin-bottom:4px;
+}
+.staff-edit-card small{
+  color:var(--t2);
+}
+@media(max-width:860px){
+  .staff-edit-card-list{
+    display:grid;
+  }
+  .staff-actions-cell{
+    min-width:210px;
+  }
+  .staff-inline-actions .staff-edit-main{
+    width:100%;
+    justify-content:center;
+  }
+}
