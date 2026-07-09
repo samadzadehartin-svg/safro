@@ -317,6 +317,30 @@ function saveBookingHotelPhotos(tourId,index){
   renderBookingPhotoHotels();
   showToast('URL و عکس‌های Booking هتل ذخیره شد');
 }
+
+function resizeImageFile(file,maxSize=900,quality=.72){
+  return new Promise(resolve=>{
+    if(!file || !String(file.type||'').startsWith('image/'))return resolve(null);
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const scale=Math.min(1,maxSize/Math.max(img.width,img.height));
+        const canvas=document.createElement('canvas');
+        canvas.width=Math.max(1,Math.round(img.width*scale));
+        canvas.height=Math.max(1,Math.round(img.height*scale));
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.onerror=()=>resolve(reader.result);
+      img.src=reader.result;
+    };
+    reader.onerror=()=>resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
 function uploadBookingHotelPhotos(tourId,index,files){
   const arr=[...(files||[])];if(!arr.length)return;
   Promise.all(arr.map(file=>new Promise(resolve=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.readAsDataURL(file)}))).then(urls=>{

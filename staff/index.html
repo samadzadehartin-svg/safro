@@ -1,31 +1,4 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>سفرو | پنل فروش</title>
-  <meta name="theme-color" content="#4a9fd8">
-  <link rel="manifest" href="../manifest.json">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css">
-</head>
-<body>
-  <div id="headerMount"></div>
-  <main class="container" id="app"></main>
-  <div id="footerMount"></div>
-  <div id="modal" class="modal" onclick="if(event.target===this)closeForm()"><div class="modal-card pad"><div class="row"><h2 id="formTitle">افزودن تور</h2><button class="soft" onclick="closeForm()">بستن</button></div><form onsubmit="saveTour(event)" class="stack"><input id="tid" type="hidden"><div class="grid g2"><input id="title" class="field" required placeholder="عنوان تور *"><input id="dest" class="field" required placeholder="مقصد *"><input id="duration" class="field" required placeholder="مدت سفر *"><input id="airline" class="field" required placeholder="ایرلاین رفت *"><input id="returnAirline" class="field" placeholder="ایرلاین برگشت"><input id="flightTime" class="field" placeholder="زمان پرواز رفت"><input id="returnFlightTime" class="field" placeholder="زمان پرواز برگشت"><input id="price" class="field" type="number" required placeholder="قیمت پایه *"><select id="type" class="field"><option value="international">خارجی</option><option value="domestic">داخلی</option></select><select id="level" class="field"><option value="">سطح ندارد</option><option value="luxury">لوکس</option><option value="economy">اقتصادی</option><option value="special">ویژه</option></select><select id="status" class="field"><option value="active">فعال</option><option value="inactive">غیرفعال</option></select><label class="row" style="justify-content:flex-start"><input id="lastMinute" type="checkbox"> نمایش در قسمت ویژه</label><input id="oldPrice" class="field" type="number" placeholder="مبلغ قبل تخفیف"><input id="newPrice" class="field" type="number" placeholder="مبلغ بعد تخفیف"><input id="dealPercent" class="field" type="number" placeholder="درصد تخفیف ویژه"><input id="dealEndsAtFa" class="field" placeholder="تاریخ پایان تخفیف شمسی؛ ۱۴۰۵/۰۵/۳۰ ۲۳:۵۹"><div class="jalali-input-help">تاریخ تخفیف را شمسی وارد کن، مثل: ۱۴۰۵/۰۵/۳۰ ۲۳:۵۹</div></div>
-  <div id="toast" class="toast"></div>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/core.js"></script>
-  <script src="../assets/js/staff.js"></script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('../sw.js').catch(() => {}));
-  }
-  </script>
-</body>
-</html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>سفرو | پنل فروش</title><meta name="theme-color" content="#4a9fd8"><link rel="manifest" href="../manifest.json"><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css"></head>
+<body><div id="headerMount"></div><main class="container" id="app"></main><div id="footerMount"></div><div id="modal" class="modal" onclick="if(event.target===this)closeForm()"><div class="modal-card pad"><div class="row"><h2 id="formTitle">افزودن تور</h2><button class="soft" onclick="closeForm()">بستن</button></div><form onsubmit="saveTour(event)" class="stack"><input id="tid" type="hidden"><div class="grid g2"><input id="title" class="field" required placeholder="عنوان تور *"><input id="dest" class="field" required placeholder="مقصد *"><input id="duration" class="field" required placeholder="مدت سفر *"><input id="airline" class="field" required placeholder="ایرلاین رفت *"><input id="returnAirline" class="field" placeholder="ایرلاین برگشت"><input id="flightTime" class="field" placeholder="زمان پرواز رفت"><input id="returnFlightTime" class="field" placeholder="زمان پرواز برگشت"><input id="price" class="field" type="number" required placeholder="قیمت پایه *"><select id="type" class="field"><option value="international">خارجی</option><option value="domestic">داخلی</option></select><select id="level" class="field"><option value="">سطح ندارد</option><option value="luxury">لوکس</option><option value="economy">اقتصادی</option><option value="special">ویژه</option></select><select id="status" class="field"><option value="active">فعال</option><option value="inactive">غیرفعال</option></select><label class="row" style="justify-content:flex-start"><input id="lastMinute" type="checkbox"> نمایش در قسمت ویژه</label><input id="oldPrice" class="field" type="number" placeholder="مبلغ قبل تخفیف"><input id="newPrice" class="field" type="number" placeholder="مبلغ بعد تخفیف"><input id="dealPercent" class="field" type="number" placeholder="درصد تخفیف ویژه"><input id="dealEndsAtFa" class="field" placeholder="تاریخ پایان تخفیف شمسی؛ ۱۴۰۵/۰۵/۳۰ ۲۳:۵۹"><div class="jalali-input-help">تاریخ تخفیف را شمسی وارد کن، مثل: ۱۴۰۵/۰۵/۳۰ ۲۳:۵۹</div></div><div id="toast" class="toast"></div><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="../assets/js/data.js"></script><script src="../assets/js/core.js"></script><script src="../assets/js/staff.js"></script></body></html>

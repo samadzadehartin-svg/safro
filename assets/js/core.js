@@ -3,8 +3,39 @@ function $(id){return document.getElementById(id)}
 function money(n){return Number(n||0).toLocaleString('fa-IR')+' تومان'}
 function faNum(n){return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
 function reqStar(){return '<span class="req-star">*</span>'}
-function read(k,f){try{return JSON.parse(localStorage.getItem(PREFIX+k))??f}catch{return f}}
-function write(k,v){localStorage.setItem(PREFIX+k,JSON.stringify(v))}
+function read(k,f){
+  try{
+    const raw=localStorage.getItem(PREFIX+k);
+    if(raw===null||raw===undefined)return f;
+    const parsed=JSON.parse(raw);
+    return parsed??f;
+  }catch(e){
+    console.warn('read failed',k,e);
+    return f;
+  }
+}
+function write(k,v){
+  try{
+    localStorage.setItem(PREFIX+k,JSON.stringify(v));
+    return true;
+  }catch(e){
+    console.error('write failed',k,e);
+    try{
+      if(k==='tours'){
+        const light=(Array.isArray(v)?v:[]).map(t=>({
+          ...t,
+          gallery:(t.gallery||[]).filter(x=>!String(x).startsWith('data:image/')).slice(0,4),
+          hotels:(t.hotels||[]).map(h=>({...h,photos:(h.photos||[]).filter(x=>!String(x).startsWith('data:image/')).slice(0,8)}))
+        }));
+        localStorage.setItem(PREFIX+k,JSON.stringify(light));
+        alert('حجم عکس‌های آپلودی زیاد بود؛ عکس‌های حجیم داخلی حذف شدند و اطلاعات اصلی ذخیره شد.');
+        return true;
+      }
+    }catch(e2){console.error('fallback write failed',k,e2)}
+    alert('ذخیره انجام نشد. حجم اطلاعات یا عکس‌ها زیاد است. چند عکس را حذف کن یا URL عکس وارد کن.');
+    return false;
+  }
+}
 
 function defaultHotelCatalog(){
   return [
@@ -170,17 +201,90 @@ function normalizeAllTourDurations(){
   saveTours(ts);
 }
 
+
+function defaultTourById(id){return (DEFAULT_TOURS||[]).find(x=>Number(x.id)===Number(id))||null}
+function repairHotel(h,basePrice,star){
+  const price=Number(h?.price||basePrice||0);
+  return {
+    ...h,
+    star:Number(h?.star||star||3),
+    name:h?.name||h?.nameLatin||`هتل ${faNum(star||3)} ستاره`,
+    price,
+    capacity:Number.isFinite(Number(h?.capacity))?Number(h.capacity):10,
+    showInBuyer:h?.showInBuyer!==false,
+    photos:(h?.photos||h?.images||[]).filter(Boolean).slice(0,12),
+    bookingLink:h?.bookingLink||''
+  };
+}
+function repairTour(t,i){
+  const def=defaultTourById(t?.id)||DEFAULT_TOURS[i%DEFAULT_TOURS.length]||{};
+  const dest=t?.dest||def.dest||'استانبول';
+  const title=(typeof TOUR_TITLE_FA_MAP!=='undefined'&&TOUR_TITLE_FA_MAP[t?.title])||t?.title||def.title||`تور ${dest}`;
+  const img=t?.img||def.img||themedTourImage({dest,title});
+  const rawHotels=Array.isArray(t?.hotels)&&t.hotels.length?t.hotels:(def.hotels||[]);
+  const hotels=(rawHotels.length?rawHotels:[
+    {star:3,name:'هتل سه ستاره پیشنهادی',price:t?.price||def.price||10000000,capacity:10},
+    {star:4,name:'هتل چهار ستاره پیشنهادی',price:Math.round((t?.price||def.price||10000000)*1.25),capacity:8},
+    {star:5,name:'هتل پنج ستاره پیشنهادی',price:Math.round((t?.price||def.price||10000000)*1.55),capacity:5}
+  ]).map((h,idx)=>repairHotel(h,t?.price||def.price||10000000,h?.star||[3,4,5][idx%3]));
+  return {
+    ...def,...t,
+    id:t?.id||Date.now()+i,
+    title,dest,
+    duration:normalizeDurationNightFirst(t?.duration||def.duration||'۴ شب و ۵ روز'),
+    airline:t?.airline||def.airline||'ایرلاین',
+    returnAirline:t?.returnAirline||def.returnAirline||t?.airline||def.airline||'ایرلاین',
+    flightTime:t?.flightTime||def.flightTime||'۰۸:۳۰',
+    landingTime:t?.landingTime||def.landingTime||'۱۲:۴۵',
+    price:Number(t?.price||def.price||10000000),
+    status:t?.status||'active',
+    type:t?.type||def.type||'international',
+    level:t?.level||def.level||'special',
+    categories:Array.isArray(t?.categories)&&t.categories.length?t.categories:(def.categories||[t?.type||def.type||'international']),
+    rating:Number(t?.rating||def.rating||4.5),
+    img,
+    gallery:(Array.isArray(t?.gallery)&&t.gallery.length?t.gallery:(def.gallery&&def.gallery.length?def.gallery:[img])).filter(Boolean).slice(0,5),
+    dates:(Array.isArray(t?.dates)&&t.dates.length?t.dates:(def.dates||['۱۴۰۵/۰۴/۱۵','۱۴۰۵/۰۴/۲۲','۱۴۰۵/۰۵/۰۱'])),
+    hotels,
+    includes:Array.isArray(t?.includes)?t.includes:(def.includes||[]),
+    excludes:Array.isArray(t?.excludes)?t.excludes:(def.excludes||[]),
+    itinerary:Array.isArray(t?.itinerary)?t.itinerary:(def.itinerary||[]),
+    docs:Array.isArray(t?.docs)?t.docs:(def.docs||[]),
+    sectionVisibility:t?.sectionVisibility||def.sectionVisibility||{}
+  };
+}
+function repairToursList(list){
+  let arr=Array.isArray(list)?list:[];
+  if(!arr.length)arr=[...DEFAULT_TOURS];
+  arr=arr.filter(Boolean).map(repairTour);
+  const ids=new Set(arr.map(t=>Number(t.id)));
+  (DEFAULT_TOURS||[]).forEach((d,i)=>{if(!ids.has(Number(d.id)))arr.push(repairTour(d,arr.length+i))});
+  return arr;
+}
+function repairAppData(){
+  write('tours',repairToursList(read('tours',DEFAULT_TOURS)));
+  if(!Array.isArray(read('discounts',null)))write('discounts',DEFAULT_DISCOUNTS);
+  if(!Array.isArray(read('visaServices',null)))write('visaServices',DEFAULT_VISAS);
+  if(!Array.isArray(read('hotelCatalog',null)))write('hotelCatalog',defaultHotelCatalog());
+  if(!Array.isArray(read('staffAccounts',null)))write('staffAccounts',defaultStaffAccounts());
+}
+function resetDemoData(){
+  if(confirm('همه تورها و تنظیمات نمونه دوباره ساخته شود؟')){
+    write('tours',DEFAULT_TOURS);
+    write('discounts',DEFAULT_DISCOUNTS);
+    write('visaServices',DEFAULT_VISAS);
+    write('hotelCatalog',defaultHotelCatalog());
+    showToast('داده‌های نمونه بازیابی شد');
+    setTimeout(()=>location.reload(),600);
+  }
+}
+
 function seed(){
-  const currentTours=read('tours',null);
-  if(!Array.isArray(currentTours)||!currentTours.length)write('tours',DEFAULT_TOURS);
-  if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS);
-  if(!read('visaServices',null))write('visaServices',DEFAULT_VISAS);
-  if(!read('hotelCatalog',null))write('hotelCatalog',defaultHotelCatalog());
-  if(!read('staffAccounts',null))write('staffAccounts',defaultStaffAccounts());
+  repairAppData();
   normalizeTourImagesTheme();
   if(typeof normalizeTourPersianNamesAndImages==='function')normalizeTourPersianNamesAndImages();
 }
-function tours(){return read('tours',DEFAULT_TOURS)}function saveTours(v){write('tours',v)}
+function tours(){return repairToursList(read('tours',DEFAULT_TOURS))}function saveTours(v){return write('tours',repairToursList(v))}
 function orders(){return read('orders',[])}function saveOrders(v){write('orders',v)}
 function leads(){return read('leads',[])}function saveLeads(v){write('leads',v)}
 function contactStaff(){return read('contactStaff',[])}function saveContactStaff(v){write('contactStaff',v)}

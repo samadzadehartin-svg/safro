@@ -2586,17 +2586,8 @@ body:not(.dark) .hero-custom-tour-card input::placeholder{
 }
 
 
-/* Runtime stability fixes */
-.clickable-tour-card{
-  cursor:pointer;
-  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-.clickable-tour-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 18px 45px rgba(15,23,42,.10);
-  border-color:rgba(57,167,223,.35)!important;
-}
+/* Full debug stability */
+.debug-error-box{border:1px solid #fecaca;background:#fff1f2;color:#991b1b;border-radius:16px;padding:14px}
+.clickable-tour-card{cursor:pointer}
 body:not(.admin-page) .customer-trail-box,
-body:not(.admin-page) .customer-trail-list{
-  display:none!important;
-}
+body:not(.admin-page) .customer-trail-list{display:none!important}
