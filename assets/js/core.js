@@ -170,7 +170,16 @@ function normalizeAllTourDurations(){
   saveTours(ts);
 }
 
-function seed(){if(!read('tours',null))write('tours',DEFAULT_TOURS);if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS);if(!read('visaServices',null))write('visaServices',DEFAULT_VISAS);if(!read('hotelCatalog',null))write('hotelCatalog',defaultHotelCatalog());if(!read('staffAccounts',null))write('staffAccounts',defaultStaffAccounts());normalizeTourImagesTheme();normalizeTourPersianNamesAndImages()}
+function seed(){
+  const currentTours=read('tours',null);
+  if(!Array.isArray(currentTours)||!currentTours.length)write('tours',DEFAULT_TOURS);
+  if(!read('discounts',null))write('discounts',DEFAULT_DISCOUNTS);
+  if(!read('visaServices',null))write('visaServices',DEFAULT_VISAS);
+  if(!read('hotelCatalog',null))write('hotelCatalog',defaultHotelCatalog());
+  if(!read('staffAccounts',null))write('staffAccounts',defaultStaffAccounts());
+  normalizeTourImagesTheme();
+  if(typeof normalizeTourPersianNamesAndImages==='function')normalizeTourPersianNamesAndImages();
+}
 function tours(){return read('tours',DEFAULT_TOURS)}function saveTours(v){write('tours',v)}
 function orders(){return read('orders',[])}function saveOrders(v){write('orders',v)}
 function leads(){return read('leads',[])}function saveLeads(v){write('leads',v)}

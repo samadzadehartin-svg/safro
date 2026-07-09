@@ -347,62 +347,75 @@ function openForm(id){
 function closeForm(){$('modal').classList.remove('on');document.body.style.overflow=''}
 function saveTour(e){
   e.preventDefault();
+  const title=$('title')?.value?.trim()||'';
+  const dest=$('dest')?.value?.trim()||'';
+  const duration=$('duration')?.value?.trim()||'';
+  const airline=$('airline')?.value?.trim()||'';
+  const price=Number($('price')?.value)||0;
+  if(!title||!dest||!duration||!airline||!price){
+    alert('لطفاً عنوان، مقصد، مدت، ایرلاین و قیمت را کامل وارد کنید');
+    return;
+  }
   const ts=tours();
-  const id=$('tid').value?Number($('tid').value):Date.now();
-  const price=Number($('price').value)||0;
-  const type=$('type').value;
-  const level=$('level').value;
+  const id=$('tid')?.value?Number($('tid').value):Date.now();
+  const type=$('type')?.value||'international';
+  const level=$('level')?.value||'';
   const cats=[type];
   const user=currentStaffUser();
   if(level)cats.push(level);
   const oldTour=findTour(id);
-  const special=$('lastMinute').checked;
-  const parsedEnd=parseFaDiscountDate($('dealEndsAtFa').value);
+  const special=!!$('lastMinute')?.checked;
+  const parsedEnd=parseFaDiscountDate($('dealEndsAtFa')?.value||'');
+  let hotelList=collectHotels(price);
+  if(!hotelList.length){
+    hotelList=[
+      {star:3,name:'هتل سه ستاره پیشنهادی',price:price,capacity:10,showInBuyer:true},
+      {star:4,name:'هتل چهار ستاره پیشنهادی',price:Math.round(price*1.25),capacity:8,showInBuyer:true},
+      {star:5,name:'هتل پنج ستاره پیشنهادی',price:Math.round(price*1.55),capacity:5,showInBuyer:true}
+    ];
+  }
+  const imageForTour=oldTour?.img||themedTourImage({dest,title})||DEFAULT_IMG;
   const data={
-    id,
-    title:$('title').value,
-    dest:$('dest').value,
-    duration:normalizeDurationNightFirst($('duration').value),
-    airline:$('airline').value,
-    returnAirline:$('returnAirline').value||$('airline').value,
-    flightTime:$('flightTime').value||'۰۸:۳۰',
-    returnFlightTime:$('returnFlightTime').value||'',
+    id,title,dest,
+    duration:normalizeDurationNightFirst(duration),
+    airline,
+    returnAirline:$('returnAirline')?.value||airline,
+    flightTime:$('flightTime')?.value||'۰۸:۳۰',
+    returnFlightTime:$('returnFlightTime')?.value||'',
     price,
     label:special?'ویژه':'',
-    type,
-    level,
-    categories:cats,
+    type,level,categories:cats,
     rating:oldTour?.rating||4.5,
-    status:$('status').value,
+    status:$('status')?.value||'active',
     lastMinute:special,
-    oldPrice:Number($('oldPrice').value)||0,
-    newPrice:Number($('newPrice').value)||0,
-    dealPercent:special?(Number($('dealPercent').value)||0):0,
-    dealEndsAtFa:$('dealEndsAtFa').value||'',
+    oldPrice:Number($('oldPrice')?.value)||0,
+    newPrice:Number($('newPrice')?.value)||0,
+    dealPercent:special?(Number($('dealPercent')?.value)||0):0,
+    dealEndsAtFa:$('dealEndsAtFa')?.value||'',
     dealEndsAt:parsedEnd?parsedEnd.toISOString():new Date(Date.now()+24*3600000).toISOString(),
-    img:oldTour?.img||DEFAULT_IMG,
-    gallery:oldTour?.gallery||[],
-    dates:$('dates').value.split('\\n').map(x=>x.trim()).filter(Boolean),
-    hotels:collectHotels(price),
-    desc:$('desc').value||'تور ثبت شده توسط فروش.',
-    includes:($('includes').value||'ترانسفر\\nبیمه\\nصبحانه').split('\\n').map(x=>x.trim()).filter(Boolean),
-    excludes:($('excludes').value||'').split('\\n').map(x=>x.trim()).filter(Boolean),
-    itinerary:($('itinerary').value||'').split('\\n').map(x=>x.trim()).filter(Boolean),
-    docs:($('docs').value||'').split('\\n').map(x=>x.trim()).filter(Boolean),
-    cancellation:$('cancel').value,
-    childPolicy:$('child').value,
+    img:imageForTour,
+    gallery:oldTour?.gallery?.length?oldTour.gallery:[imageForTour],
+    dates:($('dates')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean),
+    hotels:hotelList,
+    desc:$('desc')?.value||'تور ثبت شده توسط فروش.',
+    includes:($('includes')?.value||'ترانسفر\nبیمه\nصبحانه').split('\n').map(x=>x.trim()).filter(Boolean),
+    excludes:($('excludes')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean),
+    itinerary:($('itinerary')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean),
+    docs:($('docs')?.value||'').split('\n').map(x=>x.trim()).filter(Boolean),
+    cancellation:$('cancel')?.value||'طبق قوانین چارتر و هتل.',
+    childPolicy:$('child')?.value||'نرخ کودک طبق سن محاسبه می‌شود.',
     sectionVisibility:collectSectionVisibility(),
     reviews:oldTour?.reviews||[],
     lastEditedBy:user?.name||user?.username||'فروش',
     lastEditedAt:new Date().toISOString()
   };
-  const i=ts.findIndex(x=>x.id===id);
+  if(!data.dates.length)data.dates=['۱۴۰۵/۰۴/۱۵','۱۴۰۵/۰۴/۲۲','۱۴۰۵/۰۵/۰۱'];
+  const i=ts.findIndex(x=>Number(x.id)===Number(id));
   if(i>=0)ts[i]=data;else ts.push(data);
   saveTours(ts);
   closeForm();
   renderStaff();
   showToast('تور ذخیره شد');
 }
-
 function delTour(id){if(confirm('تور حذف شود؟')){saveTours(tours().filter(t=>t.id!==id));renderStaff()}}
 document.addEventListener('DOMContentLoaded',initStaff);
