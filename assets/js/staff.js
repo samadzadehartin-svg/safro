@@ -101,7 +101,29 @@ function badges(t){
 function hotelStars(n){return `<span class="hotel-stars">${Array.from({length:Number(n)||0}).map(()=>'<i class="fa-solid fa-star"></i>').join('')}</span>`}
 function defaultSections(){return{description:true,flightInfo:true,dates:true,hotels:true,gallery:true,itinerary:true,docs:true,includes:true,excludes:true,cancellation:true,childPolicy:true,reviews:true}}
 function sectionVal(id){return !!$(id)?.checked}
-function setSectionToggles(t){const v=Object.assign(defaultSections(),t?.sectionVisibility||{});Object.entries({visDescription:'description',visFlightInfo:'flightInfo',visDates:'dates',visHotels:'hotels',visItinerary:'itinerary',visDocs:'docs',visIncludes:'includes',visExcludes:'excludes',visCancellation:'cancellation',visChildPolicy:'childPolicy',visReviews:'reviews'}).forEach(([id,key])=>{if($(id))$(id).checked=v[key]!==false})}
+function sectionMap(){
+  return {
+    visDescription:'description',
+    visFlightInfo:'flightInfo',
+    visDates:'dates',
+    visHotels:'hotels',
+    visGallery:'gallery',
+    visItinerary:'itinerary',
+    visDocs:'docs',
+    visIncludes:'includes',
+    visExcludes:'excludes',
+    visCancellation:'cancellation',
+    visChildPolicy:'childPolicy',
+    visReviews:'reviews'
+  };
+}
+function setSectionToggles(t){
+  const v=Object.assign(defaultSections(),t?.sectionVisibility||{});
+  Object.entries(sectionMap()).forEach(([id,key])=>{if($(id))$(id).checked=v[key]!==false});
+}
+function setAllSectionVisibility(on){
+  Object.keys(sectionMap()).forEach(id=>{if($(id))$(id).checked=!!on});
+}
 
 function collectSectionVisibility(){
   return {
