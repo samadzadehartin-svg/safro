@@ -2869,3 +2869,22 @@ body:not(.admin-page) .customer-trail-list{display:none!important}
   display:grid;
   gap:12px;
 }
+
+
+/* Destination guides from Alefba-inspired content */
+.destination-guide-section{margin:22px 0}
+.destination-guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:14px}
+.destination-guide-card{text-align:right;border:1px solid var(--b);background:var(--s);border-radius:20px;padding:14px;cursor:pointer;transition:.18s;min-height:152px;display:flex;flex-direction:column;gap:8px}
+.destination-guide-card:hover{transform:translateY(-3px);box-shadow:0 14px 35px rgba(15,23,42,.08);border-color:rgba(57,167,223,.38)}
+.destination-guide-card b{font-size:17px;color:var(--t)}
+.destination-guide-card span{font-size:12px;line-height:2;color:var(--t2)}
+.destination-guide-card small{margin-top:auto;color:var(--p);font-weight:900}
+.destination-detail-box{border:1px solid rgba(57,167,223,.25);background:rgba(57,167,223,.06);border-radius:22px;padding:16px;margin:16px 0}
+.destination-intro{font-size:13px!important;line-height:2.2!important;color:var(--t)!important}
+.destination-mini-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:10px}
+.destination-mini-grid>div{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:12px}
+.destination-mini-grid b{display:block;margin-bottom:8px}
+.destination-mini-grid ul{margin:0;padding-right:18px;color:var(--t2);font-size:12px;line-height:2}
+.destination-chip{display:inline-flex;background:rgba(57,167,223,.10);color:var(--p);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;margin:0 0 6px 6px}
+.dark .destination-detail-box{background:rgba(56,189,248,.07);border-color:rgba(56,189,248,.16)}
+@media(max-width:860px){.destination-mini-grid{grid-template-columns:1fr}}
