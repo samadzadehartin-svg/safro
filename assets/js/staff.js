@@ -242,7 +242,7 @@ function renderStaff(){
   const q=$('staffSearch')?.value?.trim().toLowerCase()||'', user=currentStaffUser();
   let list=tours();if(q)list=list.filter(t=>t.title.toLowerCase().includes(q)||t.dest.toLowerCase().includes(q));
   $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge special">پنل فروش</span><h1>مدیریت تورها</h1><p class="small">وارد شده با: <b>${user?.name||user?.username||'فروش'}</b></p>${staffTaskNoteHtml()}</div><div class="actions"><button class="soft" onclick="logoutRole('staff')">خروج</button><button class="btn" onclick="openForm()">افزودن تور</button></div></div>
-  ${staffTopTabs()}${staffDebugBox()}
+  ${staffTopTabs()}${supabasePanel()}${staffDebugBox()}
   ${staffVisaInfoBox()}
   <section id="staffToursSection" class="staff-section-panel">
     <div class="section-title-row"><span class="badge domestic">بخش تورها</span><h3>مدیریت تورها و قیمت‌ها</h3></div>

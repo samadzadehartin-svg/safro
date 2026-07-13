@@ -77,7 +77,7 @@ function excelTourImportBox(role){
   const id=role==='admin'?'adminExcelTourImport':'staffExcelTourImport';
   const result=role==='admin'?'adminExcelTourImportResult':'staffExcelTourImportResult';
   const select=role==='admin'?'adminExcelTourTarget':'staffExcelTourTarget';
-  return `<section class="excel-tour-import-box">
+  return `${supabasePanel()}<section class="excel-tour-import-box">
     <h3>آپلود شیت اکسل تورها</h3>
     <p class="small">فرمت فایل استانبول پشتیبانی می‌شود. اگر فایل چند Sheet داشته باشد، اسم هر Sheet باید اسم همان تور باشد. اگر فقط Sheet با نام TOUR دارد، تور هدف را انتخاب کن.</p>
     <div class="row wrap">

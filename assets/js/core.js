@@ -1,4 +1,112 @@
 const PREFIX='safarro_three_panels_';
+
+/* ===== Supabase Sync Config =====
+   1) Create table using supabase_schema.sql
+   2) Paste your URL and anon key below
+*/
+const SUPABASE_URL = 'PASTE_SUPABASE_PROJECT_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
+const SUPABASE_TABLE = 'safaro_store';
+const SUPABASE_ENABLED = !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
+const SUPABASE_KEYS = ['tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','staffAccounts','customerTrail'];
+let supabaseClient = null;
+let supabaseBootSynced = false;
+let supabaseWriteTimers = {};
+
+function getSupabaseClient(){
+  if(!SUPABASE_ENABLED || !window.supabase)return null;
+  if(!supabaseClient)supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return supabaseClient;
+}
+function supabaseStatusText(){
+  return SUPABASE_ENABLED ? 'Supabase وصل است' : 'Supabase هنوز تنظیم نشده است';
+}
+async function supabasePullAll(){
+  const client=getSupabaseClient();
+  if(!client)return {ok:false,msg:'Supabase تنظیم نشده است'};
+  try{
+    const {data,error}=await client.from(SUPABASE_TABLE).select('key,value,updated_at');
+    if(error)throw error;
+    (data||[]).forEach(row=>{
+      if(row && row.key && row.value!==undefined){
+        localStorage.setItem(PREFIX+row.key, JSON.stringify(row.value));
+      }
+    });
+    supabaseBootSynced=true;
+    return {ok:true,msg:`${faNum((data||[]).length)} مورد از Supabase خوانده شد`};
+  }catch(e){
+    console.error('Supabase pull failed',e);
+    return {ok:false,msg:'خطا در خواندن از Supabase: '+(e.message||e)};
+  }
+}
+async function supabasePushKey(k,v){
+  const client=getSupabaseClient();
+  if(!client || !SUPABASE_KEYS.includes(k))return {ok:false,msg:'not-enabled'};
+  try{
+    const {error}=await client.from(SUPABASE_TABLE).upsert({
+      key:k,
+      value:v,
+      updated_at:new Date().toISOString()
+    },{onConflict:'key'});
+    if(error)throw error;
+    return {ok:true,msg:'saved'};
+  }catch(e){
+    console.error('Supabase push failed',k,e);
+    return {ok:false,msg:e.message||String(e)};
+  }
+}
+function queueSupabaseWrite(k,v){
+  if(!SUPABASE_ENABLED || !SUPABASE_KEYS.includes(k))return;
+  clearTimeout(supabaseWriteTimers[k]);
+  supabaseWriteTimers[k]=setTimeout(()=>supabasePushKey(k,v),350);
+}
+async function supabasePushAll(){
+  const client=getSupabaseClient();
+  if(!client)return {ok:false,msg:'Supabase تنظیم نشده است'};
+  let done=0,failed=0;
+  for(const k of SUPABASE_KEYS){
+    const val=read(k,null);
+    const res=await supabasePushKey(k,val);
+    if(res.ok)done++;else failed++;
+  }
+  return {ok:failed===0,msg:`${faNum(done)} مورد ذخیره شد${failed?`، ${faNum(failed)} خطا`:''}`};
+}
+async function supabaseManualPull(){
+  const r=await supabasePullAll();
+  showToast(r.msg);
+  if(r.ok)setTimeout(()=>location.reload(),700);
+}
+async function supabaseManualPush(){
+  const r=await supabasePushAll();
+  showToast(r.msg);
+}
+function supabasePanel(){
+  return `<section class="card pad supabase-panel">
+    <div class="row wrap">
+      <div>
+        <span class="badge international">Supabase</span>
+        <h3>اتصال دیتابیس آنلاین</h3>
+        <p class="small">${supabaseStatusText()}؛ اطلاعات ابتدا در مرورگر ذخیره می‌شود و در صورت تنظیم بودن Supabase، آنلاین هم sync می‌شود.</p>
+      </div>
+      <div class="actions">
+        <button class="soft" onclick="supabaseManualPull()">خواندن از Supabase</button>
+        <button class="btn" onclick="supabaseManualPush()">ارسال همه اطلاعات</button>
+      </div>
+    </div>
+  </section>`;
+}
+async function bootSupabaseSync(){
+  if(!SUPABASE_ENABLED || supabaseBootSynced)return;
+  const r=await supabasePullAll();
+  if(r.ok){
+    console.info(r.msg);
+    if(typeof renderAdmin==='function')renderAdmin();
+    if(typeof renderStaff==='function')renderStaff();
+    if(typeof renderHome==='function' && location.pathname.includes('/buyer'))renderHome();
+  }
+}
+window.addEventListener('load',()=>setTimeout(bootSupabaseSync,450));
+
 function $(id){return document.getElementById(id)}
 function money(n){return Number(n||0).toLocaleString('fa-IR')+' تومان'}
 function faNum(n){return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
@@ -17,6 +125,7 @@ function read(k,f){
 function write(k,v){
   try{
     localStorage.setItem(PREFIX+k,JSON.stringify(v));
+    queueSupabaseWrite(k,v);
     return true;
   }catch(e){
     console.error('write failed',k,e);
@@ -28,6 +137,7 @@ function write(k,v){
           hotels:(t.hotels||[]).map(h=>({...h,photos:(h.photos||[]).filter(x=>!String(x).startsWith('data:image/')).slice(0,8)}))
         }));
         localStorage.setItem(PREFIX+k,JSON.stringify(light));
+        queueSupabaseWrite(k,light);
         alert('حجم عکس‌های آپلودی زیاد بود؛ عکس‌های حجیم داخلی حذف شدند و اطلاعات اصلی ذخیره شد.');
         return true;
       }

@@ -2888,3 +2888,15 @@ body:not(.admin-page) .customer-trail-list{display:none!important}
 .destination-chip{display:inline-flex;background:rgba(57,167,223,.10);color:var(--p);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;margin:0 0 6px 6px}
 .dark .destination-detail-box{background:rgba(56,189,248,.07);border-color:rgba(56,189,248,.16)}
 @media(max-width:860px){.destination-mini-grid{grid-template-columns:1fr}}
+
+
+/* Supabase panel */
+.supabase-panel{
+  border:1px dashed rgba(57,167,223,.42)!important;
+  background:rgba(57,167,223,.07)!important;
+  margin:14px 0;
+}
+.dark .supabase-panel{
+  background:rgba(56,189,248,.08)!important;
+  border-color:rgba(56,189,248,.20)!important;
+}
