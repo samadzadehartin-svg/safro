@@ -352,3 +352,6 @@
 - ارسال null به Supabase متوقف شد.
 - برای کلیدهای خالی، مقدار پیش‌فرض امن ارسال می‌شود.
 - قبل از ارسال همه اطلاعات، repair/seed اجرا می‌شود.
+
+## Supabase Credentials Inserted v3.3.4
+- SUPABASE_URL و SUPABASE_ANON_KEY داخل assets/js/core.js جای‌گذاری شدند.
