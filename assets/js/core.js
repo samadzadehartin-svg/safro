@@ -4,8 +4,8 @@ const PREFIX='safarro_three_panels_';
    1) Create table using supabase_schema.sql
    2) Paste your URL and anon key below
 */
-const SUPABASE_URL = 'PASTE_SUPABASE_PROJECT_URL_HERE';
-const SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
+const SUPABASE_URL = 'https://npewgytsemqhrttuvoba.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZXdneXRzZW1xaHJ0dHV2b2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5MDkxOTYsImV4cCI6MjA5OTQ4NTE5Nn0.KdR-V7DbN_IfOyHum9y-Z0mYsqpkG-YxkpQBEHZX9F0';
 const SUPABASE_TABLE = 'safaro_store';
 const SUPABASE_ENABLED = !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
 const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','staffAccounts','customerTrail'];
