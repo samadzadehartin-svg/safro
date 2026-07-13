@@ -4,8 +4,8 @@ const PREFIX='safarro_three_panels_';
    1) Create table using supabase_schema.sql
    2) Paste your URL and anon key below
 */
-const SUPABASE_URL = 'https://npewgytsemqhrttuvoba.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZXdneXRzZW1xaHJ0dHV2b2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5MDkxOTYsImV4cCI6MjA5OTQ4NTE5Nn0.KdR-V7DbN_IfOyHum9y-Z0mYsqpkG-YxkpQBEHZX9F0';
+const SUPABASE_URL = 'PASTE_SUPABASE_PROJECT_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
 const SUPABASE_TABLE = 'safaro_store';
 const SUPABASE_ENABLED = !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
 const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','staffAccounts','customerTrail'];
@@ -61,6 +61,7 @@ async function supabasePullAll(){
   }
 }
 async function supabasePushKey(k,v){
+  if(v===null||v===undefined)v=supabaseDefaultValue(k);
   const client=getSupabaseClient();
   if(!client || !SUPABASE_KEYS.includes(k))return {ok:false,msg:'not-enabled'};
   try{
@@ -77,16 +78,31 @@ async function supabasePushKey(k,v){
   }
 }
 function queueSupabaseWrite(k,v){
+  if(v===null||v===undefined)v=supabaseDefaultValue(k);
   if(!SUPABASE_ENABLED || !SUPABASE_KEYS.includes(k))return;
   clearTimeout(supabaseWriteTimers[k]);
   supabaseWriteTimers[k]=setTimeout(()=>supabasePushKey(k,v),350);
 }
+function supabaseDefaultValue(k){
+  if(k==='settings')return typeof DEFAULT_SETTINGS!=='undefined'?DEFAULT_SETTINGS:{};
+  if(k==='tours')return typeof DEFAULT_TOURS!=='undefined'?DEFAULT_TOURS:[];
+  if(k==='orders')return [];
+  if(k==='leads')return [];
+  if(k==='contactStaff')return [];
+  if(k==='discounts')return [];
+  if(k==='visaServices')return typeof DEFAULT_VISAS!=='undefined'?DEFAULT_VISAS:[];
+  if(k==='hotelCatalog')return typeof DEFAULT_HOTEL_CATALOG!=='undefined'?DEFAULT_HOTEL_CATALOG:{};
+  if(k==='staffAccounts')return typeof DEFAULT_STAFF_ACCOUNTS!=='undefined'?DEFAULT_STAFF_ACCOUNTS:(typeof DEFAULT_STAFF!=='undefined'?DEFAULT_STAFF:[]);
+  if(k==='customerTrail')return [];
+  return {};
+}
+
 async function supabasePushAll(){
   const client=getSupabaseClient();
   if(!client)return {ok:false,msg:'Supabase تنظیم نشده است'};
   let done=0,failed=0;
   for(const k of SUPABASE_KEYS){
-    const val=read(k,null);
+    const val=read(k,supabaseDefaultValue(k));
     const res=await supabasePushKey(k,val);
     if(res.ok)done++;else failed++;
   }
@@ -98,6 +114,7 @@ async function supabaseManualPull(){
   if(r.ok)setTimeout(()=>location.reload(),700);
 }
 async function supabaseManualPush(){
+  try{ if(typeof seed==='function') seed(); if(typeof repairAppData==='function') repairAppData(); }catch(e){console.warn('pre-push repair failed',e)}
   const r=await supabasePushAll();
   showToast(r.msg);
 }
@@ -133,6 +150,10 @@ function $(id){return document.getElementById(id)}
 function money(n){return Number(n||0).toLocaleString('fa-IR')+' تومان'}
 function faNum(n){return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
 function reqStar(){return '<span class="req-star">*</span>'}
+function hotelStars(n){
+  n=Number(n)||0;
+  return '<span class="hotel-stars">'+Array.from({length:Math.max(1,n)},()=>'<i class="fa-solid fa-star"></i>').join('')+'</span>';
+}
 function read(k,f){
   try{
     const raw=localStorage.getItem(PREFIX+k);

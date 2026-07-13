@@ -346,3 +346,9 @@
 - دکمه تست اتصال Supabase اضافه شد.
 - فایل SUPABASE_SETUP.md و SUPABASE_QUICK_START.txt اضافه/آپدیت شد.
 - کلید settings هم به لیست sync اضافه شد.
+
+## Supabase Error Fix v3.3.3
+- خطای hotelStars is not defined در پنل مدیریت رفع شد.
+- ارسال null به Supabase متوقف شد.
+- برای کلیدهای خالی، مقدار پیش‌فرض امن ارسال می‌شود.
+- قبل از ارسال همه اطلاعات، repair/seed اجرا می‌شود.

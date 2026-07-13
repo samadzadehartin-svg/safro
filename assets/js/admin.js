@@ -1,3 +1,4 @@
+function adminHotelStarsFallback(n){return typeof hotelStars==='function'?adminHotelStarsFallback(n):'★'.repeat(Number(n)||0)}
 
 function excelCell(row, idx){return row && row[idx]!==undefined && row[idx]!==null ? row[idx] : ''}
 function excelNum(v){const n=Number(String(v??'').replace(/[^\d.-]/g,''));return isNaN(n)?0:n}
@@ -293,7 +294,7 @@ function renderBookingPhotoHotels(){
   box.innerHTML=`<div class="current-tour-hotel-head"><b>تور انتخاب‌شده: ${t.title}</b><span class="small">${faNum(list.length)} هتل</span></div>
   <div class="booking-photo-list">${list.map((h,i)=>`<div class="booking-photo-card">
     <div class="booking-photo-head">
-      <div><b dir="ltr">${h.name||'—'}</b><small>${hotelStars(h.star)} | ${money(h.price||0)}</small></div>
+      <div><b dir="ltr">${h.name||'—'}</b><small>${adminHotelStarsFallback(h.star)} | ${money(h.price||0)}</small></div>
       <button class="btn" onclick="saveBookingHotelPhotos(${tourId},${i})">ذخیره اطلاعات Booking</button>
     </div>
 
@@ -716,7 +717,7 @@ function renderCurrentTourHotels(){
   <div class="admin-hotel-list">${list.map((h,i)=>`<div class="admin-hotel-card">
     <div class="admin-hotel-main">
       <b dir="ltr">${h.name||'—'}</b>
-      <span>${hotelStars(h.star)} | ${money(h.price||0)} | ظرفیت: ${faNum(h.capacity||0)}</span>
+      <span>${adminHotelStarsFallback(h.star)} | ${money(h.price||0)} | ظرفیت: ${faNum(h.capacity||0)}</span>
       <small>${h.showInBuyer!==false?'نمایش در پنل مشتری':'عدم نمایش در پنل مشتری'} ${h.location?` | ${h.location}`:''}</small>
     </div>
     <div class="admin-hotel-actions">
@@ -836,7 +837,7 @@ function renderHotelCatalog(){
   box.innerHTML=`<div class="admin-hotel-list">${list.map(h=>`<div class="admin-hotel-card">
     <div class="admin-hotel-main">
       <b dir="ltr">${h.nameLatin||'—'}</b>
-      <span>${hotelStars(h.star)}</span>
+      <span>${adminHotelStarsFallback(h.star)}</span>
       <small>وضعیت: ${h.enabledForStaff!==false?'نمایش برای فروش':'عدم نمایش برای فروش'}</small>
     </div>
     <div class="admin-hotel-actions">
