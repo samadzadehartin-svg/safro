@@ -209,6 +209,18 @@ function staffVisaInfoBox(){
 }
 
 
+
+function staffHotelCatalogBox(){
+  const active=hotelCatalog().filter(h=>h.enabledForStaff!==false);
+  const groups=active.reduce((acc,h)=>{const d=h.destination||h.dest||'عمومی';(acc[d]||(acc[d]=[])).push(h);return acc},{});
+  return `<section id="staffHotelCatalogSection" class="card pad staff-section-panel">
+    <div class="row wrap">
+      <div><span class="badge international">بانک هتل‌های فعال</span><h3>هتل‌ها و پکیج‌هایی که مدیریت برای فروش فعال کرده</h3><p class="small">این لیست فقط مواردی را نشان می‌دهد که مدیر از پنل مدیریت فعال کرده است.</p></div>
+    </div>
+    ${Object.keys(groups).length?Object.entries(groups).map(([d,rows])=>`<div class="staff-hotel-destination"><h4>${d} <small>${faNum(rows.length)} مورد</small></h4><div class="staff-hotel-grid">${rows.slice(0,80).map(h=>`<div class="staff-hotel-card"><b dir="ltr">${h.nameLatin}</b><span>${typeof hotelStars==='function'?hotelStars(h.star):'★'.repeat(Number(h.star)||3)} ${h.meal?`<em>${h.meal}</em>`:''}</span><small>${h.sourceGroup||'—'}${h.catalogType==='combo'?' | پکیج ترکیبی':''}</small>${h.dblPrice?`<small>دو تخته: ${h.dblPrice} | یک تخته: ${h.sglPrice||'—'} | کودک: ${h.childPrice||'—'}</small>`:''}</div>`).join('')}</div></div>`).join(''):'<div class="empty-state-mini">هنوز مدیر هتلی را برای نمایش در پنل فروش فعال نکرده است.</div>'}
+  </section>`;
+}
+
 function staffDebugBox(){
   return `<section class="card pad staff-debug-box">
     <div class="row wrap">
@@ -244,6 +256,7 @@ function renderStaff(){
   $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge special">پنل فروش</span><h1>مدیریت تورها</h1><p class="small">وارد شده با: <b>${user?.name||user?.username||'فروش'}</b></p>${staffTaskNoteHtml()}</div><div class="actions"><button class="soft" onclick="logoutRole('staff')">خروج</button><button class="btn" onclick="openForm()">افزودن تور</button></div></div>
   ${staffTopTabs()}${supabasePanel()}${staffDebugBox()}
   ${staffVisaInfoBox()}
+  ${staffHotelCatalogBox()}
   <section id="staffToursSection" class="staff-section-panel">
     <div class="section-title-row"><span class="badge domestic">بخش تورها</span><h3>مدیریت تورها و قیمت‌ها</h3></div>
     ${priceImportBox()}${batchPriceBox()}
@@ -384,16 +397,22 @@ function batchUpdatePrices(){
   const ts=tours().map(t=>ids.includes(t.id)?{...t,hotels:(t.hotels||[]).map(h=>stars.includes(Number(h.star))?{...h,price:Number(h.price||0)+amount}:h),lastEditedBy:user?.name||user?.username||'فروش',lastEditedAt:new Date().toISOString()}:t);
   saveTours(ts);showToast('قیمت‌ها آپدیت شد');renderStaff();
 }
-function catalogForStar(star){
-  const list=hotelCatalog().filter(h=>Number(h.star)===Number(star)&&h.enabledForStaff!==false);
+function catalogForStar(star,dest=''){
+  const d=String(dest||'').trim();
+  const base=hotelCatalog().filter(h=>Number(h.star)===Number(star)&&h.enabledForStaff!==false);
+  let list=base.filter(h=>{
+    const hd=String(h.destination||h.dest||'').trim();
+    return !d||!hd||hd==='عمومی'||d.includes(hd)||hd.includes(d);
+  });
+  if(!list.length)list=base.filter(h=>!h.destination||h.destination==='عمومی');
   const padded=[...list];
   for(let i=padded.length;i<5;i++)padded.push({id:`custom-${star}-${i+1}`,star,nameLatin:`Hotel ${star} Star ${i+1}`,enabledForStaff:true,custom:true});
-  return padded.slice(0,5);
+  return padded.slice(0,8);
 }
 function renderHotelEditor(t){
   const box=$('hotelEditor');if(!box)return;
   box.innerHTML=[3,4,5].map(star=>{
-    const catalog=catalogForStar(star);
+    const catalog=catalogForStar(star,t?.dest||'');
     const existing=(t?.hotels||[]).filter(h=>Number(h.star)===star);
     return `<div class="hotel-editor-star"><h4>هتل‌های ${hotelStars(star)} <small class="small">حداکثر ۵ هتل؛ تیک نمایش یعنی در پنل مشتری دیده شود.</small></h4>${catalog.map((c,i)=>{
       const ex=existing.find(h=>h.hotelId===c.id)||existing[i]||{};

@@ -197,16 +197,35 @@ function renderAdmin(){
   <section id="admin-price-sheet" class="card pad" style="margin-bottom:16px"><h3>آپدیت قیمت با شیت</h3><p class="small">فایل CSV خروجی گرفته‌شده از شیت نمونه را اینجا آپلود کن تا قیمت‌ها، ظرفیت‌ها و تخفیف دستی آپدیت شوند.</p><div class="price-import-box"><input id="adminPriceImport" class="field" type="file" accept=".csv,.txt"><button class="btn" onclick="importPriceSheet('adminPriceImport','adminImportResult')">آپلود و آپدیت قیمت‌ها</button><div id="adminImportResult" class="import-result"></div></div>${excelTourImportBox('admin')}${adminBatchPriceBox()}</section>
 
   <section id="admin-hotels" class="card pad" style="margin-bottom:16px">
-    <h3>مدیریت هتل‌ها برای قیمت‌گذاری فروش</h3><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
-    <p class="small">نام هتل را لاتین وارد کن و مشخص کن کدام هتل‌ها در پنل فروش برای قیمت‌گذاری نمایش داده شوند.</p>
-    <div class="admin-mini-grid">
-      <input id="hotelLatinName" class="field" placeholder="Hotel Latin Name *" dir="ltr">
-      <select id="hotelStar" class="field"><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select>
-      <select id="hotelEnabled" class="field"><option value="true">نمایش برای فروش</option><option value="false">عدم نمایش</option></select>
-      <button class="btn" onclick="saveHotelItem()">افزودن هتل</button>
-      <button class="soft" onclick="resetDefaultHotels()">بازگردانی نمونه‌ها</button>
+    <div class="row wrap">
+      <div>
+        <span class="badge special">بانک هتل‌ها و پکیج‌ها</span>
+        <h3>مدیریت هتل‌ها برای نمایش در پنل فروش</h3>
+        <p class="small">هتل‌ها و پکیج‌های واردشده فقط در پنل مدیریت ذخیره می‌شوند؛ هر موردی را که فعال کنی در پنل فروش و فرم قیمت‌گذاری دیده می‌شود.</p>
+      </div>
+      <div class="actions">
+        <button class="soft" onclick="bulkToggleHotelCatalog(false)">عدم نمایش همه برای فروش</button>
+        <button class="btn" onclick="bulkToggleHotelCatalog(true)">نمایش همه برای فروش</button>
+      </div>
     </div>
-    <div class="list-title-line"><h4>لیست تک‌تک هتل‌های مدیریت</h4><span class="small">با دکمه ویرایش کنار هر هتل</span></div><div id="hotelCatalogTable" class="hotel-admin-table"></div><div class="current-hotels-box"><h3>لیست تک‌تک هتل‌های ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل مشتری را فعال/غیرفعال کنی.</p><div class="row wrap" style="margin-bottom:10px"><button class="soft" onclick="renderCurrentTourHotels()">بروزرسانی لیست</button><button class="btn" onclick="syncCatalogHotelsToTours()">اعمال هتل‌های فعال مدیریت روی همه تورها</button><select id="addHotelTourId" class="field" style="max-width:260px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join("")}</select><button class="soft" onclick="addCurrentTourHotel(Number($('addHotelTourId').value))">افزودن هتل به تور</button></div><div id="currentTourHotelsTable" class="table-wrap"></div></div>
+    <div class="admin-mini-grid">
+      <input id="hotelLatinName" class="field" placeholder="Hotel / Package Name *" dir="ltr">
+      <input id="hotelDestination" class="field" placeholder="مقصد؛ مثل استانبول">
+      <select id="hotelStar" class="field"><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select>
+      <input id="hotelMeal" class="field" placeholder="وعده / سرویس؛ BB, HB, ALL, UALL">
+      <input id="hotelSourceGroup" class="field" placeholder="منبع / گروه؛ مثل لیست استانبول">
+      <select id="hotelEnabled" class="field"><option value="false">عدم نمایش برای فروش</option><option value="true">نمایش برای فروش</option></select>
+      <button class="btn" onclick="saveHotelItem()">ذخیره هتل / پکیج</button>
+      <button class="soft" onclick="resetDefaultHotels()">بازگردانی بانک واردشده</button>
+    </div>
+    <div class="hotel-catalog-toolbar">
+      <input id="hotelCatalogSearch" class="field" placeholder="جستجوی نام هتل یا مقصد..." oninput="renderHotelCatalog()">
+      <select id="hotelCatalogDestFilter" class="field" onchange="renderHotelCatalog()"></select>
+      <select id="hotelCatalogShowFilter" class="field" onchange="renderHotelCatalog()"><option value="all">همه وضعیت‌ها</option><option value="on">فقط نمایش برای فروش</option><option value="off">فقط عدم نمایش</option></select>
+    </div>
+    <div class="list-title-line"><h4>لیست هتل‌ها و پکیج‌های مدیریت</h4><span class="small">موارد فعال‌شده برای پنل فروش ارسال می‌شوند.</span></div>
+    <div id="hotelCatalogTable" class="hotel-admin-table"></div>
+    <div class="current-hotels-box"><h3>لیست تک‌تک هتل‌های ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل مشتری را فعال/غیرفعال کنی.</p><div class="row wrap" style="margin-bottom:10px"><button class="soft" onclick="renderCurrentTourHotels()">بروزرسانی لیست</button><button class="btn" onclick="syncCatalogHotelsToTours()">اعمال هتل‌های فعال مدیریت روی تورهای هم‌مقصد</button><select id="addHotelTourId" class="field" style="max-width:260px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join("")}</select><button class="soft" onclick="addCurrentTourHotel(Number($('addHotelTourId').value))">افزودن هتل به تور</button></div><div id="currentTourHotelsTable" class="table-wrap"></div></div>
   </section>
 
 
@@ -595,7 +614,10 @@ function editCatalogHotel(id){editHotelItem(id)}
 function editHotelItem(id){
   const h=hotelCatalog().find(x=>x.id===id);if(!h)return;
   $('hotelLatinName').value=h.nameLatin||'';
+  if($('hotelDestination'))$('hotelDestination').value=h.destination||h.dest||'';
   $('hotelStar').value=String(h.star||3);
+  if($('hotelMeal'))$('hotelMeal').value=h.meal||h.board||'';
+  if($('hotelSourceGroup'))$('hotelSourceGroup').value=h.sourceGroup||'';
   $('hotelEnabled').value=String(h.enabledForStaff!==false);
   $('hotelLatinName').dataset.editId=id;
   document.getElementById('admin-hotels')?.scrollIntoView({behavior:'smooth',block:'start'});
@@ -620,14 +642,28 @@ function saveHotelItem(){
   if(!name){alert('نام لاتین هتل را وارد کنید');return}
   const editId=$('hotelLatinName').dataset.editId||'';
   const list=hotelCatalog();
-  const item={id:editId||'h-'+Date.now(),nameLatin:name,star:Number($('hotelStar').value),enabledForStaff:$('hotelEnabled').value==='true'};
+  const item={
+    id:editId||'h-'+Date.now(),
+    nameLatin:name,
+    star:Number($('hotelStar').value),
+    destination:$('hotelDestination')?.value?.trim()||'عمومی',
+    dest:$('hotelDestination')?.value?.trim()||'عمومی',
+    meal:$('hotelMeal')?.value?.trim()||'',
+    board:$('hotelMeal')?.value?.trim()||'',
+    sourceGroup:$('hotelSourceGroup')?.value?.trim()||'دستی',
+    enabledForStaff:$('hotelEnabled').value==='true',
+    imported:false
+  };
   const i=list.findIndex(h=>h.id===editId);
   if(i>=0)list[i]={...list[i],...item};else list.push(item);
   saveHotelCatalog(list);
   $('hotelLatinName').value='';
   $('hotelLatinName').dataset.editId='';
+  if($('hotelDestination'))$('hotelDestination').value='';
+  if($('hotelMeal'))$('hotelMeal').value='';
+  if($('hotelSourceGroup'))$('hotelSourceGroup').value='';
   $('hotelStar').value='3';
-  $('hotelEnabled').value='true';
+  $('hotelEnabled').value='false';
   renderHotelCatalog();
   renderCurrentTourHotels();
   showToast(editId?'هتل ویرایش شد':'هتل اضافه شد');
@@ -831,21 +867,66 @@ function jalaliToGregorian(jy,jm,jd){
   return {gy,gm,gd:d};
 }
 
+function hotelDestinations(){
+  return [...new Set(hotelCatalog().map(h=>h.destination||h.dest||'عمومی'))].sort((a,b)=>String(a).localeCompare(String(b),'fa'));
+}
 function renderHotelCatalog(){
   const box=$('hotelCatalogTable');if(!box)return;
-  const list=hotelCatalog().slice().sort((a,b)=>Number(a.star)-Number(b.star)||String(a.nameLatin||'').localeCompare(String(b.nameLatin||'')));
-  box.innerHTML=`<div class="admin-hotel-list">${list.map(h=>`<div class="admin-hotel-card">
-    <div class="admin-hotel-main">
-      <b dir="ltr">${h.nameLatin||'—'}</b>
-      <span>${adminHotelStarsFallback(h.star)}</span>
-      <small>وضعیت: ${h.enabledForStaff!==false?'نمایش برای فروش':'عدم نمایش برای فروش'}</small>
+  const destSel=$('hotelCatalogDestFilter');
+  const destinations=hotelDestinations();
+  if(destSel && !destSel.dataset.ready){
+    destSel.innerHTML='<option value="all">همه مقصدها</option>'+destinations.map(d=>`<option value="${d}">${d}</option>`).join('');
+    destSel.dataset.ready='1';
+  }
+  const q=($('hotelCatalogSearch')?.value||'').trim().toLowerCase();
+  const dest=$('hotelCatalogDestFilter')?.value||'all';
+  const show=$('hotelCatalogShowFilter')?.value||'all';
+  let list=hotelCatalog().slice();
+  if(q)list=list.filter(h=>String(h.nameLatin||'').toLowerCase().includes(q)||String(h.destination||'').toLowerCase().includes(q)||String(h.sourceGroup||'').toLowerCase().includes(q));
+  if(dest!=='all')list=list.filter(h=>(h.destination||h.dest||'عمومی')===dest);
+  if(show==='on')list=list.filter(h=>h.enabledForStaff!==false);
+  if(show==='off')list=list.filter(h=>h.enabledForStaff===false);
+  list.sort((a,b)=>String(a.destination||'').localeCompare(String(b.destination||''),'fa')||Number(a.star)-Number(b.star)||String(a.nameLatin||'').localeCompare(String(b.nameLatin||'')));
+  const grouped=list.reduce((acc,h)=>{const d=h.destination||h.dest||'عمومی';(acc[d]||(acc[d]=[])).push(h);return acc},{});
+  box.innerHTML=`<div class="hotel-catalog-summary">
+    <span>کل بانک: <b>${faNum(hotelCatalog().length)}</b></span>
+    <span>نمایش برای فروش: <b>${faNum(hotelCatalog().filter(h=>h.enabledForStaff!==false).length)}</b></span>
+    <span>نتیجه فیلتر: <b>${faNum(list.length)}</b></span>
+  </div>${Object.entries(grouped).map(([d,rows])=>`<div class="hotel-destination-group">
+    <div class="row wrap hotel-destination-head">
+      <h4>${d} <small>${faNum(rows.length)} مورد</small></h4>
+      <div class="actions">
+        <button class="soft" onclick="toggleHotelDestination('${d}',true)">نمایش این مقصد برای فروش</button>
+        <button class="soft" onclick="toggleHotelDestination('${d}',false)">عدم نمایش این مقصد</button>
+      </div>
     </div>
-    <div class="admin-hotel-actions">
-      <button class="soft" onclick="editHotelItem('${h.id}')">ویرایش</button>
-      <button class="soft" onclick="toggleHotelItem('${h.id}')">${h.enabledForStaff!==false?'غیرفعال':'فعال'}</button>
-      <button class="danger" onclick="deleteHotelItem('${h.id}')">حذف</button>
-    </div>
-  </div>`).join('')||'<div class="empty-state-mini">هنوز هتلی در مدیریت ثبت نشده است.</div>'}</div>`;
+    <div class="admin-hotel-list">${rows.map(h=>`<div class="admin-hotel-card ${h.enabledForStaff!==false?'active-for-staff':'off-for-staff'}">
+      <div class="admin-hotel-main">
+        <b dir="ltr">${h.nameLatin||'—'}</b>
+        <span>${adminHotelStarsFallback(h.star)} ${h.meal?`<em>${h.meal}</em>`:''}</span>
+        <small>${h.sourceGroup||'—'} ${h.catalogType==='combo'?' | پکیج ترکیبی':''}</small>
+        ${h.dblPrice||h.sglPrice||h.childPrice?`<small>دو تخته: ${h.dblPrice||'—'} | یک تخته: ${h.sglPrice||'—'} | کودک: ${h.childPrice||'—'}</small>`:''}
+        ${h.note?`<small>${h.note}</small>`:''}
+      </div>
+      <div class="admin-hotel-actions">
+        <span class="badge ${h.enabledForStaff!==false?'domestic':'gray'}">${h.enabledForStaff!==false?'نمایش برای فروش':'فقط مدیریت'}</span>
+        <button class="soft" onclick="editHotelItem('${h.id}')">ویرایش</button>
+        <button class="soft" onclick="toggleHotelItem('${h.id}')">${h.enabledForStaff!==false?'عدم نمایش':'نمایش برای فروش'}</button>
+        <button class="danger" onclick="deleteHotelItem('${h.id}')">حذف</button>
+      </div>
+    </div>`).join('')}</div>
+  </div>`).join('')||'<div class="empty-state-mini">موردی پیدا نشد.</div>'}`;
+}
+function toggleHotelDestination(dest,on){
+  saveHotelCatalog(hotelCatalog().map(h=>(h.destination||h.dest||'عمومی')===dest?{...h,enabledForStaff:!!on}:h));
+  renderHotelCatalog();
+  showToast(on?'این مقصد برای فروش فعال شد':'این مقصد از پنل فروش مخفی شد');
+}
+function bulkToggleHotelCatalog(on){
+  if(!confirm(on?'همه هتل‌ها برای فروش نمایش داده شوند؟':'همه هتل‌ها از پنل فروش مخفی شوند؟'))return;
+  saveHotelCatalog(hotelCatalog().map(h=>({...h,enabledForStaff:!!on})));
+  renderHotelCatalog();
+  showToast('وضعیت بانک هتل‌ها تغییر کرد');
 }
 
 function toggleVisaItem(id){saveVisaServices(visaServices().map(v=>v.id===id?{...v,active:v.active===false}:v));renderVisas()}
@@ -917,3 +998,42 @@ function changeStatus(id,v){saveOrders(orders().map(o=>o.id===id?{...o,status:v}
 function changeNote(id,v){saveOrders(orders().map(o=>o.id===id?{...o,adminNote:v}:o))}
 function delOrder(id){if(confirm('رزرو حذف شود؟')){saveOrders(orders().filter(o=>o.id!==id));renderOrders();renderCustomerTrailAdmin()}}
 document.addEventListener('DOMContentLoaded',initAdmin);
+
+
+function resetDefaultHotels(){
+  if(!confirm('بانک هتل‌ها به لیست واردشده اولیه برگردد؟ وضعیت‌های فعال/غیرفعال قبلی پاک می‌شود.'))return;
+  saveHotelCatalog(defaultHotelCatalog());
+  const sel=$('hotelCatalogDestFilter');if(sel)sel.dataset.ready='';
+  renderHotelCatalog();
+  showToast('بانک هتل‌ها بازگردانی شد');
+}
+function syncCatalogHotelsToTours(){
+  const active=hotelCatalog().filter(h=>h.enabledForStaff!==false);
+  if(!active.length){alert('هیچ هتلی برای فروش فعال نیست');return}
+  if(!confirm('هتل‌های فعال مدیریت روی تورهای هم‌مقصد اضافه شوند؟'))return;
+  const ts=tours().map(t=>{
+    const dest=String(t.dest||'');
+    const matches=active.filter(h=>{
+      const d=String(h.destination||h.dest||'');
+      return d && (dest.includes(d)||d.includes(dest));
+    }).slice(0,15);
+    if(!matches.length)return t;
+    const existing=new Set((t.hotels||[]).map(h=>String(h.name||h.nameLatin||'').toLowerCase()));
+    const add=matches.filter(h=>!existing.has(String(h.nameLatin||'').toLowerCase())).map(h=>({
+      hotelId:h.id,
+      name:h.nameLatin,
+      star:h.star,
+      price:Number(h.price||h.dblPrice?.replace(/[^\d]/g,'')||t.price||0),
+      capacity:0,
+      showInBuyer:false,
+      bookingLink:'',
+      photos:[],
+      meal:h.meal||h.board||'',
+      sourceGroup:h.sourceGroup||''
+    }));
+    return {...t,hotels:[...(t.hotels||[]),...add],lastEditedBy:'مدیریت',lastEditedAt:new Date().toISOString()};
+  });
+  saveTours(ts);
+  renderCurrentTourHotels();
+  showToast('هتل‌های فعال به تورهای هم‌مقصد اضافه شدند');
+}
