@@ -2926,3 +2926,11 @@ body:not(.admin-page) .customer-trail-list{display:none!important}
   background:rgba(255,255,255,.65);
 }
 .dark .destination-mini-grid>div{background:rgba(15,23,42,.28)}
+
+
+.supabase-panel .actions button{
+  min-width:132px;
+}
+.supabase-panel h3{
+  margin:6px 0;
+}

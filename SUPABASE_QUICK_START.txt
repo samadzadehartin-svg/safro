@@ -1,0 +1,10 @@
+Supabase Quick Start
+
+1) Supabase بساز
+2) SQL Editor > محتوای supabase_schema.sql را اجرا کن
+3) Project Settings > API > Project URL و anon public key را بردار
+4) assets/js/core.js را باز کن
+5) SUPABASE_URL و SUPABASE_ANON_KEY را جایگزین کن
+6) Deploy کن
+7) /admin/ > تست اتصال
+8) /admin/ > ارسال همه اطلاعات

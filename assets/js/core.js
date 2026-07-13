@@ -8,7 +8,7 @@ const SUPABASE_URL = 'PASTE_SUPABASE_PROJECT_URL_HERE';
 const SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
 const SUPABASE_TABLE = 'safaro_store';
 const SUPABASE_ENABLED = !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
-const SUPABASE_KEYS = ['tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','staffAccounts','customerTrail'];
+const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','staffAccounts','customerTrail'];
 let supabaseClient = null;
 let supabaseBootSynced = false;
 let supabaseWriteTimers = {};
@@ -20,6 +20,27 @@ function getSupabaseClient(){
 }
 function supabaseStatusText(){
   return SUPABASE_ENABLED ? 'Supabase وصل است' : 'Supabase هنوز تنظیم نشده است';
+}
+function supabaseConfigHelp(){
+  return `URL و ANON KEY را در فایل assets/js/core.js جایگزین کن؛ سپس فایل supabase_schema.sql را در SQL Editor اجرا کن.`;
+}
+async function supabaseTestConnection(){
+  const client=getSupabaseClient();
+  if(!client){
+    showToast('Supabase هنوز تنظیم نشده است');
+    alert(supabaseConfigHelp());
+    return;
+  }
+  try{
+    const {error}=await client.from(SUPABASE_TABLE).select('key').limit(1);
+    if(error)throw error;
+    showToast('اتصال Supabase موفق بود');
+    alert('اتصال Supabase موفق بود ✅');
+  }catch(e){
+    console.error('Supabase test failed',e);
+    showToast('اتصال Supabase خطا دارد');
+    alert('خطا در اتصال Supabase:\n'+(e.message||e)+'\n\nمطمئن شو جدول safaro_store ساخته شده و Policy ها اجرا شده‌اند.');
+  }
 }
 async function supabasePullAll(){
   const client=getSupabaseClient();
@@ -89,6 +110,7 @@ function supabasePanel(){
         <p class="small">${supabaseStatusText()}؛ اطلاعات ابتدا در مرورگر ذخیره می‌شود و در صورت تنظیم بودن Supabase، آنلاین هم sync می‌شود.</p>
       </div>
       <div class="actions">
+        <button class="soft" onclick="supabaseTestConnection()">تست اتصال</button>
         <button class="soft" onclick="supabaseManualPull()">خواندن از Supabase</button>
         <button class="btn" onclick="supabaseManualPush()">ارسال همه اطلاعات</button>
       </div>
