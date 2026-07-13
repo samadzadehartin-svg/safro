@@ -1,10 +1,52 @@
 {
-  "name": "سفرو",
-  "short_name": "Safaro",
+  "name": "سامانه هوشمند سفرو",
+  "short_name": "سفرو",
+  "description": "پلتفرم جامع مدیریت، مقایسه و خرید تورهای داخلی و خارجی سفرو",
   "start_url": "/buyer/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#2563eb",
-  "background_color": "#f6fbff",
+  "background_color": "#f0f4fa",
+  "theme_color": "#4a9fd8",
+  "orientation": "portrait",
   "dir": "rtl",
-  "lang": "fa"
+  "lang": "fa",
+  "categories": [
+    "travel",
+    "shopping",
+    "business"
+  ],
+  "icons": [
+    {
+      "src": "/assets/images/logo-safaro-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/logo-safaro-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "پنل مشتری",
+      "short_name": "مشتری",
+      "url": "/buyer/",
+      "description": "مشاهده و رزرو تور"
+    },
+    {
+      "name": "پنل فروش",
+      "short_name": "فروش",
+      "url": "/staff/",
+      "description": "مدیریت فروش و قیمت‌ها"
+    },
+    {
+      "name": "پنل مدیریت",
+      "short_name": "مدیریت",
+      "url": "/admin/",
+      "description": "مدیریت کامل سامانه"
+    }
+  ]
 }

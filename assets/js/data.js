@@ -1,105 +1,1332 @@
+const DEFAULT_IMG='../assets/images/istanbul-hagia-sophia.svg';
 
-const DEFAULT_SETTINGS={brand:'سفرو',subtitle:'تور، ویزا و خدمات سفر',phone:'021-00000000',instagram:'@safaro',address:'تهران'};
-const DEFAULT_ADMIN={username:'admin123',password:'admin123'};
-const DEFAULT_STAFF=[{id:'staff-1',name:'کارشناس فروش',username:'staff123',password:'staff123',active:true},{id:'staff-2',name:'کارشناس ویزا',username:'visa123',password:'visa123',active:true}];
-const DEFAULT_VISIBILITY={description:true,destinationGuide:true,flightInfo:true,dates:true,hotels:true,gallery:true,itinerary:true,docs:true,includes:true,excludes:true,cancellation:true,childPolicy:true,reviews:true,visa:true};
-const DEFAULT_TOURS=[
-{id:1,title:'تور استانبول اقتصادی',dest:'استانبول',country:'ترکیه',type:'international',duration:'۴ شب و ۵ روز',airline:'ترکیش',returnAirline:'ترکیش',flightTime:'۰۸:۳۰',returnFlightTime:'۱۹:۴۵',price:24500000,status:'active',level:'economy',label:'پرفروش',img:'../assets/images/istanbul.svg',gallery:['../assets/images/istanbul.svg'],dates:['۱۴۰۵/۰۵/۱۵','۱۴۰۵/۰۵/۲۲'],hotels:[{name:'Grand Istanbul Hotel',star:3,price:24500000,capacity:10,showInBuyer:true,bookingLink:'',photos:[]},{name:'City Bosphorus Hotel',star:4,price:31500000,capacity:6,showInBuyer:true,bookingLink:'',photos:[]}],desc:'استانبول شهری میان اروپا و آسیاست؛ مناسب خرید، گشت شهری و تجربه فرهنگ ترکیه.',destinationGuide:{bestFor:'خرید، شکم‌گردی، گشت تاریخی',sights:['ایاصوفیه','مسجد آبی','تنگه بسفر','بازار بزرگ'],tips:['برای خرید بهتر است لیر همراه داشته باشید.','حمل‌ونقل عمومی استانبول بسیار کاربردی است.']},includes:['بلیط رفت و برگشت','اقامت هتل','بیمه مسافرتی','ترانسفر'],excludes:['گشت اختیاری'],itinerary:['ورود و ترانسفر','گشت شهری','وقت آزاد','برگشت'],docs:['پاسپورت با حداقل ۶ ماه اعتبار'],cancellation:'طبق قوانین چارتر و هتل.',childPolicy:'نرخ کودک بر اساس سن محاسبه می‌شود.',reviews:[],sectionVisibility:{...DEFAULT_VISIBILITY}},
-{id:2,title:'تور لوکس دبی',dest:'دبی',country:'امارات',type:'international',duration:'۳ شب و ۴ روز',airline:'امارات',returnAirline:'امارات',flightTime:'۱۰:۴۰',returnFlightTime:'۲۲:۱۰',price:48500000,status:'active',level:'luxury',label:'لوکس',img:'../assets/images/dubai.svg',gallery:['../assets/images/dubai.svg'],dates:['۱۴۰۵/۰۵/۱۸','۱۴۰۵/۰۵/۲۵'],hotels:[{name:'Dubai Marina Hotel',star:4,price:48500000,capacity:8,showInBuyer:true,bookingLink:'',photos:[]},{name:'Luxury Downtown Dubai',star:5,price:68000000,capacity:4,showInBuyer:true,bookingLink:'',photos:[]}],desc:'دبی مقصدی مدرن برای خرید، تفریح، ساحل و تجربه هتل‌های لوکس است.',destinationGuide:{bestFor:'خرید، تفریحات لوکس، سفر خانوادگی',sights:['برج خلیفه','دبی مال','مارینا','جزیره نخل'],tips:['برای تفریحات معروف دبی رزرو زودتر بهتر است.']},includes:['پرواز','هتل','بیمه','ترانسفر'],excludes:['ویزا در صورت نیاز','تفریحات اختیاری'],itinerary:['ورود به دبی','گشت شهری','خرید و تفریح آزاد','برگشت'],docs:['پاسپورت معتبر','عکس'],cancellation:'طبق قوانین ایرلاین و هتل.',childPolicy:'نرخ کودک جدا محاسبه می‌شود.',reviews:[],sectionVisibility:{...DEFAULT_VISIBILITY}},
-{id:3,title:'تور آنتالیا تابستانی',dest:'آنتالیا',country:'ترکیه',type:'international',duration:'۶ شب و ۷ روز',airline:'سان اکسپرس',returnAirline:'سان اکسپرس',flightTime:'۰۶:۰۰',returnFlightTime:'۲۰:۰۰',price:39500000,status:'active',level:'special',label:'ساحلی',img:'../assets/images/antalya.svg',gallery:['../assets/images/antalya.svg'],dates:['۱۴۰۵/۰۵/۲۰','۱۴۰۵/۰۶/۰۳'],hotels:[{name:'Antalya Beach Resort',star:5,price:39500000,capacity:12,showInBuyer:true,bookingLink:'',photos:[]}],desc:'آنتالیا برای هتل‌های ساحلی، خدمات All Inclusive و سفر خانوادگی مناسب است.',destinationGuide:{bestFor:'ساحل، هتل‌های آل، سفر خانوادگی',sights:['لارا','کمر','کالیچی','آبشار دودن'],tips:['برای هتل‌های آل، کیفیت هتل و ساعت پرواز مهم است.']},includes:['پرواز','هتل آل','ترانسفر','بیمه'],excludes:['تفریحات دریایی'],itinerary:['ورود','استراحت در هتل','گشت اختیاری','برگشت'],docs:['پاسپورت معتبر'],cancellation:'طبق قرارداد.',childPolicy:'کودک با تخت و بدون تخت متفاوت است.',reviews:[],sectionVisibility:{...DEFAULT_VISIBILITY}},
-{id:4,title:'تور کیش خانوادگی',dest:'کیش',country:'ایران',type:'domestic',duration:'۲ شب و ۳ روز',airline:'کیش ایر',returnAirline:'کیش ایر',flightTime:'۰۹:۰۰',returnFlightTime:'۱۸:۰۰',price:9800000,status:'active',level:'economy',label:'داخلی',img:'../assets/images/kish.svg',gallery:['../assets/images/kish.svg'],dates:['۱۴۰۵/۰۵/۱۵','۱۴۰۵/۰۵/۲۸'],hotels:[{name:'Kish Island Hotel',star:4,price:9800000,capacity:14,showInBuyer:true,bookingLink:'',photos:[]}],desc:'کیش مقصدی مناسب برای خرید، تفریحات دریایی و استراحت کوتاه است.',destinationGuide:{bestFor:'خرید، تفریحات دریایی، سفر کوتاه',sights:['کشتی یونانی','اسکله تفریحی','مراکز خرید'],tips:['برای تفریحات دریایی برنامه‌ریزی قبلی داشته باشید.']},includes:['پرواز','هتل','ترانسفر'],excludes:['تفریحات دریایی'],itinerary:['ورود','گشت آزاد','برگشت'],docs:['کارت ملی'],cancellation:'طبق قوانین داخلی.',childPolicy:'بر اساس سن کودک.',reviews:[],sectionVisibility:{...DEFAULT_VISIBILITY}}
+const DEFAULT_TOURS = [
+  {
+    "id": 1,
+    "title": "تور بهاره استانبول",
+    "dest": "استانبول",
+    "duration": "۴ شب و ۵ روز",
+    "airline": "ترکیش ایرلاین",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "استانبول",
+    "price": 15500000,
+    "label": "پرفروش",
+    "type": "international",
+    "level": "special",
+    "categories": [
+      "international",
+      "special"
+    ],
+    "rating": 4.8,
+    "status": "active",
+    "lastMinute": true,
+    "dealPercent": 10,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/istanbul-hagia-sophia.svg",
+    "gallery": [
+    "../assets/images/istanbul-hagia-sophia.svg",
+    "../assets/images/istanbul-hagia-sophia-2.svg",
+    "../assets/images/istanbul-hagia-sophia-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۴/۱۵",
+      "۱۴۰۵/۰۴/۲۲",
+      "۱۴۰۵/۰۵/۰۱"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل تکسیم لوراس",
+        "price": 14200000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل گرند استار",
+        "price": 18176000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل الیت ورد",
+        "price": 23856000,
+        "capacity": 3
+      }
+    ],
+    "desc": "اقامت در استانبول با بازدید از ایاصوفیه، بسفر و محله‌های معروف.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "تور لوکس دبی",
+    "dest": "دبی",
+    "duration": "۳ شب و ۴ روز",
+    "airline": "امارات",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "دبی",
+    "price": 21000000,
+    "label": "VIP رویال",
+    "type": "international",
+    "level": "luxury",
+    "categories": [
+      "international",
+      "luxury"
+    ],
+    "rating": 4.7,
+    "status": "active",
+    "lastMinute": false,
+    "dealPercent": 0,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/dubai-burj-khalifa.svg",
+    "gallery": [
+    "../assets/images/dubai-burj-khalifa.svg",
+    "../assets/images/dubai-burj-khalifa-2.svg",
+    "../assets/images/dubai-burj-khalifa-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۴/۱۸",
+      "۱۴۰۵/۰۴/۲۵",
+      "۱۴۰۵/۰۵/۰۵"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل سیتی مکس",
+        "price": 13200000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل شرایتون",
+        "price": 16896000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل جمیرا بیچ",
+        "price": 22176000,
+        "capacity": 3
+      }
+    ],
+    "desc": "سفر لوکس به دبی با اقامت نزدیک مراکز خرید و برج خلیفه.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "تور تابستانی آنتالیا",
+    "dest": "آنتالیا",
+    "duration": "۵ شب و ۶ روز",
+    "airline": "پگاسوس",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "آنتالیا",
+    "price": 18000000,
+    "label": "تخفیف ویژه",
+    "type": "international",
+    "level": "special",
+    "categories": [
+      "international",
+      "special"
+    ],
+    "rating": 4.5,
+    "status": "active",
+    "lastMinute": true,
+    "dealPercent": 12,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/antalya-beach.svg",
+    "gallery": [
+    "../assets/images/antalya-beach.svg",
+    "../assets/images/antalya-beach-2.svg",
+    "../assets/images/antalya-beach-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۴/۲۰",
+      "۱۴۰۵/۰۴/۲۸",
+      "۱۴۰۵/۰۵/۰۸"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل ساحل جنوبی",
+        "price": 18000000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل کریستال پارک",
+        "price": 23040000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل رویال ساحل",
+        "price": 30240000,
+        "capacity": 3
+      }
+    ],
+    "desc": "سفر ساحلی به مدیترانه با هتل‌های متنوع و فضای خانوادگی.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "تور تعطیلات کیش",
+    "dest": "کیش",
+    "duration": "۲ شب و ۳ روز",
+    "airline": "کیش ایر",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "کیش",
+    "price": 8500000,
+    "label": "ارزان‌ترین",
+    "type": "domestic",
+    "level": "economy",
+    "categories": [
+      "domestic",
+      "economy"
+    ],
+    "rating": 4.2,
+    "status": "active",
+    "lastMinute": true,
+    "dealPercent": 8,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/kish-island.svg",
+    "gallery": [
+    "../assets/images/kish-island.svg",
+    "../assets/images/kish-island-2.svg",
+    "../assets/images/kish-island-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۵/۰۵",
+      "۱۴۰۵/۰۵/۱۲",
+      "۱۴۰۵/۰۵/۲۰"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل مرجان کیش",
+        "price": 8500000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل داریوش کیش",
+        "price": 10880000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل رویال کیش",
+        "price": 14280000,
+        "capacity": 3
+      }
+    ],
+    "desc": "سفر به جزیره کیش با تفریحات آبی، ساحل و مراکز خرید.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "تور زیارتی مشهد",
+    "dest": "مشهد",
+    "duration": "۳ شب و ۴ روز",
+    "airline": "ایران‌ایر",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "مشهد",
+    "price": 6500000,
+    "label": "اقتصادی",
+    "type": "domestic",
+    "level": "economy",
+    "categories": [
+      "domestic",
+      "economy"
+    ],
+    "rating": 4.3,
+    "status": "active",
+    "lastMinute": false,
+    "dealPercent": 0,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/mashhad-shrine.svg",
+    "gallery": [
+    "../assets/images/mashhad-shrine.svg",
+    "../assets/images/mashhad-shrine-2.svg",
+    "../assets/images/mashhad-shrine-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۴/۱۰",
+      "۱۴۰۵/۰۴/۲۵",
+      "۱۴۰۵/۰۵/۰۵"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل گلدن پالاس",
+        "price": 5500000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل درویشی",
+        "price": 7040000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل هما مشهد",
+        "price": 9240000,
+        "capacity": 3
+      }
+    ],
+    "desc": "اقامت در مشهد با دسترسی مناسب به حرم و مراکز خرید.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "تور بالون‌سواری کاپادوکیا",
+    "dest": "کاپادوکیا",
+    "duration": "۴ شب و ۵ روز",
+    "airline": "ترکیش ایرلاین",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "کاپادوکیا",
+    "price": 22500000,
+    "label": "خاص",
+    "type": "international",
+    "level": "special",
+    "categories": [
+      "international",
+      "special"
+    ],
+    "rating": 4.9,
+    "status": "active",
+    "lastMinute": true,
+    "dealPercent": 9,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/cappadocia-balloons.svg",
+    "gallery": [
+    "../assets/images/cappadocia-balloons.svg",
+    "../assets/images/cappadocia-balloons-2.svg",
+    "../assets/images/cappadocia-balloons-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۵/۰۶",
+      "۱۴۰۵/۰۵/۱۴",
+      "۱۴۰۵/۰۵/۲۲"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل غاری کلاسیک",
+        "price": 19000000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل کاپا ویو",
+        "price": 24320000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل میوزیم کاوه",
+        "price": 31920000,
+        "capacity": 3
+      }
+    ],
+    "desc": "تور خاص کاپادوکیا با بالن‌های معروف و منظره‌های رویایی.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "تور شیراز و تخت جمشید",
+    "dest": "شیراز",
+    "duration": "۲ شب و ۳ روز",
+    "airline": "زاگرس",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "شیراز",
+    "price": 7200000,
+    "label": "فرهنگی",
+    "type": "domestic",
+    "level": "economy",
+    "categories": [
+      "domestic",
+      "economy"
+    ],
+    "rating": 4.6,
+    "status": "active",
+    "lastMinute": false,
+    "dealPercent": 0,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/shiraz-persepolis.svg",
+    "gallery": [
+    "../assets/images/shiraz-persepolis.svg",
+    "../assets/images/shiraz-persepolis-2.svg",
+    "../assets/images/shiraz-persepolis-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۴/۲۹",
+      "۱۴۰۵/۰۵/۰۹",
+      "۱۴۰۵/۰۵/۱۹"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل پارس شیراز",
+        "price": 6200000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل چمران",
+        "price": 7936000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل زندیه",
+        "price": 10416000,
+        "capacity": 3
+      }
+    ],
+    "desc": "تور فرهنگی شیراز با بازدید از حافظیه، سعدیه و تخت جمشید.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "تور میراث اصفهان",
+    "dest": "اصفهان",
+    "duration": "۲ شب و ۳ روز",
+    "airline": "قطار ویژه",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "اصفهان",
+    "price": 6800000,
+    "label": "محبوب",
+    "type": "domestic",
+    "level": "economy",
+    "categories": [
+      "domestic",
+      "economy"
+    ],
+    "rating": 4.5,
+    "status": "active",
+    "lastMinute": false,
+    "dealPercent": 0,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/isfahan-bridge.svg",
+    "gallery": [
+    "../assets/images/isfahan-bridge.svg",
+    "../assets/images/isfahan-bridge-2.svg",
+    "../assets/images/isfahan-bridge-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۵/۰۳",
+      "۱۴۰۵/۰۵/۱۳",
+      "۱۴۰۵/۰۵/۲۳"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل سنتی اصفهان",
+        "price": 5900000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل عباسی",
+        "price": 7552000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل کوثر",
+        "price": 9912000,
+        "capacity": 3
+      }
+    ],
+    "desc": "سفر به اصفهان با بازدید از سی‌وسه‌پل، نقش جهان و بناهای تاریخی.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "تور رویایی پاریس",
+    "dest": "پاریس",
+    "duration": "۶ شب و ۷ روز",
+    "airline": "قطر ایرویز",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "پاریس",
+    "price": 65500000,
+    "label": "لوکس اروپا",
+    "type": "international",
+    "level": "luxury",
+    "categories": [
+      "international",
+      "luxury"
+    ],
+    "rating": 4.9,
+    "status": "active",
+    "lastMinute": false,
+    "dealPercent": 0,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/paris-eiffel.svg",
+    "gallery": [
+    "../assets/images/paris-eiffel.svg",
+    "../assets/images/paris-eiffel-2.svg",
+    "../assets/images/paris-eiffel-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۶/۰۵",
+      "۱۴۰۵/۰۶/۱۵",
+      "۱۴۰۵/۰۶/۲۵"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل مونمارتر",
+        "price": 54500000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل سن ژرمن",
+        "price": 69760000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل شانزه‌لیزه",
+        "price": 91560000,
+        "capacity": 3
+      }
+    ],
+    "desc": "تور لوکس پاریس با بازدید از برج ایفل، لوور و خیابان شانزه‌لیزه.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "تور تاریخی رم",
+    "dest": "رم",
+    "duration": "۵ شب و ۶ روز",
+    "airline": "ترکیش ایرلاین",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "رم",
+    "price": 58000000,
+    "label": "اروپا",
+    "type": "international",
+    "level": "luxury",
+    "categories": [
+      "international",
+      "luxury"
+    ],
+    "rating": 4.7,
+    "status": "active",
+    "lastMinute": false,
+    "dealPercent": 0,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/rome-colosseum.svg",
+    "gallery": [
+    "../assets/images/rome-colosseum.svg",
+    "../assets/images/rome-colosseum-2.svg",
+    "../assets/images/rome-colosseum-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۶/۰۲",
+      "۱۴۰۵/۰۶/۱۲",
+      "۱۴۰۵/۰۶/۲۲"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل سنترال رم",
+        "price": 48500000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل واتیکان ویو",
+        "price": 62080000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل کلوسئوم پالاس",
+        "price": 81480000,
+        "capacity": 3
+      }
+    ],
+    "desc": "تور رم با بازدید از کلوسئوم، واتیکان و میدان‌های تاریخی.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "تور معابد بانکوک",
+    "dest": "بانکوک",
+    "duration": "۵ شب و ۶ روز",
+    "airline": "ماهان",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "بانکوک",
+    "price": 29500000,
+    "label": "آسیایی",
+    "type": "international",
+    "level": "special",
+    "categories": [
+      "international",
+      "special"
+    ],
+    "rating": 4.4,
+    "status": "active",
+    "lastMinute": true,
+    "dealPercent": 7,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/bangkok-temple.svg",
+    "gallery": [
+    "../assets/images/bangkok-temple.svg",
+    "../assets/images/bangkok-temple-2.svg",
+    "../assets/images/bangkok-temple-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۵/۱۱",
+      "۱۴۰۵/۰۵/۲۱",
+      "۱۴۰۵/۰۶/۰۱"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل سیام",
+        "price": 24500000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل ریورساید",
+        "price": 31360000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل رویال اورکید",
+        "price": 41160000,
+        "capacity": 3
+      }
+    ],
+    "desc": "سفر به بانکوک با بازدید از معابد معروف، بازارها و رودخانه چائوپرایا.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "تور شهری ایروان",
+    "dest": "ایروان",
+    "duration": "۳ شب و ۴ روز",
+    "airline": "آرمنیا ایر",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "ایروان",
+    "price": 12500000,
+    "label": "نزدیک و اقتصادی",
+    "type": "international",
+    "level": "economy",
+    "categories": [
+      "international",
+      "economy"
+    ],
+    "rating": 4.1,
+    "status": "active",
+    "lastMinute": true,
+    "dealPercent": 6,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/yerevan-cascade.svg",
+    "gallery": [
+    "../assets/images/yerevan-cascade.svg",
+    "../assets/images/yerevan-cascade-2.svg",
+    "../assets/images/yerevan-cascade-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۴/۳۰",
+      "۱۴۰۵/۰۵/۱۰",
+      "۱۴۰۵/۰۵/۲۰"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل کاسکاد",
+        "price": 9900000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل ریپابلیک",
+        "price": 12672000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل ماریوت ایروان",
+        "price": 16632000,
+        "capacity": 3
+      }
+    ],
+    "desc": "تور اقتصادی ایروان با بازدید از کاسکاد، میدان جمهوری و دریاچه سوان.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "تور طبیعت گرجستان",
+    "dest": "تفلیس",
+    "duration": "۴ شب و ۵ روز",
+    "airline": "قشم ایر",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "تفلیس",
+    "price": 14800000,
+    "label": "طبیعت‌گردی",
+    "type": "international",
+    "level": "economy",
+    "categories": [
+      "international",
+      "economy"
+    ],
+    "rating": 4.3,
+    "status": "active",
+    "lastMinute": false,
+    "dealPercent": 0,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/georgia-caucasus.svg",
+    "gallery": [
+    "../assets/images/georgia-caucasus.svg",
+    "../assets/images/georgia-caucasus-2.svg",
+    "../assets/images/georgia-caucasus-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۵/۰۷",
+      "۱۴۰۵/۰۵/۱۷",
+      "۱۴۰۵/۰۵/۲۷"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل تفلیس سنتر",
+        "price": 11800000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل روستاولی",
+        "price": 15104000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل بیلتمور تفلیس",
+        "price": 19824000,
+        "capacity": 3
+      }
+    ],
+    "desc": "تور تفلیس و طبیعت قفقاز با گشت شهری و مناظر کوهستانی.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "تور کوالالامپور مدرن",
+    "dest": "کوالالامپور",
+    "duration": "۶ شب و ۷ روز",
+    "airline": "قطر ایرویز",
+"flightTime": "۰۸:۳۰",
+    "landingTime": "۱۲:۴۵",
+    "origin": "تهران",
+    "destination": "کوالالامپور",
+    "price": 36500000,
+    "label": "خانوادگی",
+    "type": "international",
+    "level": "special",
+    "categories": [
+      "international",
+      "special"
+    ],
+    "rating": 4.6,
+    "status": "active",
+    "lastMinute": false,
+    "dealPercent": 0,
+    "dealEndsAt": "2099-12-30T20:00:00.000Z",
+    "img": "../assets/images/malaysia-towers.svg",
+    "gallery": [
+    "../assets/images/malaysia-towers.svg",
+    "../assets/images/malaysia-towers-2.svg",
+    "../assets/images/malaysia-towers-3.svg"
+],
+    "dates": [
+      "۱۴۰۵/۰۶/۰۳",
+      "۱۴۰۵/۰۶/۱۳",
+      "۱۴۰۵/۰۶/۲۳"
+    ],
+    "hotels": [
+      {
+        "star": 3,
+        "name": "هتل بوکیت بینتانگ",
+        "price": 29800000,
+        "capacity": 10
+      },
+      {
+        "star": 4,
+        "name": "هتل تریدرز",
+        "price": 38144000,
+        "capacity": 6
+      },
+      {
+        "star": 5,
+        "name": "هتل ماندارین اورینتال",
+        "price": 50064000,
+        "capacity": 3
+      }
+    ],
+    "desc": "تور مالزی با بازدید از برج‌های دوقلو، مراکز خرید و فضاهای خانوادگی.",
+    "includes": [
+      "ترانسفر فرودگاهی",
+      "بیمه مسافرتی",
+      "راهنمای فارسی",
+      "صبحانه روزانه"
+    ],
+    "excludes": [
+      "هزینه‌های شخصی",
+      "گشت‌های اختیاری",
+      "عوارض خروج"
+    ],
+    "itinerary": [
+      "روز اول: پرواز و تحویل اتاق",
+      "روز دوم: گشت شهری",
+      "روز سوم: وقت آزاد",
+      "روز آخر: بازگشت"
+    ],
+    "docs": [
+      "کارت ملی",
+      "پاسپورت معتبر برای تور خارجی"
+    ],
+    "cancellation": "طبق قوانین چارتر و هتل، با هماهنگی کارشناس فروش.",
+    "childPolicy": "نرخ کودک طبق سن و نوع تخت محاسبه می‌شود.",
+    "reviews": [
+      {
+        "name": "مسافر سفرو",
+        "rate": 5,
+        "text": "برنامه‌ریزی و پشتیبانی خوب بود."
+      },
+      {
+        "name": "کاربر مهمان",
+        "rate": 4,
+        "text": "رزرو ساده و سریع انجام شد."
+      }
+    ]
+  }
 ];
 
-const DESTINATION_GUIDES = {
-  'استانبول': {
-    summary:'استانبول شهری برای خرید، گشت شهری، کافه‌گردی و دیدن تاریخ زنده است. پرواز تهران تا استانبول حدود سه ساعت طول می‌کشد و این مقصد برای سفر شهری، خرید، تفریح و بازدید از جاذبه‌های تاریخی انتخابی محبوب است.',
-    bestFor:'خرید، گشت تاریخی، سفر شهری',
-    sights:['ایاصوفیه','مسجد آبی','بازار بزرگ','تنگه بسفر','میدان تکسیم'],
-    tips:['برای خرید و رفت‌وآمد شهری، دسترسی هتل به مترو و میدان‌های اصلی مهم است.','برای سفر کوتاه، هتل‌های نزدیک تکسیم یا شیشلی انتخاب راحت‌تری هستند.']
+const DEFAULT_DISCOUNTS = [
+  {
+    "code": "SAFAR10",
+    "type": "percent",
+    "value": 10,
+    "min": 0,
+    "tourId": "all",
+    "active": true,
+    "used": 0,
+    "limit": 100,
+    "expires": ""
   },
-  'دبی': {
-    summary:'دبی مقصدی مدرن، لوکس و پرانرژی است؛ ترکیبی از برج‌های بلند، مراکز خرید بزرگ، ساحل، تفریحات شهری و تجربه‌های خاص. مسیر هوایی ایران تا دبی کوتاه است و برای سفر خانوادگی، خرید و تفریح لوکس بسیار پرطرفدار است.',
-    bestFor:'خرید، تفریحات لوکس، سفر خانوادگی',
-    sights:['برج خلیفه','دبی مال','مارینا','جزیره نخل','سافاری صحرا'],
-    tips:['برای سفر تفریحی، موقعیت هتل نسبت به مراکز خرید و ساحل اهمیت زیادی دارد.','در فصل‌های خنک‌تر، گشت شهری و تفریحات بیرونی لذت‌بخش‌تر است.']
+  {
+    "code": "VIP15",
+    "type": "percent",
+    "value": 15,
+    "min": 20000000,
+    "tourId": "all",
+    "active": true,
+    "used": 0,
+    "limit": 50,
+    "expires": ""
   },
-  'آنتالیا': {
-    summary:'آنتالیا برای سفر ساحلی، هتل‌های تفریحی و استراحت در کنار مدیترانه انتخابی محبوب است. این مقصد بیشتر برای سفرهای چندروزه، خانوادگی و استفاده از خدمات هتل‌های UALL مناسب است.',
-    bestFor:'ساحل، هتل UALL، استراحت',
-    sights:['سواحل لارا','کمر','کالیچی','آبشار دودن','پارک‌های آبی'],
-    tips:['در آنتالیا کیفیت هتل مهم‌تر از نزدیکی به مرکز شهر است.','قبل از رزرو، نوع خدمات هتل مثل All یا UALL را دقیق بررسی کنید.']
-  },
-  'کیش': {
-    summary:'کیش مقصد داخلی محبوب برای سفر کوتاه، خرید، ساحل و تفریحات آبی است. تور کیش از شهرهای مختلف ایران برگزار می‌شود و برای سفر خانوادگی، استراحت کوتاه و خرید گزینه‌ای در دسترس است.',
-    bestFor:'ساحل، خرید، تفریحات آبی',
-    sights:['کشتی یونانی','اسکله تفریحی','مرکز خرید دامون','مرکز خرید پردیس','ساحل مرجان'],
-    tips:['برای تفریحات آبی بهتر است زمان سفر و شرایط آب‌وهوا را بررسی کنید.','در سفرهای کوتاه، هتل نزدیک مراکز خرید یا ساحل انتخاب کاربردی‌تری است.']
-  },
-  'مشهد': {
-    summary:'مشهد مقصدی زیارتی و خانوادگی است که هم با پرواز و هم قطار طرفداران زیادی دارد. مسیر هوایی تهران تا مشهد حدود یک ساعت و نیم است و برای سفر اقتصادی، زیارتی و خانوادگی بسیار مناسب است.',
-    bestFor:'زیارتی، خانوادگی، سفر اقتصادی',
-    sights:['حرم امام رضا','بازار رضا','طرقبه','شاندیز','پارک ملت'],
-    tips:['برای سفر زیارتی، فاصله هتل تا حرم یکی از مهم‌ترین معیارهاست.','در ایام مناسبتی ظرفیت هتل‌ها سریع‌تر تکمیل می‌شود.']
-  },
-  'کاپادوکیا': {
-    summary:'کاپادوکیا مقصدی متفاوت در ترکیه است؛ معروف به بالن‌سواری، دره‌های سنگی، هتل‌های غاری و مناظر خاص. این سفر برای کسانی مناسب است که تجربه‌ای خاص، عکاسی و طبیعت متفاوت می‌خواهند.',
-    bestFor:'بالن‌سواری، طبیعت متفاوت، عکاسی',
-    sights:['بالن‌سواری گورمه','دره عشق','شهر زیرزمینی','هتل‌های غاری','قلعه اوچ‌حصار'],
-    tips:['بالن‌سواری وابسته به شرایط آب‌وهواست و همیشه قطعی نیست.','برای تجربه بهتر، اقامت در هتل‌های غاری پیشنهاد می‌شود.']
-  },
-  'شیراز': {
-    summary:'شیراز مقصد فرهنگ، شعر، باغ‌های ایرانی و آثار تاریخی است. این شهر برای سفر داخلی آرام، خانوادگی و تاریخی انتخابی مناسب است و ترکیبی از آرامش، تاریخ و طبیعت شهری دارد.',
-    bestFor:'فرهنگ و تاریخ، باغ‌گردی، سفر داخلی',
-    sights:['حافظیه','سعدیه','باغ ارم','تخت جمشید','بازار وکیل'],
-    tips:['برای بازدید از تخت جمشید، زمان کافی در برنامه سفر بگذارید.','بهار یکی از دلپذیرترین زمان‌ها برای سفر به شیراز است.']
-  },
-  'اصفهان': {
-    summary:'اصفهان مقصد معماری ایرانی، میدان‌های تاریخی، پل‌ها و بازارهای سنتی است. برای سفر داخلی فرهنگی و چندروزه بسیار مناسب است و تجربه‌ای کامل از هنر و تاریخ ایران ارائه می‌دهد.',
-    bestFor:'تاریخ و معماری، خرید صنایع دستی، سفر خانوادگی',
-    sights:['میدان نقش جهان','سی‌وسه‌پل','پل خواجو','کاخ چهلستون','بازار قیصریه'],
-    tips:['برای سفر چندروزه، هتل نزدیک مرکز تاریخی شهر انتخاب خوبی است.','بازارهای سنتی اصفهان برای خرید صنایع دستی بسیار مناسب‌اند.']
-  },
-  'پاریس': {
-    summary:'پاریس مقصد هنر، مد، موزه و خیابان‌گردی است. این سفر بیشتر مناسب کسانی است که ترکیب جاذبه‌های شهری، فرهنگ، خرید و فضای اروپایی را می‌خواهند.',
-    bestFor:'هنر و موزه، مد و خرید، سفر اروپایی',
-    sights:['برج ایفل','موزه لوور','شانزه‌لیزه','کلیسای نوتردام','مون‌مارتر'],
-    tips:['برای پاریس، برنامه‌ریزی بازدید از موزه‌ها و رزروهای قبلی اهمیت دارد.','هزینه‌های شهری را در بودجه سفر در نظر بگیرید.']
-  },
-  'رم': {
-    summary:'رم مقصدی برای عاشقان تاریخ، معماری و غذاهای ایتالیایی است. قدم‌زدن در شهر مثل عبور از یک موزه زنده است و ترکیب آثار باستانی، کافه‌ها و میدان‌های تاریخی جذابیت ویژه‌ای دارد.',
-    bestFor:'تاریخ باستان، غذا و کافه، سفر فرهنگی',
-    sights:['کولوسئوم','واتیکان','فواره تروی','پانتئون','میدان ناوونا'],
-    tips:['برای جاذبه‌های مهم رم، تهیه بلیت از قبل باعث صرفه‌جویی در زمان می‌شود.','کفش راحت برای پیاده‌روی شهری ضروری است.']
-  },
-  'بانکوک': {
-    summary:'بانکوک شهری پرجنب‌وجوش با معابد طلایی، بازارهای محلی، مراکز خرید و غذاهای خیابانی است. برای سفر اقتصادی و پرهیجان جنوب شرق آسیا انتخابی محبوب است.',
-    bestFor:'خرید، غذاهای خیابانی، معابد',
-    sights:['گرند پالاس','معبد وات آرون','بازار چاتوچاک','مراکز خرید سیام','رود چائو فرایا'],
-    tips:['برای بازدید از معابد، پوشش مناسب همراه داشته باشید.','حمل‌ونقل شهری و تاکسی‌های اینترنتی سفر را راحت‌تر می‌کنند.']
-  },
-  'ایروان': {
-    summary:'ایروان مقصدی نزدیک، اقتصادی و مناسب سفر کوتاه است. فضای شهری آرام، کافه‌ها و میدان‌های مرکزی، آن را برای سفر چندروزه محبوب کرده است.',
-    bestFor:'سفر کوتاه، اقتصادی، کافه‌گردی',
-    sights:['میدان جمهوری','کاسکاد','بازار ورنیساژ','دریاچه سوان','موزه تاریخ ارمنستان'],
-    tips:['ایروان برای سفر کوتاه چندروزه گزینه‌ای اقتصادی است.','برای گشت اطراف شهر، تورهای یک‌روزه انتخاب خوبی هستند.']
-  },
-  'تفلیس': {
-    summary:'تفلیس با خیابان‌های قدیمی، طبیعت قفقاز، غذاهای محلی و هزینه مناسب، مقصدی محبوب برای سفر خارجی نزدیک است. این شهر ترکیبی از بافت تاریخی، کافه‌ها و چشم‌اندازهای طبیعی دارد.',
-    bestFor:'طبیعت و شهر، غذاهای محلی، سفر اقتصادی',
-    sights:['شهر قدیمی تفلیس','پل صلح','قلعه ناریکالا','حمام‌های گوگردی','خیابان روستاولی'],
-    tips:['تفلیس برای سفر اقتصادی خارجی گزینه‌ای محبوب است.','غذاهای محلی گرجستان بخش مهمی از تجربه سفر هستند.']
-  },
-  'کوالالامپور': {
-    summary:'کوالالامپور مقصدی مدرن در مالزی است؛ ترکیبی از برج‌های بلند، مراکز خرید، غذاهای متنوع و دسترسی به طبیعت و جزایر اطراف. برای سفر خانوادگی و شهری انتخاب مناسبی است.',
-    bestFor:'خرید، غذاهای متنوع، سفر خانوادگی',
-    sights:['برج‌های پتروناس','غار باتو','بوکیت بینتانگ','مراکز خرید پاویلیون','پارک KLCC'],
-    tips:['کوالالامپور برای ترکیب خرید و گشت شهری مناسب است.','برای سفر ترکیبی می‌توان آن را با جزایر مالزی هماهنگ کرد.']
+  {
+    "code": "LAST5",
+    "type": "fixed",
+    "value": 500000,
+    "min": 5000000,
+    "tourId": "lastminute",
+    "active": true,
+    "used": 0,
+    "limit": 80,
+    "expires": ""
   }
-};
-function guideForDestination(dest,title=''){
-  const keys=Object.keys(DESTINATION_GUIDES);
-  const found=keys.find(k=>String(dest||'').includes(k)||String(title||'').includes(k));
-  return found ? DESTINATION_GUIDES[found] : null;
-}
+];
 
-const DEFAULT_VISAS=[{id:1,country:'امارات',city:'دبی',type:'توریستی',price:6200000,duration:'۳ تا ۷ روز کاری',docs:'پاسپورت، عکس، فرم اطلاعات',details:'مناسب سفر تفریحی و کاری کوتاه‌مدت.',active:true},{id:2,country:'شنگن',city:'اروپا',type:'توریستی',price:0,duration:'بسته به وقت سفارت',docs:'پاسپورت، تمکن مالی، گردش حساب، رزرو هتل و پرواز',details:'برای بررسی دقیق مدارک، مشاوره لازم است.',active:true}];
+
+const LATIN_TOUR_TITLES = {
+  "1": "تور بهاره استانبول",
+  "2": "تور لوکس دبی",
+  "3": "تور تابستانی آنتالیا",
+  "4": "تور تعطیلات کیش",
+  "5": "تور زیارتی مشهد",
+  "6": "تور بالون‌سواری کاپادوکیا",
+  "7": "تور شیراز و تخت جمشید",
+  "8": "تور میراث اصفهان",
+  "9": "تور رویایی پاریس",
+  "10": "تور تاریخی رم",
+  "11": "تور معابد بانکوک",
+  "12": "تور شهری ایروان",
+  "13": "تور طبیعت گرجستان",
+  "14": "تور کوالالامپور مدرن"
+};
