@@ -157,8 +157,8 @@ function renderSourceImportCards(){
   const s=externalSourceSettings();
   const stats=importedSourceStats();
   const sources=[
-    {key:'safaroIranian',title:'سفرو ایرانیان',desc:'تورهای عمومی صفحه تور سفرو ایرانیان',count:stats.safaro},
-    {key:'alefba',title:'الفبای سفر',desc:'تورهای ویژه و مسیرهای محبوب الفبای سفر',count:stats.alefba}
+    {key:'safaroIranian',title:'سفرو ایرانیان',desc:'بانک تورهای سفرو ایرانیان؛ مقصدها، هتل، سرویس و قیمت پایه',count:stats.safaro},
+    {key:'alefba',title:'الفبای سفر',desc:'بانک تورهای الفبای سفر؛ مقصدها، هتل، سرویس و قیمت پایه',count:stats.alefba}
   ];
   return `<div class="source-import-grid">${sources.map(src=>{
     const cfg=s[src.key]||{};
@@ -236,7 +236,7 @@ function renderAdmin(){
     </div>
     <div class="source-import-note">نکته: اطلاعات واردشده بعد از اضافه‌شدن داخل همین سایت قابل ویرایش، تغییر قیمت، ظرفیت، عکس و وضعیت نمایش است.</div>
     ${renderSourceImportCards()}
-    <div class="safaro-import-preview">${[...safeSafaroIranianImportedTours().slice(0,6),...alefbaImportedTours().slice(0,6)].map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price||t.price||0)} | ${t.sourceName==='AlefbaSafar'?'الفبای سفر':'سفرو ایرانیان'}</small></div>`).join('')}</div>
+    <div class="safaro-import-preview">${[...safeSafaroIranianImportedTours().slice(0,6),...alefbaImportedTours().slice(0,12)].map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price||t.price||0)} | ${t.sourceName==='AlefbaSafar'?'الفبای سفر':'سفرو ایرانیان'}</small></div>`).join('')}</div>
   </section>
 
   <section id="admin-tour-images" class="card pad">
