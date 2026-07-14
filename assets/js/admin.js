@@ -168,6 +168,7 @@ function renderAdmin(){
       <a href="#admin-price-sheet"><i class="fa-solid fa-file-csv"></i> آپدیت قیمت</a>
       <a href="#admin-hotels"><i class="fa-solid fa-hotel"></i> هتل‌ها</a>
       <a href="#admin-airlines"><i class="fa-solid fa-plane"></i> ایرلاین‌ها</a>
+      <a href="#admin-currencies"><i class="fa-solid fa-coins"></i> ارزها</a>
       <a href="#admin-hotel-booking-photos"><i class="fa-regular fa-images"></i> عکس Booking هتل‌ها</a>
       <a href="#admin-leads"><i class="fa-solid fa-phone"></i> شماره‌ها</a>
       <a href="#admin-customer-trail"><i class="fa-solid fa-shoe-prints"></i> ردپای مشتری</a>
@@ -243,6 +244,7 @@ function renderAdmin(){
             <p class="small">اول هتل را داخل بانک ثبت کن، بعد با فعال‌کردن آن، در پنل فروش و فرم انتخاب هتل نمایش داده می‌شود.</p>
           </div>
           <div id="hotelCatalogQuickStats" class="hotel-bank-quick-stats"></div>
+          <div class="all-names-box"><h4>همه اسم هتل‌ها</h4><div id="allHotelNamesList" class="all-names-list"></div></div>
         </div>
         <div class="hotel-bank-mainbox">
           <div class="list-title-line hotel-bank-list-head"><h4>لیست هتل‌ها و پکیج‌های مدیریت</h4><span class="small">موارد فعال‌شده برای پنل فروش ارسال می‌شوند.</span></div>
@@ -314,9 +316,41 @@ function renderAdmin(){
     <div id="customerTrailAdminTable" class="table-wrap" style="margin-top:12px"></div>
   </section>
 
+
+  <section id="admin-currencies" class="card pad currency-bank-section" style="margin-bottom:16px">
+    <div class="row wrap">
+      <div>
+        <span class="badge special">بانک واحدهای پولی دنیا</span>
+        <h3>کنترل ارزها برای نمایش در پنل خریدار</h3>
+        <p class="small">همه واحدهای پولی پشتیبانی‌شده مرورگر به همراه فهرست کامل کاربردی اضافه شده‌اند. هر ارزی را فعال کنی، در پنل خریدار نمایش داده می‌شود.</p>
+      </div>
+      <div class="actions">
+        <button class="soft" onclick="bulkToggleCurrencies(false)">عدم نمایش همه</button>
+        <button class="btn" onclick="bulkToggleCurrencies(true)">نمایش همه در خریدار</button>
+      </div>
+    </div>
+    <div class="currency-entry-card">
+      <div class="currency-entry-grid">
+        <input id="currencyCode" class="field" dir="ltr" placeholder="کد ارز؛ USD">
+        <input id="currencyNameFa" class="field" placeholder="نام فارسی">
+        <input id="currencyNameEn" class="field" dir="ltr" placeholder="English Name">
+        <input id="currencySymbol" class="field" placeholder="نماد / کد نمایشی">
+        <input id="currencyRate" class="field" placeholder="نرخ اختیاری نسبت به تومان">
+        <select id="currencyBuyerShow" class="field"><option value="false">عدم نمایش در خریدار</option><option value="true">نمایش در خریدار</option></select>
+      </div>
+      <div class="actions" style="margin-top:12px"><button class="btn" onclick="saveCurrencyItem()">ذخیره ارز</button><button class="soft" onclick="resetCurrencies()">بازگردانی لیست جهانی</button></div>
+    </div>
+    <div class="currency-toolbar">
+      <input id="currencySearch" class="field" placeholder="جستجوی کد یا نام ارز..." oninput="renderCurrencyCatalog()">
+      <select id="currencyShowFilter" class="field" onchange="renderCurrencyCatalog()"><option value="all">همه وضعیت‌ها</option><option value="on">فقط نمایش در خریدار</option><option value="off">فقط عدم نمایش</option></select>
+    </div>
+    <div id="currencyCatalogTable" class="currency-admin-list"></div>
+  </section>
+
   <section id="admin-visas" class="card pad" style="margin-bottom:16px">
     <h3>مدیریت قیمت ویزا</h3>
     <p class="small">کشورها و شهرهایی که امکان گرفتن ویزا یا خدمات سفر برای آن‌ها دارید را اینجا اضافه و ویرایش کن. این لیست در پنل مشتری نمایش داده می‌شود.</p>
+    <div class="all-names-box visa-names-admin"><h4>همه اسم ویزاها</h4><div id="allVisaNamesList" class="all-names-list"></div></div>
     <div class="visa-admin-grid">
       <input id="visaCountry" class="field" placeholder="کشور *">
       <input id="visaCity" class="field" placeholder="شهر / مقصد">
@@ -1020,6 +1054,7 @@ function renderHotelCatalog(){
   if(show==='off')list=list.filter(h=>h.enabledForStaff===false);
   list.sort((a,b)=>String(a.destination||'').localeCompare(String(b.destination||''),'fa')||Number(a.star)-Number(b.star)||String(a.nameLatin||'').localeCompare(String(b.nameLatin||'')));
   const grouped=list.reduce((acc,h)=>{const d=h.destination||h.dest||'عمومی';(acc[d]||(acc[d]=[])).push(h);return acc},{})
+  renderAllHotelNames(hotelCatalog());
   const all=hotelCatalog();
   const stats={
     total:all.length,
@@ -1203,9 +1238,47 @@ function resetAirlines(){
   renderAirlineCatalog();
 }
 
+
+function renderAllHotelNames(list=hotelCatalog()){
+  const box=$('allHotelNamesList');if(!box)return;
+  const rows=list.slice().sort((a,b)=>String(a.destination||'').localeCompare(String(b.destination||''),'fa')||String(a.nameLatin||'').localeCompare(String(b.nameLatin||'')));
+  box.innerHTML=rows.map(h=>`<span><b dir="ltr">${h.nameLatin||'—'}</b><small>${h.destination||h.dest||'عمومی'} | ${h.star}★ ${h.meal?`| ${h.meal}`:''}</small></span>`).join('')||'<em>هتلی ثبت نشده است.</em>';
+}
+function renderAllVisaNames(list=visaServices()){
+  const box=$('allVisaNamesList');if(!box)return;
+  box.innerHTML=list.map(v=>`<span><b>${v.country||'—'} ${v.city?`- ${v.city}`:''}</b><small>${v.type||'توریستی'} | ${v.active!==false?'فعال':'غیرفعال'}</small></span>`).join('')||'<em>ویزایی ثبت نشده است.</em>';
+}
+function currencyAdminCard(c){return `<div class="currency-admin-card ${c.enabledForBuyer?'active-for-buyer':'off-for-buyer'}">
+  <div class="currency-code-badge" dir="ltr">${c.code}</div>
+  <div class="currency-admin-info"><b>${c.nameFa||c.code}</b><small dir="ltr">${c.nameEn||'—'} | ${c.symbol||c.code}</small>${c.rate?`<small>نرخ: ${c.rate}</small>`:''}</div>
+  <div class="currency-admin-actions"><span class="badge ${c.enabledForBuyer?'domestic':'gray'}">${c.enabledForBuyer?'نمایش در خریدار':'فقط مدیریت'}</span><button class="soft" onclick="editCurrencyItem('${c.code}')">ویرایش</button><button class="soft" onclick="toggleCurrencyItem('${c.code}')">${c.enabledForBuyer?'عدم نمایش':'نمایش در خریدار'}</button><button class="danger" onclick="deleteCurrencyItem('${c.code}')">حذف</button></div>
+</div>`}
+function renderCurrencyCatalog(){
+  const box=$('currencyCatalogTable');if(!box)return;
+  const q=($('currencySearch')?.value||'').trim().toLowerCase();
+  const show=$('currencyShowFilter')?.value||'all';
+  let list=currencyCatalog();
+  if(q)list=list.filter(c=>(c.code+' '+c.nameFa+' '+c.nameEn+' '+c.symbol).toLowerCase().includes(q));
+  if(show==='on')list=list.filter(c=>c.enabledForBuyer===true);
+  if(show==='off')list=list.filter(c=>c.enabledForBuyer!==true);
+  box.innerHTML=`<div class="currency-summary"><span>کل ارزها: <b>${faNum(currencyCatalog().length)}</b></span><span>نمایش در خریدار: <b>${faNum(currencyCatalog().filter(c=>c.enabledForBuyer).length)}</b></span><span>نتیجه فیلتر: <b>${faNum(list.length)}</b></span></div><div class="currency-card-list">${list.map(currencyAdminCard).join('')||'<div class="empty-state-mini">ارزی پیدا نشد.</div>'}</div>`;
+}
+function saveCurrencyItem(){
+  const code=String($('currencyCode')?.value||'').trim().toUpperCase();if(!code)return alert('کد ارز را وارد کن');
+  const item={id:'cur-'+code,code,nameFa:$('currencyNameFa')?.value?.trim()||currencyNameFa(code),nameEn:$('currencyNameEn')?.value?.trim()||currencyNameEn(code),symbol:$('currencySymbol')?.value?.trim()||code,rate:$('currencyRate')?.value?.trim()||'',enabledForBuyer:$('currencyBuyerShow')?.value==='true'};
+  const list=currencyCatalog();const i=list.findIndex(c=>c.code===code);if(i>=0)list[i]={...list[i],...item};else list.push(item);
+  saveCurrencyCatalog(list);['currencyCode','currencyNameFa','currencyNameEn','currencySymbol','currencyRate'].forEach(id=>{if($(id))$(id).value=''});if($('currencyBuyerShow'))$('currencyBuyerShow').value='false';renderCurrencyCatalog();showToast('ارز ذخیره شد');
+}
+function editCurrencyItem(code){const c=currencyCatalog().find(x=>x.code===code);if(!c)return;$('currencyCode').value=c.code;$('currencyNameFa').value=c.nameFa||'';$('currencyNameEn').value=c.nameEn||'';$('currencySymbol').value=c.symbol||'';$('currencyRate').value=c.rate||'';$('currencyBuyerShow').value=String(c.enabledForBuyer===true);document.getElementById('admin-currencies')?.scrollIntoView({behavior:'smooth'});}
+function toggleCurrencyItem(code){saveCurrencyCatalog(currencyCatalog().map(c=>c.code===code?{...c,enabledForBuyer:!c.enabledForBuyer}:c));renderCurrencyCatalog();showToast('وضعیت نمایش ارز تغییر کرد')}
+function deleteCurrencyItem(code){if(!confirm('این ارز حذف شود؟'))return;saveCurrencyCatalog(currencyCatalog().filter(c=>c.code!==code));renderCurrencyCatalog();}
+function bulkToggleCurrencies(on){if(!confirm(on?'همه ارزها در پنل خریدار نمایش داده شوند؟':'همه ارزها از پنل خریدار مخفی شوند؟'))return;saveCurrencyCatalog(currencyCatalog().map(c=>({...c,enabledForBuyer:!!on})));renderCurrencyCatalog();}
+function resetCurrencies(){if(!confirm('لیست ارزها به حالت جهانی اولیه برگردد؟'))return;saveCurrencyCatalog(defaultCurrencyCatalog());renderCurrencyCatalog();}
+
 function renderVisas(){
   const box=$('visaTable');if(!box)return;
   const list=visaServices();
+  renderAllVisaNames(list);
   box.innerHTML=`<div class="list-title-line"><h4>لیست ویزاها</h4><span class="small">هر ویزا را ویرایش کن تا در پنل مشتری به صورت بازشو نمایش داده شود.</span></div>
   <div class="admin-edit-list">${list.map(v=>`<div class="admin-edit-row visa-admin-row">
     <div>

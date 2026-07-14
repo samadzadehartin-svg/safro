@@ -8,7 +8,7 @@ const SUPABASE_URL = 'https://npewgytsemqhrttuvoba.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZXdneXRzZW1xaHJ0dHV2b2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5MDkxOTYsImV4cCI6MjA5OTQ4NTE5Nn0.KdR-V7DbN_IfOyHum9y-Z0mYsqpkG-YxkpQBEHZX9F0';
 const SUPABASE_TABLE = 'safaro_store';
 const SUPABASE_ENABLED = !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
-const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','airlineCatalog','staffAccounts','customerTrail'];
+const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','airlineCatalog','currencyCatalog','staffAccounts','customerTrail'];
 let supabaseClient = null;
 let supabaseBootSynced = false;
 let supabaseWriteTimers = {};
@@ -93,6 +93,7 @@ function supabaseDefaultValue(k){
   if(k==='visaServices')return typeof DEFAULT_VISAS!=='undefined'?DEFAULT_VISAS:[];
   if(k==='hotelCatalog')return typeof defaultHotelCatalog==='function'?defaultHotelCatalog():[];
   if(k==='airlineCatalog')return typeof defaultAirlineCatalog==='function'?defaultAirlineCatalog():[];
+  if(k==='currencyCatalog')return typeof defaultCurrencyCatalog==='function'?defaultCurrencyCatalog():[];
   if(k==='staffAccounts')return typeof DEFAULT_STAFF_ACCOUNTS!=='undefined'?DEFAULT_STAFF_ACCOUNTS:(typeof DEFAULT_STAFF!=='undefined'?DEFAULT_STAFF:[]);
   if(k==='customerTrail')return [];
   return {};
@@ -5495,6 +5496,55 @@ const IMPORTED_HOTEL_CATALOG = [
 ];
 
 
+
+function currencyFallbackCodes(){
+  return ['AED','AFN','ALL','AMD','ANG','AOA','ARS','AUD','AWG','AZN','BAM','BBD','BDT','BGN','BHD','BIF','BMD','BND','BOB','BRL','BSD','BTN','BWP','BYN','BZD','CAD','CDF','CHF','CLP','CNY','COP','CRC','CUP','CVE','CZK','DJF','DKK','DOP','DZD','EGP','ERN','ETB','EUR','FJD','FKP','GBP','GEL','GHS','GIP','GMD','GNF','GTQ','GYD','HKD','HNL','HTG','HUF','IDR','ILS','INR','IQD','IRR','ISK','JMD','JOD','JPY','KES','KGS','KHR','KMF','KPW','KRW','KWD','KYD','KZT','LAK','LBP','LKR','LRD','LSL','LYD','MAD','MDL','MGA','MKD','MMK','MNT','MOP','MRU','MUR','MVR','MWK','MXN','MYR','MZN','NAD','NGN','NIO','NOK','NPR','NZD','OMR','PAB','PEN','PGK','PHP','PKR','PLN','PYG','QAR','RON','RSD','RUB','RWF','SAR','SBD','SCR','SDG','SEK','SGD','SHP','SLE','SOS','SRD','SSP','STN','SYP','SZL','THB','TJS','TMT','TND','TOP','TRY','TTD','TWD','TZS','UAH','UGX','USD','UYU','UZS','VES','VND','VUV','WST','XAF','XCD','XOF','XPF','YER','ZAR','ZMW','ZWL'];
+}
+function currencyCodes(){
+  try{
+    if(Intl.supportedValuesOf)return [...new Set([...Intl.supportedValuesOf('currency'),...currencyFallbackCodes()])].sort();
+  }catch(e){}
+  return currencyFallbackCodes().sort();
+}
+function currencyNameFa(code){
+  try{const dn=new Intl.DisplayNames(['fa'],{type:'currency'});return dn.of(code)||code}catch(e){return code}
+}
+function currencyNameEn(code){
+  try{const dn=new Intl.DisplayNames(['en'],{type:'currency'});return dn.of(code)||code}catch(e){return code}
+}
+function defaultCurrencyCatalog(){
+  const defaults=new Set(['IRR','USD','EUR','TRY','AED','GEL','AMD','THB','MYR','RUB','GBP','CAD','AUD','JPY','CNY']);
+  return currencyCodes().map(code=>normalizeCurrencyCatalogItem({id:'cur-'+code,code,nameFa:currencyNameFa(code),nameEn:currencyNameEn(code),symbol:code,enabledForBuyer:defaults.has(code),rate:'',note:''}));
+}
+function normalizeCurrencyCatalogItem(c,i=0){
+  const code=String(c?.code||c?.id||'').replace(/^cur-/,'').toUpperCase();
+  return {
+    id:c?.id||('cur-'+code)||('cur-'+i),
+    code:code||'CUR',
+    nameFa:c?.nameFa||currencyNameFa(code)||code,
+    nameEn:c?.nameEn||currencyNameEn(code)||code,
+    symbol:c?.symbol||code,
+    rate:c?.rate||'',
+    enabledForBuyer:c?.enabledForBuyer===true,
+    note:c?.note||''
+  };
+}
+function mergeDefaultCurrencyCatalog(list){
+  const map=new Map();
+  defaultCurrencyCatalog().forEach((c,i)=>map.set(c.code,normalizeCurrencyCatalogItem(c,i)));
+  (Array.isArray(list)?list:[]).forEach((c,i)=>{const n=normalizeCurrencyCatalogItem(c,i);map.set(n.code,{...(map.get(n.code)||{}),...n})});
+  return [...map.values()].sort((a,b)=>a.code.localeCompare(b.code));
+}
+function currencyCatalog(){
+  let v=read('currencyCatalog',null);
+  if(!Array.isArray(v)){v=defaultCurrencyCatalog();saveCurrencyCatalog(v);return v}
+  const merged=mergeDefaultCurrencyCatalog(v);
+  if(merged.length!==v.length)saveCurrencyCatalog(merged);
+  return merged;
+}
+function saveCurrencyCatalog(v){write('currencyCatalog',(Array.isArray(v)?v:[]).map(normalizeCurrencyCatalogItem))}
+function enabledCurrenciesForBuyer(){return currencyCatalog().filter(c=>c.enabledForBuyer===true)}
+
 function defaultAirlineCatalog(){
   return [
     {id:'air-mahan',nameFa:'ماهان',nameEn:'Mahan Air',code:'W5',logo:'',type:'domestic',enabledForStaff:true,note:''},
@@ -5841,6 +5891,7 @@ function resetDemoData(){
 function seed(){
   try{saveHotelCatalog(mergeDefaultHotelCatalog(hotelCatalog()))}catch(e){console.warn('hotel catalog merge failed',e)}
   try{saveAirlineCatalog(airlineCatalog())}catch(e){console.warn('airline catalog merge failed',e)}
+  try{saveCurrencyCatalog(currencyCatalog())}catch(e){console.warn('currency catalog merge failed',e)}
   repairAppData();
   normalizeTourImagesTheme();
   if(typeof normalizeTourPersianNamesAndImages==='function')normalizeTourPersianNamesAndImages();

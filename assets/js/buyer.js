@@ -313,6 +313,13 @@ function toggleBuyerVisaDetails(id){
   if(!box)return;
   box.classList.toggle('open');
 }
+
+function currencySection(){
+  const list=enabledCurrenciesForBuyer();
+  if(!list.length)return '';
+  return `<section class="currency-buyer-section card pad"><div class="row wrap"><div><span class="badge special">واحدهای پولی</span><h2>ارزهای قابل نمایش</h2><p class="small">این ارزها توسط مدیریت برای نمایش در پنل خریدار فعال شده‌اند.</p></div></div><div class="currency-buyer-grid">${list.map(c=>`<div class="currency-buyer-card"><b dir="ltr">${c.code}</b><span>${c.nameFa||c.code}</span><small dir="ltr">${c.nameEn||''} ${c.symbol?`| ${c.symbol}`:''}</small>${c.rate?`<small>نرخ: ${c.rate}</small>`:''}</div>`).join('')}</div></section>`;
+}
+
 function visaSection(){
   const list=visaServices().filter(v=>v.active!==false);
   if(!list.length)return '';
@@ -364,7 +371,7 @@ function destinationGuideDetail(t){
 
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
- $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${trustSection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
+ $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${trustSection()}${currencySection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
  <section><div class="row wrap"><h2>قسمت ویژه</h2></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
  <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
