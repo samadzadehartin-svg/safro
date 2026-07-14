@@ -1,4 +1,4 @@
-function adminHotelStarsFallback(n){return typeof hotelStars==='function'?adminHotelStarsFallback(n):'★'.repeat(Number(n)||0)}
+function adminHotelStarsFallback(n){return typeof hotelStars==='function'?hotelStars(n):'★'.repeat(Number(n)||0)}
 
 function excelCell(row, idx){return row && row[idx]!==undefined && row[idx]!==null ? row[idx] : ''}
 function excelNum(v){const n=Number(String(v??'').replace(/[^\d.-]/g,''));return isNaN(n)?0:n}
@@ -150,6 +150,7 @@ function adminBatchUpdatePrices(){
 }
 
 
+function safeSafaroIranianImportedTours(){try{return safaroIranianImportedTours()}catch(e){console.warn('safaro import preview failed',e);return []}}
 function adminImportSafaroIranianTours(){
   const n=importSafaroIranianTours();
   const box=$('safaroImportResult');
@@ -193,7 +194,7 @@ function renderAdmin(){
       <div class="actions"><button class="btn" onclick="adminImportSafaroIranianTours()">وارد کردن تورها</button></div>
     </div>
     <div id="safaroImportResult" class="import-result"></div>
-    <div class="safaro-import-preview">${safaroIranianImportedTours().slice(0,10).map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price)}</small></div>`).join('')}</div>
+    <div class="safaro-import-preview">${safeSafaroIranianImportedTours().slice(0,10).map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price)}</small></div>`).join('')}</div>
   </section>
 
   <section id="admin-tour-images" class="card pad">
@@ -396,6 +397,8 @@ function renderAdmin(){
     </div>
   </div>`;
   renderTourImages();renderStaffAccounts();renderHotelCatalog();renderCurrentTourHotels();renderBookingPhotoHotels();renderContactStaff();renderLeads();renderCustomerTrailAdmin();renderCustomerTrailAdmin();renderVisas();renderDiscounts();renderOrders();
+  if(typeof renderAirlineCatalog==='function')renderAirlineCatalog();
+  if(typeof renderCurrencyCatalog==='function')renderCurrencyCatalog();
 }
 
 
