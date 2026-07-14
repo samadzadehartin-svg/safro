@@ -187,6 +187,37 @@ function renderStaffVisaChoice(){
     <button class="soft" onclick="navigator.clipboard?.writeText('${(v.country||'') + ' ' + (v.city||'')} - ${Number(v.price||0)>0?money(v.price):'بدون هزینه ویزا'} - مدارک: ${v.docs||'—'}');showToast('متن ویزا کپی شد')">کپی متن برای مشتری</button>
   </div>`;
 }
+
+function airlineLogoHtml(a){
+  return a.logo?`<img src="${a.logo}" onerror="this.style.display='none'">`:`<span>${(a.nameFa||a.nameEn||'A').slice(0,1)}</span>`;
+}
+function airlinePickerHtml(targetId){
+  const list=enabledAirlines();
+  return `<div class="airline-picker-head"><b>انتخاب ایرلاین</b><input class="field" id="airlineSearch_${targetId}" placeholder="جستجو..." oninput="filterAirlinePicker('${targetId}')"></div>
+  <div class="airline-picker-list">${list.map(a=>`<button type="button" class="airline-picker-card" data-name="${(a.nameFa+' '+a.nameEn+' '+a.code).toLowerCase()}" onclick="selectAirline('${targetId}','${a.id}')">
+    <div class="airline-logo-mini">${airlineLogoHtml(a)}</div>
+    <div><b>${a.nameFa}</b><small dir="ltr">${a.nameEn||'—'} ${a.code?`| ${a.code}`:''}</small></div>
+  </button>`).join('')||'<div class="empty-state-mini">مدیر هنوز ایرلاینی را برای فروش فعال نکرده است.</div>'}</div>`;
+}
+function toggleAirlinePicker(targetId){
+  document.querySelectorAll('.airline-picker-panel').forEach(x=>{if(x.id!=='airlinePicker_'+targetId)x.classList.remove('on')});
+  const box=$('airlinePicker_'+targetId);if(!box)return;
+  if(!box.innerHTML.trim())box.innerHTML=airlinePickerHtml(targetId);
+  box.classList.toggle('on');
+}
+function filterAirlinePicker(targetId){
+  const q=($('airlineSearch_'+targetId)?.value||'').toLowerCase();
+  document.querySelectorAll(`#airlinePicker_${targetId} .airline-picker-card`).forEach(card=>{
+    card.style.display=card.dataset.name.includes(q)?'grid':'none';
+  });
+}
+function selectAirline(targetId,id){
+  const a=airlineCatalog().find(x=>x.id===id);if(!a)return;
+  if($(targetId))$(targetId).value=airlineDisplayName(a);
+  const box=$('airlinePicker_'+targetId);if(box)box.classList.remove('on');
+  showToast('ایرلاین انتخاب شد');
+}
+
 function staffVisaInfoBox(){
   const list=visaServices().filter(v=>v.active!==false);
   return `<section id="staffVisaSection" class="card pad staff-section-panel">
@@ -256,7 +287,6 @@ function renderStaff(){
   $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge special">پنل فروش</span><h1>مدیریت تورها</h1><p class="small">وارد شده با: <b>${user?.name||user?.username||'فروش'}</b></p>${staffTaskNoteHtml()}</div><div class="actions"><button class="soft" onclick="logoutRole('staff')">خروج</button><button class="btn" onclick="openForm()">افزودن تور</button></div></div>
   ${staffTopTabs()}${supabasePanel()}${staffDebugBox()}
   ${staffVisaInfoBox()}
-  ${staffHotelCatalogBox()}
   <section id="staffToursSection" class="staff-section-panel">
     <div class="section-title-row"><span class="badge domestic">بخش تورها</span><h3>مدیریت تورها و قیمت‌ها</h3></div>
     ${priceImportBox()}${batchPriceBox()}
@@ -436,9 +466,13 @@ function catalogPickerHtml(star,dest){
 }
 function pickerHotelCard(star,h){
   const photos=staffHotelPhotos(h);
-  return `<button type="button" class="staff-hotel-picker-card" data-name="${String(h.nameLatin||'').toLowerCase()}" onclick="selectCatalogHotelForTour(${star},'${h.id}')">
+  return `<button type="button" class="staff-hotel-picker-card staff-controlled-picker-card" data-name="${String(h.nameLatin||'').toLowerCase()}" onclick="selectCatalogHotelForTour(${star},'${h.id}')">
     <img src="${staffHotelImage(h)}" onerror="this.src='../assets/images/hotel-placeholder.svg'">
-    <span><b dir="ltr">${h.nameLatin}</b><small>${h.destination||'—'} | ${h.meal||h.board||'بدون وعده'} | ${h.sourceGroup||'—'}</small><small>عکس‌ها: ${faNum(photos.length)}</small></span>
+    <span>
+      <b dir="ltr">${h.nameLatin}</b>
+      <small>${h.meal||h.board||'سرویس ثبت نشده'} | ${h.destination||'—'}</small>
+      <small>${faNum(photos.length)} عکس ثبت‌شده</small>
+    </span>
   </button>`;
 }
 function filterHotelPicker(star){

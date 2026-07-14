@@ -42,8 +42,16 @@
           <input id="title" class="field" required placeholder="عنوان تور *">
           <input id="dest" class="field" required placeholder="مقصد *">
           <input id="duration" class="field" required placeholder="مدت سفر * مثل ۴ شب و ۵ روز">
-          <input id="airline" class="field" required placeholder="ایرلاین رفت *">
-          <input id="returnAirline" class="field" placeholder="ایرلاین برگشت">
+          <div class="airline-field-wrap">
+            <input id="airline" class="field" required placeholder="ایرلاین رفت *" readonly onclick="toggleAirlinePicker('airline')">
+            <button class="soft" type="button" onclick="toggleAirlinePicker('airline')">انتخاب ایرلاین رفت</button>
+            <div id="airlinePicker_airline" class="airline-picker-panel"></div>
+          </div>
+          <div class="airline-field-wrap">
+            <input id="returnAirline" class="field" placeholder="ایرلاین برگشت" readonly onclick="toggleAirlinePicker('returnAirline')">
+            <button class="soft" type="button" onclick="toggleAirlinePicker('returnAirline')">انتخاب ایرلاین برگشت</button>
+            <div id="airlinePicker_returnAirline" class="airline-picker-panel"></div>
+          </div>
           <input id="flightTime" class="field" placeholder="زمان پرواز رفت">
           <input id="returnFlightTime" class="field" placeholder="زمان پرواز برگشت">
           <input id="price" class="field" type="number" required placeholder="قیمت پایه *">

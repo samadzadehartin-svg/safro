@@ -3133,3 +3133,247 @@ body:not(.admin-page) .customer-trail-list{display:none!important}
   .hotel-edit-row-with-picker{grid-template-columns:1fr!important}
   .hotel-row-thumb{width:100%;height:140px}
 }
+
+
+/* Upgraded hotel bank like requested sample */
+
+.hotel-bank-section{overflow:hidden}
+.hotel-bank-shell{display:flex;flex-direction:column;gap:16px}
+.hotel-bank-hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.hotel-bank-entry-card,.hotel-bank-toolbar-card,.hotel-bank-sidebox,.hotel-bank-mainbox,.hotel-current-tour-box{
+  border:1px solid var(--b);
+  border-radius:24px;
+  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(247,250,255,.86));
+  box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.hotel-bank-entry-card{padding:16px}
+.hotel-bank-entry-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.hotel-bank-entry-actions{display:flex;gap:10px;justify-content:flex-start;flex-wrap:wrap;margin-top:12px}
+.hotel-bank-toolbar-card{padding:14px}
+.hotel-catalog-toolbar-upgraded{margin:0}
+.hotel-bank-stage{display:grid;grid-template-columns:290px minmax(0,1fr);gap:16px;align-items:start}
+.hotel-bank-sidebox{padding:14px;position:sticky;top:84px}
+.hotel-bank-mainbox{padding:14px}
+.hotel-bank-mini-note{padding:12px;border:1px dashed rgba(57,167,223,.35);border-radius:18px;background:rgba(57,167,223,.05);margin-bottom:12px}
+.hotel-bank-mini-note h4{margin:0 0 8px}
+.hotel-bank-quick-stats{display:grid;grid-template-columns:1fr;gap:10px}
+.hotel-bank-stat{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--b);border-radius:16px;padding:12px 14px;background:rgba(255,255,255,.78)}
+.hotel-bank-stat span{font-size:12px;color:var(--t2)}
+.hotel-bank-stat b{font-size:18px;color:var(--p)}
+.hotel-bank-list-head{margin-bottom:12px}
+.hotel-catalog-summary-upgraded{margin-bottom:16px}
+.hotel-bank-group-card{padding:14px 14px 6px;border-radius:22px;background:linear-gradient(180deg,rgba(248,250,252,.96),rgba(255,255,255,.85));box-shadow:0 10px 24px rgba(15,23,42,.04)}
+.hotel-bank-group-head{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:12px;align-items:center;margin-bottom:12px}
+.hotel-bank-group-stats{display:flex;gap:8px;flex-wrap:wrap}
+.hotel-bank-group-stats span{padding:7px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:12px;font-weight:800}
+.hotel-bank-list-modern{gap:10px}
+.hotel-bank-card{background:rgba(255,255,255,.95)!important;border-radius:20px!important;box-shadow:0 10px 24px rgba(15,23,42,.04)!important}
+.hotel-bank-thumb{width:96px;height:78px}
+.hotel-bank-card-main small{line-height:1.8}
+.hotel-bank-card-actions{min-width:210px}
+.hotel-bank-card-actions .badge{display:inline-flex;justify-content:center;margin-bottom:4px}
+.dark .hotel-bank-entry-card,.dark .hotel-bank-toolbar-card,.dark .hotel-bank-sidebox,.dark .hotel-bank-mainbox,.dark .hotel-current-tour-box,.dark .hotel-bank-group-card{background:rgba(15,23,42,.55)}
+.dark .hotel-bank-stat{background:rgba(15,23,42,.42)}
+.dark .hotel-bank-mini-note{background:rgba(57,167,223,.08)}
+@media(max-width:1180px){
+  .hotel-bank-entry-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hotel-bank-stage{grid-template-columns:1fr}
+  .hotel-bank-sidebox{position:relative;top:auto}
+}
+@media(max-width:760px){
+  .hotel-bank-entry-grid{grid-template-columns:1fr}
+  .hotel-bank-group-head{grid-template-columns:1fr}
+  .hotel-bank-thumb{width:100%;height:180px}
+  .hotel-bank-card-actions{min-width:0}
+}
+
+
+/* Hotel bank final: admin-only polished accordion */
+.hotel-bank-section{
+  background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(241,248,255,.92))!important;
+  border:1px solid rgba(74,159,216,.22)!important;
+  border-radius:28px!important;
+}
+.hotel-bank-hero h3{margin:8px 0 4px;font-size:21px}
+.hotel-bank-top-actions .btn,.hotel-bank-top-actions .soft{border-radius:18px;padding:12px 18px}
+.hotel-bank-entry-card{border-radius:24px!important;background:linear-gradient(180deg,#fff,#f8fbff)!important;padding:18px!important}
+.hotel-bank-entry-grid .field,.hotel-bank-toolbar-card .field{min-height:50px;border-radius:18px!important}
+.hotel-bank-entry-actions .btn{min-width:160px}
+.hotel-bank-toolbar-card{border-radius:24px!important;padding:16px!important}
+.hotel-bank-sidebox,.hotel-bank-mainbox{border-radius:24px!important}
+.hotel-bank-group-card{border-radius:24px!important;overflow:hidden;padding:0!important}
+.hotel-bank-group-head{padding:16px;background:linear-gradient(135deg,rgba(74,159,216,.10),rgba(255,255,255,.82));border-bottom:1px solid var(--b)}
+.hotel-bank-group-click{cursor:pointer}
+.hotel-bank-group-click:hover{background:linear-gradient(135deg,rgba(74,159,216,.16),rgba(255,255,255,.92))}
+.hotel-bank-accordion-list{display:none!important;padding:12px}
+.hotel-bank-accordion-list.open{display:flex!important;flex-direction:column}
+.hotel-bank-card{border-radius:22px!important;padding:12px!important;transition:.18s ease}
+.hotel-bank-card:hover{transform:translateY(-2px)}
+.hotel-bank-thumb{border-radius:18px!important;background:#eef6ff}
+.hotel-bank-card-actions button{border-radius:14px}
+.hotel-photo-control-panel{border-radius:20px!important}
+.staff-controlled-picker-card:hover{border-color:var(--p)!important;background:rgba(74,159,216,.08)!important}
+#staffHotelCatalogSection{display:none!important}
+.dark .hotel-bank-section,.dark .hotel-bank-entry-card,.dark .hotel-bank-toolbar-card,.dark .hotel-bank-sidebox,.dark .hotel-bank-mainbox{background:rgba(15,23,42,.62)!important}
+.dark .hotel-bank-group-head{background:rgba(30,41,59,.75)}
+
+
+/* Airline catalog admin + staff picker */
+.airline-bank-section{
+  border-radius:28px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(241,248,255,.92))!important;
+}
+.airline-entry-card{
+  border:1px solid var(--b);
+  border-radius:24px;
+  background:linear-gradient(180deg,#fff,#f8fbff);
+  padding:16px;
+  margin:14px 0;
+}
+.airline-entry-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.airline-toolbar{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:10px;
+  margin:14px 0;
+}
+.airline-bank-summary{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.airline-bank-summary span{
+  border:1px solid var(--b);
+  background:rgba(57,167,223,.07);
+  border-radius:14px;
+  padding:8px 10px;
+  font-size:12px;
+}
+.airline-group-card{
+  border:1px solid var(--b);
+  border-radius:22px;
+  overflow:hidden;
+  margin:12px 0;
+  background:rgba(255,255,255,.86);
+}
+.airline-group-head{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+  padding:14px;
+  border-bottom:1px solid var(--b);
+  background:linear-gradient(135deg,rgba(74,159,216,.10),rgba(255,255,255,.82));
+}
+.airline-card-list{
+  display:grid;
+  gap:10px;
+  padding:12px;
+}
+.airline-admin-card{
+  display:grid;
+  grid-template-columns:58px 1fr auto;
+  gap:12px;
+  align-items:center;
+  border:1px solid var(--b);
+  border-radius:18px;
+  padding:10px;
+  background:var(--s);
+}
+.airline-admin-card.active-for-staff{border-color:rgba(34,197,94,.35)!important;background:rgba(34,197,94,.06)!important}
+.airline-admin-card.off-for-staff{opacity:.78}
+.airline-logo-admin,.airline-logo-mini{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  border:1px solid var(--b);
+  background:linear-gradient(135deg,#e0f2fe,#eff6ff);
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  color:var(--p);
+  font-weight:1000;
+}
+.airline-logo-admin img,.airline-logo-mini img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.airline-info-admin small{
+  display:block;
+  color:var(--t2);
+  line-height:1.8;
+}
+.airline-actions-admin{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.airline-field-wrap{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+}
+.airline-field-wrap>input{cursor:pointer}
+.airline-picker-panel{
+  display:none;
+  position:absolute;
+  top:58px;
+  right:0;
+  left:0;
+  z-index:50;
+  border:1px solid var(--b);
+  background:var(--s);
+  border-radius:20px;
+  padding:12px;
+  box-shadow:0 20px 55px rgba(15,23,42,.15);
+}
+.airline-picker-panel.on{display:block}
+.airline-picker-head{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:10px;
+  align-items:center;
+  margin-bottom:10px;
+}
+.airline-picker-list{
+  display:grid;
+  gap:8px;
+  max-height:260px;
+  overflow:auto;
+}
+.airline-picker-card{
+  display:grid;
+  grid-template-columns:48px 1fr;
+  gap:10px;
+  border:1px solid var(--b);
+  background:var(--s);
+  border-radius:16px;
+  padding:8px;
+  text-align:right;
+  cursor:pointer;
+}
+.airline-picker-card:hover{
+  border-color:var(--p);
+  background:rgba(74,159,216,.08);
+}
+.airline-picker-card small{
+  display:block;
+  color:var(--t2);
+  line-height:1.7;
+}
+@media(max-width:920px){
+  .airline-entry-grid{grid-template-columns:1fr 1fr}
+  .airline-toolbar{grid-template-columns:1fr}
+  .airline-admin-card{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .airline-entry-grid,.airline-field-wrap,.airline-picker-head{grid-template-columns:1fr}
+}

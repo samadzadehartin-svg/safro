@@ -8,7 +8,7 @@ const SUPABASE_URL = 'https://npewgytsemqhrttuvoba.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZXdneXRzZW1xaHJ0dHV2b2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5MDkxOTYsImV4cCI6MjA5OTQ4NTE5Nn0.KdR-V7DbN_IfOyHum9y-Z0mYsqpkG-YxkpQBEHZX9F0';
 const SUPABASE_TABLE = 'safaro_store';
 const SUPABASE_ENABLED = !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
-const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','staffAccounts','customerTrail'];
+const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','airlineCatalog','staffAccounts','customerTrail'];
 let supabaseClient = null;
 let supabaseBootSynced = false;
 let supabaseWriteTimers = {};
@@ -92,6 +92,7 @@ function supabaseDefaultValue(k){
   if(k==='discounts')return [];
   if(k==='visaServices')return typeof DEFAULT_VISAS!=='undefined'?DEFAULT_VISAS:[];
   if(k==='hotelCatalog')return typeof defaultHotelCatalog==='function'?defaultHotelCatalog():[];
+  if(k==='airlineCatalog')return typeof defaultAirlineCatalog==='function'?defaultAirlineCatalog():[];
   if(k==='staffAccounts')return typeof DEFAULT_STAFF_ACCOUNTS!=='undefined'?DEFAULT_STAFF_ACCOUNTS:(typeof DEFAULT_STAFF!=='undefined'?DEFAULT_STAFF:[]);
   if(k==='customerTrail')return [];
   return {};
@@ -5493,6 +5494,51 @@ const IMPORTED_HOTEL_CATALOG = [
   }
 ];
 
+
+function defaultAirlineCatalog(){
+  return [
+    {id:'air-mahan',nameFa:'ماهان',nameEn:'Mahan Air',code:'W5',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-iran-air',nameFa:'ایران ایر',nameEn:'Iran Air',code:'IR',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-ata',nameFa:'آتا',nameEn:'ATA Airlines',code:'I3',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-kish',nameFa:'کیش ایر',nameEn:'Kish Air',code:'Y9',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-qeshm',nameFa:'قشم ایر',nameEn:'Qeshm Air',code:'QB',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-zagros',nameFa:'زاگرس',nameEn:'Zagros Airlines',code:'IZG',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-caspian',nameFa:'کاسپین',nameEn:'Caspian Airlines',code:'CPN',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-turkish',nameFa:'ترکیش',nameEn:'Turkish Airlines',code:'TK',logo:'',type:'international',enabledForStaff:true,note:''},
+    {id:'air-pegasus',nameFa:'پگاسوس',nameEn:'Pegasus Airlines',code:'PC',logo:'',type:'international',enabledForStaff:true,note:''},
+    {id:'air-emirates',nameFa:'امارات',nameEn:'Emirates',code:'EK',logo:'',type:'international',enabledForStaff:true,note:''},
+    {id:'air-flydubai',nameFa:'فلای‌دبی',nameEn:'Flydubai',code:'FZ',logo:'',type:'international',enabledForStaff:true,note:''},
+    {id:'air-qatar',nameFa:'قطر ایرویز',nameEn:'Qatar Airways',code:'QR',logo:'',type:'international',enabledForStaff:true,note:''},
+    {id:'air-airarabia',nameFa:'ایرعربیا',nameEn:'Air Arabia',code:'G9',logo:'',type:'international',enabledForStaff:true,note:''},
+    {id:'air-aeroflot',nameFa:'ایرفلوت',nameEn:'Aeroflot',code:'SU',logo:'',type:'international',enabledForStaff:false,note:''}
+  ].map(normalizeAirlineCatalogItem);
+}
+function normalizeAirlineCatalogItem(a,i=0){
+  return {
+    id:a?.id||('air-'+Date.now()+'-'+i),
+    nameFa:a?.nameFa||a?.name||'ایرلاین',
+    nameEn:a?.nameEn||'',
+    code:a?.code||'',
+    logo:a?.logo||a?.image||'',
+    type:a?.type||'international',
+    enabledForStaff:a?.enabledForStaff!==false,
+    note:a?.note||''
+  };
+}
+function airlineCatalog(){
+  let v=read('airlineCatalog',null);
+  if(!Array.isArray(v)){v=defaultAirlineCatalog();saveAirlineCatalog(v);return v}
+  return v.map(normalizeAirlineCatalogItem);
+}
+function saveAirlineCatalog(v){write('airlineCatalog',(Array.isArray(v)?v:[]).map(normalizeAirlineCatalogItem))}
+function enabledAirlines(){
+  return airlineCatalog().filter(a=>a.enabledForStaff!==false);
+}
+function airlineDisplayName(a){
+  if(!a)return '';
+  return a.nameFa||a.nameEn||a.code||'';
+}
+
 function defaultHotelCatalog(){
   const starter=[
     {id:'h3-1',star:3,nameLatin:'Saffron Inn',destination:'نمونه',sourceGroup:'نمونه',enabledForStaff:false},
@@ -5794,6 +5840,7 @@ function resetDemoData(){
 
 function seed(){
   try{saveHotelCatalog(mergeDefaultHotelCatalog(hotelCatalog()))}catch(e){console.warn('hotel catalog merge failed',e)}
+  try{saveAirlineCatalog(airlineCatalog())}catch(e){console.warn('airline catalog merge failed',e)}
   repairAppData();
   normalizeTourImagesTheme();
   if(typeof normalizeTourPersianNamesAndImages==='function')normalizeTourPersianNamesAndImages();

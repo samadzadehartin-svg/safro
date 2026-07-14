@@ -167,6 +167,7 @@ function renderAdmin(){
       <a href="#admin-staff-accounts"><i class="fa-regular fa-user"></i> تیم فروش</a>
       <a href="#admin-price-sheet"><i class="fa-solid fa-file-csv"></i> آپدیت قیمت</a>
       <a href="#admin-hotels"><i class="fa-solid fa-hotel"></i> هتل‌ها</a>
+      <a href="#admin-airlines"><i class="fa-solid fa-plane"></i> ایرلاین‌ها</a>
       <a href="#admin-hotel-booking-photos"><i class="fa-regular fa-images"></i> عکس Booking هتل‌ها</a>
       <a href="#admin-leads"><i class="fa-solid fa-phone"></i> شماره‌ها</a>
       <a href="#admin-customer-trail"><i class="fa-solid fa-shoe-prints"></i> ردپای مشتری</a>
@@ -196,40 +197,99 @@ function renderAdmin(){
 
   <section id="admin-price-sheet" class="card pad" style="margin-bottom:16px"><h3>آپدیت قیمت با شیت</h3><p class="small">فایل CSV خروجی گرفته‌شده از شیت نمونه را اینجا آپلود کن تا قیمت‌ها، ظرفیت‌ها و تخفیف دستی آپدیت شوند.</p><div class="price-import-box"><input id="adminPriceImport" class="field" type="file" accept=".csv,.txt"><button class="btn" onclick="importPriceSheet('adminPriceImport','adminImportResult')">آپلود و آپدیت قیمت‌ها</button><div id="adminImportResult" class="import-result"></div></div>${excelTourImportBox('admin')}${adminBatchPriceBox()}</section>
 
-  <section id="admin-hotels" class="card pad" style="margin-bottom:16px">
-    <div class="row wrap">
-      <div>
-        <span class="badge special">بانک هتل‌ها و پکیج‌ها</span>
-        <h3>مدیریت هتل‌ها برای نمایش در پنل فروش</h3>
-        <p class="small">هتل‌ها و پکیج‌های واردشده فقط در پنل مدیریت ذخیره می‌شوند؛ هر موردی را که فعال کنی در پنل فروش و فرم قیمت‌گذاری دیده می‌شود.</p>
+  <section id="admin-hotels" class="card pad hotel-bank-section" style="margin-bottom:16px">
+    <div class="hotel-bank-shell">
+      <div class="hotel-bank-hero">
+        <div>
+          <span class="badge special">بانک هتل‌ها و پکیج‌ها</span>
+          <h3>بانک هتل‌ها؛ کنترل کامل فقط برای مدیریت</h3>
+          <p class="small">همه هتل‌ها، عکس‌ها، پکیج‌ها و وضعیت نمایش فقط اینجا کنترل می‌شوند. فروش فقط می‌تواند هتل‌های فعال‌شده را انتخاب کند و به حذف، ویرایش، عکس‌ها یا فعال/غیرفعال‌سازی دسترسی ندارد.</p>
+        </div>
+        <div class="actions hotel-bank-top-actions">
+          <button class="soft" onclick="bulkToggleHotelCatalog(false)">عدم نمایش همه برای فروش</button>
+          <button class="btn" onclick="bulkToggleHotelCatalog(true)">نمایش همه برای فروش</button>
+        </div>
       </div>
-      <div class="actions">
-        <button class="soft" onclick="bulkToggleHotelCatalog(false)">عدم نمایش همه برای فروش</button>
-        <button class="btn" onclick="bulkToggleHotelCatalog(true)">نمایش همه برای فروش</button>
+
+      <div class="hotel-bank-entry-card">
+        <div class="hotel-bank-entry-grid">
+          <input id="hotelLatinName" class="field" placeholder="Hotel / Package Name *" dir="ltr">
+          <input id="hotelDestination" class="field" placeholder="مقصد؛ مثل استانبول">
+          <select id="hotelStar" class="field"><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select>
+          <input id="hotelMeal" class="field" placeholder="وعده / سرویس؛ BB, HB, ALL, UALL">
+          <input id="hotelSourceGroup" class="field" placeholder="منبع / گروه؛ مثل لیست استانبول">
+          <select id="hotelEnabled" class="field"><option value="false">عدم نمایش برای فروش</option><option value="true">نمایش برای فروش</option></select>
+          <input id="hotelImageUrl" class="field" dir="ltr" placeholder="عکس اصلی هتل URL">
+          <input id="hotelPhotosText" class="field" dir="ltr" placeholder="بیشتر / با کاما جدا کن یا URL های بیشتر">
+        </div>
+        <div class="hotel-bank-entry-actions">
+          <button class="btn" onclick="saveHotelItem()">ذخیره هتل / پکیج</button>
+          <button class="soft" onclick="resetDefaultHotels()">بازگردانی بانک واردشده</button>
+        </div>
       </div>
+
+      <div class="hotel-bank-toolbar-card">
+        <div class="hotel-catalog-toolbar hotel-catalog-toolbar-upgraded">
+          <input id="hotelCatalogSearch" class="field" placeholder="جستجوی نام هتل، مقصد یا منبع..." oninput="renderHotelCatalog()">
+          <select id="hotelCatalogDestFilter" class="field" onchange="renderHotelCatalog()"></select>
+          <select id="hotelCatalogShowFilter" class="field" onchange="renderHotelCatalog()"><option value="all">همه وضعیت‌ها</option><option value="on">فقط نمایش برای فروش</option><option value="off">فقط عدم نمایش</option></select>
+        </div>
+      </div>
+
+      <div class="hotel-bank-stage">
+        <div class="hotel-bank-sidebox">
+          <div class="hotel-bank-mini-note">
+            <h4>مدیریت سریع</h4>
+            <p class="small">اول هتل را داخل بانک ثبت کن، بعد با فعال‌کردن آن، در پنل فروش و فرم انتخاب هتل نمایش داده می‌شود.</p>
+          </div>
+          <div id="hotelCatalogQuickStats" class="hotel-bank-quick-stats"></div>
+        </div>
+        <div class="hotel-bank-mainbox">
+          <div class="list-title-line hotel-bank-list-head"><h4>لیست هتل‌ها و پکیج‌های مدیریت</h4><span class="small">موارد فعال‌شده برای پنل فروش ارسال می‌شوند.</span></div>
+          <div id="hotelCatalogTable" class="hotel-admin-table hotel-bank-modern-table"></div>
+        </div>
+      </div>
+
+      <div class="current-hotels-box hotel-current-tour-box"><h3>لیست تک‌تک هتل‌های ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل مشتری را فعال/غیرفعال کنی.</p><div class="row wrap" style="margin-bottom:10px"><button class="soft" onclick="renderCurrentTourHotels()">بروزرسانی لیست</button><button class="btn" onclick="syncCatalogHotelsToTours()">اعمال هتل‌های فعال مدیریت روی تورهای هم‌مقصد</button><select id="addHotelTourId" class="field" style="max-width:260px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join("")}</select><button class="soft" onclick="addCurrentTourHotel(Number($('addHotelTourId').value))">افزودن هتل به تور</button></div><div id="currentTourHotelsTable" class="table-wrap"></div></div>
     </div>
-    <div class="admin-mini-grid">
-      <input id="hotelLatinName" class="field" placeholder="Hotel / Package Name *" dir="ltr">
-      <input id="hotelDestination" class="field" placeholder="مقصد؛ مثل استانبول">
-      <select id="hotelStar" class="field"><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select>
-      <input id="hotelMeal" class="field" placeholder="وعده / سرویس؛ BB, HB, ALL, UALL">
-      <input id="hotelSourceGroup" class="field" placeholder="منبع / گروه؛ مثل لیست استانبول">
-      <input id="hotelImageUrl" class="field" dir="ltr" placeholder="URL عکس اصلی هتل">
-      <input id="hotelPhotosText" class="field" dir="ltr" placeholder="URL عکس‌های بیشتر؛ با کاما جدا کن">
-      <select id="hotelEnabled" class="field"><option value="false">عدم نمایش برای فروش</option><option value="true">نمایش برای فروش</option></select>
-      <button class="btn" onclick="saveHotelItem()">ذخیره هتل / پکیج</button>
-      <button class="soft" onclick="resetDefaultHotels()">بازگردانی بانک واردشده</button>
-    </div>
-    <div class="hotel-catalog-toolbar">
-      <input id="hotelCatalogSearch" class="field" placeholder="جستجوی نام هتل یا مقصد..." oninput="renderHotelCatalog()">
-      <select id="hotelCatalogDestFilter" class="field" onchange="renderHotelCatalog()"></select>
-      <select id="hotelCatalogShowFilter" class="field" onchange="renderHotelCatalog()"><option value="all">همه وضعیت‌ها</option><option value="on">فقط نمایش برای فروش</option><option value="off">فقط عدم نمایش</option></select>
-    </div>
-    <div class="list-title-line"><h4>لیست هتل‌ها و پکیج‌های مدیریت</h4><span class="small">موارد فعال‌شده برای پنل فروش ارسال می‌شوند.</span></div>
-    <div id="hotelCatalogTable" class="hotel-admin-table"></div>
-    <div class="current-hotels-box"><h3>لیست تک‌تک هتل‌های ثبت‌شده در تورها</h3><p class="small">اینجا هتل‌هایی که در خود تورها قیمت‌گذاری شده‌اند دیده می‌شوند و می‌توانی نمایش آن‌ها در پنل مشتری را فعال/غیرفعال کنی.</p><div class="row wrap" style="margin-bottom:10px"><button class="soft" onclick="renderCurrentTourHotels()">بروزرسانی لیست</button><button class="btn" onclick="syncCatalogHotelsToTours()">اعمال هتل‌های فعال مدیریت روی تورهای هم‌مقصد</button><select id="addHotelTourId" class="field" style="max-width:260px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join("")}</select><button class="soft" onclick="addCurrentTourHotel(Number($('addHotelTourId').value))">افزودن هتل به تور</button></div><div id="currentTourHotelsTable" class="table-wrap"></div></div>
   </section>
 
+
+  
+  <section id="admin-airlines" class="card pad airline-bank-section" style="margin-bottom:16px">
+    <div class="row wrap">
+      <div>
+        <span class="badge international">بانک ایرلاین‌ها</span>
+        <h3>کنترل ایرلاین‌ها فقط برای مدیریت</h3>
+        <p class="small">ایرلاین‌ها، لوگو، کد پروازی و وضعیت نمایش برای پنل فروش اینجا کنترل می‌شود. فروش فقط می‌تواند ایرلاین‌های فعال‌شده را انتخاب کند.</p>
+      </div>
+      <div class="actions">
+        <button class="soft" onclick="bulkToggleAirlines(false)">عدم نمایش همه برای فروش</button>
+        <button class="btn" onclick="bulkToggleAirlines(true)">نمایش همه برای فروش</button>
+      </div>
+    </div>
+    <div class="airline-entry-card">
+      <div class="airline-entry-grid">
+        <input id="airlineNameFa" class="field" placeholder="نام فارسی ایرلاین *">
+        <input id="airlineNameEn" class="field" dir="ltr" placeholder="English Name">
+        <input id="airlineCode" class="field" dir="ltr" placeholder="کد ایرلاین؛ مثل TK">
+        <input id="airlineLogo" class="field" dir="ltr" placeholder="URL لوگو">
+        <select id="airlineType" class="field"><option value="international">خارجی</option><option value="domestic">داخلی</option></select>
+        <select id="airlineEnabled" class="field"><option value="true">نمایش برای فروش</option><option value="false">عدم نمایش برای فروش</option></select>
+        <input id="airlineNote" class="field" placeholder="توضیح اختیاری">
+      </div>
+      <div class="actions" style="margin-top:12px">
+        <button class="btn" onclick="saveAirlineItem()">ذخیره ایرلاین</button>
+        <button class="soft" onclick="resetAirlines()">بازگردانی نمونه‌ها</button>
+      </div>
+    </div>
+    <div class="airline-toolbar">
+      <input id="airlineSearch" class="field" placeholder="جستجوی ایرلاین..." oninput="renderAirlineCatalog()">
+      <select id="airlineTypeFilter" class="field" onchange="renderAirlineCatalog()"><option value="all">همه نوع‌ها</option><option value="domestic">داخلی</option><option value="international">خارجی</option></select>
+      <select id="airlineShowFilter" class="field" onchange="renderAirlineCatalog()"><option value="all">همه وضعیت‌ها</option><option value="on">فقط نمایش برای فروش</option><option value="off">فقط عدم نمایش</option></select>
+    </div>
+    <div id="airlineCatalogTable" class="airline-admin-list"></div>
+  </section>
 
   <section id="admin-hotel-booking-photos" class="card pad" style="margin-bottom:16px">
     <div class="row wrap"><div><span class="badge international">Booking</span><h3>مدیریت عکس‌های Booking هتل‌ها</h3><p class="small">اینجا برای هر تور و هر هتل می‌توانی لینک Booking و عکس‌های هتل را وارد یا آپلود کنی. این عکس‌ها با دکمه Booking در پنل مشتری نمایش داده می‌شوند.</p></div></div>
@@ -930,6 +990,15 @@ function removeHotelCatalogPhoto(id,index){
   showToast('عکس حذف شد');
 }
 
+
+function safeHotelGroupId(d){
+  return 'hotelGroup_'+String(d||'all').replace(/[^a-zA-Z0-9آ-ی]/g,'_');
+}
+function toggleHotelBankGroup(d){
+  const el=$(safeHotelGroupId(d));
+  if(el)el.classList.toggle('open');
+}
+
 function hotelDestinations(){
   return [...new Set(hotelCatalog().map(h=>h.destination||h.dest||'عمومی'))].sort((a,b)=>String(a).localeCompare(String(b),'fa'));
 }
@@ -950,39 +1019,79 @@ function renderHotelCatalog(){
   if(show==='on')list=list.filter(h=>h.enabledForStaff!==false);
   if(show==='off')list=list.filter(h=>h.enabledForStaff===false);
   list.sort((a,b)=>String(a.destination||'').localeCompare(String(b.destination||''),'fa')||Number(a.star)-Number(b.star)||String(a.nameLatin||'').localeCompare(String(b.nameLatin||'')));
-  const grouped=list.reduce((acc,h)=>{const d=h.destination||h.dest||'عمومی';(acc[d]||(acc[d]=[])).push(h);return acc},{});
-  box.innerHTML=`<div class="hotel-catalog-summary">
-    <span>کل بانک: <b>${faNum(hotelCatalog().length)}</b></span>
-    <span>نمایش برای فروش: <b>${faNum(hotelCatalog().filter(h=>h.enabledForStaff!==false).length)}</b></span>
-    <span>نتیجه فیلتر: <b>${faNum(list.length)}</b></span>
-  </div>${Object.entries(grouped).map(([d,rows])=>`<div class="hotel-destination-group">
-    <div class="row wrap hotel-destination-head">
-      <h4>${d} <small>${faNum(rows.length)} مورد</small></h4>
-      <div class="actions">
-        <button class="soft" onclick="toggleHotelDestination('${d}',true)">نمایش این مقصد برای فروش</button>
-        <button class="soft" onclick="toggleHotelDestination('${d}',false)">عدم نمایش این مقصد</button>
+  const grouped=list.reduce((acc,h)=>{const d=h.destination||h.dest||'عمومی';(acc[d]||(acc[d]=[])).push(h);return acc},{})
+  const all=hotelCatalog();
+  const stats={
+    total:all.length,
+    active:all.filter(h=>h.enabledForStaff!==false).length,
+    hidden:all.filter(h=>h.enabledForStaff===false).length,
+    photos:all.reduce((s,h)=>s+hotelCatalogPhotos(h).length,0),
+    filtered:list.length,
+    destinations:hotelDestinations().length
+  };
+  const quick=$('hotelCatalogQuickStats');
+  if(quick){
+    quick.innerHTML=`
+      <div class="hotel-bank-stat"><span>کل بانک</span><b>${faNum(stats.total)}</b></div>
+      <div class="hotel-bank-stat"><span>نمایش برای فروش</span><b>${faNum(stats.active)}</b></div>
+      <div class="hotel-bank-stat"><span>عدم نمایش</span><b>${faNum(stats.hidden)}</b></div>
+      <div class="hotel-bank-stat"><span>نتیجه فیلتر</span><b>${faNum(stats.filtered)}</b></div>
+      <div class="hotel-bank-stat"><span>تعداد مقصدها</span><b>${faNum(stats.destinations)}</b></div>
+      <div class="hotel-bank-stat"><span>تعداد کل عکس‌ها</span><b>${faNum(stats.photos)}</b></div>`;
+  }
+  box.innerHTML=`<div class="hotel-catalog-summary hotel-catalog-summary-upgraded">
+    <span>کل بانک: <b>${faNum(stats.total)}</b></span>
+    <span>نمایش برای فروش: <b>${faNum(stats.active)}</b></span>
+    <span>عدم نمایش: <b>${faNum(stats.hidden)}</b></span>
+    <span>نتیجه فیلتر: <b>${faNum(stats.filtered)}</b></span>
+  </div>${Object.entries(grouped).map(([d,rows])=>{
+    const activeRows=rows.filter(h=>h.enabledForStaff!==false).length;
+    const photos=rows.reduce((s,h)=>s+hotelCatalogPhotos(h).length,0);
+    const star3=rows.filter(h=>Number(h.star)===3).length;
+    const star4=rows.filter(h=>Number(h.star)===4).length;
+    const star5=rows.filter(h=>Number(h.star)===5).length;
+    return `<div class="hotel-destination-group hotel-bank-group-card">
+      <div class="hotel-bank-group-head hotel-bank-group-click" onclick="toggleHotelBankGroup('${d}')">
+        <div>
+          <h4>${d}</h4>
+          <p class="small">${faNum(rows.length)} هتل / پکیج ثبت‌شده برای این مقصد</p>
+        </div>
+        <div class="hotel-bank-group-stats">
+          <span>${faNum(activeRows)} فعال</span>
+          <span>${faNum(photos)} عکس</span>
+          <span>${faNum(star3)}×۳★</span>
+          <span>${faNum(star4)}×۴★</span>
+          <span>${faNum(star5)}×۵★</span>
+        </div>
+        <div class="actions" onclick="event.stopPropagation()">
+          <button class="soft" onclick="toggleHotelDestination('${d}',true)">نمایش این مقصد</button>
+          <button class="soft" onclick="toggleHotelDestination('${d}',false)">عدم نمایش</button>
+          <button class="btn" onclick="toggleHotelBankGroup('${d}')">باز/بستن لیست</button>
+        </div>
       </div>
-    </div>
-    <div class="admin-hotel-list">${rows.map(h=>`<div class="admin-hotel-card admin-hotel-card-with-photo ${h.enabledForStaff!==false?'active-for-staff':'off-for-staff'}">
-      <img class="admin-hotel-thumb" src="${hotelCatalogImage(h)}" onerror="this.src='../assets/images/hotel-placeholder.svg'">
-      <div class="admin-hotel-main">
-        <b dir="ltr">${h.nameLatin||'—'}</b>
-        <span>${adminHotelStarsFallback(h.star)} ${h.meal?`<em>${h.meal}</em>`:''}</span>
-        <small>${h.sourceGroup||'—'} ${h.catalogType==='combo'?' | پکیج ترکیبی':''}</small>
-        <small>عکس‌ها: ${faNum(hotelCatalogPhotos(h).length)}</small>
-        ${h.dblPrice||h.sglPrice||h.childPrice?`<small>دو تخته: ${h.dblPrice||'—'} | یک تخته: ${h.sglPrice||'—'} | کودک: ${h.childPrice||'—'}</small>`:''}
-        ${h.note?`<small>${h.note}</small>`:''}
-      </div>
-      <div class="admin-hotel-actions">
-        <span class="badge ${h.enabledForStaff!==false?'domestic':'gray'}">${h.enabledForStaff!==false?'نمایش برای فروش':'فقط مدیریت'}</span>
-        <button class="soft" onclick="toggleHotelPhotoPanel('${h.id}')">کنترل عکس‌ها</button>
-        <button class="soft" onclick="editHotelItem('${h.id}')">ویرایش</button>
-        <button class="soft" onclick="toggleHotelItem('${h.id}')">${h.enabledForStaff!==false?'عدم نمایش':'نمایش برای فروش'}</button>
-        <button class="danger" onclick="deleteHotelItem('${h.id}')">حذف</button>
-      </div>
-      ${hotelCatalogPhotoPanel(h)}
-    </div>`).join('')}</div>
-  </div>`).join('')||'<div class="empty-state-mini">موردی پیدا نشد.</div>'}`;
+      <div id="${safeHotelGroupId(d)}" class="admin-hotel-list hotel-bank-list-modern hotel-bank-accordion-list">
+      ${rows.map(h=>`<div class="admin-hotel-card admin-hotel-card-with-photo hotel-bank-card ${h.enabledForStaff!==false?'active-for-staff':'off-for-staff'}">
+        <img class="admin-hotel-thumb hotel-bank-thumb" src="${hotelCatalogImage(h)}" onerror="this.src='../assets/images/hotel-placeholder.svg'">
+        <div class="admin-hotel-main hotel-bank-card-main">
+          <b dir="ltr">${h.nameLatin||'—'}</b>
+          <span>${adminHotelStarsFallback(h.star)} ${h.meal?`<em>${h.meal}</em>`:''}</span>
+          <small>مقصد: ${h.destination||h.dest||'عمومی'} ${h.catalogType==='combo'?' | پکیج ترکیبی':''}</small>
+          <small>منبع: ${h.sourceGroup||'—'}</small>
+          <small>عکس‌ها: ${faNum(hotelCatalogPhotos(h).length)}</small>
+          ${h.dblPrice||h.sglPrice||h.childPrice?`<small>دو تخته: ${h.dblPrice||'—'} | یک تخته: ${h.sglPrice||'—'} | کودک: ${h.childPrice||'—'}</small>`:''}
+          ${h.note?`<small>${h.note}</small>`:''}
+        </div>
+        <div class="admin-hotel-actions hotel-bank-card-actions">
+          <span class="badge ${h.enabledForStaff!==false?'domestic':'gray'}">${h.enabledForStaff!==false?'نمایش برای فروش':'فقط مدیریت'}</span>
+          <button class="soft" onclick="toggleHotelPhotoPanel('${h.id}')">کنترل عکس‌ها</button>
+          <button class="soft" onclick="editHotelItem('${h.id}')">ویرایش</button>
+          <button class="soft" onclick="toggleHotelItem('${h.id}')">${h.enabledForStaff!==false?'عدم نمایش':'نمایش برای فروش'}</button>
+          <button class="danger" onclick="deleteHotelItem('${h.id}')">حذف</button>
+        </div>
+        ${hotelCatalogPhotoPanel(h)}
+      </div>`).join('')}</div>
+    </div>`
+  }).join('')||'<div class="empty-state-mini">موردی پیدا نشد.</div>'}`;
 }
 function toggleHotelDestination(dest,on){
   saveHotelCatalog(hotelCatalog().map(h=>(h.destination||h.dest||'عمومی')===dest?{...h,enabledForStaff:!!on}:h));
@@ -999,6 +1108,100 @@ function bulkToggleHotelCatalog(on){
 function toggleVisaItem(id){saveVisaServices(visaServices().map(v=>v.id===id?{...v,active:v.active===false}:v));renderVisas()}
 function deleteVisaItem(id){if(confirm('حذف شود؟')){saveVisaServices(visaServices().filter(v=>v.id!==id));renderVisas()}}
 
+
+
+function airlineLogoAdmin(a){
+  return a.logo?`<img src="${a.logo}" onerror="this.style.display='none'">`:`<span>${(a.nameFa||a.nameEn||'A').slice(0,1)}</span>`;
+}
+function renderAirlineCatalog(){
+  const box=$('airlineCatalogTable');if(!box)return;
+  const q=($('airlineSearch')?.value||'').trim().toLowerCase();
+  const type=$('airlineTypeFilter')?.value||'all';
+  const show=$('airlineShowFilter')?.value||'all';
+  let list=airlineCatalog();
+  if(q)list=list.filter(a=>(a.nameFa+' '+a.nameEn+' '+a.code).toLowerCase().includes(q));
+  if(type!=='all')list=list.filter(a=>a.type===type);
+  if(show==='on')list=list.filter(a=>a.enabledForStaff!==false);
+  if(show==='off')list=list.filter(a=>a.enabledForStaff===false);
+  const grouped=list.reduce((acc,a)=>{const k=a.type==='domestic'?'داخلی':'خارجی';(acc[k]||(acc[k]=[])).push(a);return acc},{});
+  box.innerHTML=`<div class="airline-bank-summary">
+    <span>کل ایرلاین‌ها: <b>${faNum(airlineCatalog().length)}</b></span>
+    <span>نمایش برای فروش: <b>${faNum(airlineCatalog().filter(a=>a.enabledForStaff!==false).length)}</b></span>
+    <span>نتیجه فیلتر: <b>${faNum(list.length)}</b></span>
+  </div>${Object.entries(grouped).map(([group,rows])=>`<div class="airline-group-card">
+    <div class="airline-group-head"><h4>${group}</h4><span>${faNum(rows.length)} مورد</span></div>
+    <div class="airline-card-list">${rows.map(a=>`<div class="airline-admin-card ${a.enabledForStaff!==false?'active-for-staff':'off-for-staff'}">
+      <div class="airline-logo-admin">${airlineLogoAdmin(a)}</div>
+      <div class="airline-info-admin"><b>${a.nameFa||'—'}</b><small dir="ltr">${a.nameEn||'—'} ${a.code?`| ${a.code}`:''}</small>${a.note?`<small>${a.note}</small>`:''}</div>
+      <div class="airline-actions-admin">
+        <span class="badge ${a.enabledForStaff!==false?'domestic':'gray'}">${a.enabledForStaff!==false?'نمایش برای فروش':'فقط مدیریت'}</span>
+        <button class="soft" onclick="editAirlineItem('${a.id}')">ویرایش</button>
+        <button class="soft" onclick="toggleAirlineItem('${a.id}')">${a.enabledForStaff!==false?'عدم نمایش':'نمایش برای فروش'}</button>
+        <button class="danger" onclick="deleteAirlineItem('${a.id}')">حذف</button>
+      </div>
+    </div>`).join('')}</div>
+  </div>`).join('')||'<div class="empty-state-mini">ایرلاینی پیدا نشد.</div>'}`;
+}
+function saveAirlineItem(){
+  const nameFa=$('airlineNameFa')?.value?.trim()||'';
+  if(!nameFa)return alert('نام فارسی ایرلاین را وارد کن');
+  const editId=$('airlineNameFa').dataset.editId||'';
+  const item={
+    id:editId||'air-'+Date.now(),
+    nameFa,
+    nameEn:$('airlineNameEn')?.value?.trim()||'',
+    code:$('airlineCode')?.value?.trim()||'',
+    logo:$('airlineLogo')?.value?.trim()||'',
+    type:$('airlineType')?.value||'international',
+    enabledForStaff:$('airlineEnabled')?.value==='true',
+    note:$('airlineNote')?.value?.trim()||''
+  };
+  const list=airlineCatalog();
+  const i=list.findIndex(a=>a.id===editId);
+  if(i>=0)list[i]={...list[i],...item};else list.push(item);
+  saveAirlineCatalog(list);
+  ['airlineNameFa','airlineNameEn','airlineCode','airlineLogo','airlineNote'].forEach(id=>{if($(id))$(id).value=''});
+  if($('airlineNameFa'))$('airlineNameFa').dataset.editId='';
+  if($('airlineType'))$('airlineType').value='international';
+  if($('airlineEnabled'))$('airlineEnabled').value='true';
+  renderAirlineCatalog();
+  showToast(editId?'ایرلاین ویرایش شد':'ایرلاین اضافه شد');
+}
+function editAirlineItem(id){
+  const a=airlineCatalog().find(x=>x.id===id);if(!a)return;
+  $('airlineNameFa').value=a.nameFa||'';
+  $('airlineNameFa').dataset.editId=id;
+  $('airlineNameEn').value=a.nameEn||'';
+  $('airlineCode').value=a.code||'';
+  $('airlineLogo').value=a.logo||'';
+  $('airlineType').value=a.type||'international';
+  $('airlineEnabled').value=String(a.enabledForStaff!==false);
+  $('airlineNote').value=a.note||'';
+  document.getElementById('admin-airlines')?.scrollIntoView({behavior:'smooth'});
+  showToast('ایرلاین برای ویرایش آماده شد');
+}
+function toggleAirlineItem(id){
+  saveAirlineCatalog(airlineCatalog().map(a=>a.id===id?{...a,enabledForStaff:!(a.enabledForStaff!==false)}:a));
+  renderAirlineCatalog();
+  showToast('وضعیت ایرلاین تغییر کرد');
+}
+function deleteAirlineItem(id){
+  if(!confirm('این ایرلاین حذف شود؟'))return;
+  saveAirlineCatalog(airlineCatalog().filter(a=>a.id!==id));
+  renderAirlineCatalog();
+  showToast('ایرلاین حذف شد');
+}
+function bulkToggleAirlines(on){
+  if(!confirm(on?'همه ایرلاین‌ها برای فروش نمایش داده شوند؟':'همه ایرلاین‌ها از پنل فروش مخفی شوند؟'))return;
+  saveAirlineCatalog(airlineCatalog().map(a=>({...a,enabledForStaff:!!on})));
+  renderAirlineCatalog();
+  showToast('وضعیت ایرلاین‌ها تغییر کرد');
+}
+function resetAirlines(){
+  if(!confirm('لیست ایرلاین‌ها به نمونه اولیه برگردد؟'))return;
+  saveAirlineCatalog(defaultAirlineCatalog());
+  renderAirlineCatalog();
+}
 
 function renderVisas(){
   const box=$('visaTable');if(!box)return;
