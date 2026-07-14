@@ -8,7 +8,7 @@ const SUPABASE_URL = 'https://npewgytsemqhrttuvoba.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wZXdneXRzZW1xaHJ0dHV2b2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5MDkxOTYsImV4cCI6MjA5OTQ4NTE5Nn0.KdR-V7DbN_IfOyHum9y-Z0mYsqpkG-YxkpQBEHZX9F0';
 const SUPABASE_TABLE = 'safaro_store';
 const SUPABASE_ENABLED = !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_');
-const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','airlineCatalog','currencyCatalog','staffAccounts','customerTrail'];
+const SUPABASE_KEYS = ['settings','tours','orders','leads','contactStaff','discounts','visaServices','hotelCatalog','airlineCatalog','currencyCatalog','externalSourceSettings','staffAccounts','customerTrail'];
 let supabaseClient = null;
 let supabaseBootSynced = false;
 let supabaseWriteTimers = {};
@@ -94,6 +94,7 @@ function supabaseDefaultValue(k){
   if(k==='hotelCatalog')return typeof defaultHotelCatalog==='function'?defaultHotelCatalog():[];
   if(k==='airlineCatalog')return typeof defaultAirlineCatalog==='function'?defaultAirlineCatalog():[];
   if(k==='currencyCatalog')return typeof defaultCurrencyCatalog==='function'?defaultCurrencyCatalog():[];
+  if(k==='externalSourceSettings')return typeof defaultExternalSourceSettings==='function'?defaultExternalSourceSettings():{};
   if(k==='staffAccounts')return typeof DEFAULT_STAFF_ACCOUNTS!=='undefined'?DEFAULT_STAFF_ACCOUNTS:(typeof DEFAULT_STAFF!=='undefined'?DEFAULT_STAFF:[]);
   if(k==='customerTrail')return [];
   return {};
@@ -5733,15 +5734,149 @@ function safaroIranianImportedTours(){
     };
   });
 }
-function importSafaroIranianTours(){
-  const incoming=safaroIranianImportedTours();
+function importSafaroIranianTours(){return importSafaroIranianToursUpsert();}
+
+
+function alefbaImportedTours(){
+  const raw=[
+    {title:'تور ۱۴روزه برزیل و آمازون با کشتی کروز',dest:'برزیل',duration:'۱۱ شب و ۱۴ روز',airline:'ترکیش',price:4790,priceCurrency:'USD',star:5,hotel:'هتل‌های منتخب برزیل و کشتی کروز',service:'پرواز، اقامت، گشت، راهنما',sourceKey:'alefba-brazil-amazon-cruise-14'},
+    {title:'تور ۱۰روزه ویتنام تابستان با پرواز مستقیم',dest:'ویتنام',duration:'۹ شب و ۱۰ روز',airline:'معراج ایر',price:85000000,priceCurrency:'IRR',extraPrice:'1495 دلار',star:4,hotel:'هتل‌های منتخب ویتنام',service:'پرواز مستقیم، اقامت، ترنسفر، گشت',sourceKey:'alefba-vietnam-summer-10'},
+    {title:'تور ۸روزه تونس مرداد',dest:'تونس',duration:'۷ شب و ۸ روز',airline:'معراج ایر',price:69000000,priceCurrency:'IRR',extraPrice:'795 دلار',star:4,hotel:'هتل‌های منتخب تونس',service:'پرواز، اقامت، ترنسفر، گشت',sourceKey:'alefba-tunisia-8'},
+    {title:'تور روسیه؛ مسکو و سن پترزبورگ',dest:'روسیه',duration:'۷ شب و ۸ روز',airline:'معراج ایر',price:44900000,priceCurrency:'IRR',extraPrice:'695 دلار',star:4,hotel:'هتل‌های منتخب مسکو و سن‌پترزبورگ',service:'پرواز، اقامت، ترنسفر، ویزا',sourceKey:'alefba-russia-moscow-spb-8'},
+    {title:'تور استانبول الفبای سفر',dest:'استانبول',duration:'۳ شب و ۴ روز',airline:'پرواز رفت و برگشت',price:0,priceCurrency:'IRR',star:4,hotel:'هتل منتخب استانبول',service:'پرواز، اقامت، بیمه، ترنسفر',sourceKey:'alefba-istanbul-general'},
+    {title:'تور آنتالیا الفبای سفر',dest:'آنتالیا',duration:'۶ شب و ۷ روز',airline:'پرواز رفت و برگشت',price:0,priceCurrency:'IRR',star:5,hotel:'هتل UALL منتخب آنتالیا',service:'پرواز، اقامت، بیمه، ترنسفر',sourceKey:'alefba-antalya-general'},
+    {title:'تور کوش آداسی الفبای سفر',dest:'کوش‌آداسی',duration:'۶ شب و ۷ روز',airline:'پرواز رفت و برگشت',price:0,priceCurrency:'IRR',star:5,hotel:'هتل UALL منتخب کوش‌آداسی',service:'پرواز، اقامت، بیمه، ترنسفر',sourceKey:'alefba-kusadasi-general'},
+    {title:'تور دبی الفبای سفر',dest:'دبی',duration:'۳ شب و ۴ روز',airline:'پرواز رفت و برگشت',price:0,priceCurrency:'IRR',star:4,hotel:'هتل منتخب دبی',service:'پرواز، اقامت، بیمه',sourceKey:'alefba-dubai-general'},
+    {title:'تور مالزی الفبای سفر',dest:'کوالالامپور',duration:'۶ شب و ۷ روز',airline:'پرواز رفت و برگشت',price:0,priceCurrency:'IRR',star:4,hotel:'هتل منتخب مالزی',service:'پرواز، اقامت، بیمه، ترنسفر',sourceKey:'alefba-malaysia-general'},
+    {title:'تور تایلند الفبای سفر',dest:'بانکوک',duration:'۷ شب و ۸ روز',airline:'پرواز رفت و برگشت',price:0,priceCurrency:'IRR',star:4,hotel:'هتل منتخب تایلند',service:'پرواز، اقامت، بیمه، ترنسفر',sourceKey:'alefba-thailand-general'},
+    {title:'تور ارمنستان الفبای سفر',dest:'ایروان',duration:'۳ شب و ۴ روز',airline:'پرواز یا زمینی',price:0,priceCurrency:'IRR',star:4,hotel:'هتل منتخب ایروان',service:'اقامت، ترنسفر، بیمه',sourceKey:'alefba-yerevan-general'},
+    {title:'تور گرجستان الفبای سفر',dest:'تفلیس',duration:'۳ شب و ۴ روز',airline:'پرواز رفت و برگشت',price:0,priceCurrency:'IRR',star:4,hotel:'هتل منتخب تفلیس',service:'پرواز، اقامت، بیمه، ترنسفر',sourceKey:'alefba-georgia-general'}
+  ];
+  return raw.map((x,i)=>{
+    const img=(typeof themedTourImage==='function'?themedTourImage({dest:x.dest,title:x.title}):'')||DEFAULT_IMG;
+    const price=Number(x.price||0)||1000000;
+    return {
+      id:890000+i,
+      sourceKey:x.sourceKey,
+      sourceImported:true,
+      sourceName:'AlefbaSafar',
+      sourceUrl:'https://www.alefbatour.com/tour',
+      sourceSnapshot:true,
+      title:x.title,
+      dest:x.dest,
+      duration:normalizeDurationNightFirst(x.duration),
+      airline:x.airline||'پرواز رفت و برگشت',
+      returnAirline:x.airline||'پرواز رفت و برگشت',
+      flightTime:'',
+      returnFlightTime:'',
+      price,
+      priceCurrency:x.priceCurrency||'IRR',
+      extraPrice:x.extraPrice||'',
+      label:'واردشده از الفبای سفر',
+      type:['کیش','مشهد','قشم','چابهار'].includes(x.dest)?'domestic':'international',
+      level:'special',
+      categories:['special'],
+      rating:4.6,
+      status:'active',
+      lastMinute:false,
+      img,
+      gallery:[img],
+      dates:['تاریخ طبق پکیج منبع'],
+      hotels:[{name:x.hotel,star:Number(x.star)||4,price,capacity:10,showInBuyer:true,meal:x.service||'',photos:[]}],
+      desc:`این تور بر اساس اطلاعات عمومی صفحه تورهای الفبای سفر به سایت اضافه شده و برای بررسی و ویرایش مدیر آماده است. خدمات ثبت‌شده: ${x.service||'—'} ${x.extraPrice?`| هزینه تکمیلی: ${x.extraPrice}`:''}`,
+      includes:['بیمه مسافرتی','اقامت هتل',...(String(x.service||'').includes('پرواز')?['بلیط رفت و برگشت']:[]),...(String(x.service||'').includes('ترنسفر')?['ترنسفر']:[])],
+      excludes:[],
+      itinerary:[],
+      docs:['مدارک شناسایی معتبر / پاسپورت برای مقاصد خارجی'],
+      cancellation:'قبل از فروش نهایی توسط مدیر بررسی شود.',
+      childPolicy:'نرخ کودک طبق شرایط تور محاسبه می‌شود.',
+      sectionVisibility:Object.assign(defaultSections(),{}),
+      reviews:[],
+      lastEditedBy:'واردسازی الفبای سفر',
+      lastEditedAt:new Date().toISOString()
+    };
+  });
+}
+function upsertImportedTours(incoming,sourceName){
+  const now=new Date().toISOString();
   const ts=tours();
-  const existing=new Set(ts.map(t=>t.sourceKey||String(t.title||'').trim()));
-  const add=incoming.filter(t=>!existing.has(t.sourceKey)&&!existing.has(String(t.title||'').trim()));
-  if(!add.length){showToast('قبلاً همه تورهای سفرو ایرانیان وارد شده‌اند');return 0}
-  saveTours([...ts,...add]);
-  showToast(`${faNum(add.length)} تور از سفرو ایرانیان وارد شد`);
-  return add.length;
+  const byKey=new Map(ts.map((t,i)=>[(t.sourceKey||String(t.title||'').trim()),{t,i}]));
+  let added=0,updated=0;
+  incoming.forEach(t=>{
+    const key=t.sourceKey||String(t.title||'').trim();
+    if(byKey.has(key)){
+      const {i, t:old}=byKey.get(key);
+      ts[i]={...old,...t,id:old.id||t.id,hotels:(old.hotels&&old.hotels.length)?old.hotels:t.hotels,status:old.status||t.status,lastEditedBy:`آپدیت ${sourceName}`,lastEditedAt:now};
+      updated++;
+    }else{
+      ts.push({...t,lastEditedBy:`واردسازی ${sourceName}`,lastEditedAt:now});
+      added++;
+    }
+  });
+  saveTours(ts);
+  return {added,updated,total:incoming.length};
+}
+function importAlefbaTours(){
+  const res=upsertImportedTours(alefbaImportedTours(),'الفبای سفر');
+  showToast(`${faNum(res.added)} تور جدید و ${faNum(res.updated)} تور آپدیت شد`);
+  return res.added+res.updated;
+}
+function importSafaroIranianToursUpsert(){
+  const res=upsertImportedTours(safaroIranianImportedTours(),'سفرو ایرانیان');
+  showToast(`${faNum(res.added)} تور جدید و ${faNum(res.updated)} تور آپدیت شد`);
+  return res.added+res.updated;
+}
+function defaultExternalSourceSettings(){
+  return {
+    safaroIranian:{enabled:true,daily:false,lastSync:'',lastResult:''},
+    alefba:{enabled:true,daily:false,lastSync:'',lastResult:''}
+  };
+}
+function externalSourceSettings(){return read('externalSourceSettings',defaultExternalSourceSettings())}
+function saveExternalSourceSettings(v){write('externalSourceSettings',Object.assign(defaultExternalSourceSettings(),v||{}))}
+function shouldRunDailySource(key){
+  const s=externalSourceSettings()[key]||{};
+  if(!s.daily)return false;
+  if(!s.lastSync)return true;
+  return Date.now()-new Date(s.lastSync).getTime()>23*60*60*1000;
+}
+function runSourceImport(key,manual=false){
+  const settings=externalSourceSettings();
+  const now=new Date().toISOString();
+  let count=0,label='';
+  if(key==='safaroIranian'){count=importSafaroIranianToursUpsert();label='سفرو ایرانیان'}
+  if(key==='alefba'){count=importAlefbaTours();label='الفبای سفر'}
+  settings[key]=Object.assign(settings[key]||{},{lastSync:now,lastResult:`${count} مورد در ${new Date().toLocaleString('fa-IR')} پردازش شد`});
+  saveExternalSourceSettings(settings);
+  if(manual)showToast(`آپدیت ${label} انجام شد`);
+  return count;
+}
+function runAllSourceImports(manual=false){
+  let total=0;
+  total+=runSourceImport('safaroIranian',false);
+  total+=runSourceImport('alefba',false);
+  if(manual)showToast(`آپدیت منابع انجام شد: ${faNum(total)} مورد`);
+  return total;
+}
+function runDailySourceImportsIfNeeded(){
+  const settings=externalSourceSettings();
+  let total=0;
+  if((settings.safaroIranian||{}).enabled!==false&&shouldRunDailySource('safaroIranian'))total+=runSourceImport('safaroIranian',false);
+  if((settings.alefba||{}).enabled!==false&&shouldRunDailySource('alefba'))total+=runSourceImport('alefba',false);
+  return total;
+}
+function toggleSourceDaily(key,on){
+  const s=externalSourceSettings();
+  s[key]=Object.assign(s[key]||{}, {daily:!!on, enabled:true});
+  saveExternalSourceSettings(s);
+}
+function importedSourceStats(){
+  const ts=tours().filter(t=>t.sourceImported||t.sourceName);
+  return {
+    safaro:ts.filter(t=>t.sourceName==='SafaroIranian').length,
+    alefba:ts.filter(t=>t.sourceName==='AlefbaSafar').length,
+    total:ts.length
+  };
 }
 
 const DEFAULT_VISAS=[

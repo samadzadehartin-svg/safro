@@ -3394,3 +3394,89 @@ body:not(.admin-page) .customer-trail-list{display:none!important}
 .safaro-import-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:12px}
 .safaro-import-preview>div{border:1px solid var(--b);background:var(--s);border-radius:16px;padding:10px;display:grid;gap:5px}
 .safaro-import-preview small{color:var(--t2);line-height:1.8}
+
+
+/* External tour sources: Safaro Iranian + Alefba */
+.source-import-section{
+  background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(241,248,255,.92))!important;
+  border:1px solid rgba(74,159,216,.22)!important;
+  border-radius:28px!important;
+}
+.source-import-note{
+  border:1px dashed rgba(74,159,216,.38);
+  background:rgba(74,159,216,.07);
+  border-radius:18px;
+  padding:12px;
+  margin:12px 0;
+  font-size:12px;
+  color:var(--t2);
+  line-height:2;
+}
+.source-import-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:14px;
+  margin:14px 0;
+}
+.source-import-card{
+  border:1px solid var(--b);
+  border-radius:22px;
+  background:var(--s);
+  padding:14px;
+  box-shadow:0 12px 32px rgba(15,23,42,.05);
+  display:grid;
+  gap:10px;
+}
+.source-import-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.source-import-head h4{
+  margin:8px 0 0;
+  line-height:1.8;
+}
+.source-import-head>b{
+  color:var(--p);
+  background:rgba(74,159,216,.09);
+  border:1px solid rgba(74,159,216,.18);
+  border-radius:16px;
+  padding:8px 10px;
+  white-space:nowrap;
+}
+.source-daily-toggle{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--b);
+  border-radius:16px;
+  padding:10px 12px;
+  background:rgba(248,250,252,.72);
+  font-size:13px;
+  font-weight:900;
+}
+.source-import-status{
+  font-size:12px;
+  color:var(--t2);
+  background:rgba(15,23,42,.03);
+  border-radius:14px;
+  padding:9px 10px;
+  min-height:38px;
+}
+.dark .source-import-section,
+.dark .source-import-card{
+  background:rgba(15,23,42,.62)!important;
+}
+.dark .source-daily-toggle,
+.dark .source-import-status{
+  background:rgba(15,23,42,.35);
+}
+
+
+/* Hide imported/source labels in buyer only */
+body.buyer-page .source-imported-badge,
+body.buyer-page .imported-tour-badge,
+body.buyer-page .source-label-badge{
+  display:none!important;
+}

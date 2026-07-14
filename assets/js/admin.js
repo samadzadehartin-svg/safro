@@ -91,7 +91,7 @@ function excelTourImportBox(role){
 }
 
 
-function initAdmin(){mount('admin');if(!authGate('admin'))return renderLogin();renderAdmin()}
+function initAdmin(){mount('admin');if(!authGate('admin'))return renderLogin();try{runDailySourceImportsIfNeeded()}catch(e){console.warn('daily source import failed',e)}renderAdmin()}
 function renderLogin(){$('app').innerHTML=`<div class="card pad login-box"><h2>ورود مدیریت</h2><div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div><p class="small">رمز دمو: admin123</p><input id="pass" class="field" type="password" placeholder="رمز *"><button class="btn" style="width:100%;margin-top:12px" onclick="doLogin()">ورود</button></div>`}
 function doLogin(){if(loginRole('admin',$('pass').value))location.reload();else alert('رمز اشتباه است')}
 
@@ -150,13 +150,49 @@ function adminBatchUpdatePrices(){
 }
 
 
-function safeSafaroIranianImportedTours(){try{return safaroIranianImportedTours()}catch(e){console.warn('safaro import preview failed',e);return []}}
-function adminImportSafaroIranianTours(){
-  const n=importSafaroIranianTours();
-  const box=$('safaroImportResult');
-  if(box)box.innerHTML=n?`<div>${faNum(n)} تور وارد شد. برای نمایش/ویرایش از مدیریت تورها یا پنل فروش استفاده کن.</div>`:'<div>همه تورهای سفرو ایرانیان قبلاً وارد شده‌اند.</div>';
-  try{renderToursAdmin&&renderToursAdmin()}catch(e){}
+
+function sourceLabelFa(key){return key==='alefba'?'الفبای سفر':'سفرو ایرانیان'}
+function sourceUrl(key){return key==='alefba'?'https://www.alefbatour.com/tour':'https://safaroiranian.com/tour/'}
+function renderSourceImportCards(){
+  const s=externalSourceSettings();
+  const stats=importedSourceStats();
+  const sources=[
+    {key:'safaroIranian',title:'سفرو ایرانیان',desc:'تورهای عمومی صفحه تور سفرو ایرانیان',count:stats.safaro},
+    {key:'alefba',title:'الفبای سفر',desc:'تورهای ویژه و مسیرهای محبوب الفبای سفر',count:stats.alefba}
+  ];
+  return `<div class="source-import-grid">${sources.map(src=>{
+    const cfg=s[src.key]||{};
+    return `<div class="source-import-card">
+      <div class="source-import-head">
+        <div><span class="badge international">${src.title}</span><h4>${src.desc}</h4></div>
+        <b>${faNum(src.count||0)} تور</b>
+      </div>
+      <p class="small">آدرس منبع: <span dir="ltr">${sourceUrl(src.key)}</span></p>
+      <label class="source-daily-toggle"><input type="checkbox" ${cfg.daily?'checked':''} onchange="adminToggleDailySource('${src.key}',this.checked)"> هر روز بخوان و آپدیت کن</label>
+      <div class="source-import-status">${cfg.lastResult||'هنوز آپدیت روزانه اجرا نشده است.'}</div>
+      <div class="actions">
+        <button class="btn" onclick="adminRunOneSource('${src.key}')">آپدیت همین منبع</button>
+        <button class="soft" onclick="window.open('${sourceUrl(src.key)}','_blank')">باز کردن سایت منبع</button>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
 }
+function adminToggleDailySource(key,on){
+  toggleSourceDaily(key,on);
+  renderAdmin();
+  showToast(on?`آپدیت روزانه ${sourceLabelFa(key)} فعال شد`:`آپدیت روزانه ${sourceLabelFa(key)} غیرفعال شد`);
+}
+function adminRunOneSource(key){
+  runSourceImport(key,true);
+  renderAdmin();
+}
+function adminRunAllSources(){
+  runAllSourceImports(true);
+  renderAdmin();
+}
+
+function safeSafaroIranianImportedTours(){try{return safaroIranianImportedTours()}catch(e){console.warn('safaro import preview failed',e);return []}}
+function adminImportSafaroIranianTours(){adminRunAllSources()}
 
 function renderAdmin(){
   const os=orders(),sales=os.reduce((s,o)=>s+Number(o.totalPrice||0),0);
@@ -172,7 +208,7 @@ function renderAdmin(){
 
   <div class="admin-layout">
     <aside class="admin-side-nav">
-      <a href="#admin-safaro-import"><i class="fa-solid fa-cloud-arrow-down"></i> واردسازی سفرو ایرانیان</a>
+      <a href="#admin-safaro-import"><i class="fa-solid fa-cloud-arrow-down"></i> آپدیت منابع تور</a>
       <a href="#admin-tour-images"><i class="fa-regular fa-image"></i> عکس تورها</a>
       <a href="#admin-staff-accounts"><i class="fa-regular fa-user"></i> تیم فروش</a>
       <a href="#admin-price-sheet"><i class="fa-solid fa-file-csv"></i> آپدیت قیمت</a>
@@ -187,14 +223,20 @@ function renderAdmin(){
       <a href="#admin-orders"><i class="fa-solid fa-list-check"></i> رزروها</a>
     </aside>
     <div class="admin-main-stack">
-  
-  <section id="admin-safaro-import" class="card pad safaro-import-section" style="margin-bottom:16px">
+  <section id="admin-safaro-import" class="card pad safaro-import-section source-import-section" style="margin-bottom:16px">
     <div class="row wrap">
-      <div><span class="badge special">واردسازی اطلاعات سفر</span><h3>وارد کردن تورهای سایت سفرو ایرانیان</h3><p class="small">این بخش یک snapshot از اطلاعات عمومی صفحه تورهای سفرو ایرانیان را وارد تورهای سایت می‌کند. بعد از واردسازی، مدیر می‌تواند قیمت، ظرفیت، عکس و وضعیت هر تور را ویرایش کند.</p></div>
-      <div class="actions"><button class="btn" onclick="adminImportSafaroIranianTours()">وارد کردن تورها</button></div>
+      <div>
+        <span class="badge special">واردسازی و آپدیت منابع تور</span>
+        <h3>سفرو ایرانیان + الفبای سفر</h3>
+        <p class="small">از این قسمت تورهای دو منبع را وارد می‌کنی. گزینه «هر روز بخوان و آپدیت کن» باعث می‌شود هر بار پنل مدیریت باز شود، اگر ۲۴ ساعت گذشته باشد همان منبع دوباره آپدیت شود.</p>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="adminRunAllSources()">آپدیت هر دو منبع الان</button>
+      </div>
     </div>
-    <div id="safaroImportResult" class="import-result"></div>
-    <div class="safaro-import-preview">${safeSafaroIranianImportedTours().slice(0,10).map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price)}</small></div>`).join('')}</div>
+    <div class="source-import-note">نکته: اطلاعات واردشده بعد از اضافه‌شدن داخل همین سایت قابل ویرایش، تغییر قیمت، ظرفیت، عکس و وضعیت نمایش است.</div>
+    ${renderSourceImportCards()}
+    <div class="safaro-import-preview">${[...safeSafaroIranianImportedTours().slice(0,6),...alefbaImportedTours().slice(0,6)].map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price||t.price||0)} | ${t.sourceName==='AlefbaSafar'?'الفبای سفر':'سفرو ایرانیان'}</small></div>`).join('')}</div>
   </section>
 
   <section id="admin-tour-images" class="card pad">

@@ -369,6 +369,14 @@ function destinationGuideDetail(t){
   return `<section class="destination-detail-box destination-guide-detail"><div class="row wrap"><div><span class="badge international">راهنمای مقصد</span><h3>${g.title||`راهنمای سفر ${t.dest}`}</h3></div></div><p class="small destination-intro">${g.intro||''}</p><div class="destination-mini-grid"><div><b>مناسب برای</b><p>${(g.bestFor||[]).map(x=>`<span class="destination-chip">${x}</span>`).join('')}</p></div><div><b>دیدنی‌ها و تجربه‌ها</b><ul>${(g.highlights||g.sights||[]).map(x=>`<li>${x}</li>`).join('')}</ul></div><div><b>نکته سفر</b><ul>${(g.tips||[]).map(x=>`<li>${x}</li>`).join('')}</ul></div></div></section>`;
 }
 
+
+function buyerTourLabel(t){
+  const label=String(t?.label||'').trim();
+  const source=String(t?.sourceName||t?.source||t?.sourceGroup||t?.importSource||'').trim();
+  if(t?.sourceImported || source || /وارد\s*شده|واردشده|الفبای سفر|سفرو ایرانیان/i.test(label))return '';
+  return label;
+}
+
 function renderHome(){
  const list=tours().filter(t=>t.status==='active');
  $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${trustSection()}${currencySection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
@@ -409,7 +417,7 @@ function filterHome(){
  }
 }
 function resetHome(){currentCat='all';renderHome()}
-function tourCard(t){const w=wishlist().includes(t.id);return `<article class="card clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><div class="soldout-wrap" style="position:relative;overflow:hidden"><img class="tour-img" src="${t.img||DEFAULT_IMG}" alt="${t.title||''}">${t.lastMinute?'<span class="flash-badge">لحظه آخری</span>':''}</div><div class="pad"><div class="badges">${badges(t)} ${t.label?`<span class="badge special">${t.label}</span>`:''}</div><h3 class="tour-title">${t.title}</h3><div class="meta"><span>${t.dest}</span><span>${normalizeDurationNightFirst(t.duration)}</span><span>${ratingStar()} ${t.rating}</span><span>${faNum(totalCapacity(t))} ظرفیت</span></div><div class="row" style="margin-top:14px;border-top:1px solid var(--b);padding-top:14px"><b class="price">${money(minHotel(t).price)}</b><div class="actions"><button class="soft" onclick="event.stopPropagation();toggleWish(${t.id})"><i class="${w?'fa-solid':'fa-regular'} fa-heart" style="${w?'color:#ef4444':''}"></i></button><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">جزئیات</button></div></div><button class="compare-btn ${compare.has(t.id)?'active':''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id)?'در مقایسه':'افزودن به مقایسه'}</button></div></article>`}
+function tourCard(t){const w=wishlist().includes(t.id);return `<article class="card clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><div class="soldout-wrap" style="position:relative;overflow:hidden"><img class="tour-img" src="${t.img||DEFAULT_IMG}" alt="${t.title||''}">${t.lastMinute?'<span class="flash-badge">لحظه آخری</span>':''}</div><div class="pad"><div class="badges">${badges(t)} ${buyerTourLabel(t)?`<span class="badge special">${buyerTourLabel(t)}</span>`:''}</div><h3 class="tour-title">${t.title}</h3><div class="meta"><span>${t.dest}</span><span>${normalizeDurationNightFirst(t.duration)}</span><span>${ratingStar()} ${t.rating}</span><span>${faNum(totalCapacity(t))} ظرفیت</span></div><div class="row" style="margin-top:14px;border-top:1px solid var(--b);padding-top:14px"><b class="price">${money(minHotel(t).price)}</b><div class="actions"><button class="soft" onclick="event.stopPropagation();toggleWish(${t.id})"><i class="${w?'fa-solid':'fa-regular'} fa-heart" style="${w?'color:#ef4444':''}"></i></button><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">جزئیات</button></div></div><button class="compare-btn ${compare.has(t.id)?'active':''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id)?'در مقایسه':'افزودن به مقایسه'}</button></div></article>`}
 function toggleCompare(id){if(compare.has(id))compare.delete(id);else{if(compare.size>=3)return showToast('حداکثر ۳ تور قابل مقایسه است');compare.add(id)}filterHome()}
 function renderCompareDock(){const d=$('compareDock');if(!d)return;$('compareCount').textContent=faNum(compare.size);d.classList.toggle('on',compare.size>0)}
 function clearCompare(){compare.clear();filterHome()}
