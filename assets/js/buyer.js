@@ -252,7 +252,7 @@ function aboutContactSection(){
 }
 
 function referenceHeroSection(){
-  const activeCount = tours().filter(t=>t.status==='active').length;
+  const activeCount = buyerTours().filter(t=>t.status==='active').length;
   return `<section class="hero-experience combined-hero-card">
     <div class="combined-hero-grid">
       <div class="combined-hero-copy hero-copy-panel">
@@ -377,8 +377,17 @@ function buyerTourLabel(t){
   return label;
 }
 
+
+function buyerVisibleTour(t){
+  if(t?.sourceName==='Parto' && t?.showInBuyer!==true)return false;
+  return true;
+}
+function buyerTours(){
+  return tours().filter(buyerVisibleTour);
+}
+
 function renderHome(){
- const list=tours().filter(t=>t.status==='active');
+ const list=buyerTours().filter(t=>t.status==='active');
  $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${trustSection()}${currencySection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
  <section><div class="row wrap"><h2>قسمت ویژه</h2></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
  <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
@@ -404,7 +413,7 @@ function lastCard(t){return `<article class="last-card soldout-wrap clickable-to
 function filterHome(){
  try{
    let q=$('search')?.value?.trim().toLowerCase()||'',d=$('dest')?.value||'all',sort=$('sort')?.value||'default',star=$('star')?.value||'all',airline=$('airline')?.value?.trim().toLowerCase()||'',onlyCap=$('onlyCap')?.checked||false;
-   let list=tours().filter(t=>t.status==='active'&&(currentCat==='all'||(t.categories||[]).includes(currentCat)||t.type===currentCat||t.level===currentCat)&&(d==='all'||t.dest===d)&&(!q||String(t.title).toLowerCase().includes(q)||String(t.dest).toLowerCase().includes(q))&&(!airline||String(t.airline).toLowerCase().includes(airline))&&(star==='all'||(t.hotels||[]).some(h=>Number(h.star)===Number(star)))&&(!onlyCap||totalCapacity(t)>0));
+   let list=buyerTours().filter(t=>t.status==='active'&&(currentCat==='all'||(t.categories||[]).includes(currentCat)||t.type===currentCat||t.level===currentCat)&&(d==='all'||t.dest===d)&&(!q||String(t.title).toLowerCase().includes(q)||String(t.dest).toLowerCase().includes(q))&&(!airline||String(t.airline).toLowerCase().includes(airline))&&(star==='all'||(t.hotels||[]).some(h=>Number(h.star)===Number(star)))&&(!onlyCap||totalCapacity(t)>0));
    if(sort==='asc')list.sort((a,b)=>minHotel(a).price-minHotel(b).price);
    if(sort==='desc')list.sort((a,b)=>minHotel(b).price-minHotel(a).price);
    if(sort==='rate')list.sort((a,b)=>Number(b.rating||0)-Number(a.rating||0));

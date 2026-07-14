@@ -5784,6 +5784,71 @@ function alefbaImportedTours(){
     };
   });
 }
+function partoImportedTours(){
+  const raw=[{"title": "پرتو | تور استانبول", "dest": "استانبول", "duration": "۳ شب و ۴ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب استانبول", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-استانبول"}, {"title": "پرتو | تور آنتالیا", "dest": "آنتالیا", "duration": "۶ شب و ۷ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب آنتالیا", "star": 5, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-آنتالیا"}, {"title": "پرتو | تور دبی", "dest": "دبی", "duration": "۳ شب و ۴ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب دبی", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-دبی"}, {"title": "پرتو | تور کیش", "dest": "کیش", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب کیش", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-کیش"}, {"title": "پرتو | تور مشهد", "dest": "مشهد", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب مشهد", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-مشهد"}, {"title": "پرتو | تور قشم", "dest": "قشم", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب قشم", "star": 3, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-قشم"}, {"title": "پرتو | تور ایروان", "dest": "ایروان", "duration": "۳ شب و ۴ روز", "airline": "پرواز یا زمینی", "price": 0, "hotel": "هتل منتخب ایروان", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-ایروان"}, {"title": "پرتو | تور تفلیس", "dest": "تفلیس", "duration": "۳ شب و ۴ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب تفلیس", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-تفلیس"}, {"title": "پرتو | تور باتومی", "dest": "باتومی", "duration": "۳ شب و ۴ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب باتومی", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-باتومی"}, {"title": "پرتو | تور وان", "dest": "وان", "duration": "۳ شب و ۴ روز", "airline": "پرواز یا زمینی", "price": 0, "hotel": "هتل منتخب وان", "star": 3, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-وان"}, {"title": "پرتو | تور بدروم", "dest": "بدروم", "duration": "۶ شب و ۷ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب بدروم", "star": 5, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-بدروم"}, {"title": "پرتو | تور کوش‌آداسی", "dest": "کوش‌آداسی", "duration": "۶ شب و ۷ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب کوش‌آداسی", "star": 5, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-کوشآداسی"}, {"title": "پرتو | تور کوالالامپور", "dest": "کوالالامپور", "duration": "۶ شب و ۷ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب کوالالامپور", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-کوالالامپور"}, {"title": "پرتو | تور بانکوک", "dest": "بانکوک", "duration": "۷ شب و ۸ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب بانکوک", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-بانکوک"}, {"title": "پرتو | تور روسیه", "dest": "روسیه", "duration": "۷ شب و ۸ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب روسیه", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-روسیه"}, {"title": "پرتو | تور چین", "dest": "چین", "duration": "۷ شب و ۸ روز", "airline": "پرواز رفت و برگشت", "price": 0, "hotel": "هتل منتخب چین", "star": 4, "service": "پرواز، اقامت، بیمه، ترنسفر", "sourceKey": "parto-چین"}];
+  return raw.map((x,i)=>{
+    const img=(typeof themedTourImage==='function'?themedTourImage({dest:x.dest,title:x.title}):'')||DEFAULT_IMG;
+    const price=Number(x.price||0)||1000000;
+    return {
+      id:900000+i,
+      sourceKey:x.sourceKey,
+      sourceImported:true,
+      sourceName:'Parto',
+      sourceUrl:'Parto travel source / web-service',
+      sourceSnapshot:true,
+      adminOnlySource:true,
+      showInBuyer:false,
+      showInStaff:false,
+      title:x.title,
+      dest:x.dest,
+      duration:normalizeDurationNightFirst(x.duration),
+      airline:x.airline||'پرواز رفت و برگشت',
+      returnAirline:x.airline||'پرواز رفت و برگشت',
+      flightTime:'',
+      returnFlightTime:'',
+      price,
+      priceCurrency:'IRR',
+      label:'پرتو - فقط مدیریت',
+      type:['کیش','مشهد','قشم','چابهار'].includes(x.dest)?'domestic':'international',
+      level:'special',
+      categories:['special'],
+      rating:4.6,
+      status:'active',
+      lastMinute:false,
+      img,
+      gallery:[img],
+      dates:['تاریخ طبق منبع پرتو'],
+      hotels:[{name:x.hotel,star:Number(x.star)||4,price,capacity:10,showInBuyer:true,meal:x.service||'',photos:[]}],
+      desc:`این تور از منبع پرتو به‌صورت فقط مدیریت وارد شده است. تا زمانی که مدیر منتشر نکند در پنل فروش و خریدار نمایش داده نمی‌شود. خدمات ثبت‌شده: ${x.service||'—'}`,
+      includes:['بیمه مسافرتی','اقامت هتل',...(String(x.service||'').includes('پرواز')?['بلیط رفت و برگشت']:[]),...(String(x.service||'').includes('ترنسفر')?['ترنسفر']:[])],
+      excludes:[],
+      itinerary:[],
+      docs:['مدارک شناسایی معتبر / پاسپورت برای مقاصد خارجی'],
+      cancellation:'قبل از فروش نهایی توسط مدیر بررسی شود.',
+      childPolicy:'نرخ کودک طبق شرایط تور محاسبه می‌شود.',
+      sectionVisibility:Object.assign(defaultSections(),{}),
+      reviews:[],
+      lastEditedBy:'واردسازی پرتو',
+      lastEditedAt:new Date().toISOString()
+    };
+  });
+}
+function importPartoTours(){
+  const res=upsertImportedTours(partoImportedTours(),'پرتو');
+  saveTours(tours().map(t=>t.sourceName==='Parto'?{...t,adminOnlySource:true,showInBuyer:t.showInBuyer===true,showInStaff:t.showInStaff===true}:t));
+  showToast(`${faNum(res.added)} تور جدید و ${faNum(res.updated)} تور پرتو آپدیت شد`);
+  return res.added+res.updated;
+}
+function setPartoPublishMode(mode){
+  const publish=mode==='publish';
+  saveTours(tours().map(t=>t.sourceName==='Parto'?{...t,adminOnlySource:!publish,showInBuyer:publish,showInStaff:publish}:t));
+  showToast(publish?'تورهای پرتو برای فروش و خریدار منتشر شد':'تورهای پرتو فقط در مدیریت قرار گرفت');
+}
+function partoPublishStats(){
+  const list=tours().filter(t=>t.sourceName==='Parto');
+  return {total:list.length,published:list.filter(t=>t.showInBuyer===true||t.showInStaff===true).length,adminOnly:list.filter(t=>t.showInBuyer!==true&&t.showInStaff!==true).length};
+}
+
 function upsertImportedTours(incoming,sourceName){
   const now=new Date().toISOString();
   const ts=tours();
@@ -5816,7 +5881,8 @@ function importSafaroIranianToursUpsert(){
 function defaultExternalSourceSettings(){
   return {
     safaroIranian:{enabled:true,daily:false,lastSync:'',lastResult:''},
-    alefba:{enabled:true,daily:false,lastSync:'',lastResult:''}
+    alefba:{enabled:true,daily:false,lastSync:'',lastResult:''},
+    parto:{enabled:true,daily:false,lastSync:'',lastResult:''}
   };
 }
 function externalSourceSettings(){return read('externalSourceSettings',defaultExternalSourceSettings())}
@@ -5833,6 +5899,7 @@ function runSourceImport(key,manual=false){
   let count=0,label='';
   if(key==='safaroIranian'){count=importSafaroIranianToursUpsert();label='سفرو ایرانیان'}
   if(key==='alefba'){count=importAlefbaTours();label='الفبای سفر'}
+  if(key==='parto'){count=importPartoTours();label='پرتو'}
   settings[key]=Object.assign(settings[key]||{},{lastSync:now,lastResult:`${count} مورد در ${new Date().toLocaleString('fa-IR')} پردازش شد`});
   saveExternalSourceSettings(settings);
   if(manual)showToast(`آپدیت ${label} انجام شد`);
@@ -5842,6 +5909,7 @@ function runAllSourceImports(manual=false){
   let total=0;
   total+=runSourceImport('safaroIranian',false);
   total+=runSourceImport('alefba',false);
+  total+=runSourceImport('parto',false);
   if(manual)showToast(`آپدیت منابع انجام شد: ${faNum(total)} مورد`);
   return total;
 }
@@ -5850,6 +5918,7 @@ function runDailySourceImportsIfNeeded(){
   let total=0;
   if((settings.safaroIranian||{}).enabled!==false&&shouldRunDailySource('safaroIranian'))total+=runSourceImport('safaroIranian',false);
   if((settings.alefba||{}).enabled!==false&&shouldRunDailySource('alefba'))total+=runSourceImport('alefba',false);
+  if((settings.parto||{}).enabled!==false&&shouldRunDailySource('parto'))total+=runSourceImport('parto',false);
   return total;
 }
 function toggleSourceDaily(key,on){
@@ -5862,6 +5931,7 @@ function importedSourceStats(){
   return {
     safaro:ts.filter(t=>t.sourceName==='SafaroIranian').length,
     alefba:ts.filter(t=>t.sourceName==='AlefbaSafar').length,
+    parto:ts.filter(t=>t.sourceName==='Parto').length,
     total:ts.length
   };
 }

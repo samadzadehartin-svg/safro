@@ -151,14 +151,15 @@ function adminBatchUpdatePrices(){
 
 
 
-function sourceLabelFa(key){return key==='alefba'?'الفبای سفر':'سفرو ایرانیان'}
-function sourceUrl(key){return key==='alefba'?'https://www.alefbatour.com/tour':'https://safaroiranian.com/tour/'}
+function sourceLabelFa(key){return key==='parto'?'پرتو':(key==='alefba'?'الفبای سفر':'سفرو ایرانیان')}
+function sourceUrl(key){if(key==='parto')return 'Parto';return key==='alefba'?'https://www.alefbatour.com/tour':'https://safaroiranian.com/tour/'}
 function renderSourceImportCards(){
   const s=externalSourceSettings();
   const stats=importedSourceStats();
   const sources=[
     {key:'safaroIranian',title:'سفرو ایرانیان',desc:'بانک تورهای سفرو ایرانیان؛ مقصدها، هتل، سرویس و قیمت پایه',count:stats.safaro},
-    {key:'alefba',title:'الفبای سفر',desc:'بانک تورهای الفبای سفر؛ مقصدها، هتل، سرویس و قیمت پایه',count:stats.alefba}
+    {key:'alefba',title:'الفبای سفر',desc:'بانک تورهای الفبای سفر؛ مقصدها، هتل، سرویس و قیمت پایه',count:stats.alefba},
+    {key:'parto',title:'پرتو',desc:'بانک تورهای پرتو؛ پیش‌فرض فقط مدیریت، قابل انتشار برای فروش و خریدار',count:stats.parto||0}
   ];
   return `<div class="source-import-grid">${sources.map(src=>{
     const cfg=s[src.key]||{};
@@ -169,10 +170,10 @@ function renderSourceImportCards(){
       </div>
       <p class="small">آدرس منبع: <span dir="ltr">${sourceUrl(src.key)}</span></p>
       <label class="source-daily-toggle"><input type="checkbox" ${cfg.daily?'checked':''} onchange="adminToggleDailySource('${src.key}',this.checked)"> هر روز بخوان و آپدیت کن</label>
-      <div class="source-import-status">${cfg.lastResult||'هنوز آپدیت روزانه اجرا نشده است.'}</div>
+      <div class="source-import-status">${cfg.lastResult||'هنوز آپدیت روزانه اجرا نشده است.'}</div>${src.key==='parto'?`<div class="parto-publish-box"><div>${(()=>{const p=partoPublishStats();return `کل: ${faNum(p.total)} | منتشرشده: ${faNum(p.published)} | فقط مدیریت: ${faNum(p.adminOnly)}`})()}</div><button class="soft" onclick="adminSetPartoPublish('admin')">فقط مدیریت</button><button class="btn" onclick="adminSetPartoPublish('publish')">انتشار برای فروش و خریدار</button></div>`:''}
       <div class="actions">
         <button class="btn" onclick="adminRunOneSource('${src.key}')">آپدیت همین منبع</button>
-        <button class="soft" onclick="window.open('${sourceUrl(src.key)}','_blank')">باز کردن سایت منبع</button>
+        ${src.key==='parto'?`<button class="soft" onclick="alert('پرتو به صورت منبع داخلی/وب‌سرویس ثبت شده و لینک عمومی مستقیم برای کاربر ندارد')">منبع داخلی پرتو</button>`:`<button class="soft" onclick="window.open('${sourceUrl(src.key)}','_blank')">باز کردن سایت منبع</button>`}
       </div>
     </div>`;
   }).join('')}</div>`;
@@ -186,6 +187,7 @@ function adminRunOneSource(key){
   runSourceImport(key,true);
   renderAdmin();
 }
+function adminSetPartoPublish(mode){setPartoPublishMode(mode==='publish'?'publish':'admin');renderAdmin()}
 function adminRunAllSources(){
   runAllSourceImports(true);
   renderAdmin();
@@ -227,8 +229,8 @@ function renderAdmin(){
     <div class="row wrap">
       <div>
         <span class="badge special">واردسازی و آپدیت منابع تور</span>
-        <h3>سفرو ایرانیان + الفبای سفر</h3>
-        <p class="small">از این قسمت تورهای دو منبع را وارد می‌کنی. گزینه «هر روز بخوان و آپدیت کن» باعث می‌شود هر بار پنل مدیریت باز شود، اگر ۲۴ ساعت گذشته باشد همان منبع دوباره آپدیت شود.</p>
+        <h3>سفرو ایرانیان + الفبای سفر + پرتو</h3>
+        <p class="small">از این قسمت تورهای منابع را وارد می‌کنی. گزینه «هر روز بخوان و آپدیت کن» باعث می‌شود هر بار پنل مدیریت باز شود، اگر ۲۴ ساعت گذشته باشد همان منبع دوباره آپدیت شود.</p>
       </div>
       <div class="actions">
         <button class="btn" onclick="adminRunAllSources()">آپدیت هر دو منبع الان</button>
@@ -236,7 +238,7 @@ function renderAdmin(){
     </div>
     <div class="source-import-note">نکته: اطلاعات واردشده بعد از اضافه‌شدن داخل همین سایت قابل ویرایش، تغییر قیمت، ظرفیت، عکس و وضعیت نمایش است.</div>
     ${renderSourceImportCards()}
-    <div class="safaro-import-preview">${[...safeSafaroIranianImportedTours().slice(0,6),...alefbaImportedTours().slice(0,12)].map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price||t.price||0)} | ${t.sourceName==='AlefbaSafar'?'الفبای سفر':'سفرو ایرانیان'}</small></div>`).join('')}</div>
+    <div class="safaro-import-preview">${[...safeSafaroIranianImportedTours().slice(0,6),...alefbaImportedTours().slice(0,12)].map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price||t.price||0)} | ${t.sourceName==='Parto'?'پرتو':(t.sourceName==='AlefbaSafar'?'الفبای سفر':'سفرو ایرانیان')}</small></div>`).join('')}</div>
   </section>
 
   <section id="admin-tour-images" class="card pad">

@@ -3489,3 +3489,20 @@ body.buyer-page .source-label-badge{
   font-size:12px;
   color:var(--t2);
 }
+
+
+/* Parto source controls */
+.parto-publish-box{
+  border:1px dashed rgba(245,158,11,.45);
+  background:rgba(245,158,11,.07);
+  border-radius:16px;
+  padding:10px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  font-size:12px;
+  color:var(--t2);
+}
+.parto-publish-box button{border-radius:14px}

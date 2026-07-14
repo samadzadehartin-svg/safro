@@ -1,3 +1,11 @@
+function staffVisibleTour(t){
+  if(t?.sourceName==='Parto' && t?.showInStaff!==true)return false;
+  return true;
+}
+function staffTours(){
+  return tours().filter(staffVisibleTour);
+}
+
 
 function excelCell(row, idx){return row && row[idx]!==undefined && row[idx]!==null ? row[idx] : ''}
 function excelNum(v){const n=Number(String(v??'').replace(/[^\d.-]/g,''));return isNaN(n)?0:n}
@@ -32,7 +40,7 @@ function sheetRowsToHotels(rows){
 function applyExcelRowsToTour(tourId,rows,sheetName){
   const hotels=sheetRowsToHotels(rows);
   if(!hotels.length)return {ok:false,msg:`در شیت ${sheetName} هتلی پیدا نشد`};
-  const ts=tours().map(t=>{
+  const ts=staffTours().map(t=>{
     if(Number(t.id)!==Number(tourId))return t;
     const minPrice=hotels.map(h=>h.price).filter(Boolean).sort((a,b)=>a-b)[0] || t.price || 0;
     return {...t,hotels,price:minPrice,lastEditedBy:'Excel Sheet',lastEditedAt:new Date().toISOString()};
@@ -81,7 +89,7 @@ function excelTourImportBox(role){
     <h3>آپلود شیت اکسل تورها</h3>
     <p class="small">فرمت فایل استانبول پشتیبانی می‌شود. اگر فایل چند Sheet داشته باشد، اسم هر Sheet باید اسم همان تور باشد. اگر فقط Sheet با نام TOUR دارد، تور هدف را انتخاب کن.</p>
     <div class="row wrap">
-      <select id="${select}" class="field" style="max-width:280px">${tours().map(t=>`<option value="${t.id}">${t.title}</option>`).join('')}</select>
+      <select id="${select}" class="field" style="max-width:280px">${staffTours().map(t=>`<option value="${t.id}">${t.title}</option>`).join('')}</select>
       <input id="${id}" class="field" type="file" accept=".xlsx,.xls">
       <button class="btn" onclick="importExcelTourSheet('${id}','${result}','${select}')">آپلود و اعمال شیت</button>
     </div>
@@ -283,7 +291,7 @@ function staffClearCacheHint(){
 function renderStaff(){
   try{
   const q=$('staffSearch')?.value?.trim().toLowerCase()||'', user=currentStaffUser();
-  let list=tours();if(q)list=list.filter(t=>t.title.toLowerCase().includes(q)||t.dest.toLowerCase().includes(q));
+  let list=staffTours();if(q)list=list.filter(t=>t.title.toLowerCase().includes(q)||t.dest.toLowerCase().includes(q));
   $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge special">پنل فروش</span><h1>مدیریت تورها</h1><p class="small">وارد شده با: <b>${user?.name||user?.username||'فروش'}</b></p>${staffTaskNoteHtml()}</div><div class="actions"><button class="soft" onclick="logoutRole('staff')">خروج</button><button class="btn" onclick="openForm()">افزودن تور</button></div></div>
   ${staffTopTabs()}${supabasePanel()}${staffDebugBox()}
   ${staffVisaInfoBox()}
@@ -424,7 +432,7 @@ function batchUpdatePrices(){
   const stars=[3,4,5].filter(s=>$('batchStar'+s)?.checked);
   if(!ids.length||!amount||!stars.length){alert('تور، ستاره و مبلغ را انتخاب کنید');return}
   const user=currentStaffUser();
-  const ts=tours().map(t=>ids.includes(t.id)?{...t,hotels:(t.hotels||[]).map(h=>stars.includes(Number(h.star))?{...h,price:Number(h.price||0)+amount}:h),lastEditedBy:user?.name||user?.username||'فروش',lastEditedAt:new Date().toISOString()}:t);
+  const ts=staffTours().map(t=>ids.includes(t.id)?{...t,hotels:(t.hotels||[]).map(h=>stars.includes(Number(h.star))?{...h,price:Number(h.price||0)+amount}:h),lastEditedBy:user?.name||user?.username||'فروش',lastEditedAt:new Date().toISOString()}:t);
   saveTours(ts);showToast('قیمت‌ها آپدیت شد');renderStaff();
 }
 function staffSortHotelsByCapacity(list){
@@ -601,5 +609,5 @@ function saveTour(e){
   }
 }
 
-function delTour(id){if(confirm('تور حذف شود؟')){saveTours(tours().filter(t=>t.id!==id));renderStaff()}}
+function delTour(id){if(confirm('تور حذف شود؟')){saveTours(staffTours().filter(t=>t.id!==id));renderStaff()}}
 document.addEventListener('DOMContentLoaded',initStaff);
