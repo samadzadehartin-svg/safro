@@ -409,33 +409,114 @@ function catalogForStar(star,dest=''){
   for(let i=padded.length;i<5;i++)padded.push({id:`custom-${star}-${i+1}`,star,nameLatin:`Hotel ${star} Star ${i+1}`,enabledForStaff:true,custom:true});
   return padded.slice(0,8);
 }
+
+function staffHotelPhotos(h){
+  return [...new Set([h?.image||h?.img||'',...((h?.photos||h?.images||[]).filter(Boolean))].filter(Boolean))].slice(0,12);
+}
+function staffHotelImage(h){return staffHotelPhotos(h)[0]||'../assets/images/hotel-placeholder.svg'}
+function toggleHotelPicker(star){
+  const el=$('hotelPicker_'+star);
+  if(el)el.classList.toggle('on');
+}
+function catalogPickerHtml(star,dest){
+  const d=String(dest||'').trim();
+  let list=hotelCatalog().filter(h=>Number(h.star)===Number(star)&&h.enabledForStaff!==false);
+  const matched=list.filter(h=>{
+    const hd=String(h.destination||h.dest||'').trim();
+    return !d||!hd||hd==='عمومی'||d.includes(hd)||hd.includes(d);
+  });
+  if(matched.length)list=matched;
+  return `<div id="hotelPicker_${star}" class="staff-hotel-picker">
+    <div class="staff-hotel-picker-head">
+      <b>انتخاب هتل ${hotelStars(star)} از بانک مدیریت</b>
+      <input id="hotelPickerSearch_${star}" class="field" placeholder="جستجوی هتل..." oninput="filterHotelPicker(${star})">
+    </div>
+    <div id="hotelPickerList_${star}" class="staff-hotel-picker-list">${list.map(h=>pickerHotelCard(star,h)).join('')||'<div class="empty-state-mini">مدیر هنوز هتلی برای این ستاره و مقصد فعال نکرده است.</div>'}</div>
+  </div>`;
+}
+function pickerHotelCard(star,h){
+  const photos=staffHotelPhotos(h);
+  return `<button type="button" class="staff-hotel-picker-card" data-name="${String(h.nameLatin||'').toLowerCase()}" onclick="selectCatalogHotelForTour(${star},'${h.id}')">
+    <img src="${staffHotelImage(h)}" onerror="this.src='../assets/images/hotel-placeholder.svg'">
+    <span><b dir="ltr">${h.nameLatin}</b><small>${h.destination||'—'} | ${h.meal||h.board||'بدون وعده'} | ${h.sourceGroup||'—'}</small><small>عکس‌ها: ${faNum(photos.length)}</small></span>
+  </button>`;
+}
+function filterHotelPicker(star){
+  const q=($('hotelPickerSearch_'+star)?.value||'').toLowerCase();
+  document.querySelectorAll(`#hotelPickerList_${star} .staff-hotel-picker-card`).forEach(card=>{
+    card.style.display=card.dataset.name.includes(q)?'grid':'none';
+  });
+}
+function selectCatalogHotelForTour(star,id){
+  const h=hotelCatalog().find(x=>x.id===id);if(!h)return;
+  let row=-1;
+  for(let i=0;i<8;i++){
+    const hid=$(`hotel_${star}_${i}_id`)?.value||'';
+    const name=$(`hotel_${star}_${i}_name`)?.value||'';
+    if(!hid||hid.startsWith('custom-')||!name||/^Hotel\s+\d/.test(name)){row=i;break;}
+  }
+  if(row<0)row=0;
+  if($(`hotel_${star}_${row}_id`))$(`hotel_${star}_${row}_id`).value=h.id;
+  if($(`hotel_${star}_${row}_name`))$(`hotel_${star}_${row}_name`).value=h.nameLatin;
+  const nameBox=document.querySelector(`#hotelRow_${star}_${row} .hotel-name-latin`);
+  if(nameBox)nameBox.innerHTML=`${h.nameLatin}<small>${h.destination||''} ${h.meal?`| ${h.meal}`:''}</small>`;
+  const img=document.querySelector(`#hotelRow_${star}_${row} .hotel-row-thumb`);
+  if(img)img.src=staffHotelImage(h);
+  if($(`hotel_${star}_${row}_price`)&&!$(`hotel_${star}_${row}_price`).value)$(`hotel_${star}_${row}_price`).value=Number(String(h.dblPrice||'').replace(/[^\d]/g,''))||'';
+  if($(`hotel_${star}_${row}_show`))$(`hotel_${star}_${row}_show`).checked=true;
+  const photosBox=document.querySelector(`#hotelRow_${star}_${row} .hotel-row-photos`);
+  if(photosBox)photosBox.innerHTML=staffHotelPhotos(h).slice(0,4).map(x=>`<img src="${x}">`).join('');
+  showToast('هتل انتخاب شد');
+}
+
 function renderHotelEditor(t){
   const box=$('hotelEditor');if(!box)return;
   box.innerHTML=[3,4,5].map(star=>{
     const catalog=catalogForStar(star,t?.dest||'');
     const existing=(t?.hotels||[]).filter(h=>Number(h.star)===star);
-    return `<div class="hotel-editor-star"><h4>هتل‌های ${hotelStars(star)} <small class="small">حداکثر ۵ هتل؛ تیک نمایش یعنی در پنل مشتری دیده شود.</small></h4>${catalog.map((c,i)=>{
+    const rows=[];
+    for(let i=0;i<8;i++){
+      const c=catalog[i]||{id:`custom-${star}-${i+1}`,star,nameLatin:`Hotel ${star} Star ${i+1}`,enabledForStaff:true,custom:true};
       const ex=existing.find(h=>h.hotelId===c.id)||existing[i]||{};
+      const rowHotel=ex.hotelId?hotelCatalog().find(h=>h.id===ex.hotelId):c;
       const show=ex.showInBuyer!==false;
-      return `<div class="hotel-edit-row">
-        <div><input type="hidden" id="hotel_${star}_${i}_id" value="${c.id}"><input type="hidden" id="hotel_${star}_${i}_name" value="${c.nameLatin}"><div class="hotel-name-latin">${c.nameLatin}</div></div>
+      const photos=staffHotelPhotos(rowHotel||c);
+      rows.push(`<div id="hotelRow_${star}_${i}" class="hotel-edit-row hotel-edit-row-with-picker">
+        <img class="hotel-row-thumb" src="${staffHotelImage(rowHotel||c)}" onerror="this.src='../assets/images/hotel-placeholder.svg'">
+        <div>
+          <input type="hidden" id="hotel_${star}_${i}_id" value="${ex.hotelId||c.id}">
+          <input type="hidden" id="hotel_${star}_${i}_name" value="${ex.name||c.nameLatin}">
+          <div class="hotel-name-latin">${ex.name||c.nameLatin}<small>${(rowHotel?.destination||c.destination||'')} ${(rowHotel?.meal||c.meal)?`| ${rowHotel?.meal||c.meal}`:''}</small></div>
+          <div class="hotel-row-photos">${photos.slice(0,4).map(x=>`<img src="${x}">`).join('')}</div>
+        </div>
         <input id="hotel_${star}_${i}_price" class="field" type="number" placeholder="قیمت" value="${ex.price||''}">
         <input id="hotel_${star}_${i}_cap" class="field" type="number" placeholder="ظرفیت" value="${ex.capacity||''}">
         <label class="row" style="justify-content:flex-start"><input id="hotel_${star}_${i}_show" type="checkbox" ${show?'checked':''}> نمایش</label>
-      </div>`;
-    }).join('')}</div>`;
+      </div>`);
+    }
+    return `<div class="hotel-editor-star">
+      <div class="row wrap">
+        <h4>هتل‌های ${hotelStars(star)} <small class="small">از بانک مدیریت انتخاب کن، سپس قیمت و ظرفیت بده.</small></h4>
+        <button type="button" class="btn" onclick="toggleHotelPicker(${star})">انتخاب هتل</button>
+      </div>
+      ${catalogPickerHtml(star,t?.dest||'')}
+      ${rows.join('')}
+    </div>`;
   }).join('');
 }
 function collectHotels(basePrice){
   const out=[];
   [3,4,5].forEach(star=>{
-    for(let i=0;i<5;i++){
+    for(let i=0;i<8;i++){
       const id=$(`hotel_${star}_${i}_id`)?.value;
       const name=$(`hotel_${star}_${i}_name`)?.value;
       const price=Number($(`hotel_${star}_${i}_price`)?.value)||basePrice;
       const capacity=Number($(`hotel_${star}_${i}_cap`)?.value)||0;
       const show=$(`hotel_${star}_${i}_show`)?.checked;
-      if(id&&name)out.push({hotelId:id,star,name,price,capacity,showInBuyer:!!show});
+      if(id&&name){
+        const cat=hotelCatalog().find(h=>h.id===id)||{};
+        out.push({hotelId:id,star,name,price,capacity,showInBuyer:!!show,photos:staffHotelPhotos(cat),meal:cat.meal||cat.board||'',bookingLink:cat.bookingLink||''});
+      }
     }
   });
   return out;

@@ -5512,6 +5512,9 @@ function defaultStaffAccounts(){
 }
 
 function normalizeHotelCatalogItem(h,i=0){
+  const photos=Array.isArray(h?.photos)?h.photos:(Array.isArray(h?.images)?h.images:[]);
+  const cleanPhotos=photos.filter(Boolean).slice(0,18);
+  const image=h?.image||h?.img||cleanPhotos[0]||'';
   return {
     id:h?.id||('hotel-'+Date.now()+'-'+i),
     star:Number(h?.star||3),
@@ -5527,6 +5530,10 @@ function normalizeHotelCatalogItem(h,i=0){
     dblPrice:h?.dblPrice||'',
     sglPrice:h?.sglPrice||'',
     childPrice:h?.childPrice||'',
+    bookingLink:h?.bookingLink||'',
+    image,
+    img:image,
+    photos:cleanPhotos,
     note:h?.note||'',
     imported:!!h?.imported,
     enabledForStaff:h?.enabledForStaff===true

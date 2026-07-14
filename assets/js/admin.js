@@ -214,6 +214,8 @@ function renderAdmin(){
       <select id="hotelStar" class="field"><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select>
       <input id="hotelMeal" class="field" placeholder="وعده / سرویس؛ BB, HB, ALL, UALL">
       <input id="hotelSourceGroup" class="field" placeholder="منبع / گروه؛ مثل لیست استانبول">
+      <input id="hotelImageUrl" class="field" dir="ltr" placeholder="URL عکس اصلی هتل">
+      <input id="hotelPhotosText" class="field" dir="ltr" placeholder="URL عکس‌های بیشتر؛ با کاما جدا کن">
       <select id="hotelEnabled" class="field"><option value="false">عدم نمایش برای فروش</option><option value="true">نمایش برای فروش</option></select>
       <button class="btn" onclick="saveHotelItem()">ذخیره هتل / پکیج</button>
       <button class="soft" onclick="resetDefaultHotels()">بازگردانی بانک واردشده</button>
@@ -618,6 +620,8 @@ function editHotelItem(id){
   $('hotelStar').value=String(h.star||3);
   if($('hotelMeal'))$('hotelMeal').value=h.meal||h.board||'';
   if($('hotelSourceGroup'))$('hotelSourceGroup').value=h.sourceGroup||'';
+  if($('hotelImageUrl'))$('hotelImageUrl').value=h.image||h.img||'';
+  if($('hotelPhotosText'))$('hotelPhotosText').value=(h.photos||[]).join(', ');
   $('hotelEnabled').value=String(h.enabledForStaff!==false);
   $('hotelLatinName').dataset.editId=id;
   document.getElementById('admin-hotels')?.scrollIntoView({behavior:'smooth',block:'start'});
@@ -651,6 +655,9 @@ function saveHotelItem(){
     meal:$('hotelMeal')?.value?.trim()||'',
     board:$('hotelMeal')?.value?.trim()||'',
     sourceGroup:$('hotelSourceGroup')?.value?.trim()||'دستی',
+    image:$('hotelImageUrl')?.value?.trim()||'',
+    img:$('hotelImageUrl')?.value?.trim()||'',
+    photos:[$('hotelImageUrl')?.value?.trim()||'',...String($('hotelPhotosText')?.value||'').split(',').map(x=>x.trim())].filter(Boolean),
     enabledForStaff:$('hotelEnabled').value==='true',
     imported:false
   };
@@ -662,6 +669,8 @@ function saveHotelItem(){
   if($('hotelDestination'))$('hotelDestination').value='';
   if($('hotelMeal'))$('hotelMeal').value='';
   if($('hotelSourceGroup'))$('hotelSourceGroup').value='';
+  if($('hotelImageUrl'))$('hotelImageUrl').value='';
+  if($('hotelPhotosText'))$('hotelPhotosText').value='';
   $('hotelStar').value='3';
   $('hotelEnabled').value='false';
   renderHotelCatalog();
@@ -867,6 +876,60 @@ function jalaliToGregorian(jy,jm,jd){
   return {gy,gm,gd:d};
 }
 
+
+function hotelCatalogPhotos(h){
+  return [...new Set([h?.image||h?.img||'',...((h?.photos||h?.images||[]).filter(Boolean))].filter(Boolean))].slice(0,18);
+}
+function hotelCatalogImage(h){
+  return hotelCatalogPhotos(h)[0]||'../assets/images/hotel-placeholder.svg';
+}
+function hotelCatalogPhotoPanel(h){
+  const photos=hotelCatalogPhotos(h);
+  return `<div id="hotelPhotoPanel_${h.id}" class="hotel-photo-control-panel">
+    <div class="row wrap">
+      <div><b>مدیریت عکس‌های ${h.nameLatin||'هتل'}</b><p class="small">عکس‌ها فقط در مدیریت ذخیره می‌شوند و در پنل فروش هنگام انتخاب هتل دیده می‌شوند.</p></div>
+      <div class="actions">
+        <input id="hotelPhotoUrl_${h.id}" class="field hotel-photo-url" dir="ltr" placeholder="URL عکس جدید">
+        <button class="soft" onclick="addHotelCatalogPhotoUrl('${h.id}')">افزودن URL</button>
+      </div>
+    </div>
+    <input class="field" type="file" accept="image/*" multiple onchange="uploadHotelCatalogPhotoFiles('${h.id}',this.files)">
+    <div class="hotel-photo-grid-admin">${photos.map((src,i)=>`<span><img src="${src}"><button onclick="removeHotelCatalogPhoto('${h.id}',${i})">×</button></span>`).join('')||'<div class="empty-state-mini">هنوز عکسی برای این هتل ثبت نشده است.</div>'}</div>
+  </div>`;
+}
+function toggleHotelPhotoPanel(id){
+  const el=$('hotelPhotoPanel_'+id);
+  if(el)el.classList.toggle('on');
+}
+function updateCatalogHotel(id,patch){
+  saveHotelCatalog(hotelCatalog().map(h=>h.id===id?normalizeHotelCatalogItem({...h,...patch}):h));
+}
+function addHotelCatalogPhotoUrl(id){
+  const input=$('hotelPhotoUrl_'+id);const url=input?.value?.trim();if(!url)return alert('URL عکس را وارد کن');
+  const h=hotelCatalog().find(x=>x.id===id);if(!h)return;
+  const photos=[...hotelCatalogPhotos(h),url].filter(Boolean).slice(0,18);
+  updateCatalogHotel(id,{image:photos[0]||'',img:photos[0]||'',photos});
+  renderHotelCatalog();
+  showToast('عکس هتل اضافه شد');
+}
+function uploadHotelCatalogPhotoFiles(id,files){
+  const arr=[...(files||[])].slice(0,8);if(!arr.length)return;
+  Promise.all(arr.map(f=>resizeImageFile(f,900,.72))).then(urls=>{
+    const h=hotelCatalog().find(x=>x.id===id);if(!h)return;
+    const photos=[...hotelCatalogPhotos(h),...urls.filter(Boolean)].slice(0,18);
+    updateCatalogHotel(id,{image:photos[0]||'',img:photos[0]||'',photos});
+    renderHotelCatalog();
+    showToast('عکس‌های هتل آپلود شد');
+  });
+}
+function removeHotelCatalogPhoto(id,index){
+  const h=hotelCatalog().find(x=>x.id===id);if(!h)return;
+  const photos=hotelCatalogPhotos(h).filter((_,i)=>i!==index);
+  updateCatalogHotel(id,{image:photos[0]||'',img:photos[0]||'',photos});
+  renderHotelCatalog();
+  showToast('عکس حذف شد');
+}
+
 function hotelDestinations(){
   return [...new Set(hotelCatalog().map(h=>h.destination||h.dest||'عمومی'))].sort((a,b)=>String(a).localeCompare(String(b),'fa'));
 }
@@ -900,20 +963,24 @@ function renderHotelCatalog(){
         <button class="soft" onclick="toggleHotelDestination('${d}',false)">عدم نمایش این مقصد</button>
       </div>
     </div>
-    <div class="admin-hotel-list">${rows.map(h=>`<div class="admin-hotel-card ${h.enabledForStaff!==false?'active-for-staff':'off-for-staff'}">
+    <div class="admin-hotel-list">${rows.map(h=>`<div class="admin-hotel-card admin-hotel-card-with-photo ${h.enabledForStaff!==false?'active-for-staff':'off-for-staff'}">
+      <img class="admin-hotel-thumb" src="${hotelCatalogImage(h)}" onerror="this.src='../assets/images/hotel-placeholder.svg'">
       <div class="admin-hotel-main">
         <b dir="ltr">${h.nameLatin||'—'}</b>
         <span>${adminHotelStarsFallback(h.star)} ${h.meal?`<em>${h.meal}</em>`:''}</span>
         <small>${h.sourceGroup||'—'} ${h.catalogType==='combo'?' | پکیج ترکیبی':''}</small>
+        <small>عکس‌ها: ${faNum(hotelCatalogPhotos(h).length)}</small>
         ${h.dblPrice||h.sglPrice||h.childPrice?`<small>دو تخته: ${h.dblPrice||'—'} | یک تخته: ${h.sglPrice||'—'} | کودک: ${h.childPrice||'—'}</small>`:''}
         ${h.note?`<small>${h.note}</small>`:''}
       </div>
       <div class="admin-hotel-actions">
         <span class="badge ${h.enabledForStaff!==false?'domestic':'gray'}">${h.enabledForStaff!==false?'نمایش برای فروش':'فقط مدیریت'}</span>
+        <button class="soft" onclick="toggleHotelPhotoPanel('${h.id}')">کنترل عکس‌ها</button>
         <button class="soft" onclick="editHotelItem('${h.id}')">ویرایش</button>
         <button class="soft" onclick="toggleHotelItem('${h.id}')">${h.enabledForStaff!==false?'عدم نمایش':'نمایش برای فروش'}</button>
         <button class="danger" onclick="deleteHotelItem('${h.id}')">حذف</button>
       </div>
+      ${hotelCatalogPhotoPanel(h)}
     </div>`).join('')}</div>
   </div>`).join('')||'<div class="empty-state-mini">موردی پیدا نشد.</div>'}`;
 }
