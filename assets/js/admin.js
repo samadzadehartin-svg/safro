@@ -149,6 +149,14 @@ function adminBatchUpdatePrices(){
   setTimeout(()=>{renderToursAdmin();},200);
 }
 
+
+function adminImportSafaroIranianTours(){
+  const n=importSafaroIranianTours();
+  const box=$('safaroImportResult');
+  if(box)box.innerHTML=n?`<div>${faNum(n)} تور وارد شد. برای نمایش/ویرایش از مدیریت تورها یا پنل فروش استفاده کن.</div>`:'<div>همه تورهای سفرو ایرانیان قبلاً وارد شده‌اند.</div>';
+  try{renderToursAdmin&&renderToursAdmin()}catch(e){}
+}
+
 function renderAdmin(){
   const os=orders(),sales=os.reduce((s,o)=>s+Number(o.totalPrice||0),0);
   $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge international">پنل مدیریت</span><h1>داشبورد مدیریت</h1></div><button class="soft" onclick="logoutRole('admin')">خروج</button></div>
@@ -163,6 +171,7 @@ function renderAdmin(){
 
   <div class="admin-layout">
     <aside class="admin-side-nav">
+      <a href="#admin-safaro-import"><i class="fa-solid fa-cloud-arrow-down"></i> واردسازی سفرو ایرانیان</a>
       <a href="#admin-tour-images"><i class="fa-regular fa-image"></i> عکس تورها</a>
       <a href="#admin-staff-accounts"><i class="fa-regular fa-user"></i> تیم فروش</a>
       <a href="#admin-price-sheet"><i class="fa-solid fa-file-csv"></i> آپدیت قیمت</a>
@@ -177,6 +186,16 @@ function renderAdmin(){
       <a href="#admin-orders"><i class="fa-solid fa-list-check"></i> رزروها</a>
     </aside>
     <div class="admin-main-stack">
+  
+  <section id="admin-safaro-import" class="card pad safaro-import-section" style="margin-bottom:16px">
+    <div class="row wrap">
+      <div><span class="badge special">واردسازی اطلاعات سفر</span><h3>وارد کردن تورهای سایت سفرو ایرانیان</h3><p class="small">این بخش یک snapshot از اطلاعات عمومی صفحه تورهای سفرو ایرانیان را وارد تورهای سایت می‌کند. بعد از واردسازی، مدیر می‌تواند قیمت، ظرفیت، عکس و وضعیت هر تور را ویرایش کند.</p></div>
+      <div class="actions"><button class="btn" onclick="adminImportSafaroIranianTours()">وارد کردن تورها</button></div>
+    </div>
+    <div id="safaroImportResult" class="import-result"></div>
+    <div class="safaro-import-preview">${safaroIranianImportedTours().slice(0,10).map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price)}</small></div>`).join('')}</div>
+  </section>
+
   <section id="admin-tour-images" class="card pad">
     <h3>مدیریت عکس تورها</h3>
     <p class="small">آپلود یا تغییر عکس تور فقط از پنل مدیریت انجام می‌شود و در پنل فروش حذف شده است.</p>

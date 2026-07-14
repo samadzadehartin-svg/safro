@@ -5672,11 +5672,76 @@ function normalizeLatinTourTitles(){
     saveTours(ts);
   }catch(e){}
 }
+function sortHotelsCapacityFirst(list){
+  return (Array.isArray(list)?list:[]).slice().sort((a,b)=>{
+    const av=Number(a?.capacity||0)>0, bv=Number(b?.capacity||0)>0;
+    if(av!==bv)return av?-1:1;
+    const capDiff=Number(b?.capacity||0)-Number(a?.capacity||0);
+    if(capDiff)return capDiff;
+    return Number(a?.price||0)-Number(b?.price||0);
+  });
+}
 function visibleHotels(t){
   const hs=(t.hotels||[]).filter(h=>h && h.showInBuyer!==false);
-  return hs.length?hs:(t.hotels||[]);
+  return sortHotelsCapacityFirst(hs.length?hs:(t.hotels||[]));
 }
 
+
+
+function safaroIranianImportedTours(){
+  const raw=[{"title": "تور کیش از تهران ۲شب و ۳روز | هتل امیرکبیر ۳ ستاره", "dest": "کیش", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 6790600, "star": 3, "hotel": "امیرکبیر", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-kish-amirkabir-3"}, {"title": "تور قشم از تهران ۲شب و ۳روز | هتل خلیج فارس ۳ ستاره", "dest": "قشم", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 6990000, "star": 3, "hotel": "خلیج فارس", "service": "BB", "sourceKey": "safaroir-qeshm-khalij-3"}, {"title": "تور چابهار از تهران ۲شب و ۳روز | هتل سپیده ۴ ستاره", "dest": "چابهار", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 10990000, "star": 4, "hotel": "سپیده", "service": "BB", "sourceKey": "safaroir-chabahar-sepideh-4"}, {"title": "تور زمینی وان با قطار از تهران ۳شب و ۴روز | هتل سه ستاره", "dest": "وان", "duration": "۳ شب و ۴ روز", "airline": "قطار", "price": 11000000, "star": 3, "hotel": "هتل سه ستاره وان", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-van-train-3"}, {"title": "تور مشهد از تهران ۲شب و ۳روز | هتل شیراز Shiraz ۳ ستاره", "dest": "مشهد", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 12900000, "star": 3, "hotel": "شیراز Shiraz", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-mashhad-shiraz-3"}, {"title": "تور مشهد از تهران ۲شب و ۳روز | هتل مینو Mino ۴ ستاره", "dest": "مشهد", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 14400000, "star": 4, "hotel": "مینو Mino", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-mashhad-mino-4"}, {"title": "تور مشهد از تهران ۲شب و ۳روز | هتل پارسیس Parsis ۵ ستاره", "dest": "مشهد", "duration": "۲ شب و ۳ روز", "airline": "پرواز رفت و برگشت", "price": 15500000, "star": 5, "hotel": "پارسیس Parsis", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-mashhad-parsis-5"}, {"title": "تور زمینی ارمنستان از تهران به ایروان ۳شب و ۴روز | هتل Baxos ۳ ستاره", "dest": "ایروان", "duration": "۳ شب و ۴ روز", "airline": "اتوبوس", "price": 25900000, "star": 3, "hotel": "Baxos", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-yerevan-baxos-3"}, {"title": "تور استانبول از شیراز ۳شب و ۴روز | هتل FIDE ۳ ستاره", "dest": "استانبول", "duration": "۳ شب و ۴ روز", "airline": "پرواز رفت و برگشت", "price": 0, "star": 3, "hotel": "FIDE", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-istanbul-fide-3"}, {"title": "تور زمینی استانبول از تهران ۴شب و ۵روز | هتل ROTA STAR ۴ ستاره", "dest": "استانبول", "duration": "۴ شب و ۵ روز", "airline": "زمینی", "price": 0, "star": 4, "hotel": "ROTA STAR", "service": "BB - لیدر", "sourceKey": "safaroir-istanbul-rota-star-4"}, {"title": "تور آنتالیا از تهران به قاضی‌پاشا ۶شب و ۷روز | هتل BELKON ۴ ستاره", "dest": "آنتالیا", "duration": "۶ شب و ۷ روز", "airline": "کاسپین", "price": 91500000, "star": 4, "hotel": "BELKON", "service": "AL - لیدر - ترنسفر", "sourceKey": "safaroir-antalya-belkon-4"}, {"title": "تور آنتالیا از تهران به قاضی‌پاشا ۶شب و ۷روز | هتل CRYSTAL WATER WORLD ۵ ستاره", "dest": "آنتالیا", "duration": "۶ شب و ۷ روز", "airline": "کاسپین", "price": 203300000, "star": 5, "hotel": "CRYSTAL WATER WORLD", "service": "UAL - لیدر - ترنسفر", "sourceKey": "safaroir-antalya-crystal-5"}, {"title": "تور آنتالیا از تهران به قاضی‌پاشا ۶شب و ۷روز | هتل GRANADA LUXURY BELEK ۵ ستاره", "dest": "آنتالیا", "duration": "۶ شب و ۷ روز", "airline": "کاسپین", "price": 258500000, "star": 5, "hotel": "GRANADA LUXURY BELEK", "service": "UAL - لیدر - ترنسفر", "sourceKey": "safaroir-antalya-granada-5"}, {"title": "تور ترکیبی مالزی؛ کوالالامپور و سنگاپور ۷شب و ۸روز | LAZDANA + IBIS BUDGET", "dest": "کوالالامپور", "duration": "۷ شب و ۸ روز", "airline": "ایران ایرتور", "price": 198200000, "star": 3, "hotel": "LAZDANA + IBIS BUDGET", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-malaysia-singapore-3"}, {"title": "تور ترکیبی روسیه؛ مسکو و سنت پترزبورگ ۷شب و ۸روز | هتل ۵ ستاره", "dest": "روسیه", "duration": "۷ شب و ۸ روز", "airline": "پرواز رفت و برگشت", "price": 229000000, "star": 5, "hotel": "هتل پنج ستاره روسیه", "service": "BB - لیدر - ترنسفر - ویزای توریستی", "sourceKey": "safaroir-russia-combo-5"}, {"title": "تور ترکیبی ویتنام؛ دانانگ، هانوی و کشتی کروز ۹شب و ۱۰روز", "dest": "ویتنام", "duration": "۹ شب و ۱۰ روز", "airline": "معراج", "price": 390100000, "star": 4, "hotel": "EDEN OCEAN VIEW OR SIMILAR", "service": "BB - لیدر - ترنسفر", "sourceKey": "safaroir-vietnam-combo-4"}];
+  return raw.map((x,i)=>{
+    const img=(typeof themedTourImage==='function'?themedTourImage({dest:x.dest,title:x.title}):'')||DEFAULT_IMG;
+    const price=Number(x.price||0)||1000000;
+    return {
+      id:880000+i,
+      sourceKey:x.sourceKey,
+      sourceImported:true,
+      sourceName:'SafaroIranian',
+      sourceUrl:'https://safaroiranian.com/tour/',
+      title:x.title,
+      dest:x.dest,
+      duration:normalizeDurationNightFirst(x.duration),
+      airline:x.airline||'پرواز رفت و برگشت',
+      returnAirline:x.airline||'پرواز رفت و برگشت',
+      flightTime:'',
+      returnFlightTime:'',
+      price,
+      label:'واردشده از سفرو ایرانیان',
+      type:['کیش','مشهد','قشم','چابهار'].includes(x.dest)?'domestic':'international',
+      level:'special',
+      categories:['special'],
+      rating:4.6,
+      status:'active',
+      lastMinute:false,
+      img,
+      gallery:[img],
+      dates:['تیر','مرداد'],
+      hotels:[{name:x.hotel,star:Number(x.star)||3,price,capacity:10,showInBuyer:true,meal:x.service||'',photos:[]}],
+      desc:`این تور بر اساس اطلاعات عمومی صفحه تورهای سفرو ایرانیان به سایت اضافه شده و برای بررسی و ویرایش مدیر آماده است. خدمات ثبت‌شده: ${x.service||'—'}`,
+      includes:['بیمه مسافرتی','بلیط رفت و برگشت','اقامت هتل',...(String(x.service||'').includes('ترنسفر')?['ترنسفر']:[])],
+      excludes:[],
+      itinerary:[],
+      docs:['مدارک شناسایی معتبر / پاسپورت برای مقاصد خارجی'],
+      cancellation:'قبل از فروش نهایی توسط مدیر بررسی شود.',
+      childPolicy:'نرخ کودک طبق شرایط تور محاسبه می‌شود.',
+      sectionVisibility:Object.assign(defaultSections(),{}),
+      reviews:[],
+      lastEditedBy:'واردسازی سفرو ایرانیان',
+      lastEditedAt:new Date().toISOString()
+    };
+  });
+}
+function importSafaroIranianTours(){
+  const incoming=safaroIranianImportedTours();
+  const ts=tours();
+  const existing=new Set(ts.map(t=>t.sourceKey||String(t.title||'').trim()));
+  const add=incoming.filter(t=>!existing.has(t.sourceKey)&&!existing.has(String(t.title||'').trim()));
+  if(!add.length){showToast('قبلاً همه تورهای سفرو ایرانیان وارد شده‌اند');return 0}
+  saveTours([...ts,...add]);
+  showToast(`${faNum(add.length)} تور از سفرو ایرانیان وارد شد`);
+  return add.length;
+}
 
 const DEFAULT_VISAS=[
   {id:'visa-1',country:'امارات',city:'دبی',price:4500000,duration:'۳ تا ۷ روز کاری',type:'توریستی',docs:'پاسپورت، عکس، فرم درخواست',active:true},

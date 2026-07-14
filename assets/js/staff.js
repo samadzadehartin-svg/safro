@@ -427,6 +427,15 @@ function batchUpdatePrices(){
   const ts=tours().map(t=>ids.includes(t.id)?{...t,hotels:(t.hotels||[]).map(h=>stars.includes(Number(h.star))?{...h,price:Number(h.price||0)+amount}:h),lastEditedBy:user?.name||user?.username||'فروش',lastEditedAt:new Date().toISOString()}:t);
   saveTours(ts);showToast('قیمت‌ها آپدیت شد');renderStaff();
 }
+function staffSortHotelsByCapacity(list){
+  return (Array.isArray(list)?list:[]).slice().sort((a,b)=>{
+    const av=Number(a?.capacity||0)>0,bv=Number(b?.capacity||0)>0;
+    if(av!==bv)return av?-1:1;
+    const cap=Number(b?.capacity||0)-Number(a?.capacity||0);
+    if(cap)return cap;
+    return Number(a?.price||0)-Number(b?.price||0);
+  });
+}
 function catalogForStar(star,dest=''){
   const d=String(dest||'').trim();
   const base=hotelCatalog().filter(h=>Number(h.star)===Number(star)&&h.enabledForStaff!==false);
@@ -507,7 +516,7 @@ function renderHotelEditor(t){
   const box=$('hotelEditor');if(!box)return;
   box.innerHTML=[3,4,5].map(star=>{
     const catalog=catalogForStar(star,t?.dest||'');
-    const existing=(t?.hotels||[]).filter(h=>Number(h.star)===star);
+    const existing=staffSortHotelsByCapacity((t?.hotels||[]).filter(h=>Number(h.star)===star));
     const rows=[];
     for(let i=0;i<8;i++){
       const c=catalog[i]||{id:`custom-${star}-${i+1}`,star,nameLatin:`Hotel ${star} Star ${i+1}`,enabledForStaff:true,custom:true};
@@ -515,7 +524,8 @@ function renderHotelEditor(t){
       const rowHotel=ex.hotelId?hotelCatalog().find(h=>h.id===ex.hotelId):c;
       const show=ex.showInBuyer!==false;
       const photos=staffHotelPhotos(rowHotel||c);
-      rows.push(`<div id="hotelRow_${star}_${i}" class="hotel-edit-row hotel-edit-row-with-picker">
+      const full=!!ex.name && Number(ex.capacity||0)<=0;
+      rows.push(`<div id="hotelRow_${star}_${i}" class="hotel-edit-row hotel-edit-row-with-picker ${full?'hotel-row-full':'hotel-row-available'}">
         <img class="hotel-row-thumb" src="${staffHotelImage(rowHotel||c)}" onerror="this.src='../assets/images/hotel-placeholder.svg'">
         <div>
           <input type="hidden" id="hotel_${star}_${i}_id" value="${ex.hotelId||c.id}">
@@ -525,7 +535,7 @@ function renderHotelEditor(t){
         </div>
         <input id="hotel_${star}_${i}_price" class="field" type="number" placeholder="قیمت" value="${ex.price||''}">
         <input id="hotel_${star}_${i}_cap" class="field" type="number" placeholder="ظرفیت" value="${ex.capacity||''}">
-        <label class="row" style="justify-content:flex-start"><input id="hotel_${star}_${i}_show" type="checkbox" ${show?'checked':''}> نمایش</label>
+        <label class="row" style="justify-content:flex-start"><input id="hotel_${star}_${i}_show" type="checkbox" ${show?'checked':''}> نمایش</label><span class="capacity-state ${full?'full':'ok'}">${full?'تکمیل ظرفیت':'ظرفیت دارد'}</span>
       </div>`);
     }
     return `<div class="hotel-editor-star">
@@ -553,7 +563,7 @@ function collectHotels(basePrice){
       }
     }
   });
-  return out;
+  return staffSortHotelsByCapacity(out);
 }
 function openForm(id){
   const t=id?findTour(id):null;$('modal').classList.add('on');setTimeout(()=>{document.querySelector('.staff-edit-modal-card')?.scrollTo({top:0,behavior:'smooth'});$('modal')?.scrollTo({top:0,behavior:'smooth'});},30);$('formTitle').textContent=t?'ویرایش تور':'افزودن تور';$('tid').value=t?.id||'';
