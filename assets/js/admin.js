@@ -356,6 +356,101 @@ function bulkSourceHotelVisibility(on){
   showToast(on?'نتیجه فیلتر فعال شد':'نتیجه فیلتر مخفی شد');
 }
 
+
+function adminCurrencyOptions(selected){
+  const selectedCode=String(selected||'IRR').toUpperCase();
+  let list=[];try{list=currencyCatalog()}catch(e){list=[]}
+  const essentials=['IRR','USD','EUR','AED','TRY'];
+  const map=new Map();
+  essentials.forEach(c=>map.set(c,{code:c,nameFa:currencyShortName(c)}));
+  (list||[]).forEach(c=>map.set(String(c.code).toUpperCase(),c));
+  return [...map.values()].map(c=>`<option value="${c.code}" ${String(c.code).toUpperCase()===selectedCode?'selected':''}>${c.code} - ${c.nameFa||currencyShortName(c.code)}</option>`).join('');
+}
+function adminTourDomId(id){return String(id).replace(/[^a-zA-Z0-9_-]/g,'_')}
+function adminJsArg(v){return JSON.stringify(String(v))}
+function tourSourceFa(t){return t.sourceName==='Parto'?'پرتو':(t.sourceName==='AlefbaSafar'?'الفبای سفر':(t.sourceName==='SafaroIranian'?'سفرو ایرانیان':(t.sourceName||t.label||'دستی')))}
+function tourBankPricingBox(){
+  const entries=tourBankCurrentTours();
+  return `<section id="admin-tour-bank-pricing" class="card pad tour-bank-pricing-section" style="margin-bottom:16px">
+    <div class="row wrap"><div><span class="badge special">بانک تورها و قیمت ارزی</span><h3>قیمت تورها با ارزهای مختلف + قیمت تک‌تخته/دو‌تخته هتل‌ها</h3><p class="small">برای هر تور می‌توانی چند قیمت با ارزهای مختلف ثبت کنی. برای هر هتل هم قیمت دو‌تخته و تک‌تخته جداگانه ذخیره می‌شود.</p></div><div class="tour-bank-count"><span>تعداد تور</span><b>${faNum(tours().length)}</b></div></div>
+    <div class="tour-bank-toolbar">
+      <input id="tourBankSearch" class="field" placeholder="جستجوی تور، مقصد، منبع..." oninput="renderTourBankPricing()">
+      <select id="tourBankSourceFilter" class="field" onchange="renderTourBankPricing()"><option value="all">همه منابع</option>${[...new Set(tours().map(t=>tourSourceFa(t)))].filter(Boolean).sort((a,b)=>a.localeCompare(b,'fa')).map(s=>`<option value="${s}">${s}</option>`).join('')}</select>
+      <select id="tourBankDestFilter" class="field" onchange="renderTourBankPricing()"><option value="all">همه مقصدها</option>${[...new Set(tours().map(t=>t.dest).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),'fa')).map(d=>`<option value="${d}">${d}</option>`).join('')}</select>
+    </div>
+    <div id="tourBankPricingList">${tourBankPricingRowsHtml(entries)}</div>
+  </section>`;
+}
+function tourBankCurrentTours(){
+  const q=($('tourBankSearch')?.value||'').trim().toLowerCase();
+  const source=$('tourBankSourceFilter')?.value||'all';
+  const dest=$('tourBankDestFilter')?.value||'all';
+  let list=tours();
+  if(source!=='all')list=list.filter(t=>tourSourceFa(t)===source);
+  if(dest!=='all')list=list.filter(t=>String(t.dest||'')===dest);
+  if(q)list=list.filter(t=>String([t.title,t.dest,t.sourceName,t.sourceKey,t.label].join(' ')).toLowerCase().includes(q));
+  return list.slice(0,120);
+}
+function tourBankPricingRowsHtml(list){
+  if(!list.length)return '<div class="empty-note">توری برای ویرایش قیمت پیدا نشد.</div>';
+  return `<div class="tour-bank-pricing-list">${list.map(t=>tourBankPricingCard(t)).join('')}</div>`;
+}
+function tourPriceRowsHtml(t){
+  const rows=normalizeTourPrices(t.prices||[],t.price,t.priceCurrency||'IRR');
+  if(!rows.length)return '<div class="small">هنوز قیمت ارزی ثبت نشده است.</div>';
+  return `<div class="tour-price-row-list">${rows.map(p=>`<span class="tour-price-admin-chip"><b dir="ltr">${p.code}</b> ${formatCurrencyAmount(p.amount,p.code)} <button class="mini-x" onclick="removeTourCurrencyPrice(${adminJsArg(t.id)},'${p.code}')">×</button></span>`).join('')}</div>`;
+}
+function tourBankPricingCard(t){
+  const tid=adminTourDomId(t.id);
+  const hotels=Array.isArray(t.hotels)?t.hotels:[];
+  return `<div class="tour-bank-price-card">
+    <div class="tour-bank-price-head"><div><span class="badge international">${tourSourceFa(t)}</span><h4>${t.title}</h4><small>${t.dest||'—'} | ${normalizeDurationNightFirst(t.duration||'')}</small></div><b>${formatCurrencyAmount(t.price,t.priceCurrency||'IRR')}</b></div>
+    <div class="tour-base-price-grid">
+      <input id="tb_base_${tid}" class="field" value="${priceNumber(t.price)||''}" placeholder="قیمت پایه تور">
+      <select id="tb_base_cur_${tid}" class="field">${adminCurrencyOptions(t.priceCurrency||'IRR')}</select>
+      <button class="btn" onclick="saveTourBasePriceCurrency(${adminJsArg(t.id)})">ذخیره قیمت پایه</button>
+    </div>
+    <div class="tour-multi-currency-box"><b>قیمت‌های ارزی تور</b>${tourPriceRowsHtml(t)}<div class="tour-add-currency-grid"><input id="tb_cur_amount_${tid}" class="field" placeholder="مبلغ"><select id="tb_cur_code_${tid}" class="field">${adminCurrencyOptions('USD')}</select><input id="tb_cur_label_${tid}" class="field" placeholder="عنوان اختیاری"><button class="soft" onclick="addTourCurrencyPrice(${adminJsArg(t.id)})">افزودن/آپدیت ارز</button></div></div>
+    <div class="tour-hotel-room-editor"><b>قیمت هتل‌ها</b>${hotels.length?hotels.map((h,i)=>tourHotelRoomPriceRow(t,h,i,tid)).join(''):'<small>هتلی ثبت نشده است.</small>'}</div>
+  </div>`;
+}
+function tourHotelRoomPriceRow(t,h,i,tid){
+  return `<div class="tour-hotel-room-row"><div><b dir="ltr">${h.name||h.nameLatin||'هتل'}</b><small>${hotelStars(h.star||3)} ${h.meal||h.board||''}</small></div><input id="tb_h_dbl_${tid}_${i}" class="field" value="${priceNumber(h.dblPrice||h.price)||''}" placeholder="قیمت دو‌تخته"><select id="tb_h_dbl_cur_${tid}_${i}" class="field">${adminCurrencyOptions(h.dblCurrency||h.priceCurrency||t.priceCurrency||'IRR')}</select><input id="tb_h_sgl_${tid}_${i}" class="field" value="${priceNumber(h.sglPrice)||''}" placeholder="قیمت تک‌تخته"><select id="tb_h_sgl_cur_${tid}_${i}" class="field">${adminCurrencyOptions(h.sglCurrency||h.priceCurrency||t.priceCurrency||'IRR')}</select><input id="tb_h_cap_${tid}_${i}" class="field" type="number" value="${Number(h.capacity||0)}" placeholder="ظرفیت"><button class="btn" onclick="saveTourHotelRoomPrices(${adminJsArg(t.id)},${i})">ذخیره هتل</button></div>`;
+}
+function renderTourBankPricing(){const box=$('tourBankPricingList');if(box)box.innerHTML=tourBankPricingRowsHtml(tourBankCurrentTours())}
+function saveTourBasePriceCurrency(id){
+  const tid=adminTourDomId(id), amount=priceNumber($(`tb_base_${tid}`)?.value), code=$(`tb_base_cur_${tid}`)?.value||'IRR';
+  saveTours(tours().map(t=>String(t.id)===String(id)?{...t,price:amount,priceCurrency:code,prices:normalizeTourPrices([...(t.prices||[]),{code,amount,label:'قیمت پایه'}],amount,code),lastEditedBy:'مدیریت - بانک تورها',lastEditedAt:new Date().toISOString()}:t));
+  renderTourBankPricing();showToast('قیمت پایه تور ذخیره شد');
+}
+function addTourCurrencyPrice(id){
+  const tid=adminTourDomId(id), amount=priceNumber($(`tb_cur_amount_${tid}`)?.value), code=($(`tb_cur_code_${tid}`)?.value||'USD').toUpperCase(), label=$(`tb_cur_label_${tid}`)?.value?.trim()||currencyShortName(code);
+  if(!amount)return alert('مبلغ ارز را وارد کن');
+  saveTours(tours().map(t=>{
+    if(String(t.id)!==String(id))return t;
+    const others=(t.prices||[]).filter(p=>String(p.code||p.currency).toUpperCase()!==code);
+    return {...t,prices:normalizeTourPrices([...others,{code,amount,label}],t.price,t.priceCurrency||'IRR'),lastEditedBy:'مدیریت - قیمت ارزی',lastEditedAt:new Date().toISOString()};
+  }));
+  renderTourBankPricing();showToast('قیمت ارزی تور ذخیره شد');
+}
+function removeTourCurrencyPrice(id,code){
+  saveTours(tours().map(t=>String(t.id)===String(id)?{...t,prices:(t.prices||[]).filter(p=>String(p.code||p.currency).toUpperCase()!==String(code).toUpperCase())}:t));
+  renderTourBankPricing();showToast('قیمت ارزی حذف شد');
+}
+function saveTourHotelRoomPrices(id,index){
+  const tid=adminTourDomId(id);
+  const dbl=priceNumber($(`tb_h_dbl_${tid}_${index}`)?.value), sgl=priceNumber($(`tb_h_sgl_${tid}_${index}`)?.value);
+  const dc=$(`tb_h_dbl_cur_${tid}_${index}`)?.value||'IRR', sc=$(`tb_h_sgl_cur_${tid}_${index}`)?.value||dc;
+  const cap=Number($(`tb_h_cap_${tid}_${index}`)?.value)||0;
+  saveTours(tours().map(t=>{
+    if(String(t.id)!==String(id))return t;
+    const hs=[...(t.hotels||[])];const old=hs[index]||{};
+    hs[index]={...old,dblPrice:dbl,sglPrice:sgl,dblCurrency:dc,sglCurrency:sc,price:dbl||old.price||0,priceCurrency:dc,capacity:cap};
+    return {...t,hotels:hs,lastEditedBy:'مدیریت - قیمت هتل',lastEditedAt:new Date().toISOString()};
+  }));
+  renderTourBankPricing();showToast('قیمت تک‌تخته/دو‌تخته هتل ذخیره شد');
+}
+
 function safeSafaroIranianImportedTours(){try{return safaroIranianImportedTours()}catch(e){console.warn('safaro import preview failed',e);return []}}
 function adminImportSafaroIranianTours(){adminRunAllSources()}
 
@@ -383,6 +478,7 @@ function renderAdmin(){
   <div class="admin-layout">
     <aside class="admin-side-nav">
       <a href="#admin-safaro-import"><i class="fa-solid fa-cloud-arrow-down"></i> آپدیت منابع تور</a>
+      <a href="#admin-tour-bank-pricing"><i class="fa-solid fa-money-check-dollar"></i> بانک تورها و قیمت‌ها</a>
       <a href="#admin-tour-images"><i class="fa-regular fa-image"></i> عکس تورها</a>
       <a href="#admin-staff-accounts"><i class="fa-regular fa-user"></i> تیم فروش</a>
       <a href="#admin-price-sheet"><i class="fa-solid fa-file-csv"></i> آپدیت قیمت</a>
@@ -413,6 +509,8 @@ function renderAdmin(){
     ${sourceHotelEditorBox()}
     <div class="safaro-import-preview">${[...safeSafaroIranianImportedTours().slice(0,6),...alefbaImportedTours().slice(0,12)].map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price||t.price||0)} | ${t.sourceName==='Parto'?'پرتو':(t.sourceName==='AlefbaSafar'?'الفبای سفر':'سفرو ایرانیان')}</small></div>`).join('')}</div>
   </section>
+
+  ${tourBankPricingBox()}
 
   <section id="admin-tour-images" class="card pad">
     <h3>مدیریت عکس تورها</h3>

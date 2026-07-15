@@ -153,6 +153,48 @@ function $(id){return document.getElementById(id)}
 function money(n){return Number(n||0).toLocaleString('fa-IR')+' تومان'}
 function faNum(n){return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d])}
 function reqStar(){return '<span class="req-star">*</span>'}
+
+function enDigits(v){return String(v||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));}
+function priceNumber(v){
+  if(typeof v==='number')return Number.isFinite(v)?v:0;
+  const s=enDigits(v).replace(/,/g,'').match(/\d+(?:\.\d+)?/g);
+  return s&&s.length?Number(s.join('')):0;
+}
+function currencyShortName(code){
+  code=String(code||'IRR').toUpperCase();
+  const map={IRR:'تومان',USD:'دلار',EUR:'یورو',AED:'درهم',TRY:'لیر',GBP:'پوند',RUB:'روبل',MYR:'رینگیت',THB:'بات',CNY:'یوان',JPY:'ین',AMD:'درام',GEL:'لاری'};
+  return map[code]||code;
+}
+function formatCurrencyAmount(amount,code){
+  const n=priceNumber(amount);
+  if(!n)return '—';
+  return faNum(n.toLocaleString('en-US'))+' '+currencyShortName(code);
+}
+function normalizeTourPriceItem(p,i=0){
+  const code=String(p?.code||p?.currency||'IRR').toUpperCase();
+  return {id:p?.id||('tp-'+code+'-'+i),code,amount:priceNumber(p?.amount||p?.price||0),label:p?.label||currencyShortName(code),note:p?.note||'',enabled:p?.enabled!==false};
+}
+function normalizeTourPrices(list,baseAmount,baseCurrency){
+  const map=new Map();
+  (Array.isArray(list)?list:[]).forEach((p,i)=>{const n=normalizeTourPriceItem(p,i);if(n.code)map.set(n.code,n)});
+  const bc=String(baseCurrency||'IRR').toUpperCase();
+  const ba=priceNumber(baseAmount);
+  if(ba && !map.has(bc))map.set(bc,normalizeTourPriceItem({code:bc,amount:ba,label:'قیمت پایه'},0));
+  return [...map.values()].filter(p=>p.amount>0).slice(0,20);
+}
+function tourPriceBadges(t,limit=5){
+  const list=normalizeTourPrices(t?.prices||[],t?.price,t?.priceCurrency||'IRR').filter(p=>p.enabled!==false).slice(0,limit);
+  return list.map(p=>`<span class="tour-price-chip"><b dir="ltr">${p.code}</b> ${formatCurrencyAmount(p.amount,p.code)}</span>`).join('');
+}
+function hotelRoomPriceHtml(h){
+  const dbl=priceNumber(h?.dblPrice||h?.doublePrice||h?.price||0);
+  const sgl=priceNumber(h?.sglPrice||h?.singlePrice||0);
+  const dc=h?.dblCurrency||h?.priceCurrency||'IRR';
+  const sc=h?.sglCurrency||h?.priceCurrency||dc;
+  if(!dbl && !sgl)return `<b>${money(h?.price||0)}</b>`;
+  return `<span class="hotel-room-price"><b>دو تخته: ${formatCurrencyAmount(dbl,dc)}</b>${sgl?`<small>تک تخته: ${formatCurrencyAmount(sgl,sc)}</small>`:''}</span>`;
+}
+
 function hotelStars(n){
   n=Number(n)||0;
   return '<span class="hotel-stars">'+Array.from({length:Math.max(1,n)},()=>'<i class="fa-solid fa-star"></i>').join('')+'</span>';
@@ -5548,20 +5590,39 @@ function enabledCurrenciesForBuyer(){return currencyCatalog().filter(c=>c.enable
 
 function defaultAirlineCatalog(){
   return [
-    {id:'air-mahan',nameFa:'ماهان',nameEn:'Mahan Air',code:'W5',logo:'',type:'domestic',enabledForStaff:true,note:''},
     {id:'air-iran-air',nameFa:'ایران ایر',nameEn:'Iran Air',code:'IR',logo:'',type:'domestic',enabledForStaff:true,note:''},
-    {id:'air-ata',nameFa:'آتا',nameEn:'ATA Airlines',code:'I3',logo:'',type:'domestic',enabledForStaff:true,note:''},
-    {id:'air-kish',nameFa:'کیش ایر',nameEn:'Kish Air',code:'Y9',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-mahan',nameFa:'ماهان ایر',nameEn:'Mahan Air',code:'W5',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-aseman',nameFa:'آسمان',nameEn:'Iran Aseman Airlines',code:'EP',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-iran-airtour',nameFa:'ایران ایرتور',nameEn:'Iran Airtour',code:'B9',logo:'',type:'domestic',enabledForStaff:true,note:''},
     {id:'air-qeshm',nameFa:'قشم ایر',nameEn:'Qeshm Air',code:'QB',logo:'',type:'domestic',enabledForStaff:true,note:''},
-    {id:'air-zagros',nameFa:'زاگرس',nameEn:'Zagros Airlines',code:'IZG',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-kish',nameFa:'کیش ایر',nameEn:'Kish Air',code:'Y9',logo:'',type:'domestic',enabledForStaff:true,note:''},
     {id:'air-caspian',nameFa:'کاسپین',nameEn:'Caspian Airlines',code:'CPN',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-zagros',nameFa:'زاگرس',nameEn:'Zagros Airlines',code:'IZG',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-ata',nameFa:'آتا',nameEn:'ATA Airlines',code:'I3',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-meraj',nameFa:'معراج',nameEn:'Meraj Airlines',code:'JI',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-taban',nameFa:'تابان',nameEn:'Taban Air',code:'HH',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-flypersia',nameFa:'فلای پرشیا',nameEn:'FlyPersia',code:'FP',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-varesh',nameFa:'وارش',nameEn:'Varesh Airlines',code:'VRH',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-sepehran',nameFa:'سپهران',nameEn:'Sepehran Airlines',code:'IS',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-pars',nameFa:'پارس ایر',nameEn:'Pars Air',code:'PA',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-karun',nameFa:'کارون',nameEn:'Karun Airlines',code:'NV',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-chabahar',nameFa:'چابهار ایر',nameEn:'Chabahar Airlines',code:'IRU',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-saha',nameFa:'ساها',nameEn:'Saha Airlines',code:'IRZ',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-pouya',nameFa:'پویا ایر',nameEn:'Pouya Air',code:'PYA',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-ava',nameFa:'آوا ایر',nameEn:'AVA Airlines',code:'AVA',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-fly-kish',nameFa:'فلای کیش',nameEn:'Fly Kish',code:'FK',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-nasim',nameFa:'نسیم ایر',nameEn:'Nasim Airlines',code:'NS',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-yazd',nameFa:'یزد ایرویز',nameEn:'Yazd Airways',code:'YZD',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-raimon',nameFa:'رایمون ایرویز',nameEn:'Raimon Airways',code:'RMN',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-air1air',nameFa:'ایروان',nameEn:'Air1Air',code:'A1',logo:'',type:'domestic',enabledForStaff:true,note:''},
+    {id:'air-soroush',nameFa:'سروش ایر',nameEn:'Soroush Air',code:'SRH',logo:'',type:'domestic',enabledForStaff:true,note:''},
     {id:'air-turkish',nameFa:'ترکیش',nameEn:'Turkish Airlines',code:'TK',logo:'',type:'international',enabledForStaff:true,note:''},
     {id:'air-pegasus',nameFa:'پگاسوس',nameEn:'Pegasus Airlines',code:'PC',logo:'',type:'international',enabledForStaff:true,note:''},
     {id:'air-emirates',nameFa:'امارات',nameEn:'Emirates',code:'EK',logo:'',type:'international',enabledForStaff:true,note:''},
     {id:'air-flydubai',nameFa:'فلای‌دبی',nameEn:'Flydubai',code:'FZ',logo:'',type:'international',enabledForStaff:true,note:''},
     {id:'air-qatar',nameFa:'قطر ایرویز',nameEn:'Qatar Airways',code:'QR',logo:'',type:'international',enabledForStaff:true,note:''},
     {id:'air-airarabia',nameFa:'ایرعربیا',nameEn:'Air Arabia',code:'G9',logo:'',type:'international',enabledForStaff:true,note:''},
-    {id:'air-aeroflot',nameFa:'ایرفلوت',nameEn:'Aeroflot',code:'SU',logo:'',type:'international',enabledForStaff:false,note:''}
+    {id:'air-aeroflot',nameFa:'ایرفلوت',nameEn:'Aeroflot',code:'SU',logo:'',type:'international',enabledForStaff:true,note:''}
   ].map(normalizeAirlineCatalogItem);
 }
 function normalizeAirlineCatalogItem(a,i=0){
@@ -5576,10 +5637,28 @@ function normalizeAirlineCatalogItem(a,i=0){
     note:a?.note||''
   };
 }
+
+function mergeDefaultAirlineCatalog(existing){
+  const base=defaultAirlineCatalog();
+  const out=(Array.isArray(existing)?existing:[]).map(normalizeAirlineCatalogItem);
+  const keyOf=a=>String(a.code||a.nameEn||a.nameFa||a.id||'').trim().toLowerCase();
+  const keys=new Set(out.map(keyOf).filter(Boolean));
+  base.forEach(a=>{
+    const k=keyOf(a);
+    if(!keys.has(k)){
+      out.push(a);
+      keys.add(k);
+    }
+  });
+  return out.map(normalizeAirlineCatalogItem);
+}
+
 function airlineCatalog(){
   let v=read('airlineCatalog',null);
   if(!Array.isArray(v)){v=defaultAirlineCatalog();saveAirlineCatalog(v);return v}
-  return v.map(normalizeAirlineCatalogItem);
+  const merged=mergeDefaultAirlineCatalog(v);
+  if(merged.length!==v.length)saveAirlineCatalog(merged);
+  return merged;
 }
 function saveAirlineCatalog(v){write('airlineCatalog',(Array.isArray(v)?v:[]).map(normalizeAirlineCatalogItem))}
 function enabledAirlines(){
@@ -5936,15 +6015,62 @@ function importedSourceStats(){
 }
 
 const DEFAULT_VISAS=[
-  {id:'visa-1',country:'امارات',city:'دبی',price:4500000,duration:'۳ تا ۷ روز کاری',type:'توریستی',docs:'پاسپورت، عکس، فرم درخواست',active:true},
-  {id:'visa-2',country:'ترکیه',city:'استانبول',price:0,duration:'بدون ویزا برای پاسپورت ایران',type:'بدون ویزا',docs:'پاسپورت معتبر',active:true},
-  {id:'visa-3',country:'تایلند',city:'بانکوک',price:7800000,duration:'۷ تا ۱۴ روز کاری',type:'توریستی',docs:'پاسپورت، عکس، تمکن، رزرو هتل',active:true},
-  {id:'visa-4',country:'ارمنستان',city:'ایروان',price:0,duration:'بدون ویزا برای پاسپورت ایران',type:'بدون ویزا',docs:'پاسپورت معتبر',active:true},
-  {id:'visa-5',country:'مالزی',city:'کوالالامپور',price:0,duration:'بدون ویزا برای اقامت کوتاه',type:'بدون ویزا',docs:'پاسپورت معتبر و بلیط برگشت',active:true}
+  {id:'visa-china',country:'چین',city:'پکن / شانگهای',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-thailand',country:'تایلند',city:'بانکوک',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-russia',country:'روسیه',city:'مسکو',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-indonesia',country:'اندونزی',city:'بالی / جاکارتا',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-india',country:'هند',city:'دهلی',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-philippines',country:'فیلیپین',city:'مانیل',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-malaysia',country:'مالزی',city:'کوالالامپور',price:0,duration:'طبق شرایط ورود مقصد',type:'بدون ویزا / شرایط خاص',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-singapore',country:'سنگاپور',city:'سنگاپور',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-uzbekistan',country:'ازبکستان',city:'تاشکند',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-tajikistan',country:'تاجیکستان',city:'دوشنبه',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-pakistan',country:'پاکستان',city:'اسلام‌آباد',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-azerbaijan',country:'آذربایجان',city:'باکو',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-kenya',country:'کنیا',city:'نایروبی',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-qatar',country:'قطر',city:'دوحه',price:0,duration:'طبق شرایط ورود مقصد',type:'بدون ویزا / شرایط خاص',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-oman',country:'عمان',city:'مسقط',price:0,duration:'طبق شرایط ورود مقصد',type:'بدون ویزا / شرایط خاص',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-iran',country:'ایران',city:'تهران',price:0,duration:'طبق شرایط ورود مقصد',type:'بدون ویزا / شرایط خاص',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-brazil',country:'برزیل',city:'ریودوژانیرو / سائوپائولو',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-srilanka',country:'سریلانکا',city:'کلمبو',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true},
+  {id:'visa-cambodia',country:'کامبوج',city:'پنوم‌پن',price:"",duration:'طبق قوانین مقصد / نیازمند بررسی',type:'توریستی',docs:'پاسپورت معتبر، عکس، فرم درخواست، مدارک مالی و شغلی در صورت نیاز',active:true}
 ];
 
-function visaServices(){return read('visaServices',DEFAULT_VISAS)}
-function saveVisaServices(v){write('visaServices',v)}
+
+function normalizeVisaService(v,i=0){
+  return {
+    id:v?.id||('visa-custom-'+Date.now()+'-'+i),
+    country:v?.country||'کشور',
+    city:v?.city||'',
+    price:v?.price??'',
+    duration:v?.duration||'طبق شرایط سفارت',
+    type:v?.type||'توریستی',
+    docs:v?.docs||'پاسپورت معتبر و مدارک لازم',
+    active:v?.active!==false
+  };
+}
+function mergeDefaultVisaServices(existing){
+  const base=(typeof DEFAULT_VISAS!=='undefined'?DEFAULT_VISAS:[]).map(normalizeVisaService);
+  const out=(Array.isArray(existing)?existing:[]).map(normalizeVisaService);
+  const keyOf=v=>String(v.country||v.id||'').trim().toLowerCase();
+  const keys=new Set(out.map(keyOf).filter(Boolean));
+  base.forEach(v=>{
+    const k=keyOf(v);
+    if(!keys.has(k)){
+      out.push(v);
+      keys.add(k);
+    }
+  });
+  return out.map(normalizeVisaService);
+}
+
+function visaServices(){
+  const v=read('visaServices',DEFAULT_VISAS);
+  const merged=mergeDefaultVisaServices(v);
+  if(Array.isArray(v)&&merged.length!==v.length)saveVisaServices(merged);
+  return merged;
+}
+function saveVisaServices(v){write('visaServices',mergeDefaultVisaServices(v))}
 
 function themedTourImage(t){
   const s=String((t?.dest||'')+' '+(t?.title||'')).toLowerCase();
@@ -6070,12 +6196,20 @@ function destinationGuideList(){return Object.entries(DESTINATION_GUIDES).map(([
 
 function defaultTourById(id){return (DEFAULT_TOURS||[]).find(x=>Number(x.id)===Number(id))||null}
 function repairHotel(h,basePrice,star){
-  const price=Number(h?.price||basePrice||0);
+  const priceCurrency=String(h?.priceCurrency||h?.currency||h?.dblCurrency||'IRR').toUpperCase();
+  const dblPrice=priceNumber(h?.dblPrice||h?.doublePrice||h?.price||basePrice||0);
+  const sglPrice=priceNumber(h?.sglPrice||h?.singlePrice||h?.sgl||0);
+  const price=priceNumber(h?.price||dblPrice||basePrice||0);
   return {
     ...h,
     star:Number(h?.star||star||3),
     name:h?.name||h?.nameLatin||`هتل ${faNum(star||3)} ستاره`,
     price,
+    priceCurrency,
+    dblPrice:dblPrice||price,
+    sglPrice:sglPrice||'',
+    dblCurrency:String(h?.dblCurrency||priceCurrency).toUpperCase(),
+    sglCurrency:String(h?.sglCurrency||priceCurrency).toUpperCase(),
     capacity:Number.isFinite(Number(h?.capacity))?Number(h.capacity):10,
     showInBuyer:h?.showInBuyer!==false,
     photos:(h?.photos||h?.images||[]).filter(Boolean).slice(0,12),
@@ -6087,12 +6221,14 @@ function repairTour(t,i){
   const dest=t?.dest||def.dest||'استانبول';
   const title=(typeof TOUR_TITLE_FA_MAP!=='undefined'&&TOUR_TITLE_FA_MAP[t?.title])||t?.title||def.title||`تور ${dest}`;
   const img=t?.img||def.img||themedTourImage({dest,title});
+  const basePrice=priceNumber(t?.price||def.price||10000000);
+  const priceCurrency=String(t?.priceCurrency||t?.currency||def.priceCurrency||'IRR').toUpperCase();
   const rawHotels=Array.isArray(t?.hotels)&&t.hotels.length?t.hotels:(def.hotels||[]);
   const hotels=(rawHotels.length?rawHotels:[
-    {star:3,name:'هتل سه ستاره پیشنهادی',price:t?.price||def.price||10000000,capacity:10},
-    {star:4,name:'هتل چهار ستاره پیشنهادی',price:Math.round((t?.price||def.price||10000000)*1.25),capacity:8},
-    {star:5,name:'هتل پنج ستاره پیشنهادی',price:Math.round((t?.price||def.price||10000000)*1.55),capacity:5}
-  ]).map((h,idx)=>repairHotel(h,t?.price||def.price||10000000,h?.star||[3,4,5][idx%3]));
+    {star:3,name:'هتل سه ستاره پیشنهادی',price:basePrice,capacity:10},
+    {star:4,name:'هتل چهار ستاره پیشنهادی',price:Math.round(basePrice*1.25),capacity:8},
+    {star:5,name:'هتل پنج ستاره پیشنهادی',price:Math.round(basePrice*1.55),capacity:5}
+  ]).map((h,idx)=>repairHotel(h,basePrice,h?.star||[3,4,5][idx%3]));
   return {
     ...def,...t,
     id:t?.id||Date.now()+i,
@@ -6102,7 +6238,9 @@ function repairTour(t,i){
     returnAirline:t?.returnAirline||def.returnAirline||t?.airline||def.airline||'ایرلاین',
     flightTime:t?.flightTime||def.flightTime||'۰۸:۳۰',
     landingTime:t?.landingTime||def.landingTime||'۱۲:۴۵',
-    price:Number(t?.price||def.price||10000000),
+    price:basePrice,
+    priceCurrency,
+    prices:normalizeTourPrices(t?.prices||def.prices||[],basePrice,priceCurrency),
     status:t?.status||'active',
     type:t?.type||def.type||'international',
     level:t?.level||def.level||'special',
@@ -6179,8 +6317,9 @@ function cleanFinalToursHotels(){
 function seed(){
   cleanFinalToursHotels();
   try{saveHotelCatalog(mergeDefaultHotelCatalog(hotelCatalog()).filter(h=>!isTestHotelItem(h)))}catch(e){console.warn('hotel catalog merge failed',e)}
-  try{saveAirlineCatalog(airlineCatalog())}catch(e){console.warn('airline catalog merge failed',e)}
+  try{saveAirlineCatalog(mergeDefaultAirlineCatalog(airlineCatalog()))}catch(e){console.warn('airline catalog merge failed',e)}
   try{saveCurrencyCatalog(currencyCatalog())}catch(e){console.warn('currency catalog merge failed',e)}
+  try{saveVisaServices(mergeDefaultVisaServices(visaServices()))}catch(e){console.warn('visa services merge failed',e)}
   repairAppData();
   cleanFinalToursHotels();
   normalizeTourImagesTheme();

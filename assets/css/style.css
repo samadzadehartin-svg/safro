@@ -3534,3 +3534,23 @@ button.danger,
 .source-hotel-note{min-height:52px;margin-top:8px}
 @media(max-width:980px){.source-hotel-toolbar,.source-hotel-edit-grid{grid-template-columns:1fr 1fr}.source-hotel-card-head{flex-direction:column}}
 @media(max-width:620px){.source-hotel-toolbar,.source-hotel-edit-grid{grid-template-columns:1fr}}
+
+
+/* Tour bank currency + hotel room pricing */
+.tour-bank-pricing-section{border:1px solid rgba(74,159,216,.22)!important;background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(240,249,255,.88))!important;border-radius:28px!important}
+.tour-bank-count{display:grid;gap:4px;text-align:center;background:rgba(74,159,216,.08);border:1px solid rgba(74,159,216,.18);border-radius:18px;padding:10px 14px;color:var(--t2)}
+.tour-bank-count b{color:var(--p);font-size:22px}
+.tour-bank-toolbar,.tour-base-price-grid,.tour-add-currency-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
+.tour-bank-pricing-list{display:grid;gap:14px;margin-top:12px}
+.tour-bank-price-card{border:1px solid var(--b);border-radius:22px;background:var(--s);padding:14px;box-shadow:0 12px 30px rgba(15,23,42,.05)}
+.tour-bank-price-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid var(--b);padding-bottom:10px;margin-bottom:12px}
+.tour-bank-price-head h4{margin:6px 0;line-height:1.8}
+.tour-multi-currency-box,.tour-hotel-room-editor{border:1px dashed rgba(74,159,216,.32);border-radius:18px;padding:12px;margin-top:12px;background:rgba(74,159,216,.04)}
+.tour-price-row-list{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tour-price-admin-chip,.tour-price-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(74,159,216,.24);background:rgba(74,159,216,.08);border-radius:999px;padding:6px 9px;font-size:12px;color:var(--t)}
+.mini-x{border:0;background:rgba(239,68,68,.12);color:#ef4444;border-radius:50%;width:22px;height:22px;cursor:pointer;font-weight:900}
+.tour-hotel-room-row{display:grid;grid-template-columns:minmax(170px,1.3fr) repeat(6,minmax(100px,1fr));gap:8px;align-items:center;border-top:1px solid var(--b);padding-top:10px;margin-top:10px}
+.hotel-room-price{display:grid;gap:2px;text-align:left;direction:rtl}.hotel-room-price small{font-size:11px;color:var(--t2)}
+.tour-currency-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.tour-currency-badges .tour-price-chip:first-child{display:none}
+@media(max-width:900px){.tour-hotel-room-row{grid-template-columns:1fr 1fr}.tour-bank-price-head{display:grid}.tour-bank-toolbar,.tour-base-price-grid,.tour-add-currency-grid{grid-template-columns:1fr}}
+.dark .tour-bank-pricing-section,.dark .tour-bank-price-card{background:rgba(15,23,42,.65)!important}
