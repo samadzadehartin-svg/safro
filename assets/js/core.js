@@ -5591,15 +5591,7 @@ function airlineDisplayName(a){
 }
 
 function defaultHotelCatalog(){
-  const starter=[
-    {id:'h3-1',star:3,nameLatin:'Saffron Inn',destination:'نمونه',sourceGroup:'نمونه',enabledForStaff:false},
-    {id:'h3-2',star:3,nameLatin:'Blue Pearl Hotel',destination:'نمونه',sourceGroup:'نمونه',enabledForStaff:false},
-    {id:'h4-1',star:4,nameLatin:'Grand Vista Hotel',destination:'نمونه',sourceGroup:'نمونه',enabledForStaff:false},
-    {id:'h4-2',star:4,nameLatin:'Marina Palace',destination:'نمونه',sourceGroup:'نمونه',enabledForStaff:false},
-    {id:'h5-1',star:5,nameLatin:'Royal Palace Hotel',destination:'نمونه',sourceGroup:'نمونه',enabledForStaff:false},
-    {id:'h5-2',star:5,nameLatin:'Imperial Grand Hotel',destination:'نمونه',sourceGroup:'نمونه',enabledForStaff:false}
-  ];
-  return [...starter,...(typeof IMPORTED_HOTEL_CATALOG!=='undefined'?IMPORTED_HOTEL_CATALOG:[])].map(normalizeHotelCatalogItem);
+  return [...(typeof IMPORTED_HOTEL_CATALOG!=='undefined'?IMPORTED_HOTEL_CATALOG:[])].map(normalizeHotelCatalogItem);
 }
 function defaultStaffAccounts(){
   return Array.from({length:30},(_,i)=>{
@@ -6146,11 +6138,44 @@ function resetDemoData(){
   }
 }
 
+
+function isTestHotelItem(h){
+  const s=String([h?.id,h?.name,h?.nameLatin,h?.destination,h?.sourceGroup,h?.source].filter(Boolean).join(' ')).toLowerCase();
+  return /test|demo|sample|نمونه|آزمایشی|تستی|saffron inn|blue pearl|grand vista|marina palace|royal palace|imperial grand/.test(s)
+    || /^h[345]-\d+$/.test(String(h?.id||''));
+}
+function isTestTourItem(t){
+  const s=String([t?.title,t?.dest,t?.label,t?.sourceName,t?.sourceKey,t?.lastEditedBy,t?.desc].filter(Boolean).join(' ')).toLowerCase();
+  return /test|demo|sample|نمونه|آزمایشی|تستی/.test(s);
+}
+function cleanFinalToursHotels(){
+  try{
+    const currentTours=read('tours',null);
+    if(Array.isArray(currentTours)){
+      const cleanedTours=currentTours.filter(t=>!isTestTourItem(t)).map(t=>({
+        ...t,
+        hotels:(Array.isArray(t.hotels)?t.hotels:[]).filter(h=>!isTestHotelItem(h))
+      }));
+      if(cleanedTours.length!==currentTours.length || JSON.stringify(cleanedTours)!==JSON.stringify(currentTours)){
+        write('tours',cleanedTours);
+      }
+    }
+    const currentHotels=read('hotelCatalog',null);
+    if(Array.isArray(currentHotels)){
+      const cleanedHotels=currentHotels.filter(h=>!isTestHotelItem(h));
+      if(cleanedHotels.length!==currentHotels.length)write('hotelCatalog',cleanedHotels);
+    }
+    write('testToursHotelsCleanedV1',true);
+  }catch(e){console.warn('cleanFinalToursHotels failed',e)}
+}
+
 function seed(){
-  try{saveHotelCatalog(mergeDefaultHotelCatalog(hotelCatalog()))}catch(e){console.warn('hotel catalog merge failed',e)}
+  cleanFinalToursHotels();
+  try{saveHotelCatalog(mergeDefaultHotelCatalog(hotelCatalog()).filter(h=>!isTestHotelItem(h)))}catch(e){console.warn('hotel catalog merge failed',e)}
   try{saveAirlineCatalog(airlineCatalog())}catch(e){console.warn('airline catalog merge failed',e)}
   try{saveCurrencyCatalog(currencyCatalog())}catch(e){console.warn('currency catalog merge failed',e)}
   repairAppData();
+  cleanFinalToursHotels();
   normalizeTourImagesTheme();
   if(typeof normalizeTourPersianNamesAndImages==='function')normalizeTourPersianNamesAndImages();
 }

@@ -196,6 +196,15 @@ function adminRunAllSources(){
 function safeSafaroIranianImportedTours(){try{return safaroIranianImportedTours()}catch(e){console.warn('safaro import preview failed',e);return []}}
 function adminImportSafaroIranianTours(){adminRunAllSources()}
 
+
+function adminCleanTestToursHotels(){
+  cleanFinalToursHotels();
+  try{saveHotelCatalog(hotelCatalog().filter(h=>!isTestHotelItem(h)))}catch(e){}
+  try{saveTours(tours().filter(t=>!isTestTourItem(t)).map(t=>({...t,hotels:(t.hotels||[]).filter(h=>!isTestHotelItem(h))})))}catch(e){}
+  showToast('تور و هتل‌های تستی حذف شدند');
+  try{renderAdmin()}catch(e){}
+}
+
 function renderAdmin(){
   const os=orders(),sales=os.reduce((s,o)=>s+Number(o.totalPrice||0),0);
   $('app').innerHTML=`<div class="card pad row wrap" style="margin-top:22px"><div><span class="badge international">پنل مدیریت</span><h1>داشبورد مدیریت</h1></div><button class="soft" onclick="logoutRole('admin')">خروج</button></div>
@@ -233,7 +242,7 @@ function renderAdmin(){
         <p class="small">از این قسمت تورهای منابع را وارد می‌کنی. گزینه «هر روز بخوان و آپدیت کن» باعث می‌شود هر بار پنل مدیریت باز شود، اگر ۲۴ ساعت گذشته باشد همان منبع دوباره آپدیت شود.</p>
       </div>
       <div class="actions">
-        <button class="btn" onclick="adminRunAllSources()">آپدیت هر دو منبع الان</button>
+        <button class="btn" onclick="adminRunAllSources()">آپدیت منابع الان</button><button class="danger" onclick="adminCleanTestToursHotels()">حذف تستی‌ها</button>
       </div>
     </div>
     <div class="source-import-note">نکته: اطلاعات واردشده بعد از اضافه‌شدن داخل همین سایت قابل ویرایش، تغییر قیمت، ظرفیت، عکس و وضعیت نمایش است.</div>
