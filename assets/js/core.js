@@ -5625,6 +5625,7 @@ function normalizeHotelCatalogItem(h,i=0){
     dblPrice:h?.dblPrice||'',
     sglPrice:h?.sglPrice||'',
     childPrice:h?.childPrice||'',
+    capacity:Number(h?.capacity||0),
     bookingLink:h?.bookingLink||'',
     image,
     img:image,

@@ -3515,3 +3515,22 @@ button.danger,
   color:#fff!important;
   border:0!important;
 }
+
+
+/* Source hotel editor inside import section */
+.source-hotel-editor{border:1px solid rgba(74,159,216,.22)!important;background:rgba(255,255,255,.72)!important;border-radius:24px!important}
+.source-hotel-mini-stats{border:1px solid var(--b);border-radius:18px;padding:10px 14px;background:var(--s);display:grid;gap:4px;text-align:center}
+.source-hotel-mini-stats b{font-size:22px;color:var(--p)}
+.source-hotel-toolbar{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:10px;margin:14px 0}
+.source-hotel-actions{margin:8px 0 12px}
+.source-hotel-stats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.source-hotel-stats span{background:rgba(74,159,216,.08);border:1px solid rgba(74,159,216,.16);border-radius:999px;padding:7px 10px;font-size:12px;color:var(--t2)}
+.source-hotel-list{display:grid;gap:12px}
+.source-hotel-card{border:1px solid var(--b);border-radius:20px;background:var(--s);padding:12px;box-shadow:0 10px 24px rgba(15,23,42,.04)}
+.source-hotel-card.off{opacity:.72;background:rgba(148,163,184,.08)}
+.source-hotel-card-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+.source-hotel-card-head b{display:block;margin:6px 0;font-size:15px}.source-hotel-card-head small{display:block;color:var(--t2);line-height:1.8}
+.source-hotel-edit-grid{display:grid;grid-template-columns:2fr 1fr .8fr 1fr 1.2fr .8fr .9fr 1.2fr;gap:8px}
+.source-hotel-note{min-height:52px;margin-top:8px}
+@media(max-width:980px){.source-hotel-toolbar,.source-hotel-edit-grid{grid-template-columns:1fr 1fr}.source-hotel-card-head{flex-direction:column}}
+@media(max-width:620px){.source-hotel-toolbar,.source-hotel-edit-grid{grid-template-columns:1fr}}

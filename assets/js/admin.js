@@ -193,6 +193,169 @@ function adminRunAllSources(){
   renderAdmin();
 }
 
+
+function sourceHotelKindFa(kind){return kind==='tour'?'هتل داخل تور':'بانک هتل'}
+function sourceHotelName(e){return e.kind==='tour'?(e.hotel.name||e.hotel.nameLatin||'هتل'):(e.hotel.nameLatin||e.hotel.name||'هتل')}
+function sourceHotelDest(e){return e.kind==='tour'?(e.tour.dest||e.tour.destination||'عمومی'):(e.hotel.destination||e.hotel.dest||'عمومی')}
+function sourceHotelSource(e){return e.kind==='tour'?(e.tour.sourceName||e.tour.label||e.tour.lastEditedBy||'تور واردشده'):(e.hotel.sourceGroup||e.hotel.source||'بانک هتل')}
+function sourceHotelEntries(){
+  const catalog=hotelCatalog().filter(h=>h.imported||String(h.sourceGroup||h.source||'').match(/الفبای سفر|سفرو|پرتو|PDF|Parto|Safaro|Alefba/i)||String(h.id||'').match(/alefba|safaro|parto/i)).map(h=>({kind:'catalog',id:h.id,hotel:h}));
+  const tourEntries=[];
+  tours().filter(t=>t.sourceImported||t.sourceName||String(t.label||t.lastEditedBy||'').match(/وارد|الفبای سفر|سفرو ایرانیان|پرتو/i)).forEach(t=>{
+    (t.hotels||[]).forEach((h,i)=>tourEntries.push({kind:'tour',id:String(t.id),index:i,tour:t,hotel:h}));
+  });
+  return [...catalog,...tourEntries];
+}
+function sourceHotelFilterOptions(){
+  const entries=sourceHotelEntries();
+  const sources=[...new Set(entries.map(sourceHotelSource).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),'fa'));
+  const dests=[...new Set(entries.map(sourceHotelDest).filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),'fa'));
+  return {sources,dests};
+}
+function sourceHotelCurrentEntries(){
+  const q=($('sourceHotelSearch')?.value||'').trim().toLowerCase();
+  const kind=$('sourceHotelKindFilter')?.value||'all';
+  const source=$('sourceHotelSourceFilter')?.value||'all';
+  const dest=$('sourceHotelDestFilter')?.value||'all';
+  const show=$('sourceHotelShowFilter')?.value||'all';
+  let entries=sourceHotelEntries();
+  if(kind!=='all')entries=entries.filter(e=>e.kind===kind);
+  if(source!=='all')entries=entries.filter(e=>sourceHotelSource(e)===source);
+  if(dest!=='all')entries=entries.filter(e=>sourceHotelDest(e)===dest);
+  if(q)entries=entries.filter(e=>String([sourceHotelName(e),sourceHotelDest(e),sourceHotelSource(e),e.tour?.title,e.hotel?.note,e.hotel?.meal,e.hotel?.board].join(' ')).toLowerCase().includes(q));
+  if(show==='on')entries=entries.filter(e=>e.kind==='catalog'?e.hotel.enabledForStaff!==false:e.hotel.showInBuyer!==false);
+  if(show==='off')entries=entries.filter(e=>e.kind==='catalog'?e.hotel.enabledForStaff===false:e.hotel.showInBuyer===false);
+  entries.sort((a,b)=>String(sourceHotelDest(a)).localeCompare(sourceHotelDest(b),'fa')||String(sourceHotelSource(a)).localeCompare(sourceHotelSource(b),'fa')||String(sourceHotelName(a)).localeCompare(sourceHotelName(b),'en'));
+  return entries;
+}
+function sourceHotelEditorBox(){
+  const opt=sourceHotelFilterOptions();
+  const stats=sourceHotelEntries();
+  return `<section class="source-hotel-editor card pad" style="margin-top:14px">
+    <div class="row wrap">
+      <div><span class="badge special">ویرایش هتل‌های خروجی منابع</span><h3>ادیت هتل‌ها بعد از خروجی گرفتن از سایت‌ها</h3><p class="small">هتل‌هایی که از سفرو ایرانیان، الفبای سفر، پرتو یا PDFها وارد شده‌اند اینجا قابل ویرایش هستند؛ بدون اینکه مجبور باشی وارد بخش‌های دیگر شوی.</p></div>
+      <div class="source-hotel-mini-stats"><span>کل موارد</span><b>${faNum(stats.length)}</b></div>
+    </div>
+    <div class="source-hotel-toolbar">
+      <input id="sourceHotelSearch" class="field" placeholder="جستجوی نام هتل، مقصد، منبع..." oninput="renderSourceHotelEditor()">
+      <select id="sourceHotelKindFilter" class="field" onchange="renderSourceHotelEditor()"><option value="all">همه نوع‌ها</option><option value="catalog">بانک هتل</option><option value="tour">هتل داخل تور</option></select>
+      <select id="sourceHotelSourceFilter" class="field" onchange="renderSourceHotelEditor()"><option value="all">همه منابع</option>${opt.sources.map(s=>`<option value="${s}">${s}</option>`).join('')}</select>
+      <select id="sourceHotelDestFilter" class="field" onchange="renderSourceHotelEditor()"><option value="all">همه مقصدها</option>${opt.dests.map(d=>`<option value="${d}">${d}</option>`).join('')}</select>
+      <select id="sourceHotelShowFilter" class="field" onchange="renderSourceHotelEditor()"><option value="all">همه وضعیت‌ها</option><option value="on">نمایش فعال</option><option value="off">مخفی</option></select>
+    </div>
+    <div class="row wrap source-hotel-actions">
+      <button class="soft" onclick="bulkSourceHotelVisibility(false)">مخفی کردن نتیجه فیلتر</button>
+      <button class="btn" onclick="bulkSourceHotelVisibility(true)">نمایش نتیجه فیلتر برای فروش/خریدار</button>
+      <button class="soft" onclick="renderSourceHotelEditor()">بازسازی لیست</button>
+    </div>
+    <div id="sourceHotelEditorStats" class="source-hotel-stats"></div>
+    <div id="sourceHotelEditorTable">${sourceHotelRowsHtml(sourceHotelCurrentEntries())}</div>
+  </section>`;
+}
+function sourceHotelRowsHtml(entries){
+  if(!entries.length)return '<div class="empty-note">موردی برای ویرایش پیدا نشد.</div>';
+  return `<div class="source-hotel-list">${entries.map(e=>sourceHotelCardHtml(e)).join('')}</div>`;
+}
+function sourceHotelCardHtml(e){
+  const h=e.hotel||{};
+  const sid=safeHotelGroupId(`${e.kind}-${e.id}-${e.index??'x'}`);
+  const show=e.kind==='catalog'?h.enabledForStaff!==false:h.showInBuyer!==false;
+  const name=sourceHotelName(e), dest=sourceHotelDest(e), source=sourceHotelSource(e);
+  const price=e.kind==='catalog'?(h.dblPrice||h.price||''):(h.price||'');
+  const cap=Number(h.capacity||0);
+  return `<div class="source-hotel-card ${show?'on':'off'}">
+    <div class="source-hotel-card-head">
+      <div><span class="badge ${e.kind==='catalog'?'special':'international'}">${sourceHotelKindFa(e.kind)}</span><b dir="ltr">${name}</b><small>${dest} | ${source}${e.tour?.title?` | ${e.tour.title}`:''}</small></div>
+      <span class="badge ${show?'domestic':'muted'}">${show?'نمایش فعال':'مخفی'}</span>
+    </div>
+    <div class="source-hotel-edit-grid">
+      <input id="sh_name_${sid}" class="field" value="${name.replace(/"/g,'&quot;')}" placeholder="نام هتل">
+      <input id="sh_dest_${sid}" class="field" value="${String(dest).replace(/"/g,'&quot;')}" placeholder="مقصد">
+      <select id="sh_star_${sid}" class="field">${[3,4,5].map(s=>`<option value="${s}" ${Number(h.star||3)===s?'selected':''}>${s} ستاره</option>`).join('')}</select>
+      <input id="sh_meal_${sid}" class="field" value="${String(h.meal||h.board||'').replace(/"/g,'&quot;')}" placeholder="سرویس / وعده">
+      <input id="sh_price_${sid}" class="field" value="${String(price).replace(/"/g,'&quot;')}" placeholder="قیمت / قیمت پایه">
+      <input id="sh_cap_${sid}" class="field" type="number" value="${cap}" placeholder="ظرفیت">
+      <select id="sh_show_${sid}" class="field"><option value="true" ${show?'selected':''}>نمایش فعال</option><option value="false" ${!show?'selected':''}>مخفی</option></select>
+      <input id="sh_source_${sid}" class="field" value="${String(source).replace(/"/g,'&quot;')}" placeholder="منبع">
+    </div>
+    <textarea id="sh_note_${sid}" class="field source-hotel-note" placeholder="یادداشت / توضیحات">${String(h.note||e.tour?.desc||'').replace(/</g,'&lt;')}</textarea>
+    <div class="actions"><button class="btn" onclick="saveSourceHotelEdit('${e.kind}','${e.id}',${e.index??-1})">ذخیره ادیت</button><button class="soft" onclick="toggleSourceHotelVisibility('${e.kind}','${e.id}',${e.index??-1})">تغییر وضعیت نمایش</button></div>
+  </div>`;
+}
+function renderSourceHotelEditor(){
+  const box=$('sourceHotelEditorTable');if(!box)return;
+  const entries=sourceHotelCurrentEntries();
+  const stats=$('sourceHotelEditorStats');
+  if(stats){
+    const all=sourceHotelEntries();
+    stats.innerHTML=`<span>کل: <b>${faNum(all.length)}</b></span><span>نتیجه فیلتر: <b>${faNum(entries.length)}</b></span><span>بانک هتل: <b>${faNum(entries.filter(e=>e.kind==='catalog').length)}</b></span><span>هتل داخل تور: <b>${faNum(entries.filter(e=>e.kind==='tour').length)}</b></span>`;
+  }
+  box.innerHTML=sourceHotelRowsHtml(entries);
+}
+function sourceHotelReadFields(kind,id,index){
+  const sid=safeHotelGroupId(`${kind}-${id}-${index??'x'}`);
+  return {
+    name:$(`sh_name_${sid}`)?.value?.trim()||'هتل',
+    dest:$(`sh_dest_${sid}`)?.value?.trim()||'عمومی',
+    star:Number($(`sh_star_${sid}`)?.value)||3,
+    meal:$(`sh_meal_${sid}`)?.value?.trim()||'',
+    price:$(`sh_price_${sid}`)?.value?.trim()||'',
+    capacity:Number($(`sh_cap_${sid}`)?.value)||0,
+    show:$(`sh_show_${sid}`)?.value==='true',
+    source:$(`sh_source_${sid}`)?.value?.trim()||'',
+    note:$(`sh_note_${sid}`)?.value?.trim()||''
+  };
+}
+function saveSourceHotelEdit(kind,id,index){
+  const v=sourceHotelReadFields(kind,id,index);
+  if(kind==='catalog'){
+    saveHotelCatalog(hotelCatalog().map(h=>h.id===id?{...h,nameLatin:v.name,name:v.name,destination:v.dest,dest:v.dest,star:v.star,meal:v.meal,board:v.meal,dblPrice:v.price,price:v.price,capacity:v.capacity,enabledForStaff:v.show,sourceGroup:v.source||h.sourceGroup,note:v.note,imported:true}:h));
+  }else{
+    const tourId=Number(id);
+    saveTours(tours().map(t=>{
+      if(Number(t.id)!==tourId)return t;
+      const hs=[...(t.hotels||[])];
+      const old=hs[index]||{};
+      hs[index]={...old,name:v.name,nameLatin:v.name,star:v.star,meal:v.meal,board:v.meal,price:Number(String(v.price).replace(/[^0-9]/g,''))||Number(old.price||0),priceText:v.price,capacity:v.capacity,showInBuyer:v.show,note:v.note};
+      return {...t,dest:v.dest,hotels:hs,lastEditedBy:'مدیریت - ویرایش هتل منبع',lastEditedAt:new Date().toISOString()};
+    }));
+  }
+  renderSourceHotelEditor();
+  try{renderHotelCatalog()}catch(e){}
+  try{renderCurrentTourHotels()}catch(e){}
+  showToast('ادیت هتل ذخیره شد');
+}
+function toggleSourceHotelVisibility(kind,id,index){
+  if(kind==='catalog'){
+    saveHotelCatalog(hotelCatalog().map(h=>h.id===id?{...h,enabledForStaff:!(h.enabledForStaff!==false)}:h));
+  }else{
+    const tourId=Number(id);
+    saveTours(tours().map(t=>{
+      if(Number(t.id)!==tourId)return t;
+      const hs=[...(t.hotels||[])];
+      const old=hs[index]||{};
+      hs[index]={...old,showInBuyer:!(old.showInBuyer!==false)};
+      return {...t,hotels:hs};
+    }));
+  }
+  renderSourceHotelEditor();
+  showToast('وضعیت نمایش تغییر کرد');
+}
+function bulkSourceHotelVisibility(on){
+  const entries=sourceHotelCurrentEntries();
+  if(!entries.length){alert('موردی انتخاب نشده');return}
+  const catalogIds=new Set(entries.filter(e=>e.kind==='catalog').map(e=>e.id));
+  const tourMap={};
+  entries.filter(e=>e.kind==='tour').forEach(e=>{(tourMap[e.id]||(tourMap[e.id]=new Set())).add(e.index)});
+  if(catalogIds.size)saveHotelCatalog(hotelCatalog().map(h=>catalogIds.has(h.id)?{...h,enabledForStaff:!!on}:h));
+  if(Object.keys(tourMap).length)saveTours(tours().map(t=>{
+    const set=tourMap[String(t.id)];if(!set)return t;
+    return {...t,hotels:(t.hotels||[]).map((h,i)=>set.has(i)?{...h,showInBuyer:!!on}:h)};
+  }));
+  renderSourceHotelEditor();
+  showToast(on?'نتیجه فیلتر فعال شد':'نتیجه فیلتر مخفی شد');
+}
+
 function safeSafaroIranianImportedTours(){try{return safaroIranianImportedTours()}catch(e){console.warn('safaro import preview failed',e);return []}}
 function adminImportSafaroIranianTours(){adminRunAllSources()}
 
@@ -247,6 +410,7 @@ function renderAdmin(){
     </div>
     <div class="source-import-note">نکته: اطلاعات واردشده بعد از اضافه‌شدن داخل همین سایت قابل ویرایش، تغییر قیمت، ظرفیت، عکس و وضعیت نمایش است.</div>
     ${renderSourceImportCards()}
+    ${sourceHotelEditorBox()}
     <div class="safaro-import-preview">${[...safeSafaroIranianImportedTours().slice(0,6),...alefbaImportedTours().slice(0,12)].map(t=>`<div><b>${t.title}</b><small>${t.dest} | ${money(minHotel(t).price||t.price||0)} | ${t.sourceName==='Parto'?'پرتو':(t.sourceName==='AlefbaSafar'?'الفبای سفر':'سفرو ایرانیان')}</small></div>`).join('')}</div>
   </section>
 
