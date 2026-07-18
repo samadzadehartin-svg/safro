@@ -4146,3 +4146,35 @@ body.buyer-page .toast{
     background:rgba(255,255,255,.72)!important;
   }
 }
+
+/* =========================================================
+   v4.3 fixed buyer background
+   Keeps the main buyer line-art background fixed while content scrolls.
+   ========================================================= */
+body.buyer-page::before{
+  position:fixed!important;
+  top:var(--buyer-header-offset,67px)!important;
+  right:0!important;
+  bottom:0!important;
+  left:0!important;
+  inset:var(--buyer-header-offset,67px) 0 0 0!important;
+  background-attachment:fixed!important;
+  will-change:auto!important;
+}
+body.buyer-page::after{
+  position:fixed!important;
+  top:var(--buyer-header-offset,67px)!important;
+  right:0!important;
+  bottom:0!important;
+  left:0!important;
+  inset:var(--buyer-header-offset,67px) 0 0 0!important;
+  pointer-events:none!important;
+  will-change:auto!important;
+}
+@media(max-width:900px){
+  body.buyer-page::before,
+  body.buyer-page::after{
+    position:fixed!important;
+    inset:var(--buyer-header-offset,67px) 0 0 0!important;
+  }
+}
