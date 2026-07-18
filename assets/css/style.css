@@ -4300,3 +4300,57 @@ body.buyer-page .buyer-visa-section h2{
   body.buyer-page .buyer-visa-section h2{font-size:28px!important}
   .special-tours-section{padding:14px;border-radius:24px}
 }
+
+/* =========================================================
+   v4.5 richer, stronger and more varied fixed line-art background
+   ========================================================= */
+body.buyer-page::before{
+  background-image:url("../images/world-landmarks-v45-art.svg")!important;
+  background-size:1040px auto!important;
+  background-position:center var(--buyer-header-offset,67px)!important;
+  opacity:.98!important;
+  filter:contrast(1.18) saturate(1.18)!important;
+}
+body.buyer-page::after{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.70) 0%,rgba(255,255,255,.11) 18%,rgba(255,255,255,.015) 50%,rgba(255,255,255,.11) 82%,rgba(255,255,255,.70) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.035) 0%,rgba(255,255,255,.11) 45%,rgba(255,255,255,.19) 100%)!important;
+}
+body.buyer-page .combined-hero-card,
+body.buyer-page .country-line-section,
+body.buyer-page .special-tours-section,
+body.buyer-page .hero-custom-tour-card,
+body.buyer-page .filters,
+body.buyer-page .visa-section,
+body.buyer-page .about-box,
+body.buyer-page .contact-box,
+body.buyer-page .destination-guide-section{
+  background:rgba(255,255,255,.56)!important;
+  backdrop-filter:blur(7px) saturate(1.06)!important;
+}
+body.buyer-page .clickable-tour-card,
+body.buyer-page .last-card,
+body.buyer-page .visa-card,
+body.buyer-page .country-line-card,
+body.buyer-page .modal-card{
+  background:rgba(255,255,255,.74)!important;
+  backdrop-filter:blur(6px) saturate(1.04)!important;
+}
+@media(max-width:900px){
+  body.buyer-page::before{
+    background-size:860px auto!important;
+    opacity:.88!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.18)!important;
+  }
+}
+@media(max-width:560px){
+  body.buyer-page::before{
+    background-size:700px auto!important;
+    opacity:.78!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.28)!important;
+  }
+}
