@@ -4012,3 +4012,80 @@ body.buyer-page button.soft{
     background:rgba(255,255,255,.82)!important;
   }
 }
+
+
+/* =========================================================
+   v4.1 visible denser buyer background
+   Fix: previous white overlay hid the extra line-art.
+   ========================================================= */
+body.buyer-page,
+body.buyer-page.dark{
+  background:#fff!important;
+}
+body.buyer-page::before{
+  background-color:#fff!important;
+  background-image:url("../images/world-landmarks-denser.svg")!important;
+  background-repeat:repeat!important;
+  background-position:center var(--buyer-header-offset,67px)!important;
+  background-size:980px auto!important;
+  opacity:.58!important;
+}
+body.buyer-page::after{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.90) 0%,rgba(255,255,255,.32) 17%,rgba(255,255,255,.16) 50%,rgba(255,255,255,.32) 83%,rgba(255,255,255,.90) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,.30) 45%,rgba(255,255,255,.42) 100%)!important;
+}
+body.buyer-page .combined-hero-card{
+  background:rgba(255,255,255,.38)!important;
+  border-color:rgba(15,23,42,.07)!important;
+  box-shadow:0 10px 24px rgba(15,23,42,.025)!important;
+}
+body.buyer-page .hero-copy-panel,
+body.buyer-page .combined-hero-copy.hero-copy-panel{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+body.buyer-page .hero-custom-tour-card,
+body.buyer-page .country-line-section,
+body.buyer-page .filters,
+body.buyer-page .visa-section,
+body.buyer-page .about-box,
+body.buyer-page .contact-box,
+body.buyer-page .trust-section .trust-card,
+body.buyer-page .destination-guide-section{
+  background:rgba(255,255,255,.68)!important;
+  border-color:rgba(15,23,42,.08)!important;
+}
+body.buyer-page .card:not(.clickable-tour-card):not(.last-card),
+body.buyer-page .modal-card,
+body.buyer-page .hotel,
+body.buyer-page .date-chip,
+body.buyer-page .info{
+  background:rgba(255,255,255,.68)!important;
+}
+body.buyer-page .clickable-tour-card,
+body.buyer-page .last-card,
+body.buyer-page .visa-card,
+body.buyer-page .country-line-card{
+  background:rgba(255,255,255,.82)!important;
+}
+@media(max-width:900px){
+  body.buyer-page::before{
+    background-size:820px auto!important;
+    background-position:center 72px!important;
+    opacity:.50!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.34)!important;
+  }
+}
+@media(max-width:560px){
+  body.buyer-page::before{
+    background-size:660px auto!important;
+    background-position:center 82px!important;
+    opacity:.43!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.45)!important;
+  }
+}
