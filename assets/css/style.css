@@ -3814,3 +3814,60 @@ body.buyer-page::before{
   .country-line-card[class*="country-card-v"]{grid-template-rows:112px auto;}
   .country-card-wide .country-art-wrap img{height:92px;max-width:100%;}
 }
+
+/* v3.9 calmer buyer background: mostly white, sparse non-repeating line art */
+body.buyer-page,
+body.buyer-page.dark{
+  background:#fff!important;
+}
+body.buyer-page::before{
+  background-color:#fff!important;
+  background-image:url("../images/world-landmarks-calm.svg")!important;
+  background-repeat:no-repeat!important;
+  background-position:center 30px!important;
+  background-size:min(1800px, 132vw) auto!important;
+  opacity:.48!important;
+}
+body.buyer-page::after{
+  content:"";
+  position:absolute;
+  inset:var(--buyer-header-offset,67px) 0 0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.98) 0%,rgba(255,255,255,.88) 18%,rgba(255,255,255,.76) 50%,rgba(255,255,255,.88) 82%,rgba(255,255,255,.98) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.84) 38%,rgba(255,255,255,.92) 100%);
+}
+body.buyer-page>#headerMount,
+body.buyer-page>#app,
+body.buyer-page>#footerMount,
+body.buyer-page>.lightbox,
+body.buyer-page>.toast{
+  position:relative;
+  z-index:1;
+}
+body.buyer-page .country-line-section,
+body.buyer-page .filters,
+body.buyer-page .card,
+body.buyer-page .visa-section,
+body.buyer-page .about-box,
+body.buyer-page .contact-box{
+  background:rgba(255,255,255,.96)!important;
+}
+@media(max-width:900px){
+  body.buyer-page::before{
+    background-size:1320px auto!important;
+    background-position:center 70px!important;
+    opacity:.38!important;
+  }
+}
+@media(max-width:560px){
+  body.buyer-page::before{
+    background-size:980px auto!important;
+    background-position:center 90px!important;
+    opacity:.30!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.90)!important;
+  }
+}
