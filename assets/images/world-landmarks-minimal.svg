@@ -1,130 +1,98 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1080" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none">
   <defs>
-    <linearGradient id="horizon" x1="0" y1="0" x2="1800" y2="0" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#4A9FD8" stop-opacity="0"/>
-      <stop offset="0.18" stop-color="#4A9FD8" stop-opacity="0.46"/>
-      <stop offset="0.82" stop-color="#4A9FD8" stop-opacity="0.46"/>
-      <stop offset="1" stop-color="#4A9FD8" stop-opacity="0"/>
+    <linearGradient id="mist" x1="800" y1="0" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#000000" stop-opacity=".58"/>
+      <stop offset=".46" stop-color="#000000" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#000000" stop-opacity=".52"/>
     </linearGradient>
-    <linearGradient id="goldLine" x1="180" y1="240" x2="1610" y2="860" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E8A838" stop-opacity="0.18"/>
-      <stop offset="0.48" stop-color="#E8A838" stop-opacity="0.58"/>
-      <stop offset="1" stop-color="#E8A838" stop-opacity="0.16"/>
+    <linearGradient id="skyLine" x1="0" y1="0" x2="1600" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#000000" stop-opacity=".08"/>
+      <stop offset=".5" stop-color="#000000" stop-opacity=".23"/>
+      <stop offset="1" stop-color="#000000" stop-opacity=".08"/>
     </linearGradient>
     <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="0.35"/>
+      <feGaussianBlur stdDeviation="2.2"/>
     </filter>
   </defs>
 
-  <!-- soft geographic contour lines -->
-  <g stroke="#4A9FD8" stroke-width="2" opacity="0.18">
-    <path d="M-60 164C180 74 330 228 565 144C775 69 922 107 1112 188C1329 280 1534 144 1865 194"/>
-    <path d="M-84 220C144 130 340 290 570 210C802 129 985 155 1170 242C1382 342 1582 202 1872 244"/>
-    <path d="M-120 736C166 622 338 788 595 708C831 634 988 671 1192 756C1395 840 1604 715 1910 752"/>
-    <path d="M-108 794C150 698 352 854 610 778C846 709 1024 741 1210 821C1410 906 1630 786 1900 818"/>
+  <rect width="1600" height="1000" fill="#FFFFFF"/>
+
+  <!-- soft travel route -->
+  <path d="M-90 126C172 18 334 164 548 108C794 43 900 17 1140 114C1344 197 1502 95 1695 37" stroke="#000000" stroke-opacity=".42" stroke-width="2" stroke-dasharray="9 15"/>
+  <path d="M1180 77l26 8-20 7-4 18-8-15-18-3 16-7 8-8z" fill="#000000" fill-opacity=".30"/>
+
+  <!-- hot air balloons / Cappadocia -->
+  <g stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+    <path d="M145 144c0-33 25-57 55-57s55 24 55 57c0 31-24 58-44 77h-22c-20-19-44-46-44-77z"/>
+    <path d="M188 222h24l-4 17h-16l-4-17zM200 87v134M164 103c18 19 21 78 36 118M236 103c-18 19-21 78-36 118"/>
+    <path d="M309 88c0-18 14-32 32-32s32 14 32 32c0 19-13 34-25 47h-14c-12-13-25-28-25-47zM334 136h14l-3 10h-8l-3-10z" opacity=".48"/>
   </g>
 
-  <!-- air routes -->
-  <g stroke="url(#goldLine)" stroke-width="2.5" stroke-dasharray="10 14" opacity="0.8">
-    <path d="M150 348C492 110 1008 112 1642 390"/>
-    <path d="M210 890C582 622 1110 604 1590 842"/>
-  </g>
-  <g fill="#E8A838" opacity="0.5">
-    <circle cx="150" cy="348" r="5"/><circle cx="1642" cy="390" r="5"/>
-    <circle cx="210" cy="890" r="5"/><circle cx="1590" cy="842" r="5"/>
-  </g>
-
-  <!-- Eiffel Tower / France -->
-  <g transform="translate(95 338)" stroke="#4A9FD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.58">
-    <path d="M82 0L62 74L43 153L13 246M82 0L102 74L121 153L151 246"/>
-    <path d="M52 116H112M37 176H127M13 246H151"/>
-    <path d="M62 74H102M51 128L113 128M31 202C60 184 104 184 133 202"/>
-    <path d="M82 0V-20"/>
+  <!-- Eiffel tower / France -->
+  <g transform="translate(40 282)" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+    <path d="M72 455h300" stroke-width="4"/>
+    <path d="M116 455c43-83 76-194 103-343M328 455c-43-83-76-194-103-343" stroke-width="7"/>
+    <path d="M172 324h105M194 231h62M211 159h28" stroke-width="5"/>
+    <path d="M187 455c3-62 72-62 75 0M222 112V65M214 65h16" stroke-width="5"/>
+    <path d="M131 410h182" stroke-width="4"/>
   </g>
 
-  <!-- Big Ben / United Kingdom -->
-  <g transform="translate(315 418)" stroke="#4A9FD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.46">
-    <path d="M35 0H91L99 24H27L35 0Z"/>
-    <path d="M35 24H91V236H35V24Z"/>
-    <path d="M44 62H82V112H44V62Z"/>
-    <circle cx="63" cy="87" r="15"/>
-    <path d="M63 72V87L73 94M27 236H99M44 132H82M44 160H82M44 188H82"/>
-    <path d="M53 -20H73L63 -43L53 -20Z"/>
+  <!-- Istanbul domes / Turkey -->
+  <g transform="translate(390 363)" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+    <path d="M0 378h405" stroke-width="4"/>
+    <path d="M75 378V251h202v127" stroke-width="6"/>
+    <path d="M108 251c5-70 131-70 136 0" stroke-width="7"/>
+    <path d="M151 187c4-45 47-45 51 0M176 143v28" stroke-width="6"/>
+    <path d="M35 378V116M28 116h14M35 116l10 22M340 378V88M333 88h14M340 88l10 22" stroke-width="5"/>
+    <path d="M288 378V282h69v96M49 378V291h42v87" stroke-width="5"/>
+    <path d="M98 300h157M101 335h151" stroke-width="3" opacity=".48"/>
+    <circle cx="235" cy="182" r="7" fill="#000000" fill-opacity=".28" stroke="none"/>
   </g>
 
-  <!-- Istanbul mosque / Türkiye -->
-  <g transform="translate(530 526)" stroke="#E8A838" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.52">
-    <path d="M26 188V90M208 188V90"/>
-    <path d="M17 90H35L26 62L17 90ZM199 90H217L208 62L199 90Z"/>
-    <path d="M42 188V135C42 91 76 57 117 57C158 57 192 91 192 135V188"/>
-    <path d="M67 91C79 54 98 38 117 38C136 38 155 54 167 91"/>
-    <path d="M117 38V10M109 10H125L117 -5L109 10Z"/>
-    <path d="M0 188H234M78 188V151C78 128 95 111 117 111C139 111 156 128 156 151V188"/>
+  <!-- Dubai skyline / UAE -->
+  <g transform="translate(1165 200)" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+    <path d="M-55 536h405" stroke-width="4"/>
+    <path d="M88 536L132 68l18-44 18 44 43 468" stroke-width="7"/>
+    <path d="M118 218h61M111 282h75M103 350h91M96 421h105" stroke-width="4"/>
+    <path d="M150 24V0" stroke-width="5"/>
+    <path d="M-10 536V338h73v198M244 536V292h64v244M321 536V394h44v142" stroke-width="5"/>
+    <path d="M3 372h47M256 329h40" stroke-width="3" opacity=".48"/>
+    <circle cx="46" cy="305" r="6" fill="#000000" fill-opacity=".28" stroke="none"/>
   </g>
 
-  <!-- Burj Khalifa / UAE -->
-  <g transform="translate(858 250)" stroke="#4A9FD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.55">
-    <path d="M86 0V322M86 24L64 73V322M86 67L112 119V322M64 101L46 144V322M112 150L130 191V322"/>
-    <path d="M26 322H150M46 144H64M64 73H86M86 119H112M112 191H130"/>
-    <path d="M78 -35H94L86 0L78 -35Z"/>
+  <!-- Mountains / Georgia and Iran -->
+  <g transform="translate(715 667)" opacity=".42">
+    <path d="M-110 191L30 40l73 85 72-65 188 131" stroke="#000000" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-110 191h473" stroke="#000000" stroke-width="4"/>
+    <path d="M3 70l27-30 28 33M145 88l30-28 34 32" stroke="#000000" stroke-opacity=".30" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
-  <!-- Petronas Towers / Malaysia -->
-  <g transform="translate(1120 396)" stroke="#4A9FD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.48">
-    <path d="M34 38H100V250H34V38ZM160 38H226V250H160V38Z"/>
-    <path d="M48 38L67 0L86 38M174 38L193 0L212 38"/>
-    <path d="M67 0V-25M193 0V-25"/>
-    <path d="M100 120H160V152H100V120Z"/>
-    <path d="M48 72H86M48 104H86M48 168H86M48 202H86M174 72H212M174 104H212M174 168H212M174 202H212"/>
-    <path d="M20 250H240"/>
-  </g>
-
-  <!-- Tokyo tower / Japan -->
-  <g transform="translate(1435 430)" stroke="#E8A838" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.48">
-    <path d="M72 0L54 74L36 138L6 246M72 0L90 74L108 138L138 246"/>
-    <path d="M45 104H99M31 160H113M6 246H138"/>
-    <path d="M36 138C58 124 86 124 108 138"/>
-    <path d="M72 0V-31M60 -31H84"/>
+  <!-- Petronas towers / Malaysia -->
+  <g transform="translate(930 566)" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+    <path d="M-42 344h335" stroke-width="4"/>
+    <path d="M22 344L48 81l26-42 26 42 25 263M164 344l25-263 26-42 27 42 25 263" stroke-width="6"/>
+    <path d="M49 81h50M190 81h51M40 151h69M181 151h69M34 220h82M175 220h82M28 287h94M169 287h94" stroke-width="4"/>
+    <path d="M113 178h66M113 178l13 18h40l13-18" stroke-width="5"/>
+    <path d="M74 39V10M215 39V10" stroke-width="5"/>
   </g>
 
   <!-- Colosseum / Italy -->
-  <g transform="translate(120 820)" stroke="#4A9FD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">
-    <path d="M0 118C8 50 61 12 142 12C223 12 276 50 284 118V174H0V118Z"/>
-    <path d="M0 110H284M12 144H272M24 174V112M260 174V112"/>
-    <path d="M44 108V78C44 58 59 44 78 44C97 44 112 58 112 78V108M122 108V74C122 53 138 38 158 38C178 38 194 53 194 74V108M202 108V78C202 58 217 44 236 44C255 44 270 58 270 78V108"/>
-    <path d="M40 174V144C40 126 54 113 72 113C90 113 104 126 104 144V174M126 174V140C126 121 141 107 160 107C179 107 194 121 194 140V174M214 174V144C214 126 228 113 246 113C264 113 278 126 278 144V174"/>
+  <g transform="translate(110 790)" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+    <path d="M0 140h470" stroke-width="4"/>
+    <path d="M38 140V48c83-48 309-48 394 0v92" stroke-width="7"/>
+    <path d="M39 76h392M39 108h392" stroke-width="4"/>
+    <path d="M76 140V61M126 140V48M177 140V40M228 140V36M279 140V40M330 140V48M381 140V61" stroke-width="4" opacity=".78"/>
+    <path d="M67 140c1-30 30-30 31 0M118 140c1-34 31-34 32 0M169 140c1-36 31-36 32 0M220 140c1-37 31-37 32 0M271 140c1-36 31-36 32 0M322 140c1-34 31-34 32 0M373 140c1-30 30-30 31 0" stroke-width="3"/>
   </g>
 
-  <!-- Arc / India-inspired landmark -->
-  <g transform="translate(560 836)" stroke="#4A9FD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.42">
-    <path d="M20 180V58H162V180"/>
-    <path d="M45 180V115C45 85 65 64 91 64C117 64 137 85 137 115V180"/>
-    <path d="M8 58H174L150 29H32L8 58Z"/>
-    <path d="M72 29L91 0L110 29M0 180H182"/>
+  <!-- Persian arch / Iran -->
+  <g transform="translate(665 825)" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" opacity=".42">
+    <path d="M0 118h250M27 118V20h196v98" stroke-width="5"/>
+    <path d="M65 118V65c2-53 118-53 120 0v53M74 65h102" stroke-width="5"/>
+    <path d="M49 42h152M49 91h152" stroke-width="3"/>
   </g>
 
-  <!-- Azadi Tower / Iran -->
-  <g transform="translate(880 800)" stroke="#E8A838" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">
-    <path d="M16 208C62 155 71 98 74 24H126C129 98 138 155 184 208"/>
-    <path d="M36 208C66 169 80 137 100 137C120 137 134 169 164 208"/>
-    <path d="M63 92H137M53 133H147M0 208H200"/>
-    <path d="M74 24L100 0L126 24"/>
-  </g>
-
-  <!-- Sydney Opera House / Australia -->
-  <g transform="translate(1210 840)" stroke="#4A9FD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.46">
-    <path d="M0 176H270"/>
-    <path d="M20 176C45 112 75 66 131 12C117 84 123 128 150 176"/>
-    <path d="M91 176C116 106 158 61 212 34C184 95 187 137 214 176"/>
-    <path d="M170 176C191 124 220 93 252 73C237 118 239 147 258 176"/>
-  </g>
-
-  <!-- clean baseline -->
-  <path d="M48 1016H1752" stroke="url(#horizon)" stroke-width="3"/>
-
-  <!-- small plane glyphs -->
-  <g fill="#E8A838" opacity="0.48" filter="url(#soft)">
-    <path d="M650 200L672 210L696 193L703 198L683 217L702 230L696 235L674 224L662 242L655 239L661 219L642 208L650 200Z"/>
-    <path d="M1450 748L1472 758L1496 741L1503 746L1483 765L1502 778L1496 783L1474 772L1462 790L1455 787L1461 767L1442 756L1450 748Z"/>
-  </g>
+  <!-- soft horizon ribbons -->
+  <path d="M-80 930C210 869 420 992 723 922C1018 854 1304 899 1680 830" stroke="url(#skyLine)" stroke-width="8" filter="url(#soft)"/>
+  <path d="M-80 963C270 907 464 1015 792 953C1112 893 1370 923 1680 878" stroke="#000000" stroke-opacity=".18" stroke-width="5"/>
 </svg>

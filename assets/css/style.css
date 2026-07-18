@@ -3385,7 +3385,7 @@ body:not(.admin-page) .customer-trail-list{display:none!important}
 
 
 /* Sales hotel capacity sorting + Safaro Iranian import */
-.hotel-edit-row.hotel-row-full{opacity:.72;background:rgba(239,68,68,.045)!important;border-color:rgba(239,68,68,.20)!important}
+.hotel-edit-row.hotel-row-full{opacity:.78;background:rgba(239,68,68,.045)!important;border-color:rgba(239,68,68,.20)!important}
 .hotel-edit-row.hotel-row-available{background:rgba(34,197,94,.035)!important;border-color:rgba(34,197,94,.18)!important}
 .capacity-state{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;white-space:nowrap}
 .capacity-state.ok{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
@@ -3527,7 +3527,7 @@ button.danger,
 .source-hotel-stats span{background:rgba(74,159,216,.08);border:1px solid rgba(74,159,216,.16);border-radius:999px;padding:7px 10px;font-size:12px;color:var(--t2)}
 .source-hotel-list{display:grid;gap:12px}
 .source-hotel-card{border:1px solid var(--b);border-radius:20px;background:var(--s);padding:12px;box-shadow:0 10px 24px rgba(15,23,42,.04)}
-.source-hotel-card.off{opacity:.72;background:rgba(148,163,184,.08)}
+.source-hotel-card.off{opacity:.78;background:rgba(148,163,184,.08)}
 .source-hotel-card-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
 .source-hotel-card-head b{display:block;margin:6px 0;font-size:15px}.source-hotel-card-head small{display:block;color:var(--t2);line-height:1.8}
 .source-hotel-edit-grid{display:grid;grid-template-columns:2fr 1fr .8fr 1fr 1.2fr .8fr .9fr 1.2fr;gap:8px}
@@ -3555,70 +3555,64 @@ button.danger,
 @media(max-width:900px){.tour-hotel-room-row{grid-template-columns:1fr 1fr}.tour-bank-price-head{display:grid}.tour-bank-toolbar,.tour-base-price-grid,.tour-add-currency-grid{grid-template-columns:1fr}}
 .dark .tour-bank-pricing-section,.dark .tour-bank-price-card{background:rgba(15,23,42,.65)!important}
 
-/* Buyer site: minimal world-landmark background, beginning below the sticky header. */
+
+/* Buyer background: full white canvas with black minimal landmark line art */
 body.buyer-page{
+  --buyer-header-offset:67px;
   position:relative;
   isolation:isolate;
   min-height:100vh;
-  background:
-    radial-gradient(circle at 12% 18%,rgba(74,159,216,.10),transparent 28%),
-    radial-gradient(circle at 88% 76%,rgba(232,168,56,.09),transparent 30%),
-    linear-gradient(180deg,#f8fbfe 0%,#f2f7fb 52%,#edf4f9 100%);
+  background:#fff!important;
 }
 body.buyer-page::before{
   content:"";
-  position:fixed;
-  z-index:-1;
-  top:var(--buyer-header-offset,71px);
-  right:0;
-  bottom:0;
-  left:0;
+  position:absolute;
+  inset:var(--buyer-header-offset) 0 0;
+  z-index:0;
   pointer-events:none;
+  background-color:#fff;
   background-image:url("../images/world-landmarks-minimal.svg");
-  background-repeat:no-repeat;
-  background-position:center bottom;
-  background-size:cover;
-  opacity:.34;
+  background-repeat:repeat;
+  background-position:center top;
+  background-size:1120px 700px;
+  opacity:.86;
 }
-body.buyer-page main.container{
+body.buyer-page>#headerMount,
+body.buyer-page>#app,
+body.buyer-page>#footerMount,
+body.buyer-page>.lightbox,
+body.buyer-page>.toast{
   position:relative;
+  z-index:1;
 }
-body.buyer-page .card,
-body.buyer-page .trust-card,
-body.buyer-page .about-box,
-body.buyer-page .contact-box{
-  background-color:rgba(255,255,255,.91);
-  backdrop-filter:blur(6px);
+body.buyer-page .header{
+  background:rgba(255,255,255,.94)!important;
+}
+body.buyer-page .footer{
+  background:rgba(255,255,255,.92)!important;
+  backdrop-filter:blur(14px);
 }
 body.buyer-page.dark{
-  background:
-    radial-gradient(circle at 12% 18%,rgba(74,159,216,.12),transparent 28%),
-    radial-gradient(circle at 88% 76%,rgba(232,168,56,.08),transparent 30%),
-    linear-gradient(180deg,#0b1222 0%,#0d1728 54%,#0a1322 100%);
+  background:#fff!important;
 }
 body.buyer-page.dark::before{
-  opacity:.18;
-  filter:saturate(.8) brightness(1.15);
+  opacity:.70;
+  filter:none;
 }
-body.buyer-page.dark .card,
-body.buyer-page.dark .trust-card,
-body.buyer-page.dark .about-box,
-body.buyer-page.dark .contact-box{
-  background-color:rgba(19,29,48,.90);
+body.buyer-page.dark .header,
+body.buyer-page.dark .footer{
+  background:rgba(255,255,255,.94)!important;
 }
-@media(max-width:700px){
+@media(max-width:900px){
   body.buyer-page::before{
-    background-position:center bottom;
-    background-size:auto 100%;
-    opacity:.24;
-  }
-  body.buyer-page .card,
-  body.buyer-page .trust-card,
-  body.buyer-page .about-box,
-  body.buyer-page .contact-box{
-    backdrop-filter:blur(4px);
+    background-size:860px 538px;
+    background-position:center top;
+    opacity:.78;
   }
 }
-@media(prefers-reduced-motion:reduce){
-  body.buyer-page::before{background-attachment:scroll}
+@media(max-width:560px){
+  body.buyer-page::before{
+    background-size:700px 438px;
+    opacity:.72;
+  }
 }
