@@ -10,11 +10,7 @@
   "orientation": "portrait",
   "dir": "rtl",
   "lang": "fa",
-  "categories": [
-    "travel",
-    "shopping",
-    "business"
-  ],
+  "categories": ["travel", "shopping", "business"],
   "icons": [
     {
       "src": "/assets/images/logo-safaro-192.png",

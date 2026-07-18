@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safaro-v4.4.0';
+const CACHE_NAME = 'safaro-v4.8.0-clean';
 const ASSETS = [
   '/',
   '/buyer/',
@@ -19,12 +19,14 @@ const ASSETS = [
   '/assets/images/world-landmarks-minimal.svg',
   '/assets/images/world-landmarks-denser.svg',
   '/assets/images/world-landmarks-more.svg',
-  '/manifest.json'
+  '/assets/images/world-landmarks-v45-art.svg',
+  '/manifest.json',
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches
+      .open(CACHE_NAME)
       .then(cache => cache.addAll(ASSETS))
       .catch(() => null)
   );
@@ -33,9 +35,12 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-    )).then(() => self.clients.claim())
+    caches
+      .keys()
+      .then(keys =>
+        Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))
+      )
+      .then(() => self.clients.claim())
   );
 });
 
@@ -45,9 +50,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
   if (url.origin !== location.origin) {
-    event.respondWith(
-      fetch(event.request).catch(() => caches.match(event.request))
-    );
+    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
     return;
   }
 
@@ -58,9 +61,11 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => {
-        if (cached) return cached;
-        if (event.request.mode === 'navigate') return caches.match('/buyer/');
-      }))
+      .catch(() =>
+        caches.match(event.request).then(cached => {
+          if (cached) return cached;
+          if (event.request.mode === 'navigate') return caches.match('/buyer/');
+        })
+      )
   );
 });
