@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safaro-v3.4.9';
+const CACHE_NAME = 'safaro-v3.5.0';
 const ASSETS = [
   '/',
   '/buyer/',
@@ -16,6 +16,7 @@ const ASSETS = [
   '/assets/images/logo-safaro.png',
   '/assets/images/logo-safaro-192.png',
   '/assets/images/logo-safaro-512.png',
+  '/assets/images/world-landmarks-minimal.svg',
   '/manifest.json'
 ];
 

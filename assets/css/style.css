@@ -3554,3 +3554,71 @@ button.danger,
 .tour-currency-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.tour-currency-badges .tour-price-chip:first-child{display:none}
 @media(max-width:900px){.tour-hotel-room-row{grid-template-columns:1fr 1fr}.tour-bank-price-head{display:grid}.tour-bank-toolbar,.tour-base-price-grid,.tour-add-currency-grid{grid-template-columns:1fr}}
 .dark .tour-bank-pricing-section,.dark .tour-bank-price-card{background:rgba(15,23,42,.65)!important}
+
+/* Buyer site: minimal world-landmark background, beginning below the sticky header. */
+body.buyer-page{
+  position:relative;
+  isolation:isolate;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 12% 18%,rgba(74,159,216,.10),transparent 28%),
+    radial-gradient(circle at 88% 76%,rgba(232,168,56,.09),transparent 30%),
+    linear-gradient(180deg,#f8fbfe 0%,#f2f7fb 52%,#edf4f9 100%);
+}
+body.buyer-page::before{
+  content:"";
+  position:fixed;
+  z-index:-1;
+  top:var(--buyer-header-offset,71px);
+  right:0;
+  bottom:0;
+  left:0;
+  pointer-events:none;
+  background-image:url("../images/world-landmarks-minimal.svg");
+  background-repeat:no-repeat;
+  background-position:center bottom;
+  background-size:cover;
+  opacity:.34;
+}
+body.buyer-page main.container{
+  position:relative;
+}
+body.buyer-page .card,
+body.buyer-page .trust-card,
+body.buyer-page .about-box,
+body.buyer-page .contact-box{
+  background-color:rgba(255,255,255,.91);
+  backdrop-filter:blur(6px);
+}
+body.buyer-page.dark{
+  background:
+    radial-gradient(circle at 12% 18%,rgba(74,159,216,.12),transparent 28%),
+    radial-gradient(circle at 88% 76%,rgba(232,168,56,.08),transparent 30%),
+    linear-gradient(180deg,#0b1222 0%,#0d1728 54%,#0a1322 100%);
+}
+body.buyer-page.dark::before{
+  opacity:.18;
+  filter:saturate(.8) brightness(1.15);
+}
+body.buyer-page.dark .card,
+body.buyer-page.dark .trust-card,
+body.buyer-page.dark .about-box,
+body.buyer-page.dark .contact-box{
+  background-color:rgba(19,29,48,.90);
+}
+@media(max-width:700px){
+  body.buyer-page::before{
+    background-position:center bottom;
+    background-size:auto 100%;
+    opacity:.24;
+  }
+  body.buyer-page .card,
+  body.buyer-page .trust-card,
+  body.buyer-page .about-box,
+  body.buyer-page .contact-box{
+    backdrop-filter:blur(4px);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.buyer-page::before{background-attachment:scroll}
+}

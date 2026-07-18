@@ -80,7 +80,21 @@ function bookingHotelList(t){
   return `<div class="stack">${visibleHotelEntries(t).map(({h,i})=>`<div class="hotel ${i===booking.hotel?'selected':''} ${h.capacity<=0?'disabled':''}" onclick="${h.capacity>0?`booking.hotel=${i};renderBooking(findTour(${t.id}))`:''}">${isHotelSoldOut(h)?'<span class="soldout-stamp small-stamp">تکمیل</span>':''}<div class="row"><span class="row" style="gap:6px;justify-content:flex-start"><b dir="ltr">${h.name} ${hotelStars(h.star)}</b><button type="button" class="booking-hotel-action" onclick="event.stopPropagation();showHotelPhotos(${t.id},${i})">Booking</button></span><span>${hotelRoomPriceHtml(h)}</span></div><small>${h.capacity>0?faNum(h.capacity)+' ظرفیت':'تکمیل ظرفیت'}</small></div>`).join('')}</div>`;
 }
 
-function initBuyer(){mount('buyer');route('home')}
+let buyerHeaderOffsetObserver=null;
+function syncBuyerBackgroundOffset(){
+  const header=document.querySelector('.header');
+  if(!header)return;
+  const update=()=>document.documentElement.style.setProperty('--buyer-header-offset',`${Math.ceil(header.getBoundingClientRect().height)}px`);
+  update();
+  if(typeof ResizeObserver==='function'){
+    buyerHeaderOffsetObserver?.disconnect();
+    buyerHeaderOffsetObserver=new ResizeObserver(update);
+    buyerHeaderOffsetObserver.observe(header);
+  }else{
+    window.addEventListener('resize',update,{passive:true});
+  }
+}
+function initBuyer(){mount('buyer');syncBuyerBackgroundOffset();route('home')}
 function route(v,id){view=v;if(v==='detail'){selectedTour=id;addCustomerTrail(findTour(id))}if(v==='booking'){booking.tourId=id;booking.step=1;const t=findTour(id);const entries=visibleHotelEntries(t||{});booking.hotel=entries.some(e=>e.i===selectedHotel)?selectedHotel:(entries[0]?.i||0);booking.date=t?.dates?.[0]||null}renderBuyer();window.scrollTo({top:0,left:0,behavior:'auto'})}
 function renderBuyer(){if(view==='home')return renderHome();if(view==='detail')return renderDetail(findTour(selectedTour));if(view==='booking')return renderBooking(findTour(booking.tourId));if(view==='wish')return renderWish();if(view==='mine')return renderMine()}
 function buyerTabs(){return `<div class="catbar"><button onclick="route('home')" class="${view==='home'?'active':''}">خانه مشتری</button><button onclick="route('wish')" class="${view==='wish'?'active':''}">علاقه‌مندی‌ها</button><button onclick="route('mine')" class="${view==='mine'?'active':''}">رزروهای من</button></div>`}
