@@ -37,36 +37,36 @@
       <path d="M36 128 V98"/><path d="M98 128 V92"/><path d="M160 128 V98"/><path d="M28 150 C72 140 122 140 182 150"/>
     </g>
   </defs>
-  <g stroke="#111827" stroke-width="2.6" opacity="0.34">
-    <path d="M28 88 C142 24 220 116 328 70 C452 18 536 132 668 78 C800 28 910 98 1060 40" stroke-dasharray="7 14" opacity=".42"/>
-    <path d="M16 470 C132 410 238 514 356 456 C474 398 574 518 696 454 C826 386 938 502 1082 430" stroke-dasharray="6 13" opacity=".36"/>
-    <path d="M54 770 C180 710 296 816 418 750 C538 684 656 808 790 742 C914 680 994 762 1080 720" stroke-dasharray="8 16" opacity=".30"/>
+  <g stroke="#0f172a" stroke-width="2.8" opacity="0.54">
+    <path d="M28 88 C142 24 220 116 328 70 C452 18 536 132 668 78 C800 28 910 98 1060 40" stroke-dasharray="7 14" opacity=".58"/>
+    <path d="M16 470 C132 410 238 514 356 456 C474 398 574 518 696 454 C826 386 938 502 1082 430" stroke-dasharray="6 13" opacity=".52"/>
+    <path d="M54 770 C180 710 296 816 418 750 C538 684 656 808 790 742 C914 680 994 762 1080 720" stroke-dasharray="8 16" opacity=".46"/>
 
-    <use href="#eiffel" transform="translate(54 106) scale(.62)" opacity=".76"/>
-    <use href="#dome" transform="translate(216 112) scale(.56) rotate(-1)" opacity=".56"/>
-    <use href="#burj" transform="translate(394 76) scale(.58)" opacity=".68"/>
-    <use href="#mosque" transform="translate(548 112) scale(.55) rotate(1.5)" opacity=".52"/>
-    <use href="#colosseum" transform="translate(730 100) scale(.56)" opacity=".62"/>
-    <use href="#mountains" transform="translate(912 118) scale(.50)" opacity=".45"/>
+    <use href="#eiffel" transform="translate(54 106) scale(.62)" opacity=".92"/>
+    <use href="#dome" transform="translate(216 112) scale(.56) rotate(-1)" opacity=".72"/>
+    <use href="#burj" transform="translate(394 76) scale(.58)" opacity=".84"/>
+    <use href="#mosque" transform="translate(548 112) scale(.55) rotate(1.5)" opacity=".68"/>
+    <use href="#colosseum" transform="translate(730 100) scale(.56)" opacity=".78"/>
+    <use href="#mountains" transform="translate(912 118) scale(.50)" opacity=".61"/>
 
-    <use href="#temple" transform="translate(80 314) scale(.56) rotate(1)" opacity=".54"/>
-    <use href="#palm" transform="translate(250 306) scale(.60)" opacity=".48"/>
-    <use href="#bridge" transform="translate(428 324) scale(.54)" opacity=".60"/>
-    <use href="#eiffel" transform="translate(630 296) scale(.50) rotate(2)" opacity=".46"/>
-    <use href="#dome" transform="translate(792 300) scale(.58)" opacity=".66"/>
-    <use href="#burj" transform="translate(980 282) scale(.52)" opacity=".50"/>
+    <use href="#temple" transform="translate(80 314) scale(.56) rotate(1)" opacity=".70"/>
+    <use href="#palm" transform="translate(250 306) scale(.60)" opacity=".64"/>
+    <use href="#bridge" transform="translate(428 324) scale(.54)" opacity=".76"/>
+    <use href="#eiffel" transform="translate(630 296) scale(.50) rotate(2)" opacity=".62"/>
+    <use href="#dome" transform="translate(792 300) scale(.58)" opacity=".82"/>
+    <use href="#burj" transform="translate(980 282) scale(.52)" opacity=".66"/>
 
-    <use href="#mosque" transform="translate(22 560) scale(.60)" opacity=".66"/>
-    <use href="#mountains" transform="translate(218 588) scale(.58)" opacity=".48"/>
-    <use href="#colosseum" transform="translate(448 560) scale(.56) rotate(-1)" opacity=".52"/>
-    <use href="#temple" transform="translate(644 570) scale(.55)" opacity=".62"/>
-    <use href="#bridge" transform="translate(844 585) scale(.55)" opacity=".50"/>
-    <use href="#palm" transform="translate(1012 572) scale(.50)" opacity=".58"/>
+    <use href="#mosque" transform="translate(22 560) scale(.60)" opacity=".82"/>
+    <use href="#mountains" transform="translate(218 588) scale(.58)" opacity=".64"/>
+    <use href="#colosseum" transform="translate(448 560) scale(.56) rotate(-1)" opacity=".68"/>
+    <use href="#temple" transform="translate(644 570) scale(.55)" opacity=".78"/>
+    <use href="#bridge" transform="translate(844 585) scale(.55)" opacity=".66"/>
+    <use href="#palm" transform="translate(1012 572) scale(.50)" opacity=".74"/>
 
-    <use href="#burj" transform="translate(116 736) scale(.48) rotate(-1)" opacity=".50"/>
-    <use href="#dome" transform="translate(296 740) scale(.52)" opacity=".56"/>
-    <use href="#eiffel" transform="translate(500 724) scale(.48) rotate(1)" opacity=".58"/>
-    <use href="#mountains" transform="translate(686 744) scale(.50)" opacity=".44"/>
-    <use href="#mosque" transform="translate(880 732) scale(.50)" opacity=".50"/>
+    <use href="#burj" transform="translate(116 736) scale(.48) rotate(-1)" opacity=".66"/>
+    <use href="#dome" transform="translate(296 740) scale(.52)" opacity=".72"/>
+    <use href="#eiffel" transform="translate(500 724) scale(.48) rotate(1)" opacity=".74"/>
+    <use href="#mountains" transform="translate(686 744) scale(.50)" opacity=".60"/>
+    <use href="#mosque" transform="translate(880 732) scale(.50)" opacity=".66"/>
   </g>
 </svg>

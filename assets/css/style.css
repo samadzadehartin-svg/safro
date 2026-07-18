@@ -4089,3 +4089,60 @@ body.buyer-page .country-line-card{
     background:rgba(255,255,255,.45)!important;
   }
 }
+
+
+/* =========================================================
+   v4.2 stronger buyer line-art + softer popups
+   ========================================================= */
+body.buyer-page::before{
+  background-image:url("../images/world-landmarks-denser.svg")!important;
+  background-size:930px auto!important;
+  opacity:.72!important;
+  filter:contrast(1.18) saturate(1.08)!important;
+}
+body.buyer-page::after{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.84) 0%,rgba(255,255,255,.22) 18%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.22) 82%,rgba(255,255,255,.84) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.20) 45%,rgba(255,255,255,.30) 100%)!important;
+}
+body.buyer-page .modal,
+body.buyer-page .popup-backdrop{
+  background:rgba(15,23,42,.18)!important;
+  backdrop-filter:blur(3px)!important;
+}
+body.buyer-page .modal-card,
+body.buyer-page .consult-popup{
+  background:rgba(255,255,255,.58)!important;
+  border-color:rgba(15,23,42,.075)!important;
+  box-shadow:0 18px 54px rgba(15,23,42,.14)!important;
+  backdrop-filter:blur(10px) saturate(1.05)!important;
+}
+body.buyer-page .consult-popup:before{
+  opacity:.34!important;
+}
+body.buyer-page .toast{
+  background:rgba(15,23,42,.76)!important;
+  box-shadow:0 12px 30px rgba(15,23,42,.12)!important;
+}
+@media(max-width:900px){
+  body.buyer-page::before{
+    background-size:780px auto!important;
+    opacity:.64!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.28)!important;
+  }
+}
+@media(max-width:560px){
+  body.buyer-page::before{
+    background-size:625px auto!important;
+    opacity:.56!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.38)!important;
+  }
+  body.buyer-page .modal-card,
+  body.buyer-page .consult-popup{
+    background:rgba(255,255,255,.72)!important;
+  }
+}
