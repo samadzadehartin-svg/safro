@@ -3731,3 +3731,86 @@ body.buyer-page.dark .footer{
   .country-card-body b{font-size:16px}
 }
 @media(max-width:430px){.country-line-grid{grid-template-columns:1fr}}
+
+/* v3.8 buyer refinements */
+body.buyer-page::before{
+  background-repeat:repeat-y!important;
+  background-position:center top!important;
+  background-size:1600px 1000px!important;
+}
+.buyer-main-tabs{
+  align-items:center;
+}
+.buyer-main-tabs .buyer-visa-tab{
+  border-color:rgba(17,24,39,.18)!important;
+  background:#111827!important;
+  color:#fff!important;
+  box-shadow:0 10px 24px rgba(15,23,42,.12);
+}
+.buyer-main-tabs .buyer-visa-tab:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 32px rgba(15,23,42,.18);
+}
+.country-line-grid{
+  grid-auto-flow:dense;
+}
+.country-line-card{
+  position:relative;
+}
+.country-line-card::after{
+  content:"";
+  position:absolute;
+  inset:12px;
+  border:1px dashed rgba(17,24,39,.08);
+  border-radius:inherit;
+  pointer-events:none;
+  opacity:.45;
+}
+.country-card-wide{
+  grid-column:span 2;
+}
+.country-card-v0{
+  grid-template-rows:138px auto;
+}
+.country-card-v1{
+  grid-template-rows:112px auto;
+  border-radius:30px 18px 30px 18px;
+}
+.country-card-v2{
+  grid-template-rows:154px auto;
+  border-radius:18px 30px 18px 30px;
+}
+.country-card-v3{
+  grid-template-rows:124px auto;
+}
+.country-card-v4{
+  grid-template-rows:144px auto;
+  border-radius:28px;
+}
+.country-card-v1 .country-art-wrap{
+  background:repeating-linear-gradient(-45deg,#fff 0 18px,#f8fafc 18px 20px);
+}
+.country-card-v2 .country-art-wrap{
+  background:radial-gradient(circle at 18% 18%,rgba(17,24,39,.06),transparent 28%),#fff;
+}
+.country-card-v3 .country-art-wrap{
+  background:linear-gradient(180deg,#fff,#f8fafc);
+}
+.country-card-v4 .country-art-wrap{
+  background:radial-gradient(circle at 82% 16%,rgba(17,24,39,.05),transparent 30%),radial-gradient(circle at 16% 82%,rgba(17,24,39,.04),transparent 28%),#fff;
+}
+.country-card-v1 .country-art-wrap img{transform:translateX(-8px) rotate(-2deg) scale(.96)}
+.country-card-v2 .country-art-wrap img{transform:translateX(6px) rotate(1.6deg) scale(1.08)}
+.country-card-v3 .country-art-wrap img{transform:translateY(4px) scale(.92)}
+.country-card-v4 .country-art-wrap img{transform:translateY(-2px) rotate(-1deg) scale(1.02)}
+.country-card-wide .country-art-wrap img{height:126px;max-width:82%}
+@media(max-width:900px){
+  body.buyer-page::before{background-size:1200px 750px!important;}
+  .country-card-wide{grid-column:span 1;}
+}
+@media(max-width:560px){
+  body.buyer-page::before{background-size:980px 613px!important;}
+  .buyer-main-tabs .buyer-visa-tab{width:100%;}
+  .country-line-card[class*="country-card-v"]{grid-template-rows:112px auto;}
+  .country-card-wide .country-art-wrap img{height:92px;max-width:100%;}
+}

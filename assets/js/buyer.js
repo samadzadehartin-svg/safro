@@ -83,7 +83,17 @@ function bookingHotelList(t){
 function initBuyer(){mount('buyer');route('home')}
 function route(v,id){view=v;if(v==='detail'){selectedTour=id;addCustomerTrail(findTour(id))}if(v==='booking'){booking.tourId=id;booking.step=1;const t=findTour(id);const entries=visibleHotelEntries(t||{});booking.hotel=entries.some(e=>e.i===selectedHotel)?selectedHotel:(entries[0]?.i||0);booking.date=t?.dates?.[0]||null}renderBuyer();window.scrollTo({top:0,left:0,behavior:'auto'})}
 function renderBuyer(){if(view==='home')return renderHome();if(view==='detail')return renderDetail(findTour(selectedTour));if(view==='booking')return renderBooking(findTour(booking.tourId));if(view==='wish')return renderWish();if(view==='mine')return renderMine()}
-function buyerTabs(){return `<div class="catbar"><button onclick="route('home')" class="${view==='home'?'active':''}">خانه مشتری</button><button onclick="route('wish')" class="${view==='wish'?'active':''}">علاقه‌مندی‌ها</button><button onclick="route('mine')" class="${view==='mine'?'active':''}">رزروهای من</button></div>`}
+function scrollToBuyerVisa(){
+  if(view!=='home'){
+    view='home';
+    renderBuyer();
+  }
+  setTimeout(()=>{
+    const target=$('buyerVisaSection');
+    if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+  },60);
+}
+function buyerTabs(){return `<div class="catbar buyer-main-tabs"><button onclick="route('home')" class="${view==='home'?'active':''}">خانه مشتری</button><button onclick="scrollToBuyerVisa()" class="buyer-visa-tab"><i class="fa-solid fa-passport"></i> خدمات ویزا را راحت ببین</button><button onclick="route('wish')" class="${view==='wish'?'active':''}">علاقه‌مندی‌ها</button><button onclick="route('mine')" class="${view==='mine'?'active':''}">رزروهای من</button></div>`}
 
 function sendLeadToWhatsApp(lead){ return; }
 
@@ -253,7 +263,7 @@ function countryLineArtSection(){
       <button class="soft country-reset" onclick="selectCountryFromLineArt('all')"><i class="fa-solid fa-earth-asia"></i> همه کشورها</button>
     </div>
     <div class="country-line-grid">
-      ${items.map(item=>`<button type="button" class="country-line-card ${currentCountry===item.country?'active':''}" onclick="selectCountryFromLineArt('${item.country}')">
+      ${items.map((item,i)=>`<button type="button" class="country-line-card country-card-v${i%5} ${i===0?'country-card-wide':''} ${currentCountry===item.country?'active':''}" onclick="selectCountryFromLineArt('${item.country}')">
         <span class="country-art-wrap"><img src="${item.img}" alt="لاین‌آرت ${item.country}"></span>
         <span class="country-card-body">
           <b>${item.country}</b>
@@ -389,15 +399,13 @@ function toggleBuyerVisaDetails(id){
 }
 
 function currencySection(){
-  const list=enabledCurrenciesForBuyer();
-  if(!list.length)return '';
-  return `<section class="currency-buyer-section card pad"><div class="row wrap"><div><span class="badge special">واحدهای پولی</span><h2>ارزهای قابل نمایش</h2><p class="small">این ارزها توسط مدیریت برای نمایش در پنل خریدار فعال شده‌اند.</p></div></div><div class="currency-buyer-grid">${list.map(c=>`<div class="currency-buyer-card"><b dir="ltr">${c.code}</b><span>${c.nameFa||c.code}</span><small dir="ltr">${c.nameEn||''} ${c.symbol?`| ${c.symbol}`:''}</small>${c.rate?`<small>نرخ: ${c.rate}</small>`:''}</div>`).join('')}</div></section>`;
+  return '';
 }
 
 function visaSection(){
   const list=visaServices().filter(v=>v.active!==false);
   if(!list.length)return '';
-  return `<section class="visa-section card pad buyer-visa-section">
+  return `<section id="buyerVisaSection" class="visa-section card pad buyer-visa-section">
     <div class="buyer-visa-hero">
       <div>
         <span class="badge international">ویزا و خدمات سفر</span>
@@ -462,7 +470,7 @@ function buyerTours(){
 
 function renderHome(){
  const list=buyerTours().filter(t=>t.status==='active');
- $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${countryLineArtSection()}${currencySection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
+ $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${countryLineArtSection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
  <section><div class="row wrap"><h2>قسمت ویژه</h2></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
  <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="currentCountry='all';filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>tourDestName(t)).filter(Boolean))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
@@ -484,7 +492,7 @@ function specialPriceLine(t, fallbackPrice){
 }
 
 function cardClickDetail(e,id){const target=e.target;if(target.closest('button,a,input,select,textarea,label'))return;route('detail',id)}
-function lastCard(t){return `<article class="last-card soldout-wrap clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><span class="flash-badge">${faNum(t.dealPercent||0)}٪ ویژه</span><img src="${t.img||DEFAULT_IMG}" alt="${t.title||''}"><div class="pad"><div class="row"><b>${t.title}</b><span class="badge special">قسمت ویژه</span></div><p class="small">${t.dest} | ${normalizeDurationNightFirst(t.duration)}</p><div class="row"><span><b class="price">${money(minHotel(t).price)}</b><div class="tour-currency-badges">${tourPriceBadges(t)}</div></span><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">مشاهده</button></div></div></article>`}
+function lastCard(t){return `<article class="last-card soldout-wrap clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><span class="flash-badge">${faNum(t.dealPercent||0)}٪ ویژه</span><img src="${t.img||DEFAULT_IMG}" alt="${t.title||''}"><div class="pad"><div class="row"><b>${t.title}</b><span class="badge special">قسمت ویژه</span></div><p class="small">${t.dest} | ${normalizeDurationNightFirst(t.duration)}</p><div class="row"><span><b class="price">${money(minHotel(t).price)}</b></span><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">مشاهده</button></div></div></article>`}
 function filterHome(){
  try{
    let q=$('search')?.value?.trim().toLowerCase()||'',d=$('dest')?.value||'all',sort=$('sort')?.value||'default',star=$('star')?.value||'all',airline=$('airline')?.value?.trim().toLowerCase()||'',onlyCap=$('onlyCap')?.checked||false;
@@ -501,7 +509,7 @@ function filterHome(){
  }
 }
 function resetHome(){currentCat='all';currentCountry='all';renderHome()}
-function tourCard(t){const w=wishlist().includes(t.id);return `<article class="card clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><div class="soldout-wrap" style="position:relative;overflow:hidden"><img class="tour-img" src="${t.img||DEFAULT_IMG}" alt="${t.title||''}">${t.lastMinute?'<span class="flash-badge">لحظه آخری</span>':''}</div><div class="pad"><div class="badges">${badges(t)} ${buyerTourLabel(t)?`<span class="badge special">${buyerTourLabel(t)}</span>`:''}</div><h3 class="tour-title">${t.title}</h3><div class="meta"><span>${t.dest}</span><span>${normalizeDurationNightFirst(t.duration)}</span><span>${ratingStar()} ${t.rating}</span><span>${faNum(totalCapacity(t))} ظرفیت</span></div><div class="row" style="margin-top:14px;border-top:1px solid var(--b);padding-top:14px"><span><b class="price">${money(minHotel(t).price)}</b><div class="tour-currency-badges">${tourPriceBadges(t)}</div></span><div class="actions"><button class="soft" onclick="event.stopPropagation();toggleWish(${t.id})"><i class="${w?'fa-solid':'fa-regular'} fa-heart" style="${w?'color:#ef4444':''}"></i></button><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">جزئیات</button></div></div><button class="compare-btn ${compare.has(t.id)?'active':''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id)?'در مقایسه':'افزودن به مقایسه'}</button></div></article>`}
+function tourCard(t){const w=wishlist().includes(t.id);return `<article class="card clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><div class="soldout-wrap" style="position:relative;overflow:hidden"><img class="tour-img" src="${t.img||DEFAULT_IMG}" alt="${t.title||''}">${t.lastMinute?'<span class="flash-badge">لحظه آخری</span>':''}</div><div class="pad"><div class="badges">${badges(t)} ${buyerTourLabel(t)?`<span class="badge special">${buyerTourLabel(t)}</span>`:''}</div><h3 class="tour-title">${t.title}</h3><div class="meta"><span>${t.dest}</span><span>${normalizeDurationNightFirst(t.duration)}</span><span>${ratingStar()} ${t.rating}</span><span>${faNum(totalCapacity(t))} ظرفیت</span></div><div class="row" style="margin-top:14px;border-top:1px solid var(--b);padding-top:14px"><span><b class="price">${money(minHotel(t).price)}</b></span><div class="actions"><button class="soft" onclick="event.stopPropagation();toggleWish(${t.id})"><i class="${w?'fa-solid':'fa-regular'} fa-heart" style="${w?'color:#ef4444':''}"></i></button><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">جزئیات</button></div></div><button class="compare-btn ${compare.has(t.id)?'active':''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id)?'در مقایسه':'افزودن به مقایسه'}</button></div></article>`}
 function toggleCompare(id){if(compare.has(id))compare.delete(id);else{if(compare.size>=3)return showToast('حداکثر ۳ تور قابل مقایسه است');compare.add(id)}filterHome()}
 function renderCompareDock(){const d=$('compareDock');if(!d)return;$('compareCount').textContent=faNum(compare.size);d.classList.toggle('on',compare.size>0)}
 function clearCompare(){compare.clear();filterHome()}
