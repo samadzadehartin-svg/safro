@@ -3871,3 +3871,144 @@ body.buyer-page .contact-box{
     background:rgba(255,255,255,.90)!important;
   }
 }
+
+/* =========================================================
+   v4.0 buyer background refinement: lighter text panels + more line-art
+   ========================================================= */
+body.buyer-page,
+body.buyer-page.dark{
+  background:#fff!important;
+}
+body.buyer-page::before{
+  background-color:#fff!important;
+  background-image:url("../images/world-landmarks-more.svg")!important;
+  background-repeat:repeat-y!important;
+  background-position:center 18px!important;
+  background-size:min(1560px,132vw) auto!important;
+  opacity:.36!important;
+}
+body.buyer-page::after{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.94) 0%,rgba(255,255,255,.62) 18%,rgba(255,255,255,.48) 50%,rgba(255,255,255,.62) 82%,rgba(255,255,255,.94) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.42) 0%,rgba(255,255,255,.64) 44%,rgba(255,255,255,.76) 100%)!important;
+}
+body.buyer-page .combined-hero-card{
+  background:rgba(255,255,255,.54)!important;
+  border-color:rgba(15,23,42,.08)!important;
+  box-shadow:0 12px 32px rgba(15,23,42,.035)!important;
+  backdrop-filter:none!important;
+}
+body.buyer-page .hero-copy-panel,
+body.buyer-page .combined-hero-copy.hero-copy-panel{
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#0f172a!important;
+  padding:14px 12px!important;
+}
+body.buyer-page .hero-copy-panel::after,
+body.buyer-page .combined-hero-copy.hero-copy-panel::after{
+  display:none!important;
+}
+body.buyer-page .hero-copy-panel .buyer-hero-title,
+body.buyer-page .combined-hero-copy.hero-copy-panel .buyer-hero-title{
+  color:#0f172a!important;
+  text-shadow:none!important;
+}
+body.buyer-page .hero-copy-panel .buyer-hero-title span,
+body.buyer-page .combined-hero-copy.hero-copy-panel .buyer-hero-title span{
+  color:#b77907!important;
+}
+body.buyer-page .hero-copy-panel .buyer-hero-subtitle,
+body.buyer-page .combined-hero-copy.hero-copy-panel .buyer-hero-subtitle{
+  color:#334155!important;
+  text-shadow:none!important;
+}
+body.buyer-page .hero-copy-kicker{
+  background:rgba(255,255,255,.52)!important;
+  border:1px solid rgba(15,23,42,.08)!important;
+  box-shadow:none!important;
+  color:#5f3b00!important;
+}
+body.buyer-page .hero-copy-panel .trust-item,
+body.buyer-page .combined-hero-copy.hero-copy-panel .trust-item{
+  background:rgba(255,255,255,.42)!important;
+  border:1px solid rgba(15,23,42,.08)!important;
+  color:#0f172a!important;
+  backdrop-filter:none!important;
+}
+body.buyer-page .hero-copy-panel .trust-item span,
+body.buyer-page .combined-hero-copy.hero-copy-panel .trust-item span{
+  color:#0f172a!important;
+}
+body.buyer-page .hero-copy-panel .trust-item i,
+body.buyer-page .combined-hero-copy.hero-copy-panel .trust-item i{
+  color:#b77907!important;
+}
+body.buyer-page .hero-custom-tour-card,
+body.buyer-page .country-line-section,
+body.buyer-page .filters,
+body.buyer-page .visa-section,
+body.buyer-page .about-box,
+body.buyer-page .contact-box,
+body.buyer-page .trust-section .trust-card,
+body.buyer-page .destination-guide-section{
+  background:rgba(255,255,255,.72)!important;
+  border-color:rgba(15,23,42,.08)!important;
+  box-shadow:0 10px 26px rgba(15,23,42,.035)!important;
+  backdrop-filter:none!important;
+}
+body.buyer-page .card:not(.clickable-tour-card):not(.last-card),
+body.buyer-page .modal-card,
+body.buyer-page .hotel,
+body.buyer-page .date-chip,
+body.buyer-page .info{
+  background:rgba(255,255,255,.72)!important;
+}
+body.buyer-page .clickable-tour-card,
+body.buyer-page .last-card,
+body.buyer-page .visa-card,
+body.buyer-page .country-line-card{
+  background:rgba(255,255,255,.86)!important;
+}
+body.buyer-page .country-art-wrap{
+  background:rgba(255,255,255,.50)!important;
+}
+body.buyer-page .country-line-card::after{
+  opacity:.22!important;
+}
+body.buyer-page .field,
+body.buyer-page input,
+body.buyer-page select,
+body.buyer-page textarea{
+  background:rgba(255,255,255,.68)!important;
+}
+body.buyer-page .soft,
+body.buyer-page button.soft{
+  background:rgba(255,255,255,.54)!important;
+}
+@media(max-width:900px){
+  body.buyer-page::before{
+    background-size:1180px auto!important;
+    background-position:center 62px!important;
+    opacity:.31!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.72)!important;
+  }
+}
+@media(max-width:560px){
+  body.buyer-page::before{
+    background-size:930px auto!important;
+    background-position:center 80px!important;
+    opacity:.26!important;
+  }
+  body.buyer-page .combined-hero-card,
+  body.buyer-page .hero-custom-tour-card,
+  body.buyer-page .country-line-section,
+  body.buyer-page .filters,
+  body.buyer-page .visa-section,
+  body.buyer-page .about-box,
+  body.buyer-page .contact-box{
+    background:rgba(255,255,255,.82)!important;
+  }
+}
