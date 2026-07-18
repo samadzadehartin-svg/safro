@@ -1,7 +1,7 @@
 
 function beautyTrustStrip(){return ``;}
 
-let view='home',currentCat='all',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
+let view='home',currentCat='all',currentCountry='all',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
 if(!sessionStorage.getItem('safarro_visit_start'))sessionStorage.setItem('safarro_visit_start',Date.now());
 function siteSeconds(){return Math.max(0,Math.round((Date.now()-Number(sessionStorage.getItem('safarro_visit_start')||Date.now()))/1000))}
 function siteTourViews(){return Number(localStorage.getItem('safarro_tour_views')||0)}
@@ -199,6 +199,80 @@ function trustSection(){
 }
 
 
+
+const DESTINATION_COUNTRY_MAP = {
+  'استانبول':'ترکیه','آنتالیا':'ترکیه','کاپادوکیا':'ترکیه',
+  'دبی':'امارات','ابوظبی':'امارات','شارجه':'امارات',
+  'کیش':'ایران','مشهد':'ایران','شیراز':'ایران','اصفهان':'ایران','تهران':'ایران',
+  'پاریس':'فرانسه','نیس':'فرانسه',
+  'رم':'ایتالیا','میلان':'ایتالیا','ونیز':'ایتالیا',
+  'بانکوک':'تایلند','پوکت':'تایلند','پاتایا':'تایلند',
+  'ایروان':'ارمنستان','تفلیس':'گرجستان','باتومی':'گرجستان',
+  'کوالالامپور':'مالزی','لنکاوی':'مالزی'
+};
+const COUNTRY_LINE_ART = {
+  'ترکیه':'../assets/images/line-country-turkey.svg',
+  'ایران':'../assets/images/line-country-iran.svg',
+  'امارات':'../assets/images/line-country-uae.svg',
+  'فرانسه':'../assets/images/line-country-france.svg',
+  'ایتالیا':'../assets/images/line-country-italy.svg',
+  'تایلند':'../assets/images/line-country-thailand.svg',
+  'ارمنستان':'../assets/images/line-country-armenia.svg',
+  'گرجستان':'../assets/images/line-country-georgia.svg',
+  'مالزی':'../assets/images/line-country-malaysia.svg'
+};
+function tourDestName(t){return String(t?.dest||t?.destination||t?.city||'').trim()}
+function countryFromDestination(dest){
+  const clean=String(dest||'').trim();
+  return DESTINATION_COUNTRY_MAP[clean] || clean || 'سایر کشورها';
+}
+function countryLineArtImg(country){
+  return COUNTRY_LINE_ART[country] || '../assets/images/line-country-default.svg';
+}
+function countryLineArtData(){
+  const grouped={};
+  buyerTours().filter(t=>t.status==='active').forEach(t=>{
+    const destName=tourDestName(t);
+    const country=countryFromDestination(destName);
+    if(!grouped[country])grouped[country]={country,tours:0,dests:new Set(),img:countryLineArtImg(country)};
+    grouped[country].tours++;
+    if(destName)grouped[country].dests.add(destName);
+  });
+  return Object.values(grouped).map(x=>({...x,dests:[...x.dests]})).sort((a,b)=>b.tours-a.tours || String(a.country).localeCompare(String(b.country),'fa'));
+}
+function countryLineArtSection(){
+  const items=countryLineArtData();
+  if(!items.length)return '';
+  return `<section class="country-line-section">
+    <div class="country-line-head">
+      <div>
+        <span class="badge international">مقصدهای سفرو</span>
+        <h2>کشورهایی که تور داریم</h2>
+        <p class="small">کشور موردنظرت را انتخاب کن تا تورهای همان کشور را ببینی.</p>
+      </div>
+      <button class="soft country-reset" onclick="selectCountryFromLineArt('all')"><i class="fa-solid fa-earth-asia"></i> همه کشورها</button>
+    </div>
+    <div class="country-line-grid">
+      ${items.map(item=>`<button type="button" class="country-line-card ${currentCountry===item.country?'active':''}" onclick="selectCountryFromLineArt('${item.country}')">
+        <span class="country-art-wrap"><img src="${item.img}" alt="لاین‌آرت ${item.country}"></span>
+        <span class="country-card-body">
+          <b>${item.country}</b>
+          <small>${faNum(item.tours)} تور فعال</small>
+          <em>${item.dests.slice(0,4).join('، ')}</em>
+        </span>
+      </button>`).join('')}
+    </div>
+  </section>`;
+}
+function selectCountryFromLineArt(country){
+  currentCountry=country || 'all';
+  const dest=$('dest');
+  if(dest)dest.value='all';
+  document.querySelectorAll('.country-line-card').forEach(card=>card.classList.toggle('active', card.textContent.includes(currentCountry) && currentCountry!=='all'));
+  filterHome();
+  document.getElementById('tourGrid')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 function consultPopupHtml(){
   return `<div id="consultPopup" class="popup-backdrop">
     <div class="consult-popup">
@@ -388,11 +462,12 @@ function buyerTours(){
 
 function renderHome(){
  const list=buyerTours().filter(t=>t.status==='active');
- $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${trustSection()}${currencySection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
+ $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${countryLineArtSection()}${currencySection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
  <section><div class="row wrap"><h2>قسمت ویژه</h2></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
- <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>t.dest))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
+ <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="currentCountry='all';filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>tourDestName(t)).filter(Boolean))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
  <div class="row"><h2>تورها</h2><b id="tourCount">۰</b><button class="soft" onclick="resetDemoData()">بازیابی تورهای نمونه</button></div><section id="tourGrid" class="grid g3"></section>
+ ${trustSection()}
  ${aboutContactSection()}
  <div id="compareDock" class="dock"><b><i class="fa-solid fa-code-compare"></i> <span id="compareCount">۰</span> تور برای مقایسه</b><div class="actions"><button class="soft" onclick="openCompare()">مقایسه</button><button class="danger" onclick="clearCompare()">پاک کردن</button></div></div>
  <div id="compareModal" class="modal" onclick="if(event.target===this)closeCompare()"><div class="modal-card pad"><div class="row"><h2>مقایسه تورها</h2><button class="soft" onclick="closeCompare()">بستن</button></div><div id="compareContent" class="table-wrap"></div></div></div>`;
@@ -413,7 +488,7 @@ function lastCard(t){return `<article class="last-card soldout-wrap clickable-to
 function filterHome(){
  try{
    let q=$('search')?.value?.trim().toLowerCase()||'',d=$('dest')?.value||'all',sort=$('sort')?.value||'default',star=$('star')?.value||'all',airline=$('airline')?.value?.trim().toLowerCase()||'',onlyCap=$('onlyCap')?.checked||false;
-   let list=buyerTours().filter(t=>t.status==='active'&&(currentCat==='all'||(t.categories||[]).includes(currentCat)||t.type===currentCat||t.level===currentCat)&&(d==='all'||t.dest===d)&&(!q||String(t.title).toLowerCase().includes(q)||String(t.dest).toLowerCase().includes(q))&&(!airline||String(t.airline).toLowerCase().includes(airline))&&(star==='all'||(t.hotels||[]).some(h=>Number(h.star)===Number(star)))&&(!onlyCap||totalCapacity(t)>0));
+   let list=buyerTours().filter(t=>t.status==='active'&&(currentCat==='all'||(t.categories||[]).includes(currentCat)||t.type===currentCat||t.level===currentCat)&&(currentCountry==='all'||countryFromDestination(tourDestName(t))===currentCountry)&&(d==='all'||tourDestName(t)===d)&&(!q||String(t.title).toLowerCase().includes(q)||String(tourDestName(t)).toLowerCase().includes(q)||String(countryFromDestination(tourDestName(t))).toLowerCase().includes(q))&&(!airline||String(t.airline).toLowerCase().includes(airline))&&(star==='all'||(t.hotels||[]).some(h=>Number(h.star)===Number(star)))&&(!onlyCap||totalCapacity(t)>0));
    if(sort==='asc')list.sort((a,b)=>minHotel(a).price-minHotel(b).price);
    if(sort==='desc')list.sort((a,b)=>minHotel(b).price-minHotel(a).price);
    if(sort==='rate')list.sort((a,b)=>Number(b.rating||0)-Number(a.rating||0));
@@ -425,7 +500,7 @@ function filterHome(){
    if($('tourGrid'))$('tourGrid').innerHTML='<div class="debug-error-box" style="grid-column:1/-1">خطا در نمایش تورها. داده‌ها را بازیابی کنید.</div>';
  }
 }
-function resetHome(){currentCat='all';renderHome()}
+function resetHome(){currentCat='all';currentCountry='all';renderHome()}
 function tourCard(t){const w=wishlist().includes(t.id);return `<article class="card clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><div class="soldout-wrap" style="position:relative;overflow:hidden"><img class="tour-img" src="${t.img||DEFAULT_IMG}" alt="${t.title||''}">${t.lastMinute?'<span class="flash-badge">لحظه آخری</span>':''}</div><div class="pad"><div class="badges">${badges(t)} ${buyerTourLabel(t)?`<span class="badge special">${buyerTourLabel(t)}</span>`:''}</div><h3 class="tour-title">${t.title}</h3><div class="meta"><span>${t.dest}</span><span>${normalizeDurationNightFirst(t.duration)}</span><span>${ratingStar()} ${t.rating}</span><span>${faNum(totalCapacity(t))} ظرفیت</span></div><div class="row" style="margin-top:14px;border-top:1px solid var(--b);padding-top:14px"><span><b class="price">${money(minHotel(t).price)}</b><div class="tour-currency-badges">${tourPriceBadges(t)}</div></span><div class="actions"><button class="soft" onclick="event.stopPropagation();toggleWish(${t.id})"><i class="${w?'fa-solid':'fa-regular'} fa-heart" style="${w?'color:#ef4444':''}"></i></button><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">جزئیات</button></div></div><button class="compare-btn ${compare.has(t.id)?'active':''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id)?'در مقایسه':'افزودن به مقایسه'}</button></div></article>`}
 function toggleCompare(id){if(compare.has(id))compare.delete(id);else{if(compare.size>=3)return showToast('حداکثر ۳ تور قابل مقایسه است');compare.add(id)}filterHome()}
 function renderCompareDock(){const d=$('compareDock');if(!d)return;$('compareCount').textContent=faNum(compare.size);d.classList.toggle('on',compare.size>0)}
