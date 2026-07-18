@@ -1,7 +1,7 @@
 
 function beautyTrustStrip(){return ``;}
 
-let view='home',currentCat='all',currentCountry='all',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
+let view='home',currentCat='all',currentCountry='all',selectedCountry='',compare=new Set(),selectedTour=null,selectedHotel=0,booking={step:1,tourId:null,hotel:0,date:null,passengers:2};
 if(!sessionStorage.getItem('safarro_visit_start'))sessionStorage.setItem('safarro_visit_start',Date.now());
 function siteSeconds(){return Math.max(0,Math.round((Date.now()-Number(sessionStorage.getItem('safarro_visit_start')||Date.now()))/1000))}
 function siteTourViews(){return Number(localStorage.getItem('safarro_tour_views')||0)}
@@ -81,8 +81,8 @@ function bookingHotelList(t){
 }
 
 function initBuyer(){mount('buyer');route('home')}
-function route(v,id){view=v;if(v==='detail'){selectedTour=id;addCustomerTrail(findTour(id))}if(v==='booking'){booking.tourId=id;booking.step=1;const t=findTour(id);const entries=visibleHotelEntries(t||{});booking.hotel=entries.some(e=>e.i===selectedHotel)?selectedHotel:(entries[0]?.i||0);booking.date=t?.dates?.[0]||null}renderBuyer();window.scrollTo({top:0,left:0,behavior:'auto'})}
-function renderBuyer(){if(view==='home')return renderHome();if(view==='detail')return renderDetail(findTour(selectedTour));if(view==='booking')return renderBooking(findTour(booking.tourId));if(view==='wish')return renderWish();if(view==='mine')return renderMine()}
+function route(v,id){view=v;if(v==='country'){selectedCountry=id||'';currentCountry=selectedCountry||'all'}if(v==='detail'){selectedTour=id;addCustomerTrail(findTour(id))}if(v==='booking'){booking.tourId=id;booking.step=1;const t=findTour(id);const entries=visibleHotelEntries(t||{});booking.hotel=entries.some(e=>e.i===selectedHotel)?selectedHotel:(entries[0]?.i||0);booking.date=t?.dates?.[0]||null}renderBuyer();window.scrollTo({top:0,left:0,behavior:'auto'})}
+function renderBuyer(){if(view==='home')return renderHome();if(view==='country')return renderCountryPage(selectedCountry);if(view==='detail')return renderDetail(findTour(selectedTour));if(view==='booking')return renderBooking(findTour(booking.tourId));if(view==='wish')return renderWish();if(view==='mine')return renderMine()}
 function scrollToBuyerVisa(){
   if(view!=='home'){
     view='home';
@@ -93,7 +93,7 @@ function scrollToBuyerVisa(){
     if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
   },60);
 }
-function buyerTabs(){return `<div class="catbar buyer-main-tabs"><button onclick="route('home')" class="${view==='home'?'active':''}">خانه مشتری</button><button onclick="scrollToBuyerVisa()" class="buyer-visa-tab"><i class="fa-solid fa-passport"></i> خدمات ویزا را راحت ببین</button><button onclick="route('wish')" class="${view==='wish'?'active':''}">علاقه‌مندی‌ها</button><button onclick="route('mine')" class="${view==='mine'?'active':''}">رزروهای من</button></div>`}
+function buyerTabs(){return `<div class="catbar buyer-main-tabs"><button onclick="route('home')" class="${(view==='home'||view==='country')?'active':''}">خانه مشتری</button><button onclick="scrollToBuyerVisa()" class="buyer-visa-tab"><i class="fa-solid fa-passport"></i> خدمات ویزا را راحت ببین</button><button onclick="route('wish')" class="${view==='wish'?'active':''}">علاقه‌مندی‌ها</button><button onclick="route('mine')" class="${view==='mine'?'active':''}">رزروهای من</button></div>`}
 
 function sendLeadToWhatsApp(lead){ return; }
 
@@ -211,14 +211,17 @@ function trustSection(){
 
 
 const DESTINATION_COUNTRY_MAP = {
-  'استانبول':'ترکیه','آنتالیا':'ترکیه','کاپادوکیا':'ترکیه',
+  'استانبول':'ترکیه','آنتالیا':'ترکیه','کاپادوکیا':'ترکیه','کوش‌آداسی':'ترکیه','کوش آداسی':'ترکیه','بدروم':'ترکیه','مارماریس':'ترکیه',
   'دبی':'امارات','ابوظبی':'امارات','شارجه':'امارات',
   'کیش':'ایران','مشهد':'ایران','شیراز':'ایران','اصفهان':'ایران','تهران':'ایران',
   'پاریس':'فرانسه','نیس':'فرانسه',
   'رم':'ایتالیا','میلان':'ایتالیا','ونیز':'ایتالیا',
   'بانکوک':'تایلند','پوکت':'تایلند','پاتایا':'تایلند',
-  'ایروان':'ارمنستان','تفلیس':'گرجستان','باتومی':'گرجستان',
-  'کوالالامپور':'مالزی','لنکاوی':'مالزی'
+  'ایروان':'ارمنستان','تفلیس':'گرجستان','باتومی':'گرجستان','تفلیس+باتومی':'گرجستان','تفلیس و باتومی':'گرجستان',
+  'کوالالامپور':'مالزی','لنکاوی':'مالزی','مالزی':'مالزی',
+  'بالی':'اندونزی','ویتنام':'ویتنام','تونس':'تونس','روسیه':'روسیه','مسکو':'روسیه','سنت پترزبورگ':'روسیه','مسکو و سن پترزبورگ':'روسیه',
+  'برزیل':'برزیل','آمازون':'برزیل','چین':'چین','ژاپن':'ژاپن','کره جنوبی':'کره جنوبی','هند':'هند','سریلانکا':'سریلانکا',
+  'آفریقای جنوبی':'آفریقای جنوبی','کنیا':'کنیا','باکو':'آذربایجان','دوحه':'قطر','مسقط':'عمان','اسپانیا':'اسپانیا','یونان':'یونان','اروپا':'اروپا'
 };
 const COUNTRY_LINE_ART = {
   'ترکیه':'../assets/images/line-country-turkey.svg',
@@ -275,12 +278,29 @@ function countryLineArtSection(){
   </section>`;
 }
 function selectCountryFromLineArt(country){
-  currentCountry=country || 'all';
-  const dest=$('dest');
-  if(dest)dest.value='all';
-  document.querySelectorAll('.country-line-card').forEach(card=>card.classList.toggle('active', card.textContent.includes(currentCountry) && currentCountry!=='all'));
-  filterHome();
-  document.getElementById('tourGrid')?.scrollIntoView({behavior:'smooth',block:'start'});
+  if(!country || country==='all'){
+    currentCountry='all';selectedCountry='';
+    if(view!=='home')route('home');
+    else {filterHome();document.getElementById('tourGrid')?.scrollIntoView({behavior:'smooth',block:'start'});}
+    return;
+  }
+  route('country',country);
+}
+
+function toursForCountry(country){
+  return buyerTours().filter(t=>t.status==='active' && countryFromDestination(tourDestName(t))===country);
+}
+function renderCountryPage(country){
+  const clean=country||'سایر کشورها';
+  const list=toursForCountry(clean);
+  const data=countryLineArtData().find(x=>x.country===clean);
+  $('app').innerHTML=`${buyerTabs()}<button class="soft" onclick="route('home')"><i class="fa-solid fa-arrow-right"></i> بازگشت به کشورها</button>
+  <section class="country-page-hero">
+    <div class="country-page-copy"><span class="badge international">تورهای ${clean}</span><h1>${clean}</h1><p class="small">همه تورهای فعال این کشور را اینجا ببین و با انتخاب هر کارت، وارد صفحه جزئیات همان تور شو.</p><b>${faNum(list.length)} تور فعال</b></div>
+    <div class="country-page-art"><img src="${data?.img||countryLineArtImg(clean)}" alt="لاین‌آرت ${clean}"></div>
+  </section>
+  <section class="country-page-grid grid g3">${list.map(tourCard).join('')||'<div class="card pad" style="grid-column:1/-1">فعلاً توری برای این کشور فعال نیست.</div>'}</section>
+  ${hotelPhotosModalHtml()}${consultPopupHtml()}`;
 }
 
 function consultPopupHtml(){
@@ -470,8 +490,9 @@ function buyerTours(){
 
 function renderHome(){
  const list=buyerTours().filter(t=>t.status==='active');
- $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}${countryLineArtSection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
- <section><div class="row wrap"><h2>قسمت ویژه</h2></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
+ $('app').innerHTML=`${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}
+ <section class="special-tours-section"><div class="row wrap"><div><span class="badge special">پیشنهاد سفرو</span><h2>تور ویژه</h2></div></div><div class="grid g3">${list.filter(t=>t.lastMinute).slice(0,3).map(lastCard).join('')}</div></section>
+ ${countryLineArtSection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
  <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="currentCountry='all';filterHome()"><option value="all">همه</option>${[...new Set(list.map(t=>tourDestName(t)).filter(Boolean))].map(d=>`<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="resetHome()">بازنشانی</button></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
  <section class="catbar">${['all:همه','domestic:داخلی','international:خارجی','luxury:لوکس','economy:اقتصادی','special:ویژه'].map(x=>{const[a,b]=x.split(':');return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a===currentCat?'active':''}">${b}</button>`}).join('')}</section>
  <div class="row"><h2>تورها</h2><b id="tourCount">۰</b><button class="soft" onclick="resetDemoData()">بازیابی تورهای نمونه</button></div><section id="tourGrid" class="grid g3"></section>
@@ -492,7 +513,7 @@ function specialPriceLine(t, fallbackPrice){
 }
 
 function cardClickDetail(e,id){const target=e.target;if(target.closest('button,a,input,select,textarea,label'))return;route('detail',id)}
-function lastCard(t){return `<article class="last-card soldout-wrap clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><span class="flash-badge">${faNum(t.dealPercent||0)}٪ ویژه</span><img src="${t.img||DEFAULT_IMG}" alt="${t.title||''}"><div class="pad"><div class="row"><b>${t.title}</b><span class="badge special">قسمت ویژه</span></div><p class="small">${t.dest} | ${normalizeDurationNightFirst(t.duration)}</p><div class="row"><span><b class="price">${money(minHotel(t).price)}</b></span><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">مشاهده</button></div></div></article>`}
+function lastCard(t){return `<article class="last-card soldout-wrap clickable-tour-card" onclick="cardClickDetail(event,${t.id})"><span class="flash-badge">${faNum(t.dealPercent||0)}٪ ویژه</span><img src="${t.img||DEFAULT_IMG}" alt="${t.title||''}"><div class="pad"><div class="row"><b>${t.title}</b><span class="badge special">تور ویژه</span></div><p class="small">${t.dest} | ${normalizeDurationNightFirst(t.duration)}</p><div class="row"><span><b class="price">${money(minHotel(t).price)}</b></span><button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">مشاهده</button></div></div></article>`}
 function filterHome(){
  try{
    let q=$('search')?.value?.trim().toLowerCase()||'',d=$('dest')?.value||'all',sort=$('sort')?.value||'default',star=$('star')?.value||'all',airline=$('airline')?.value?.trim().toLowerCase()||'',onlyCap=$('onlyCap')?.checked||false;

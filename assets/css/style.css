@@ -4178,3 +4178,125 @@ body.buyer-page::after{
     inset:var(--buyer-header-offset,67px) 0 0 0!important;
   }
 }
+
+
+/* =========================================================
+   v4.4 stronger fixed background + larger purple headings + country pages
+   ========================================================= */
+body.buyer-page::before{
+  opacity:.82!important;
+  filter:contrast(1.32) saturate(1.10)!important;
+  background-size:900px auto!important;
+}
+body.buyer-page::after{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.78) 0%,rgba(255,255,255,.16) 18%,rgba(255,255,255,.035) 50%,rgba(255,255,255,.16) 82%,rgba(255,255,255,.78) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.15) 45%,rgba(255,255,255,.25) 100%)!important;
+}
+body.buyer-page .badge.international{
+  font-size:13px!important;
+  padding:7px 13px!important;
+  letter-spacing:-.01em;
+}
+body.buyer-page .country-line-head h2,
+body.buyer-page .tours-anchor-title h2,
+body.buyer-page .special-tours-section h2,
+body.buyer-page .buyer-visa-section h2{
+  font-size:clamp(30px,3vw,48px)!important;
+  line-height:1.45!important;
+}
+.special-tours-section{
+  margin:18px 0 20px;
+  padding:18px;
+  border-radius:28px;
+  background:rgba(255,255,255,.60)!important;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 12px 30px rgba(15,23,42,.035);
+}
+.special-tours-section .row.wrap{
+  margin-bottom:14px;
+}
+.special-tours-section h2{
+  margin:6px 0 0;
+  color:#111827;
+}
+.country-line-card{
+  cursor:pointer;
+}
+.country-line-card:hover .country-card-body b,
+.country-line-card.active .country-card-body b{
+  color:#6d28d9!important;
+}
+.country-page-hero{
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:18px;
+  align-items:center;
+  margin:18px 0 18px;
+  padding:24px;
+  border-radius:30px;
+  background:rgba(255,255,255,.62)!important;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 14px 34px rgba(15,23,42,.045);
+  overflow:hidden;
+}
+.country-page-copy h1{
+  margin:8px 0 8px;
+  font-size:clamp(38px,5vw,72px);
+  line-height:1.25;
+  color:#111827;
+  font-weight:1000;
+}
+.country-page-copy b{
+  display:inline-flex;
+  margin-top:12px;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(124,58,237,.12);
+  color:#6d28d9;
+  border:1px solid rgba(124,58,237,.16);
+}
+.country-page-art{
+  min-height:220px;
+  display:grid;
+  place-items:center;
+  border-radius:26px;
+  background:rgba(255,255,255,.46);
+  border:1px dashed rgba(17,24,39,.10);
+}
+.country-page-art img{
+  width:min(360px,100%);
+  height:220px;
+  object-fit:contain;
+  filter:contrast(1.15);
+}
+.country-page-grid{
+  margin-top:16px;
+}
+@media(max-width:900px){
+  body.buyer-page::before{
+    background-size:760px auto!important;
+    opacity:.74!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.24)!important;
+  }
+  .country-page-hero{grid-template-columns:1fr;padding:18px}
+  .country-page-art{min-height:170px}
+  .country-page-art img{height:170px}
+}
+@media(max-width:560px){
+  body.buyer-page::before{
+    background-size:610px auto!important;
+    opacity:.64!important;
+  }
+  body.buyer-page::after{
+    background:rgba(255,255,255,.34)!important;
+  }
+  body.buyer-page .badge.international{font-size:12px!important;padding:6px 11px!important}
+  body.buyer-page .country-line-head h2,
+  body.buyer-page .tours-anchor-title h2,
+  body.buyer-page .special-tours-section h2,
+  body.buyer-page .buyer-visa-section h2{font-size:28px!important}
+  .special-tours-section{padding:14px;border-radius:24px}
+}
