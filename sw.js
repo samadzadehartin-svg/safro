@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safaro-v5.1.0-custom-tour-popup';
+const CACHE_NAME = 'safarro-cache-v5.2';
 const ASSETS = [
   '/',
   '/buyer/',
