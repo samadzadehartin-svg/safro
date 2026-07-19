@@ -282,7 +282,7 @@ function hotelRoomPriceHtml(h) {
   const dc = h?.dblCurrency || h?.priceCurrency || 'IRR';
   const sc = h?.sglCurrency || h?.priceCurrency || dc;
   if (!dbl && !sgl) return `<b>${money(h?.price || 0)}</b>`;
-  return `<span class="hotel-room-price"><b>دو تخته: ${formatCurrencyAmount(dbl, dc)}</b>${sgl ? `<small>تک تخته: ${formatCurrencyAmount(sgl, sc)}</small>` : ''}</span>`;
+  return `<span class="hotel-room-price"><b>دو‌تخته: ${formatCurrencyAmount(dbl, dc)}</b>${sgl ? `<small>یک‌تخته: ${formatCurrencyAmount(sgl, sc)}</small>` : ''}</span>`;
 }
 
 function hotelStars(n) {

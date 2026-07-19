@@ -8214,3 +8214,182 @@ body.buyer-page.dark .hero-figma-fusion {
     width: 100%;
   }
 }
+
+
+/* v5.4 luxury polish + clearer hotel room prices */
+:root {
+  --lux-navy: #202d59;
+  --lux-gold: #fbb71c;
+  --lux-ink: #07111f;
+}
+body.buyer-page,
+body:has(#app) {
+  background:
+    radial-gradient(circle at 82% 8%, rgba(251, 183, 28, 0.15), transparent 26rem),
+    radial-gradient(circle at 14% 12%, rgba(32, 45, 89, 0.13), transparent 24rem),
+    linear-gradient(180deg, #f7f9fd 0%, #eef3fb 100%);
+}
+.header {
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid rgba(32, 45, 89, 0.1);
+  box-shadow: 0 18px 60px rgba(32, 45, 89, 0.08);
+}
+.btn {
+  background: linear-gradient(135deg, #202d59 0%, #30477e 54%, #4a9fd8 100%);
+  box-shadow: 0 14px 32px rgba(32, 45, 89, 0.24);
+}
+.gold,
+.btn.gold,
+.hero-custom-tour-card .gold,
+.hero-custom-tour-card button.gold {
+  background: linear-gradient(135deg, #fbb71c 0%, #ffd667 100%);
+  color: #1a2337;
+  box-shadow: 0 16px 38px rgba(251, 183, 28, 0.25);
+}
+.badge.special,
+.badge.luxury,
+.badge.international {
+  background: linear-gradient(135deg, rgba(32, 45, 89, 0.95), rgba(48, 71, 126, 0.94));
+  color: #fff;
+  border: 1px solid rgba(251, 183, 28, 0.32);
+  box-shadow: 0 10px 26px rgba(32, 45, 89, 0.18);
+}
+.hero-experience {
+  border-radius: 28px;
+  background:
+    linear-gradient(110deg, rgba(8, 18, 37, 0.96) 0%, rgba(32, 45, 89, 0.87) 45%, rgba(32, 45, 89, 0.34) 100%),
+    url('../images/safarro-middle-hero.png') center / cover no-repeat;
+  box-shadow: 0 28px 90px rgba(7, 17, 31, 0.28);
+  border: 1px solid rgba(251, 183, 28, 0.18);
+}
+.hero-experience::after {
+  border: 1px solid rgba(251, 183, 28, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+.combined-hero-grid {
+  padding: 42px;
+}
+.combined-hero-copy h1,
+.hero-copy h1 {
+  letter-spacing: -1.2px;
+  text-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+}
+.trust-item {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(251, 183, 28, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.hero-custom-tour-card,
+.card,
+.country-card-v49,
+.tour-card-v49,
+.detail-aside-v49,
+.detail-main-v49 {
+  border: 1px solid rgba(32, 45, 89, 0.1);
+  box-shadow: 0 24px 70px rgba(32, 45, 89, 0.11);
+}
+.hero-custom-tour-card {
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 255, 0.94)),
+    radial-gradient(circle at 16% 0%, rgba(251, 183, 28, 0.15), transparent 12rem);
+}
+.tour-card-v49 {
+  border-radius: 26px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.94);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.tour-card-v49:hover,
+.country-card-v49:hover,
+.hotel:hover:not(.disabled) {
+  transform: translateY(-4px);
+  border-color: rgba(251, 183, 28, 0.42);
+  box-shadow: 0 30px 85px rgba(32, 45, 89, 0.18);
+}
+.tour-image-wrap-v49::after,
+.detail-hero-img-v49::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 42%, rgba(7, 17, 31, 0.18));
+}
+.tour-card-footer-v49 .price,
+.detail-price-box-v49 b,
+.price {
+  color: #202d59;
+}
+.hotel {
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(249, 252, 255, 0.92));
+  border: 1px solid rgba(32, 45, 89, 0.11);
+  box-shadow: 0 16px 42px rgba(32, 45, 89, 0.07);
+}
+.hotel.selected {
+  border-color: rgba(251, 183, 28, 0.75) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 225, 0.86));
+  box-shadow: 0 20px 55px rgba(251, 183, 28, 0.16);
+}
+.hotel-room-price {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 142px;
+  padding: 8px 11px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(32, 45, 89, 0.08), rgba(251, 183, 28, 0.12));
+  border: 1px solid rgba(32, 45, 89, 0.1);
+}
+.hotel-room-price b {
+  color: #202d59;
+  font-size: 12px;
+  font-weight: 1000;
+}
+.hotel-room-price small {
+  color: #8a5b00;
+  font-size: 11px;
+  font-weight: 1000;
+}
+.detail-hero-v49 {
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgba(32, 45, 89, 0.97), rgba(11, 26, 46, 0.96));
+  color: #fff;
+  box-shadow: 0 28px 90px rgba(7, 17, 31, 0.22);
+  border: 1px solid rgba(251, 183, 28, 0.25);
+}
+.detail-hero-copy-v49 h1,
+.detail-hero-copy-v49 p,
+.detail-hero-chips-v49 span {
+  color: #fff !important;
+}
+.detail-aside-v49 {
+  border-top: 4px solid #fbb71c;
+}
+.custom-tour-top-trigger {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(251, 183, 28, 0.36);
+  box-shadow: 0 18px 55px rgba(32, 45, 89, 0.14);
+}
+.custom-tour-top-trigger:hover {
+  box-shadow: 0 24px 75px rgba(32, 45, 89, 0.22);
+}
+@media (max-width: 768px) {
+  .combined-hero-grid {
+    padding: 22px;
+  }
+  .hero-experience {
+    border-radius: 22px;
+  }
+  .hotel .row {
+    align-items: flex-start;
+  }
+  .hotel-room-price {
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 8px;
+  }
+}

@@ -644,7 +644,7 @@ function tourSourceFa(t) {
 function tourBankPricingBox() {
   const entries = tourBankCurrentTours();
   return `<section id="admin-tour-bank-pricing" class="card pad tour-bank-pricing-section" style="margin-bottom:16px">
-    <div class="row wrap"><div><span class="badge special">بانک تورها و قیمت ارزی</span><h3>قیمت تورها با ارزهای مختلف + قیمت تک‌تخته/دو‌تخته هتل‌ها</h3><p class="small">برای هر تور می‌توانی چند قیمت با ارزهای مختلف ثبت کنی. برای هر هتل هم قیمت دو‌تخته و تک‌تخته جداگانه ذخیره می‌شود.</p></div><div class="tour-bank-count"><span>تعداد تور</span><b>${faNum(tours().length)}</b></div></div>
+    <div class="row wrap"><div><span class="badge special">بانک تورها و قیمت ارزی</span><h3>قیمت تورها با ارزهای مختلف + قیمت یک‌تخته/دو‌تخته هتل‌ها</h3><p class="small">برای هر تور می‌توانی چند قیمت با ارزهای مختلف ثبت کنی. برای هر هتل هم قیمت دو‌تخته و تک‌تخته جداگانه ذخیره می‌شود.</p></div><div class="tour-bank-count"><span>تعداد تور</span><b>${faNum(tours().length)}</b></div></div>
     <div class="tour-bank-toolbar">
       <input id="tourBankSearch" class="field" placeholder="جستجوی تور، مقصد، منبع..." oninput="renderTourBankPricing()">
       <select id="tourBankSourceFilter" class="field" onchange="renderTourBankPricing()"><option value="all">همه منابع</option>${[
@@ -707,7 +707,7 @@ function tourBankPricingCard(t) {
   </div>`;
 }
 function tourHotelRoomPriceRow(t, h, i, tid) {
-  return `<div class="tour-hotel-room-row"><div><b dir="ltr">${h.name || h.nameLatin || 'هتل'}</b><small>${hotelStars(h.star || 3)} ${h.meal || h.board || ''}</small></div><input id="tb_h_dbl_${tid}_${i}" class="field" value="${priceNumber(h.dblPrice || h.price) || ''}" placeholder="قیمت دو‌تخته"><select id="tb_h_dbl_cur_${tid}_${i}" class="field">${adminCurrencyOptions(h.dblCurrency || h.priceCurrency || t.priceCurrency || 'IRR')}</select><input id="tb_h_sgl_${tid}_${i}" class="field" value="${priceNumber(h.sglPrice) || ''}" placeholder="قیمت تک‌تخته"><select id="tb_h_sgl_cur_${tid}_${i}" class="field">${adminCurrencyOptions(h.sglCurrency || h.priceCurrency || t.priceCurrency || 'IRR')}</select><input id="tb_h_cap_${tid}_${i}" class="field" type="number" value="${Number(h.capacity || 0)}" placeholder="ظرفیت"><button class="btn" onclick="saveTourHotelRoomPrices(${adminJsArg(t.id)},${i})">ذخیره هتل</button></div>`;
+  return `<div class="tour-hotel-room-row"><div><b dir="ltr">${h.name || h.nameLatin || 'هتل'}</b><small>${hotelStars(h.star || 3)} ${h.meal || h.board || ''}</small></div><input id="tb_h_dbl_${tid}_${i}" class="field" value="${priceNumber(h.dblPrice || h.price) || ''}" placeholder="قیمت دو‌تخته"><select id="tb_h_dbl_cur_${tid}_${i}" class="field">${adminCurrencyOptions(h.dblCurrency || h.priceCurrency || t.priceCurrency || 'IRR')}</select><input id="tb_h_sgl_${tid}_${i}" class="field" value="${priceNumber(h.sglPrice) || ''}" placeholder="قیمت یک‌تخته"><select id="tb_h_sgl_cur_${tid}_${i}" class="field">${adminCurrencyOptions(h.sglCurrency || h.priceCurrency || t.priceCurrency || 'IRR')}</select><input id="tb_h_cap_${tid}_${i}" class="field" type="number" value="${Number(h.capacity || 0)}" placeholder="ظرفیت"><button class="btn" onclick="saveTourHotelRoomPrices(${adminJsArg(t.id)},${i})">ذخیره هتل</button></div>`;
 }
 function renderTourBankPricing() {
   const box = $('tourBankPricingList');
@@ -812,7 +812,7 @@ function saveTourHotelRoomPrices(id, index) {
     })
   );
   renderTourBankPricing();
-  showToast('قیمت تک‌تخته/دو‌تخته هتل ذخیره شد');
+  showToast('قیمت یک‌تخته/دو‌تخته هتل ذخیره شد');
 }
 
 function safeSafaroIranianImportedTours() {
@@ -2259,7 +2259,7 @@ function renderHotelCatalog() {
           <small>مقصد: ${h.destination || h.dest || 'عمومی'} ${h.catalogType === 'combo' ? ' | پکیج ترکیبی' : ''}</small>
           <small>منبع: ${h.sourceGroup || '—'}</small>
           <small>عکس‌ها: ${faNum(hotelCatalogPhotos(h).length)}</small>
-          ${h.dblPrice || h.sglPrice || h.childPrice ? `<small>دو تخته: ${h.dblPrice || '—'} | یک تخته: ${h.sglPrice || '—'} | کودک: ${h.childPrice || '—'}</small>` : ''}
+          ${h.dblPrice || h.sglPrice || h.childPrice ? `<small>دو‌تخته: ${h.dblPrice || '—'} | یک‌تخته: ${h.sglPrice || '—'} | کودک: ${h.childPrice || '—'}</small>` : ''}
           ${h.note ? `<small>${h.note}</small>` : ''}
         </div>
         <div class="admin-hotel-actions hotel-bank-card-actions">
