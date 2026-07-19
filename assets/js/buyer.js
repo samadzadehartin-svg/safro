@@ -1152,3 +1152,381 @@ function updateBackButton() {
   const btn = $('backFloatingBtn');
   if (btn) btn.classList.toggle('on', view !== 'home');
 }
+
+
+/* =========================================================
+   v4.9 full buyer UI refresh
+   Clean, sales-focused home, improved cards, search-first hero,
+   stronger tour detail layout, and better section order.
+   ========================================================= */
+function uniqueBuyerDestinations() {
+  return [...new Set(buyerTours().filter(t => t.status === 'active').map(t => tourDestName(t)).filter(Boolean))];
+}
+
+function homeSearchDestOptions(selected = '') {
+  return `<option value="all">همه مقصدها</option>${uniqueBuyerDestinations()
+    .map(d => `<option value="${escapeAttr(d)}" ${d === selected ? 'selected' : ''}>${d}</option>`)
+    .join('')}`;
+}
+
+function applyHeroSearch(e) {
+  if (e) e.preventDefault();
+  const q = $('heroSearchQuery')?.value?.trim() || '';
+  const d = $('heroSearchDest')?.value || 'all';
+  currentCountry = 'all';
+  currentCat = 'all';
+  const ensure = () => {
+    if ($('search')) $('search').value = q;
+    if ($('dest')) $('dest').value = d;
+    if ($('sort')) $('sort').value = 'default';
+    if ($('star')) $('star').value = 'all';
+    if ($('airline')) $('airline').value = '';
+    if ($('onlyCap')) $('onlyCap').checked = false;
+    filterHome();
+    document.getElementById('tourGrid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  if (view !== 'home') {
+    route('home');
+    setTimeout(ensure, 80);
+  } else ensure();
+}
+
+function referenceHeroSection() {
+  const activeCount = buyerTours().filter(t => t.status === 'active').length;
+  const countriesCount = countryLineArtData().length;
+  return `<section class="hero-v49">
+    <div class="hero-v49-copy">
+      <span class="hero-copy-kicker"><i class="fa-solid fa-shield-heart"></i> رزرو تور با خیال راحت</span>
+      <h1 class="buyer-hero-title">تور داخلی و خارجی با <span>رزرو سریع</span> و انتخاب آزاد هتل</h1>
+      <p class="buyer-hero-subtitle">مقصد، قیمت، ظرفیت، هتل و خدمات هر تور را شفاف ببین؛ بعد با چند کلیک وارد جزئیات و رزرو شو.</p>
+      <form class="hero-search-panel" onsubmit="applyHeroSearch(event)">
+        <div class="hero-search-field hero-search-wide">
+          <label>جستجوی سریع</label>
+          <input id="heroSearchQuery" class="field" placeholder="مثلاً استانبول، دبی، آنتالیا یا تور لوکس">
+        </div>
+        <div class="hero-search-field">
+          <label>مقصد</label>
+          <select id="heroSearchDest" class="field">${homeSearchDestOptions()}</select>
+        </div>
+        <div class="hero-search-field">
+          <label>تعداد نفرات</label>
+          <select id="heroSearchPeople" class="field">
+            <option>۲ نفر</option><option>۱ نفر</option><option>۳ نفر</option><option>۴ نفر یا بیشتر</option>
+          </select>
+        </div>
+        <button class="btn hero-search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i> جستجوی تور</button>
+      </form>
+      <div class="hero-stats-v49">
+        <span><b>${faNum(activeCount)}</b> تور فعال</span>
+        <span><b>${faNum(countriesCount)}</b> کشور</span>
+        <span><b>۲۴/۷</b> پشتیبانی سفر</span>
+      </div>
+    </div>
+    <div class="hero-v49-art" aria-hidden="true">
+      <img src="../assets/images/world-landmarks-v45-art.svg" alt="">
+    </div>
+  </section>`;
+}
+
+function customTourSection() {
+  return `<section class="custom-tour-section" id="customTourSection">
+    <div class="custom-tour-copy">
+      <span class="badge special">تور اختصاصی سفرو</span>
+      <h2>تور خودتو بساز</h2>
+      <p class="small">اگر تاریخ، بودجه یا هتل خاصی مدنظرت هست، درخواستت را ثبت کن تا کارشناس سفرو با پیشنهاد مناسب تماس بگیرد.</p>
+      <div class="custom-tour-points">
+        <span><i class="fa-solid fa-hotel"></i> انتخاب هتل دلخواه</span>
+        <span><i class="fa-solid fa-calendar-days"></i> تاریخ منعطف</span>
+        <span><i class="fa-solid fa-headset"></i> مشاوره رایگان</span>
+      </div>
+    </div>
+    <form class="hero-custom-tour-card custom-tour-form-v49" onsubmit="submitConsultation(event)">
+      <div class="form-note-required">موارد ستاره‌دار الزامی هستند <span class="req-star">*</span></div>
+      <div class="grid g2">
+        <input id="leadName" class="field" placeholder="نام شما">
+        <input id="leadPhone" class="field" placeholder="شماره تماس *" required dir="ltr">
+        <input id="leadDest" class="field" placeholder="مقصد دلخواه">
+        <select id="leadPeople" class="field">
+          <option value="">تعداد نفرات</option>
+          <option>۱ نفر</option><option>۲ نفر</option><option>۳ نفر</option><option>۴ نفر یا بیشتر</option>
+        </select>
+      </div>
+      <textarea id="leadNote" class="field" rows="3" style="margin-top:10px" placeholder="مثلاً: استانبول، هتل ۵ ستاره، بودجه ۳۰ میلیون، آخر هفته"></textarea>
+      <button class="gold" style="width:100%;margin-top:12px" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> ساخت تور اختصاصی</button>
+      <div id="leadStatus" class="lead-status"></div>
+    </form>
+  </section>`;
+}
+
+function specialToursSection(list) {
+  const specials = list.filter(t => t.lastMinute).slice(0, 3);
+  if (!specials.length) return '';
+  return `<section class="special-tours-section special-tours-v49">
+    <div class="section-title-v49">
+      <div><span class="badge special">پیشنهاد سفرو</span><h2>تور ویژه</h2><p class="small">تورهای منتخب با پیشنهاد جذاب و ظرفیت محدود.</p></div>
+      <button class="soft" onclick="currentCat='special';filterHome();document.getElementById('tourGrid')?.scrollIntoView({behavior:'smooth',block:'start'})">مشاهده همه ویژه‌ها</button>
+    </div>
+    <div class="grid g3">${specials.map(lastCard).join('')}</div>
+  </section>`;
+}
+
+function filtersSection(list) {
+  return `<section class="filters-shell-v49">
+    <div class="section-title-v49 tours-title-v49">
+      <div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2><p class="small">با فیلترها سریع‌تر به مقصد، قیمت و هتل مناسب برس.</p></div>
+    </div>
+    <section class="card filters filters-v49">
+      <div class="filter-grid">
+        <div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div>
+        <div><label class="label">مقصد</label><select id="dest" class="field" onchange="currentCountry='all';filterHome()">${homeSearchDestOptions()}</select></div>
+        <div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div>
+        <button class="soft" onclick="manualResetHome()"><i class="fa-solid fa-rotate-right"></i> بازنشانی</button>
+      </div>
+      <div id="autoResetStatus" class="auto-reset-status" aria-live="polite"></div>
+      <div class="grid g3 filters-extra-v49" style="margin-top:12px">
+        <div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()" placeholder="نام ایرلاین"></div>
+        <div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div>
+        <label class="row only-cap-v49"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط تورهای ظرفیت‌دار</label>
+      </div>
+    </section>
+  </section>`;
+}
+
+function categoryBarHtml() {
+  return `<section class="catbar catbar-v49">${[
+    'all:همه',
+    'domestic:داخلی',
+    'international:خارجی',
+    'luxury:لوکس',
+    'economy:اقتصادی',
+    'special:تور ویژه',
+  ]
+    .map(x => {
+      const [a, b] = x.split(':');
+      return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a === currentCat ? 'active' : ''}">${b}</button>`;
+    })
+    .join('')}</section>`;
+}
+
+function uiFaqSection() {
+  return `<section class="faq-section-v49 card pad">
+    <div class="section-title-v49"><div><span class="badge domestic">سوالات پرتکرار</span><h2>قبل از رزرو بهتر بدونی</h2></div></div>
+    <div class="faq-grid-v49">
+      <div><b>قیمت‌ها قطعی هستند؟</b><p class="small">قیمت پایه و هتل‌ها نمایش داده می‌شود؛ برای نهایی‌سازی، کارشناس سفرو رزرو را تأیید می‌کند.</p></div>
+      <div><b>می‌توانم هتل را عوض کنم؟</b><p class="small">بله، در جزئیات هر تور هتل‌های قابل انتخاب و ظرفیتشان را می‌بینی.</p></div>
+      <div><b>برای ویزا هم کمک می‌کنید؟</b><p class="small">بله، بخش خدمات ویزا در صفحه مشتری قابل مشاهده است.</p></div>
+    </div>
+  </section>`;
+}
+
+function countryLineArtSection() {
+  const items = countryLineArtData();
+  if (!items.length) return '';
+  return `<section class="country-line-section country-line-section-v49">
+    <div class="country-line-head section-title-v49">
+      <div>
+        <span class="badge international">مقصدهای سفرو</span>
+        <h2>کشورهایی که تور داریم</h2>
+        <p class="small">هر کشور صفحه خودش را دارد؛ وارد شو و تورهای همان کشور را ببین.</p>
+      </div>
+      <button class="soft country-reset" onclick="selectCountryFromLineArt('all')"><i class="fa-solid fa-earth-asia"></i> همه تورها</button>
+    </div>
+    <div class="country-line-grid">
+      ${items
+        .map(
+          (item, i) => `<button type="button" class="country-line-card country-card-v${i % 5} ${i === 0 ? 'country-card-wide' : ''} ${currentCountry === item.country ? 'active' : ''}" onclick="selectCountryFromLineArt('${item.country}')">
+        <span class="country-art-wrap"><img src="${item.img}" alt="لاین‌آرت ${item.country}"></span>
+        <span class="country-card-body">
+          <b>${item.country}</b>
+          <small>${faNum(item.tours)} تور فعال</small>
+          <em>${item.dests.slice(0, 4).join('، ')}</em>
+          <strong>مشاهده تورها <i class="fa-solid fa-arrow-left"></i></strong>
+        </span>
+      </button>`
+        )
+        .join('')}
+    </div>
+  </section>`;
+}
+
+function renderHome() {
+  const list = buyerTours().filter(t => t.status === 'active');
+  $('app').innerHTML = `${buyerTabs()}
+    ${referenceHeroSection()}
+    ${countryLineArtSection()}
+    ${customTourSection()}
+    ${specialToursSection(list)}
+    ${consultPopupHtml()}${hotelPhotosModalHtml()}
+    ${filtersSection(list)}
+    ${categoryBarHtml()}
+    <div class="tour-list-head-v49 row"><div><h2>تورها</h2><p class="small">روی هر کارت بزن تا وارد جزئیات و رزرو همان تور شوی.</p></div><div class="row"><b id="tourCount">۰</b><button class="soft" onclick="resetDemoData()">بازیابی تورهای نمونه</button></div></div>
+    <section id="tourGrid" class="grid g3 tour-grid-v49"></section>
+    ${visaSection()}
+    ${trustSection()}
+    ${uiFaqSection()}
+    ${aboutContactSection()}
+    <div id="compareDock" class="dock"><b><i class="fa-solid fa-code-compare"></i> <span id="compareCount">۰</span> تور برای مقایسه</b><div class="actions"><button class="soft" onclick="openCompare()">مقایسه</button><button class="danger" onclick="clearCompare()">پاک کردن</button></div></div>
+    <div id="compareModal" class="modal" onclick="if(event.target===this)closeCompare()"><div class="modal-card pad"><div class="row"><h2>مقایسه تورها</h2><button class="soft" onclick="closeCompare()">بستن</button></div><div id="compareContent" class="table-wrap"></div></div></div>`;
+  filterHome();
+  scheduleOneMinuteConsultPopup();
+}
+
+function tourCard(t) {
+  const w = wishlist().includes(t.id);
+  const startPrice = Number(t.newPrice || 0) > 0 ? Number(t.newPrice) : Number(minHotel(t).price || 0);
+  const hotelCount = visibleHotelEntries(t).length || (t.hotels || []).length;
+  const cap = totalCapacity(t);
+  return `<article class="card clickable-tour-card tour-card-v49" onclick="cardClickDetail(event,${t.id})">
+    <div class="tour-image-wrap-v49">
+      <img class="tour-img" src="${t.img || DEFAULT_IMG}" alt="${t.title || ''}">
+      ${t.lastMinute ? '<span class="flash-badge">لحظه آخری</span>' : ''}
+      <button class="wish-float-v49" onclick="event.stopPropagation();toggleWish(${t.id})" aria-label="علاقه‌مندی"><i class="${w ? 'fa-solid' : 'fa-regular'} fa-heart" style="${w ? 'color:#ef4444' : ''}"></i></button>
+    </div>
+    <div class="pad tour-card-body-v49">
+      <div class="badges">${badges(t)} ${buyerTourLabel(t) ? `<span class="badge special">${buyerTourLabel(t)}</span>` : ''}</div>
+      <h3 class="tour-title">${t.title}</h3>
+      <div class="tour-meta-grid-v49">
+        <span><i class="fa-solid fa-location-dot"></i>${tourDestName(t)}</span>
+        <span><i class="fa-solid fa-clock"></i>${normalizeDurationNightFirst(t.duration)}</span>
+        <span><i class="fa-solid fa-star"></i>${faNum(t.rating || '۴.۸')}</span>
+        <span><i class="fa-solid fa-hotel"></i>${faNum(hotelCount)} هتل</span>
+      </div>
+      <div class="tour-card-footer-v49">
+        <div><small>شروع قیمت از</small><b class="price">${money(startPrice)}</b><em>${cap > 0 ? faNum(cap) + ' ظرفیت باقی‌مانده' : 'تکمیل ظرفیت'}</em></div>
+        <button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">مشاهده و رزرو</button>
+      </div>
+      <button class="compare-btn ${compare.has(t.id) ? 'active' : ''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id) ? 'در مقایسه' : 'افزودن به مقایسه'}</button>
+    </div>
+  </article>`;
+}
+
+function renderDetail(t) {
+  if (!t) return;
+  countTourViewAndMaybePopup();
+  const entries = visibleHotelEntries(t);
+  if (!entries.some(e => e.i === selectedHotel)) selectedHotel = entries[0]?.i || 0;
+  const selected = t.hotels[selectedHotel] || entries[0]?.h || minHotel(t);
+  const displayPrice = Number(t.newPrice || 0) > 0 ? Number(t.newPrice) : Number(selected.price || 0);
+  const detailGallery = sectionOn(t, 'gallery')
+    ? `<div class="gallery gallery-v49">${[t.img, ...(t.gallery || [])]
+        .filter(Boolean)
+        .slice(0, 5)
+        .map(x => `<img src="${x}" onclick="lightbox('${x}')">`)
+        .join('')}</div>`
+    : '';
+  const descHtml = sectionOn(t, 'description') ? `<p class="small detail-desc-v49">${t.desc || ''}</p>` : '';
+  const flightHtml = sectionOn(t, 'flightInfo')
+    ? `<div class="info-grid detail-info-v49">${info('مقصد', tourDestName(t))}${info('مدت', normalizeDurationNightFirst(t.duration))}${info('ایرلاین رفت', t.airline)}${info('ایرلاین برگشت', t.returnAirline || t.airline)}${info('زمان پرواز رفت', t.flightTime)}${info('زمان پرواز برگشت', t.returnFlightTime || t.landingTime)}</div>`
+    : '';
+  const datesHtml = sectionOn(t, 'dates') ? dateOnly(t) : '';
+  const hotelsHtml = sectionOn(t, 'hotels') ? hotelGroupsHtml(t) : '';
+  const itineraryHtml = sectionOn(t, 'itinerary')
+    ? `<div class="info"><small>برنامه سفر</small>${(t.itinerary || []).map(x => `<p class="small">• ${x}</p>`).join('')}</div>`
+    : '';
+  const docsHtml = sectionOn(t, 'docs')
+    ? `<div class="info"><small>مدارک لازم</small>${(t.docs || []).map(x => `<p class="small">• ${x}</p>`).join('')}</div>`
+    : '';
+  const includesHtml = sectionOn(t, 'includes')
+    ? `<div class="info"><small>خدمات شامل</small>${(t.includes || []).map(x => `<p class="small">✓ ${x}</p>`).join('')}</div>`
+    : '';
+  const excludesHtml = sectionOn(t, 'excludes')
+    ? `<div class="info"><small>خدمات غیرشامل</small>${(t.excludes || []).map(x => `<p class="small">× ${x}</p>`).join('')}</div>`
+    : '';
+  const blocks = [itineraryHtml, docsHtml, includesHtml, excludesHtml].filter(Boolean).join('');
+  const blocksHtml = blocks ? `<div class="g2 grid detail-block-grid-v49">${blocks}</div>` : '';
+  const policyBits = [];
+  if (sectionOn(t, 'cancellation')) policyBits.push(`<p class="small">قوانین کنسلی: ${t.cancellation || '—'}</p>`);
+  if (sectionOn(t, 'childPolicy')) policyBits.push(`<p class="small">شرایط کودک: ${t.childPolicy || '—'}</p>`);
+  const policyHtml = policyBits.length ? `<div class="info detail-policy-v49"><small>قوانین و شرایط</small>${policyBits.join('')}</div>` : '';
+  const reviewsHtml =
+    sectionOn(t, 'reviews') && (t.reviews || []).length
+      ? `<h3>نظر مسافران</h3><div class="g2 grid">${(t.reviews || []).map(r => `<div class="info"><div class="row"><b>${r.name}</b><span style="color:#f59e0b">${'★'.repeat(r.rate || 5)}</span></div><p class="small">${r.text}</p></div>`).join('')}</div>`
+      : '';
+  $('app').innerHTML = `${buyerTabs()}
+    <button class="soft back-btn-v49" onclick="goBack()"><i class="fa-solid fa-arrow-right"></i> بازگشت</button>
+    <section class="detail-hero-v49">
+      <div class="detail-hero-img-v49"><img src="${t.img || DEFAULT_IMG}" alt="${t.title || ''}"></div>
+      <div class="detail-hero-copy-v49">
+        <div class="badges">${badges(t)}</div>
+        <h1>${t.title}</h1>
+        ${descHtml}
+        <div class="detail-hero-chips-v49">
+          <span><i class="fa-solid fa-location-dot"></i>${tourDestName(t)}</span>
+          <span><i class="fa-solid fa-clock"></i>${normalizeDurationNightFirst(t.duration)}</span>
+          <span><i class="fa-solid fa-users"></i>${faNum(totalCapacity(t))} ظرفیت</span>
+        </div>
+      </div>
+    </section>
+    <section class="detail-layout-v49">
+      <main class="detail-main-v49 card pad">
+        ${detailGallery}
+        ${flightHtml}
+        ${destinationGuideDetail(t)}
+        ${datesHtml}
+        ${hotelsHtml}
+        ${blocksHtml}
+        ${policyHtml}
+        ${reviewsHtml}
+      </main>
+      <aside class="detail-aside-v49 card pad">
+        <span class="badge special">رزرو سریع</span>
+        <h3>خلاصه تور</h3>
+        <div class="detail-price-box-v49"><small>شروع قیمت از</small>${specialPriceLine(t, displayPrice)}</div>
+        <div class="stack detail-summary-list-v49">
+          <div class="row"><span>هتل انتخاب‌شده</span><b dir="ltr">${selected.name || '—'}</b></div>
+          <div class="row"><span>ظرفیت</span><b>${faNum(totalCapacity(t))}</b></div>
+          <div class="row"><span>ایرلاین</span><b>${t.airline || '—'}</b></div>
+        </div>
+        <button class="btn" style="width:100%;margin-top:14px" onclick="route('booking',${t.id})">رزرو نهایی</button>
+        <button class="soft" style="width:100%;margin-top:8px" onclick="toggleWish(${t.id})"><i class="fa-regular fa-heart"></i> افزودن به علاقه‌مندی</button>
+      </aside>
+    </section>
+    <div class="sticky-cta"><b>${money(displayPrice)}</b><button class="btn" onclick="route('booking',${t.id})">رزرو سریع</button></div>${hotelPhotosModalHtml()}${consultPopupHtml()}`;
+}
+
+function filterHome() {
+  try {
+    let q = $('search')?.value?.trim().toLowerCase() || '',
+      d = $('dest')?.value || 'all',
+      sort = $('sort')?.value || 'default',
+      star = $('star')?.value || 'all',
+      airline = $('airline')?.value?.trim().toLowerCase() || '',
+      onlyCap = $('onlyCap')?.checked || false;
+    let list = buyerTours().filter(t => {
+      const categoryMatch =
+        currentCat === 'all' ||
+        (currentCat === 'special' && t.lastMinute) ||
+        (t.categories || []).includes(currentCat) ||
+        t.type === currentCat ||
+        t.level === currentCat;
+      return (
+        t.status === 'active' &&
+        categoryMatch &&
+        (currentCountry === 'all' || countryFromDestination(tourDestName(t)) === currentCountry) &&
+        (d === 'all' || tourDestName(t) === d) &&
+        (!q ||
+          String(t.title).toLowerCase().includes(q) ||
+          String(tourDestName(t)).toLowerCase().includes(q) ||
+          String(countryFromDestination(tourDestName(t))).toLowerCase().includes(q)) &&
+        (!airline || String(t.airline).toLowerCase().includes(airline)) &&
+        (star === 'all' || (t.hotels || []).some(h => Number(h.star) === Number(star))) &&
+        (!onlyCap || totalCapacity(t) > 0)
+      );
+    });
+    if (sort === 'asc') list.sort((a, b) => minHotel(a).price - minHotel(b).price);
+    if (sort === 'desc') list.sort((a, b) => minHotel(b).price - minHotel(a).price);
+    if (sort === 'rate') list.sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0));
+    if ($('tourCount')) $('tourCount').textContent = faNum(list.length);
+    if ($('tourGrid'))
+      $('tourGrid').innerHTML =
+        list.map(tourCard).join('') ||
+        '<div class="card pad" style="grid-column:1/-1">توری پیدا نشد. از پنل مدیریت/کارشناس تور فعال اضافه کنید.</div>';
+    renderCompareDock();
+    updateHomeAutoReset();
+  } catch (e) {
+    console.error('filterHome error', e);
+    if ($('tourGrid'))
+      $('tourGrid').innerHTML =
+        '<div class="debug-error-box" style="grid-column:1/-1">خطا در نمایش تورها. داده‌ها را بازیابی کنید.</div>';
+  }
+}
