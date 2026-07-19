@@ -8393,3 +8393,66 @@ body:has(#app) {
     margin-top: 8px;
   }
 }
+
+
+/* v5.5 actual visible update: cache-safe luxury UI + single-room price emphasis */
+body.buyer-page .hero-v49,
+body.buyer-page .hero-figma-fusion {
+  border: 1px solid rgba(251, 183, 28, 0.34);
+  box-shadow: 0 34px 110px rgba(13, 25, 54, 0.30), inset 0 1px 0 rgba(255,255,255,0.10);
+}
+body.buyer-page .section-title-v49 h2,
+body.buyer-page .buyer-hero-title,
+body.buyer-page .tour-list-head-v49 h2 {
+  color: #202D59;
+}
+body.buyer-page .section-title-v49 h2::after,
+body.buyer-page .tour-list-head-v49 h2::after {
+  content: '';
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FBB71C, rgba(251,183,28,0));
+}
+body.buyer-page .card,
+body.buyer-page .tour-card-v49,
+body.buyer-page .country-card-v49,
+body.buyer-page .custom-tour-popup-card {
+  border-color: rgba(251, 183, 28, 0.22);
+  box-shadow: 0 24px 80px rgba(32, 45, 89, 0.13);
+}
+.hotel-room-price {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(32,45,89,0.07), rgba(251,183,28,0.14));
+  border: 1px solid rgba(251, 183, 28, 0.30);
+  color: #202D59;
+}
+.hotel-room-price b,
+.hotel-room-price small {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 900;
+}
+.hotel-room-price small {
+  color: #7a5610;
+}
+.hotel-room-price small::before {
+  content: 'قیمت اتاق یک‌تخته';
+  color: rgba(32,45,89,0.74);
+  font-weight: 800;
+}
+.hotel-room-price b::before {
+  content: 'قیمت اتاق دو‌تخته';
+  color: rgba(32,45,89,0.74);
+  font-weight: 800;
+}
+.hidden-home-filters {
+  display: none !important;
+}

@@ -15,7 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=5.5" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css"
@@ -30,9 +30,22 @@
     </div>
     <div id="toast" class="toast"></div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../assets/js/data.js"></script>
-    <script src="../assets/js/core.js"></script>
-    <script src="../assets/js/buyer.js"></script>
+
+    <script>
+      (function() {
+        var version = 'safro-v5.5';
+        try {
+          if (localStorage.getItem('safro-app-version') !== version) {
+            localStorage.setItem('safro-app-version', version);
+            if (window.caches) caches.keys().then(function(keys) { return Promise.all(keys.map(function(k) { return caches.delete(k); })); });
+            if (navigator.serviceWorker) navigator.serviceWorker.getRegistrations().then(function(regs) { regs.forEach(function(r) { r.update(); if (r.active) r.active.postMessage({ type: 'CLEAR_SAFRO_CACHES' }); }); });
+          }
+        } catch(e) {}
+      })();
+    </script>
+    <script src="../assets/js/data.js?v=5.5"></script>
+    <script src="../assets/js/core.js?v=5.5"></script>
+    <script src="../assets/js/buyer.js?v=5.5"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () =>

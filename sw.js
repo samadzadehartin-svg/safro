@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safarro-cache-v5.4';
+const CACHE_NAME = 'safarro-cache-v5.5';
 const ASSETS = [
   '/',
   '/buyer/',
@@ -68,4 +68,11 @@ self.addEventListener('fetch', event => {
         })
       )
   );
+});
+
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'CLEAR_SAFRO_CACHES') {
+    event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key)))));
+  }
 });
