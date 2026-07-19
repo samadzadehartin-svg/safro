@@ -336,24 +336,7 @@ function consultationSection() {
 }
 
 function trustSection() {
-  return `<section class="trust-section">
-    <div class="trust-card">
-      <div class="trust-content">
-        <div class="trust-head">
-          <div>
-            <span class="badge domestic">چرا سفرو؟</span>
-            <h2>خرید تور با خیال راحت</h2>
-          </div>
-        </div>
-        <div class="trust-items">
-          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-headset"></i></div><b>پشتیبانی قبل و بعد از خرید</b><p>کارشناس‌ها از انتخاب تور تا زمان سفر همراهت هستند.</p></div>
-          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-hotel"></i></div><b>انتخاب آزاد هتل</b><p>برای هر تور می‌توانی هتل ۳، ۴ یا ۵ ستاره را انتخاب کنی.</p></div>
-          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-shield-heart"></i></div><b>نمایش ظرفیت و خدمات</b><p>ظرفیت، خدمات و جزئیات تور واضح نمایش داده می‌شود.</p></div>
-          <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-ticket"></i></div><b>پیگیری رزرو</b><p>با شماره موبایل یا کد پیگیری، وضعیت رزروت را ببین.</p></div>
-        </div>
-      </div>
-    </div>
-  </section>`;
+  return '';
 }
 
 const DESTINATION_COUNTRY_MAP = {
@@ -707,37 +690,7 @@ function buyerTours() {
   return tours().filter(buyerVisibleTour);
 }
 
-function renderHome() {
-  const list = buyerTours().filter(t => t.status === 'active');
-  $('app').innerHTML = `${buyerTabs()}${referenceHeroSection()}${beautyTrustStrip()}
- <section class="special-tours-section"><div class="row wrap"><div><span class="badge special">پیشنهاد سفرو</span><h2>تور ویژه</h2></div></div><div class="grid g3">${list
-   .filter(t => t.lastMinute)
-   .slice(0, 3)
-   .map(lastCard)
-   .join('')}</div></section>
- ${countryLineArtSection()}${visaSection()}${consultPopupHtml()}${hotelPhotosModalHtml()}
- <div class="tours-anchor-title"><div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2></div></div><section class="card filters"><div class="filter-grid"><div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div><div><label class="label">مقصد</label><select id="dest" class="field" onchange="currentCountry='all';filterHome()"><option value="all">همه</option>${[...new Set(list.map(t => tourDestName(t)).filter(Boolean))].map(d => `<option>${d}</option>`).join('')}</select></div><div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div><button class="soft" onclick="manualResetHome()">بازنشانی</button></div><div id="autoResetStatus" class="auto-reset-status" aria-live="polite"></div><div class="grid g3" style="margin-top:12px"><div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()"></div><div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div><label class="row" style="justify-content:flex-start;margin-top:26px"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط ظرفیت‌دار</label></div></section>
- <section class="catbar">${[
-   'all:همه',
-   'domestic:داخلی',
-   'international:خارجی',
-   'luxury:لوکس',
-   'economy:اقتصادی',
-   'special:ویژه',
- ]
-   .map(x => {
-     const [a, b] = x.split(':');
-     return `<button data-cat="${a}" onclick="currentCat='${a}';filterHome()" class="${a === currentCat ? 'active' : ''}">${b}</button>`;
-   })
-   .join('')}</section>
- <div class="row"><h2>تورها</h2><b id="tourCount">۰</b><button class="soft" onclick="resetDemoData()">بازیابی تورهای نمونه</button></div><section id="tourGrid" class="grid g3"></section>
- ${trustSection()}
- ${aboutContactSection()}
- <div id="compareDock" class="dock"><b><i class="fa-solid fa-code-compare"></i> <span id="compareCount">۰</span> تور برای مقایسه</b><div class="actions"><button class="soft" onclick="openCompare()">مقایسه</button><button class="danger" onclick="clearCompare()">پاک کردن</button></div></div>
- <div id="compareModal" class="modal" onclick="if(event.target===this)closeCompare()"><div class="modal-card pad"><div class="row"><h2>مقایسه تورها</h2><button class="soft" onclick="closeCompare()">بستن</button></div><div id="compareContent" class="table-wrap"></div></div></div>`;
-  filterHome();
-  scheduleOneMinuteConsultPopup();
-}
+// Older duplicate renderHome removed in v5.0; the active renderHome is defined below.
 
 function specialPriceLine(t, fallbackPrice) {
   const oldP = Number(t.oldPrice || 0),
@@ -1155,7 +1108,7 @@ function updateBackButton() {
 
 
 /* =========================================================
-   v4.9 full buyer UI refresh
+   v5.0 buyer UI cleanup
    Clean, sales-focused home, improved cards, search-first hero,
    stronger tour detail layout, and better section order.
    ========================================================= */
@@ -1271,24 +1224,16 @@ function specialToursSection(list) {
 }
 
 function filtersSection(list) {
-  return `<section class="filters-shell-v49">
-    <div class="section-title-v49 tours-title-v49">
-      <div><span class="badge international">فهرست تورها</span><h2>تور مورد نظرت رو انتخاب کن</h2><p class="small">با فیلترها سریع‌تر به مقصد، قیمت و هتل مناسب برس.</p></div>
-    </div>
-    <section class="card filters filters-v49">
-      <div class="filter-grid">
-        <div><label class="label">جستجو</label><input id="search" class="field" oninput="filterHome()" placeholder="مقصد یا عنوان تور"></div>
-        <div><label class="label">مقصد</label><select id="dest" class="field" onchange="currentCountry='all';filterHome()">${homeSearchDestOptions()}</select></div>
-        <div><label class="label">مرتب‌سازی</label><select id="sort" class="field" onchange="filterHome()"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select></div>
-        <button class="soft" onclick="manualResetHome()"><i class="fa-solid fa-rotate-right"></i> بازنشانی</button>
-      </div>
-      <div id="autoResetStatus" class="auto-reset-status" aria-live="polite"></div>
-      <div class="grid g3 filters-extra-v49" style="margin-top:12px">
-        <div><label class="label">ایرلاین</label><input id="airline" class="field" oninput="filterHome()" placeholder="نام ایرلاین"></div>
-        <div><label class="label">ستاره هتل</label><select id="star" class="field" onchange="filterHome()"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select></div>
-        <label class="row only-cap-v49"><input id="onlyCap" type="checkbox" onchange="filterHome()"> فقط تورهای ظرفیت‌دار</label>
-      </div>
-    </section>
+  // فیلترهای قدیمی از UI حذف شده‌اند؛ این کنترل‌های پنهان فقط برای جستجوی سریع هیرو،
+  // لینک کشورها، دسته‌بندی‌ها و بازنشانی خودکار نگه داشته شده‌اند.
+  return `<section class="filters-shell-v49 hidden-home-filters" aria-hidden="true">
+    <input id="search" value="">
+    <select id="dest">${homeSearchDestOptions()}</select>
+    <select id="sort"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select>
+    <input id="airline" value="">
+    <select id="star"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select>
+    <input id="onlyCap" type="checkbox">
+    <div id="autoResetStatus" class="auto-reset-status" aria-live="polite"></div>
   </section>`;
 }
 
@@ -1362,7 +1307,6 @@ function renderHome() {
     <div class="tour-list-head-v49 row"><div><h2>تورها</h2><p class="small">روی هر کارت بزن تا وارد جزئیات و رزرو همان تور شوی.</p></div><div class="row"><b id="tourCount">۰</b><button class="soft" onclick="resetDemoData()">بازیابی تورهای نمونه</button></div></div>
     <section id="tourGrid" class="grid g3 tour-grid-v49"></section>
     ${visaSection()}
-    ${trustSection()}
     ${uiFaqSection()}
     ${aboutContactSection()}
     <div id="compareDock" class="dock"><b><i class="fa-solid fa-code-compare"></i> <span id="compareCount">۰</span> تور برای مقایسه</b><div class="actions"><button class="soft" onclick="openCompare()">مقایسه</button><button class="danger" onclick="clearCompare()">پاک کردن</button></div></div>

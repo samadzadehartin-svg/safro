@@ -7610,3 +7610,80 @@ body.buyer-page.dark .small {
     height: 240px;
   }
 }
+
+
+/* =========================================================
+   v5.0 Buyer cleanup: remove visual filters/trust, new blue/gold brand colors
+   ========================================================= */
+body.buyer-page {
+  --v49-purple: #202d59;
+  --v49-purple-2: #fbb71c;
+  --p: #202d59;
+  --pl: #314071;
+  --a: #fbb71c;
+  --v49-line: rgba(32, 45, 89, 0.16);
+}
+body.buyer-page .hidden-home-filters {
+  display: none !important;
+}
+body.buyer-page h2,
+body.buyer-page .section-title-v49 h2,
+body.buyer-page .country-line-head h2,
+body.buyer-page .tours-title-v49 h2,
+body.buyer-page .visa-section h2,
+body.buyer-page .buyer-hero-title span,
+body.buyer-page .tour-card-footer-v49 .price,
+body.buyer-page .tour-meta-grid-v49 i,
+body.buyer-page .country-card-body strong,
+body.buyer-page .hero-stats-v49 b,
+body.buyer-page .hero-search-field label,
+body.buyer-page .country-line-card:hover .country-card-body b,
+body.buyer-page .country-line-card.active .country-card-body b {
+  color: #202d59 !important;
+}
+body.buyer-page .btn,
+body.buyer-page button.btn,
+body.buyer-page .catbar button.active {
+  background: linear-gradient(135deg, #202d59, #314071) !important;
+  border-color: #202d59 !important;
+  color: #fff !important;
+}
+body.buyer-page .gold,
+body.buyer-page button.gold,
+body.buyer-page .badge.special,
+body.buyer-page .flash-badge {
+  background: linear-gradient(135deg, #fbb71c, #ffd166) !important;
+  color: #202d59 !important;
+}
+body.buyer-page .badge.international,
+body.buyer-page .badge.domestic {
+  background: rgba(32, 45, 89, 0.10) !important;
+  color: #202d59 !important;
+}
+body.buyer-page .hero-v49,
+body.buyer-page .country-line-section-v49,
+body.buyer-page .tour-card-v49,
+body.buyer-page .detail-hero-v49,
+body.buyer-page .detail-aside-v49,
+body.buyer-page .detail-main-v49,
+body.buyer-page .catbar-v49 {
+  border-color: rgba(32, 45, 89, 0.14) !important;
+}
+body.buyer-page .hero-v49 {
+  background:
+    radial-gradient(circle at 12% 15%, rgba(251, 183, 28, 0.14), transparent 36%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(245, 248, 255, 0.78)) !important;
+}
+body.buyer-page .hero-search-panel,
+body.buyer-page .hero-stats-v49 span,
+body.buyer-page .hero-v49-art,
+body.buyer-page .country-line-card,
+body.buyer-page .detail-hero-chips-v49 span {
+  border-color: rgba(32, 45, 89, 0.12) !important;
+}
+body.buyer-page .special-tours-v49 {
+  border-color: rgba(251, 183, 28, 0.20) !important;
+}
+body.buyer-page .detail-price-box-v49 {
+  background: linear-gradient(135deg, rgba(32, 45, 89, 0.08), rgba(251, 183, 28, 0.13)) !important;
+}
