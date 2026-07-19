@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap') layer(base);
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Vazirmatn', sans-serif;
+  --color-navy: #202D59;
+  --color-gold: #FBB71C;
+  --color-gold-light: #FEF3D0;
+  --color-navy-light: #2D3F7A;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  direction: rtl;
+  font-family: 'Vazirmatn', sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but allow scrolling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #202D59;
+  border-radius: 3px;
+}
+
+/* Persian number style */
+.num-fa {
+  font-feature-settings: 'ss01';
+}
