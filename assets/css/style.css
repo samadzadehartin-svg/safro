@@ -7687,3 +7687,230 @@ body.buyer-page .special-tours-v49 {
 body.buyer-page .detail-price-box-v49 {
   background: linear-gradient(135deg, rgba(32, 45, 89, 0.08), rgba(251, 183, 28, 0.13)) !important;
 }
+
+/* =========================================================
+   v5.1 Custom tour as top-center popup
+   ========================================================= */
+body.buyer-page .custom-tour-section {
+  display: none !important;
+}
+body.buyer-page .custom-tour-top-shell {
+  position: sticky;
+  top: 10px;
+  z-index: 120;
+  width: min(560px, calc(100% - 28px));
+  margin: 12px auto 18px;
+  pointer-events: none;
+}
+body.buyer-page .custom-tour-top-card {
+  pointer-events: auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(32, 45, 89, 0.18);
+  border-radius: 999px;
+  padding: 10px 12px 10px 10px;
+  color: #202d59;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(251, 183, 28, 0.22), transparent 34%),
+    rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 46px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(16px) saturate(1.12);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+body.buyer-page .custom-tour-top-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 183, 28, 0.48);
+  box-shadow: 0 22px 58px rgba(15, 23, 42, 0.16);
+}
+body.buyer-page .custom-tour-top-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbb71c, #ffd166);
+  color: #202d59;
+  box-shadow: 0 10px 24px rgba(251, 183, 28, 0.26);
+}
+body.buyer-page .custom-tour-top-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-width: 0;
+}
+body.buyer-page .custom-tour-top-copy b {
+  font-size: 15px;
+  font-weight: 1000;
+  line-height: 1.5;
+}
+body.buyer-page .custom-tour-top-copy small {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+body.buyer-page .custom-tour-top-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #202d59;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 1000;
+}
+body.buyer-page .custom-tour-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 84px 16px 20px;
+  z-index: 10020;
+  background: rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(4px);
+}
+body.buyer-page .custom-tour-popup-backdrop.on {
+  display: flex;
+}
+body.buyer-page .custom-tour-popup-card {
+  width: min(680px, 100%);
+  position: relative;
+  border-radius: 34px;
+  border: 1px solid rgba(32, 45, 89, 0.14);
+  background:
+    radial-gradient(circle at 8% 12%, rgba(251, 183, 28, 0.22), transparent 32%),
+    radial-gradient(circle at 94% 2%, rgba(32, 45, 89, 0.09), transparent 26%),
+    rgba(255, 255, 255, 0.94);
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.24);
+  backdrop-filter: blur(18px) saturate(1.08);
+  padding: 24px;
+  overflow: hidden;
+  animation: customTourDrop 0.22s ease-out;
+}
+@keyframes customTourDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+body.buyer-page .custom-tour-popup-close {
+  background: rgba(255, 255, 255, 0.78) !important;
+  color: #202d59 !important;
+  border-color: rgba(32, 45, 89, 0.14) !important;
+}
+body.buyer-page .custom-tour-popup-hero {
+  padding-left: 42px;
+}
+body.buyer-page .custom-tour-popup-hero h2 {
+  margin: 10px 0 6px;
+  font-size: clamp(26px, 4vw, 36px) !important;
+  line-height: 1.35;
+  color: #202d59 !important;
+}
+body.buyer-page .custom-tour-popup-hero p {
+  margin: 0;
+  color: #475569;
+  line-height: 2;
+  font-weight: 800;
+}
+body.buyer-page .custom-tour-popup-points {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+body.buyer-page .custom-tour-popup-points span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 999px;
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(32, 45, 89, 0.10);
+  color: #202d59;
+  font-size: 12px;
+  font-weight: 950;
+}
+body.buyer-page .custom-tour-popup-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+body.buyer-page .custom-tour-popup-card .field {
+  background: rgba(255, 255, 255, 0.86) !important;
+  border-color: rgba(32, 45, 89, 0.14) !important;
+  min-height: 48px;
+}
+body.buyer-page .custom-tour-popup-card textarea.field {
+  margin-top: 10px;
+  width: 100%;
+  resize: vertical;
+}
+body.buyer-page .custom-tour-submit {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 12px;
+  border-radius: 18px !important;
+  font-size: 15px;
+  font-weight: 1000;
+}
+body.buyer-page.dark .custom-tour-top-card,
+body.buyer-page.dark .custom-tour-popup-card {
+  background:
+    radial-gradient(circle at 8% 12%, rgba(251, 183, 28, 0.18), transparent 34%),
+    rgba(15, 23, 42, 0.88) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #fff;
+}
+body.buyer-page.dark .custom-tour-popup-hero h2,
+body.buyer-page.dark .custom-tour-top-copy b,
+body.buyer-page.dark .custom-tour-popup-points span {
+  color: #fff !important;
+}
+body.buyer-page.dark .custom-tour-top-copy small,
+body.buyer-page.dark .custom-tour-popup-hero p {
+  color: #cbd5e1;
+}
+@media (max-width: 720px) {
+  body.buyer-page .custom-tour-top-shell {
+    top: 6px;
+    margin-top: 8px;
+  }
+  body.buyer-page .custom-tour-top-card {
+    grid-template-columns: auto 1fr;
+    border-radius: 24px;
+  }
+  body.buyer-page .custom-tour-top-action {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+  body.buyer-page .custom-tour-popup-backdrop {
+    padding-top: 54px;
+  }
+  body.buyer-page .custom-tour-popup-card {
+    border-radius: 26px;
+    padding: 20px;
+  }
+  body.buyer-page .custom-tour-popup-fields {
+    grid-template-columns: 1fr;
+  }
+  body.buyer-page .custom-tour-popup-hero {
+    padding-left: 34px;
+  }
+}

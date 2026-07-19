@@ -284,7 +284,18 @@ function submitConsultation(e) {
   const lead = buildLeadFromForm('lead');
   if (saveLeadAndNotify(lead, 'leadStatus')) {
     e.target.reset();
+    setTimeout(closeCustomTourPopup, 1200);
   }
+}
+
+function openCustomTourPopup() {
+  const p = $('customTourPopup');
+  if (p) p.classList.add('on');
+}
+
+function closeCustomTourPopup() {
+  const p = $('customTourPopup');
+  if (p) p.classList.remove('on');
 }
 
 function submitPopupConsultation(e) {
@@ -1211,6 +1222,48 @@ function customTourSection() {
   </section>`;
 }
 
+
+function customTourLauncher() {
+  return `<section class="custom-tour-top-shell" aria-label="تور اختصاصی سفرو">
+    <button class="custom-tour-top-card" onclick="openCustomTourPopup()" type="button">
+      <span class="custom-tour-top-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+      <span class="custom-tour-top-copy"><b>تور خودتو بساز</b><small>هتل، تاریخ و بودجه دلخواهت را ثبت کن</small></span>
+      <span class="custom-tour-top-action">شروع <i class="fa-solid fa-arrow-left"></i></span>
+    </button>
+  </section>`;
+}
+
+function customTourPopupHtml() {
+  return `<div id="customTourPopup" class="custom-tour-popup-backdrop" onclick="if(event.target===this)closeCustomTourPopup()">
+    <form class="custom-tour-popup-card" onsubmit="submitConsultation(event)">
+      <button class="popup-close custom-tour-popup-close" type="button" onclick="closeCustomTourPopup()">×</button>
+      <div class="custom-tour-popup-hero">
+        <span class="badge special">تور اختصاصی سفرو</span>
+        <h2>تور خودتو بساز</h2>
+        <p>مقصد، تاریخ، بودجه و سبک سفرت را بنویس؛ کارشناس سفرو با پیشنهاد مناسب با تو تماس می‌گیرد.</p>
+      </div>
+      <div class="custom-tour-popup-points">
+        <span><i class="fa-solid fa-hotel"></i> انتخاب هتل دلخواه</span>
+        <span><i class="fa-solid fa-calendar-days"></i> تاریخ منعطف</span>
+        <span><i class="fa-solid fa-headset"></i> مشاوره رایگان</span>
+      </div>
+      <div class="form-note-required">شماره تماس الزامی است <span class="req-star">*</span></div>
+      <div class="custom-tour-popup-fields">
+        <input id="leadName" class="field" placeholder="نام شما">
+        <input id="leadPhone" class="field" placeholder="شماره تماس *" required dir="ltr">
+        <input id="leadDest" class="field" placeholder="مقصد دلخواه">
+        <select id="leadPeople" class="field">
+          <option value="">تعداد نفرات</option>
+          <option>۱ نفر</option><option>۲ نفر</option><option>۳ نفر</option><option>۴ نفر یا بیشتر</option>
+        </select>
+      </div>
+      <textarea id="leadNote" class="field" rows="3" placeholder="مثلاً: دبی، ۴ شب، هتل ۵ ستاره، بودجه حدود ۵۰ میلیون"></textarea>
+      <button class="gold custom-tour-submit" type="submit"><i class="fa-solid fa-paper-plane"></i> ثبت درخواست تور اختصاصی</button>
+      <div id="leadStatus" class="lead-status"></div>
+    </form>
+  </div>`;
+}
+
 function specialToursSection(list) {
   const specials = list.filter(t => t.lastMinute).slice(0, 3);
   if (!specials.length) return '';
@@ -1297,11 +1350,11 @@ function countryLineArtSection() {
 function renderHome() {
   const list = buyerTours().filter(t => t.status === 'active');
   $('app').innerHTML = `${buyerTabs()}
+    ${customTourLauncher()}
     ${referenceHeroSection()}
     ${countryLineArtSection()}
-    ${customTourSection()}
     ${specialToursSection(list)}
-    ${consultPopupHtml()}${hotelPhotosModalHtml()}
+    ${customTourPopupHtml()}${consultPopupHtml()}${hotelPhotosModalHtml()}
     ${filtersSection(list)}
     ${categoryBarHtml()}
     <div class="tour-list-head-v49 row"><div><h2>تورها</h2><p class="small">روی هر کارت بزن تا وارد جزئیات و رزرو همان تور شوی.</p></div><div class="row"><b id="tourCount">۰</b><button class="soft" onclick="resetDemoData()">بازیابی تورهای نمونه</button></div></div>
