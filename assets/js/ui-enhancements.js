@@ -1,5 +1,5 @@
 /* ========================================
-   SAFRO UI Enhancements v7.2
+   SAFRO UI Enhancements v7.3
    Safe adapter for the existing static app
    ======================================== */
 (() => {
