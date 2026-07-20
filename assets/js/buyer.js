@@ -940,3 +940,6 @@ function filterHome() {
         '<div class="debug-error-box" style="grid-column:1/-1">خطا در نمایش تورها. داده‌ها را بازیابی کنید.</div>';
   }
 }
+
+// v5.6: make sure the buyer app actually boots on /buyer and on Vercel rewrites.
+document.addEventListener('DOMContentLoaded', initBuyer);
