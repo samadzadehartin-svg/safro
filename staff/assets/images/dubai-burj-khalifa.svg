@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0b3b66"/>
+        <stop offset="55%" stop-color="#0ea5e9"/>
+        <stop offset="100%" stop-color="#f8fafc"/>
+      </linearGradient>
+      <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="rgba(255,255,255,.26)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,.08)"/>
+      </linearGradient>
+      <filter id="blur"><feGaussianBlur stdDeviation="70"/></filter>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="rgba(15,23,42,.25)"/>
+      </filter>
+    </defs>
+    <rect width="1600" height="900" fill="url(#bg)"/>
+    <circle cx="1290" cy="140" r="220" fill="#f59e0b" opacity="0.18" filter="url(#blur)"/>
+    <circle cx="250" cy="760" r="240" fill="#ffffff" opacity="0.12" filter="url(#blur)"/>
+    <path d="M0 660C260 550 460 580 700 650c260 75 520 70 900-80V900H0Z" fill="#ffffff" opacity="0.18"/>
+    <path d="M0 720C250 640 470 670 690 735c270 82 560 85 910-35V900H0Z" fill="#ffffff" opacity="0.12"/>
+    <g transform="translate(0,0)"><path d="M260 470h1100" stroke="rgba(255,255,255,.92)" stroke-width="12" opacity=".45"/>
+        <path d="M760 470 820 110 860 470" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="20" stroke-linejoin="round"/>
+        <path d="M820 110 870 210 840 210" stroke="#f59e0b" stroke-width="10" fill="none"/>
+        <rect x="610" y="270" width="70" height="200" rx="8" fill="rgba(255,255,255,.45)"/>
+        <rect x="960" y="250" width="90" height="220" rx="8" fill="rgba(255,255,255,.45)"/></g>
+    <rect x="90" y="80" width="1420" height="740" rx="38" fill="rgba(255,255,255,.09)" stroke="rgba(255,255,255,.18)" filter="url(#shadow)"/>
+    <rect x="1180" y="112" width="245" height="52" rx="26" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.24)"/>
+    <text x="1303" y="146" fill="#ffffff" font-family="Vazirmatn, Arial" font-size="24" font-weight="700" text-anchor="middle">تصویر اختصاصی تور</text>
+    <text x="132" y="180" fill="#ffffff" opacity=".92" font-family="Arial" font-size="26" font-weight="700">SAFARO</text>
+    <text x="132" y="214" fill="#ffffff" opacity=".72" font-family="Arial" font-size="18">TRAVEL AGENCY</text>
+    <text x="1448" y="278" fill="#ffffff" font-family="Vazirmatn, Arial" font-size="68" font-weight="900" text-anchor="end">تور لوکس دبی</text>
+    <text x="1448" y="340" fill="#ffffff" font-family="Vazirmatn, Arial" font-size="28" font-weight="600" text-anchor="end" opacity=".92">دبی</text>
+    <text x="1448" y="388" fill="#ffffff" font-family="Arial" font-size="24" font-weight="600" text-anchor="end" opacity=".82">Dubai • Burj Khalifa • Luxury City Break</text>
+    <g transform="translate(1040 600)">
+      <rect x="0" y="0" width="408" height="112" rx="28" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.18)"/>
+      <text x="204" y="46" fill="#ffffff" font-family="Vazirmatn, Arial" font-size="22" font-weight="700" text-anchor="middle">رزرو سریع • قیمت شفاف • هتل متنوع</text>
+      <text x="204" y="80" fill="#ffffff" font-family="Vazirmatn, Arial" font-size="18" font-weight="500" text-anchor="middle" opacity=".85">عکس این تور به صورت محلی داخل سایت قرار گرفته است</text>
+    </g>
+    </svg>

@@ -1,0 +1,4 @@
+﻿tour_id,tour_title,hotel_star,hotel_name_latin,price,capacity,show_in_buyer,special_old_price,special_new_price,special_discount_percent,special_end_jalali,note
+1,Istanbul Spring Escape,3,Saffron Inn,14500000,8,TRUE,18000000,15500000,10,۱۴۰۵/۰۵/۳۰ ۲۳:۵۹,sample
+1,Istanbul Spring Escape,4,Grand Vista Hotel,17500000,6,TRUE,18000000,15500000,10,۱۴۰۵/۰۵/۳۰ ۲۳:۵۹,sample
+2,Dubai Luxury Break,5,Royal Palace Hotel,25500000,4,TRUE,30000000,26000000,0,۱۴۰۵/۰۶/۱۵ ۲۳:۵۹,manual discount

@@ -1,0 +1,11 @@
+رفع خطای باز نشدن صفحه خریدار در v5.7
+
+مشکل اصلی در Console:
+ReferenceError: buyerTours is not defined
+
+اصلاحات:
+- تابع buyerTours به فایل buyer.js اضافه شد تا داده‌های تورها را از tours() بگیرد.
+- نسخه cache و query string فایل‌های CSS/JS به 5.7 تغییر کرد.
+- favicon.ico اضافه شد تا خطای 404 آیکن مرورگر حذف شود.
+
+بعد از deploy، Ctrl + F5 بزن یا Clear site data انجام بده.

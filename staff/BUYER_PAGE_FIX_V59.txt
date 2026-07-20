@@ -1,0 +1,12 @@
+رفع خطای صفحه خریدار در v5.9
+
+مشکل اصلی در کنسول:
+- ReferenceError: lastCard is not defined
+- TypeError: Failed to convert value to Response در service worker
+
+اصلاحات:
+- بخش تور ویژه از tourCard استفاده می‌کند و دیگر به lastCard وابسته نیست.
+- service worker همیشه Response معتبر برمی‌گرداند و باعث خطای مرورگر نمی‌شود.
+- نسخه کش و query string فایل‌ها به 5.9 تغییر کرد.
+
+بعد از Deploy، در مرورگر Ctrl + F5 بزن. اگر هنوز نسخه قدیمی بود، DevTools > Application > Storage > Clear site data را بزن.
