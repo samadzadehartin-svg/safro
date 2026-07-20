@@ -4,10 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>سفرو | پنل مدیریت</title>
-    <meta name="theme-color" content="#4a9fd8" />
+    <meta name="theme-color" content="#202D59" />
     <link rel="manifest" href="../manifest.json" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
+        <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
@@ -15,13 +14,9 @@
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/css/style.css?v=6.7" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css"
-    />
+    <link rel="stylesheet" href="../assets/css/style.css?v=6.9" />
   </head>
-  <body class="admin-page">
+  <body class="admin-page panel-page">
     <div id="headerMount"></div>
     <main class="container" id="app"></main>
     <div id="footerMount"></div>
@@ -31,7 +26,7 @@
 
     <script>
       (function() {
-        var version = 'safro-v6.6';
+        var version = 'safro-v6.9';
         try {
           if (localStorage.getItem('safro-app-version') !== version) {
             localStorage.setItem('safro-app-version', version);
@@ -41,9 +36,9 @@
         } catch(e) {}
       })();
     </script>
-    <script src="../assets/js/data.js?v=6.6"></script>
-    <script src="../assets/js/core.js?v=6.6"></script>
-    <script src="../assets/js/admin.js?v=6.6"></script>
+    <script src="../assets/js/data.js?v=6.9"></script>
+    <script src="../assets/js/core.js?v=6.9"></script>
+    <script src="../assets/js/admin.js?v=6.9"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () =>
