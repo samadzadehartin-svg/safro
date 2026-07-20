@@ -10754,3 +10754,496 @@ body.buyer-page.dark .tour-card-v49 .compare-btn.active {
   }
 }
 
+
+
+/* =========================================================
+   v6.7 GLASSMORPHISM + TYPOGRAPHY SYSTEM
+   فونت کامل + شیشه‌ای واقعی در لایت و دارک
+   ========================================================= */
+
+/* ─── 1. FONT SYSTEM — سیستم تایپوگرافی کامل ──────────── */
+
+/* import یه بار از jsDelivr — سریع‌ترین CDN */
+@import url('https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css');
+
+body.buyer-page {
+  /* rendering خوب‌تر */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+/* --- Type scale رسمی برای buyer --- */
+body.buyer-page h1,
+body.buyer-page .buyer-hero-title {
+  font-size: clamp(28px, 4.5vw, 58px) !important;
+  font-weight: 1000 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.03em !important;
+  font-feature-settings: 'kern' 1 !important;
+}
+
+body.buyer-page h2,
+body.buyer-page .section-title-v49 h2,
+body.buyer-page .tour-list-head-v49 h2,
+body.buyer-page .country-line-head h2 {
+  font-size: clamp(22px, 3vw, 36px) !important;
+  font-weight: 1000 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.025em !important;
+}
+
+body.buyer-page h3 {
+  font-size: clamp(17px, 2vw, 22px) !important;
+  font-weight: 900 !important;
+  line-height: 1.45 !important;
+  letter-spacing: -0.015em !important;
+}
+
+body.buyer-page h4, body.buyer-page h5 {
+  font-size: clamp(14px, 1.5vw, 17px) !important;
+  font-weight: 900 !important;
+  line-height: 1.5 !important;
+}
+
+/* body copy */
+body.buyer-page p,
+body.buyer-page .buyer-hero-subtitle,
+body.buyer-page .small,
+body.buyer-page .detail-desc-v49 {
+  font-size: clamp(13px, 1.2vw, 15px) !important;
+  line-height: 1.95 !important;
+  letter-spacing: 0.005em !important;
+  font-weight: 500 !important;
+}
+
+/* labels و meta */
+body.buyer-page .label,
+body.buyer-page .meta,
+body.buyer-page .muted,
+body.buyer-page small {
+  font-size: clamp(10.5px, 1vw, 12.5px) !important;
+  font-weight: 700 !important;
+  line-height: 1.7 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* قیمت‌ها — لاتین‌وار، واضح */
+body.buyer-page .price,
+body.buyer-page .room-price-pill b,
+body.buyer-page b.price,
+body.buyer-page .tour-card-footer-v49 .price {
+  font-size: clamp(13px, 1.3vw, 16px) !important;
+  font-weight: 1000 !important;
+  font-feature-settings: 'tnum' 1 !important; /* اعداد tabular */
+  letter-spacing: -0.01em !important;
+}
+
+/* badge و chip */
+body.buyer-page .badge,
+body.buyer-page .flash-badge,
+body.buyer-page .chip {
+  font-size: 10.5px !important;
+  font-weight: 1000 !important;
+  letter-spacing: 0.03em !important;
+}
+
+/* دکمه‌ها */
+body.buyer-page .btn,
+body.buyer-page .soft,
+body.buyer-page .gold {
+  font-size: clamp(11px, 1.1vw, 13px) !important;
+  font-weight: 1000 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* hero title accent */
+body.buyer-page .buyer-hero-title span {
+  position: relative;
+  color: #fbb71c !important;
+  display: inline-block;
+}
+
+/* hero title gradient در هیرو تاریک */
+body.buyer-page .hero-copy-panel .buyer-hero-title,
+body.buyer-page .hero-v49 .buyer-hero-title {
+  background: linear-gradient(135deg, #fff 35%, rgba(255,210,100,0.92) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none !important;
+}
+body.buyer-page .hero-copy-panel .buyer-hero-title span,
+body.buyer-page .hero-v49 .buyer-hero-title span {
+  background: linear-gradient(135deg, #ffd97a, #ffb300);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* section label kicker */
+body.buyer-page .hero-copy-kicker,
+body.buyer-page .hero-fusion-kicker {
+  font-size: 11.5px !important;
+  font-weight: 1000 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: none;
+}
+
+/* tour title در کارت */
+body.buyer-page .tour-card-v49 .tour-title {
+  font-size: clamp(15px, 1.4vw, 19px) !important;
+  font-weight: 1000 !important;
+  line-height: 1.5 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* متا گرید کارت */
+body.buyer-page .tour-meta-grid-v49 span {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.005em !important;
+}
+
+/* DARK typography */
+body.dark.buyer-page h1,
+body.dark.buyer-page h2,
+body.dark.buyer-page h3,
+body.dark.buyer-page .tour-title,
+body.dark.buyer-page b,
+body.dark.buyer-page strong {
+  color: #f0f6ff !important;
+}
+body.dark.buyer-page p,
+body.dark.buyer-page .small,
+body.dark.buyer-page .buyer-hero-subtitle,
+body.dark.buyer-page .label,
+body.dark.buyer-page .muted {
+  color: #9ab0d0 !important;
+}
+
+/* ─── 2. GLASSMORPHISM SYSTEM ───────────────────────────── */
+
+/* CSS vars برای glass */
+body.buyer-page {
+  --glass-bg-light: rgba(255, 255, 255, 0.62);
+  --glass-bg-mid:   rgba(255, 255, 255, 0.44);
+  --glass-bg-thin:  rgba(255, 255, 255, 0.28);
+  --glass-border:   rgba(255, 255, 255, 0.72);
+  --glass-border-subtle: rgba(32, 45, 89, 0.10);
+  --glass-blur:     blur(20px) saturate(1.6);
+  --glass-blur-sm:  blur(12px) saturate(1.4);
+  --glass-shadow:   0 8px 32px rgba(32, 45, 89, 0.12),
+                    0 2px 8px rgba(32, 45, 89, 0.06),
+                    inset 0 1px 0 rgba(255,255,255,0.82);
+  --glass-shadow-hover: 0 20px 56px rgba(32, 45, 89, 0.18),
+                        0 4px 14px rgba(32, 45, 89, 0.09),
+                        inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+body.dark.buyer-page,
+body.buyer-page.dark {
+  --glass-bg-light: rgba(16, 28, 62, 0.68);
+  --glass-bg-mid:   rgba(10, 20, 46, 0.58);
+  --glass-bg-thin:  rgba(8, 16, 38, 0.42);
+  --glass-border:   rgba(140, 165, 230, 0.16);
+  --glass-border-subtle: rgba(140, 165, 230, 0.10);
+  --glass-shadow:   0 8px 32px rgba(0, 0, 0, 0.32),
+                    0 2px 8px rgba(0, 0, 0, 0.18),
+                    inset 0 1px 0 rgba(255,255,255,0.05);
+  --glass-shadow-hover: 0 20px 56px rgba(0, 0, 0, 0.42),
+                        0 4px 14px rgba(0, 0, 0, 0.22),
+                        inset 0 1px 0 rgba(255,255,255,0.07);
+}
+
+/* --- HEADER glass --- */
+body.buyer-page .header {
+  background: var(--glass-bg-light) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+  box-shadow: 0 4px 24px rgba(32, 45, 89, 0.08),
+              inset 0 -1px 0 rgba(32, 45, 89, 0.06) !important;
+}
+body.dark.buyer-page .header,
+body.buyer-page.dark .header {
+  background: rgba(6, 12, 28, 0.72) !important;
+  border-bottom-color: rgba(140, 165, 230, 0.12) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.28),
+              inset 0 -1px 0 rgba(140,165,230,0.08) !important;
+}
+
+/* --- TOUR CARDS glass --- */
+body.buyer-page .tour-card-v49 {
+  background: var(--glass-bg-light) !important;
+  backdrop-filter: var(--glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+  border-radius: 28px !important;
+}
+body.buyer-page .tour-card-v49:hover {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border-color: rgba(251, 183, 28, 0.48) !important;
+  box-shadow: var(--glass-shadow-hover) !important;
+}
+
+/* glass تاریک کارت */
+body.dark.buyer-page .tour-card-v49,
+body.buyer-page.dark .tour-card-v49 {
+  background: var(--glass-bg-light) !important;
+  border-color: var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+body.dark.buyer-page .tour-card-v49:hover,
+body.buyer-page.dark .tour-card-v49:hover {
+  background: rgba(18, 32, 68, 0.78) !important;
+  border-color: rgba(251, 183, 28, 0.38) !important;
+  box-shadow: var(--glass-shadow-hover) !important;
+}
+
+/* --- MINI CARDS روی هیرو (glass شناور) --- */
+body.buyer-page .hero-mini-card {
+  background: var(--glass-bg-mid) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+  border-radius: 18px;
+  padding: 12px 16px;
+  transition: transform 0.28s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.28s ease !important;
+}
+body.buyer-page .hero-mini-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--glass-shadow-hover) !important;
+}
+
+/* --- COUNTRY CARDS glass --- */
+body.buyer-page .country-line-card {
+  background: var(--glass-bg-light) !important;
+  backdrop-filter: var(--glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+  transition: transform 0.38s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.38s ease,
+              border-color 0.28s ease !important;
+}
+body.buyer-page .country-line-card:hover,
+body.buyer-page .country-line-card.active {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(251, 183, 28, 0.5) !important;
+  box-shadow: var(--glass-shadow-hover) !important;
+}
+body.dark.buyer-page .country-line-card,
+body.buyer-page.dark .country-line-card {
+  background: var(--glass-bg-light) !important;
+  border-color: var(--glass-border) !important;
+}
+body.dark.buyer-page .country-line-card:hover,
+body.buyer-page.dark .country-line-card:hover {
+  background: rgba(18, 32, 68, 0.72) !important;
+  border-color: rgba(251, 183, 28, 0.35) !important;
+}
+
+/* --- MODAL glass --- */
+body.buyer-page .modal-card,
+body.buyer-page .consult-popup,
+body.buyer-page .custom-tour-popup-card {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(28px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.82) !important;
+  box-shadow: 0 32px 100px rgba(32, 45, 89, 0.22),
+              0 8px 24px rgba(32, 45, 89, 0.10),
+              inset 0 1px 0 rgba(255,255,255,1) !important;
+}
+body.dark.buyer-page .modal-card,
+body.dark.buyer-page .consult-popup,
+body.dark.buyer-page .custom-tour-popup-card,
+body.buyer-page.dark .modal-card {
+  background: rgba(10, 18, 42, 0.88) !important;
+  border-color: rgba(140, 165, 230, 0.18) !important;
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.52),
+              0 8px 24px rgba(0, 0, 0, 0.28),
+              inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+
+/* --- FLOATING CTA glass --- */
+body.buyer-page #customTourFloatingShell .custom-tour-top-card {
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(24px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 16px 48px rgba(32, 45, 89, 0.18),
+              0 4px 12px rgba(32, 45, 89, 0.09),
+              inset 0 1px 0 rgba(255,255,255,0.9) !important;
+}
+body.dark.buyer-page #customTourFloatingShell .custom-tour-top-card,
+body.buyer-page.dark #customTourFloatingShell .custom-tour-top-card {
+  background: rgba(10, 18, 46, 0.82) !important;
+  border-color: rgba(140, 165, 230, 0.18) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.42),
+              inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+
+/* --- WISH BUTTON glass خفن --- */
+body.buyer-page .wish-float-v49 {
+  background: var(--glass-bg-light) !important;
+  backdrop-filter: blur(14px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.5) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 4px 14px rgba(32, 45, 89, 0.14),
+              inset 0 1px 0 rgba(255,255,255,0.9) !important;
+}
+body.dark.buyer-page .wish-float-v49,
+body.buyer-page.dark .wish-float-v49 {
+  background: rgba(10, 18, 46, 0.72) !important;
+  border-color: rgba(140, 165, 230, 0.2) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.38),
+              inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+
+/* --- DETAIL aside glass --- */
+body.buyer-page .detail-aside-v49 {
+  background: var(--glass-bg-light) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+body.dark.buyer-page .detail-aside-v49,
+body.buyer-page.dark .detail-aside-v49 {
+  background: var(--glass-bg-mid) !important;
+  border-color: var(--glass-border) !important;
+}
+
+/* --- PRICE PILLS glass --- */
+body.buyer-page .tour-card-v49 .room-price-pill {
+  background: var(--glass-bg-thin) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7),
+              0 2px 8px rgba(32,45,89,0.06) !important;
+}
+body.buyer-page .tour-card-v49 .room-price-pill.single {
+  background: rgba(255, 248, 220, 0.6) !important;
+  border-color: rgba(251, 183, 28, 0.32) !important;
+}
+body.dark.buyer-page .tour-card-v49 .room-price-pill,
+body.buyer-page.dark .tour-card-v49 .room-price-pill {
+  background: rgba(12, 22, 54, 0.55) !important;
+  border-color: rgba(140, 165, 230, 0.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04),
+              0 2px 8px rgba(0,0,0,0.18) !important;
+}
+body.dark.buyer-page .tour-card-v49 .room-price-pill.single,
+body.buyer-page.dark .tour-card-v49 .room-price-pill.single {
+  background: rgba(40, 28, 8, 0.55) !important;
+  border-color: rgba(251, 183, 28, 0.28) !important;
+}
+
+/* --- HERO SEARCH glass --- */
+body.buyer-page .hero-search-panel,
+body.buyer-page .hero-search-figma {
+  background: rgba(255, 255, 255, 0.58) !important;
+  backdrop-filter: blur(18px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 8px 28px rgba(32, 45, 89, 0.12),
+              inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  border-radius: 22px;
+}
+body.dark.buyer-page .hero-search-panel,
+body.dark.buyer-page .hero-search-figma {
+  background: rgba(8, 16, 42, 0.62) !important;
+  border-color: rgba(140, 165, 230, 0.16) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.32),
+              inset 0 1px 0 rgba(255,255,255,0.04) !important;
+}
+
+/* --- FOOTER glass --- */
+body.buyer-page .footer,
+body.buyer-page .site-footer {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: var(--glass-blur-sm) !important;
+  -webkit-backdrop-filter: var(--glass-blur-sm) !important;
+  border-top: 1px solid rgba(32, 45, 89, 0.09) !important;
+}
+body.dark.buyer-page .footer,
+body.dark.buyer-page .site-footer,
+body.buyer-page.dark .footer {
+  background: rgba(6, 12, 28, 0.78) !important;
+  border-top-color: rgba(140, 165, 230, 0.10) !important;
+}
+
+/* --- CATBAR glass --- */
+body.buyer-page .catbar-v49,
+body.buyer-page .catbar {
+  background: rgba(255, 255, 255, 0.56) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  border-radius: 18px;
+  padding: 6px;
+  box-shadow: 0 4px 16px rgba(32, 45, 89, 0.08) !important;
+}
+body.dark.buyer-page .catbar-v49,
+body.dark.buyer-page .catbar,
+body.buyer-page.dark .catbar {
+  background: rgba(10, 18, 44, 0.62) !important;
+  border-color: rgba(140, 165, 230, 0.12) !important;
+}
+
+/* --- BACKGROUND — زمینه glass --- */
+body.buyer-page {
+  background:
+    radial-gradient(ellipse at 18% 8%,  rgba(100, 130, 220, 0.18), transparent 38%),
+    radial-gradient(ellipse at 88% 12%, rgba(251, 183, 28, 0.12),  transparent 32%),
+    radial-gradient(ellipse at 50% 90%, rgba(80, 120, 210, 0.10),  transparent 40%),
+    linear-gradient(180deg, #f4f8ff 0%, #edf3fb 55%, #f0f5ff 100%) !important;
+}
+body.dark.buyer-page,
+body.buyer-page.dark {
+  background:
+    radial-gradient(ellipse at 18% 8%,  rgba(60, 90, 180, 0.28), transparent 38%),
+    radial-gradient(ellipse at 88% 12%, rgba(251, 183, 28, 0.14), transparent 32%),
+    radial-gradient(ellipse at 50% 90%, rgba(40, 70, 160, 0.20), transparent 40%),
+    linear-gradient(180deg, #040813 0%, #07122a 50%, #030712 100%) !important;
+}
+
+/* ─── 3. MOBILE glass ───────────────────────────────────── */
+@media (max-width: 600px) {
+  /* blur سبک‌تر روی موبایل برای پرفورمنس */
+  body.buyer-page {
+    --glass-blur: blur(10px) saturate(1.3);
+    --glass-blur-sm: blur(7px) saturate(1.2);
+  }
+  body.buyer-page h1,
+  body.buyer-page .buyer-hero-title {
+    font-size: clamp(24px, 7vw, 34px) !important;
+    letter-spacing: -0.02em !important;
+  }
+  body.buyer-page h2,
+  body.buyer-page .section-title-v49 h2 {
+    font-size: clamp(19px, 5.5vw, 26px) !important;
+  }
+}
+
+/* ─── 4. reduced-motion safe ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  body.buyer-page * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  body.buyer-page .tour-card-v49 {
+    background: rgba(255,255,255,0.94) !important;
+  }
+  body.dark.buyer-page .tour-card-v49 {
+    background: rgba(12, 22, 52, 0.94) !important;
+  }
+}
+
