@@ -10528,15 +10528,16 @@ function layout(type) {
   const links = type === 'buyer' ? buyerLinks : privateLinks;
 
   return `
-<header class="header">
+<header class="header main-header">
   <div class="container nav">
     <a class="logo" href="../buyer/index.html">
       <span class="logo-icon logo-img-box"><img src="../assets/images/logo-safaro.png" alt="Safaro logo"></span>
       <span>سفرو<small style="display:block;color:var(--p);font-size:9px;letter-spacing:2px">SAFARO</small></span>
     </a>
-    <nav class="links">${links}</nav>
+    <nav class="links main-nav" id="mainNav">${links}</nav>
     <div class="actions">
-      <button class="soft" onclick="toggleDark()"><i class="fa-solid fa-moon"></i></button>
+      <button class="soft dark-toggle" type="button" onclick="toggleDark()" aria-label="تغییر حالت روز و شب"><i class="fa-solid fa-moon"></i></button>
+      <button class="soft hamburger" type="button" aria-label="باز کردن منو" aria-controls="mainNav" aria-expanded="false"><span></span><span></span><span></span></button>
       <span class="soft"><i class="fa-regular fa-heart"></i><span id="wishCount">۰</span></span>
     </div>
   </div>

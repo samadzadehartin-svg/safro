@@ -690,9 +690,9 @@ function referenceHeroSection() {
         <button class="btn hero-search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i> پیدا کن</button>
       </form>
       <div class="hero-stats-v49 hero-fusion-stats">
-        <span><b>${faNum(activeCount)}</b> تور فعال</span>
-        <span><b>${faNum(countriesCount)}</b> کشور</span>
-        <span><b>${faNum(specialCount)}</b> تور ویژه</span>
+        <span><b data-ui-counter="${activeCount}">${faNum(activeCount)}</b> تور فعال</span>
+        <span><b data-ui-counter="${countriesCount}">${faNum(countriesCount)}</b> کشور</span>
+        <span><b data-ui-counter="${specialCount}">${faNum(specialCount)}</b> تور ویژه</span>
         <span><b>۲۴/۷</b> همراه سفر</span>
       </div>
     </div>

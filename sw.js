@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safarro-cache-v6.9';
+const CACHE_NAME = 'safarro-cache-v7.1';
 const ASSETS = [
   '/',
   '/buyer/',
@@ -13,6 +13,7 @@ const ASSETS = [
   '/assets/js/buyer.js',
   '/assets/js/staff.js',
   '/assets/js/admin.js',
+  '/assets/js/ui-enhancements.js',
   '/assets/images/logo-safaro.png',
   '/assets/images/logo-safaro-192.png',
   '/assets/images/logo-safaro-512.png',
