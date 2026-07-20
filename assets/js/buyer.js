@@ -40,6 +40,14 @@ function hotelStars(n) {
 function ratingStar() {
   return '<span class="rating-star">★</span>';
 }
+
+// v5.7: Buyer page data source alias.
+// Some UI blocks use buyerTours() while the shared data layer exposes tours().
+// Keep this small wrapper so the buyer UI always reads the repaired tour list.
+function buyerTours() {
+  return typeof tours === 'function' ? tours() : [];
+}
+
 function defaultSections() {
   return {
     description: true,
@@ -941,5 +949,5 @@ function filterHome() {
   }
 }
 
-// v5.6: make sure the buyer app actually boots on /buyer and on Vercel rewrites.
+// v5.7: make sure the buyer app actually boots on /buyer and on Vercel rewrites.
 document.addEventListener('DOMContentLoaded', initBuyer);
