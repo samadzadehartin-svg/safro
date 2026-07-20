@@ -96,6 +96,34 @@ function visibleHotelEntries(t) {
   return arr.length ? arr : (t.hotels || []).map((h, i) => ({ h, i }));
 }
 
+function buyerRoomPriceValue(h, type = 'double') {
+  const dbl = priceNumber(h?.dblPrice || h?.doublePrice || h?.price || 0);
+  const sglRaw = priceNumber(h?.sglPrice || h?.singlePrice || h?.sgl || 0);
+  const sgl = sglRaw || (dbl ? Math.ceil((dbl * 1.35) / 100000) * 100000 : 0);
+  return type === 'single' ? sgl || dbl : dbl || sgl;
+}
+
+function tourRoomPricePairHtml(t) {
+  const entries = visibleHotelEntries(t || {});
+  const doubles = entries.map(x => buyerRoomPriceValue(x.h, 'double')).filter(Boolean);
+  const singles = entries.map(x => buyerRoomPriceValue(x.h, 'single')).filter(Boolean);
+  const minDouble = doubles.length ? Math.min(...doubles) : priceNumber(t?.price || t?.newPrice || 0);
+  const minSingle = singles.length
+    ? Math.min(...singles)
+    : minDouble
+      ? Math.ceil((minDouble * 1.35) / 100000) * 100000
+      : 0;
+  return `<div class="tour-room-price-pair" aria-label="قیمت اتاق‌ها">
+    <div class="room-price-pill double"><span>دو‌تخته</span><b>${money(minDouble)}</b></div>
+    <div class="room-price-pill single"><span>یک‌تخته</span><b>${money(minSingle)}</b></div>
+  </div>`;
+}
+
+function selectedRoomTypeForBooking() {
+  const value = String($('roomType')?.value || 'دبل');
+  return value.includes('سینگل') || value.includes('یک') ? 'single' : 'double';
+}
+
 function escapeAttr(v) {
   return String(v || '').replace(/"/g, '&quot;');
 }
@@ -671,6 +699,35 @@ function customTourLauncher() {
   </section>`;
 }
 
+function customTourMiniDock() {
+  return `<button id="customTourMiniDock" class="custom-tour-mini-dock" onclick="openCustomTourPopup()" type="button" aria-label="ساخت تور اختصاصی">
+    <span class="mini-spark"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+    <span><b>تور خودتو بساز</b><small>کنار لیست تورها</small></span>
+    <i class="fa-solid fa-arrow-left"></i>
+  </button>`;
+}
+
+function setupCustomTourMiniDock() {
+  setTimeout(() => {
+    const dock = $('customTourMiniDock');
+    const grid = $('tourGrid');
+    if (!dock || !grid) return;
+    if (window.safroCustomTourMiniHandler) {
+      window.removeEventListener('scroll', window.safroCustomTourMiniHandler);
+      window.removeEventListener('resize', window.safroCustomTourMiniHandler);
+    }
+    const update = () => {
+      const rect = grid.getBoundingClientRect();
+      const inTourZone = rect.top < window.innerHeight * 0.72 && rect.bottom > 160;
+      dock.classList.toggle('show', !!inTourZone);
+    };
+    window.safroCustomTourMiniHandler = update;
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }, 80);
+}
+
 function customTourPopupHtml() {
   return `<div id="customTourPopup" class="custom-tour-popup-backdrop" onclick="if(event.target===this)closeCustomTourPopup()">
     <form class="custom-tour-popup-card" onsubmit="submitConsultation(event)">
@@ -792,7 +849,7 @@ function renderHome() {
     ${referenceHeroSection()}
     ${countryLineArtSection()}
     ${specialToursSection(list)}
-    ${customTourPopupHtml()}${consultPopupHtml()}${hotelPhotosModalHtml()}
+    ${customTourPopupHtml()}${customTourMiniDock()}${consultPopupHtml()}${hotelPhotosModalHtml()}
     ${filtersSection(list)}
     ${categoryBarHtml()}
     <div class="tour-list-head-v49 row"><div><h2>تورها</h2><p class="small">روی هر کارت بزن تا وارد جزئیات و رزرو همان تور شوی.</p></div><div class="row"><b id="tourCount">۰</b><button class="soft" onclick="resetDemoData()">بازیابی تورهای نمونه</button></div></div>
@@ -803,6 +860,7 @@ function renderHome() {
     <div id="compareDock" class="dock"><b><i class="fa-solid fa-code-compare"></i> <span id="compareCount">۰</span> تور برای مقایسه</b><div class="actions"><button class="soft" onclick="openCompare()">مقایسه</button><button class="danger" onclick="clearCompare()">پاک کردن</button></div></div>
     <div id="compareModal" class="modal" onclick="if(event.target===this)closeCompare()"><div class="modal-card pad"><div class="row"><h2>مقایسه تورها</h2><button class="soft" onclick="closeCompare()">بستن</button></div><div id="compareContent" class="table-wrap"></div></div></div>`;
   filterHome();
+  setupCustomTourMiniDock();
   scheduleOneMinuteConsultPopup();
 }
 
@@ -826,8 +884,9 @@ function tourCard(t) {
         <span><i class="fa-solid fa-star"></i>${faNum(t.rating || '۴.۸')}</span>
         <span><i class="fa-solid fa-hotel"></i>${faNum(hotelCount)} هتل</span>
       </div>
+      ${tourRoomPricePairHtml(t)}
       <div class="tour-card-footer-v49">
-        <div><small>شروع قیمت از</small><b class="price">${money(startPrice)}</b><em>${cap > 0 ? faNum(cap) + ' ظرفیت باقی‌مانده' : 'تکمیل ظرفیت'}</em></div>
+        <div class="tour-capacity-note"><small>ظرفیت</small><em>${cap > 0 ? faNum(cap) + ' ظرفیت باقی‌مانده' : 'تکمیل ظرفیت'}</em></div>
         <button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">مشاهده و رزرو</button>
       </div>
       <button class="compare-btn ${compare.has(t.id) ? 'active' : ''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id) ? 'در مقایسه' : 'افزودن به مقایسه'}</button>
@@ -907,6 +966,7 @@ function renderDetail(t) {
         <span class="badge special">رزرو سریع</span>
         <h3>خلاصه تور</h3>
         <div class="detail-price-box-v49"><small>شروع قیمت از</small>${specialPriceLine(t, displayPrice)}</div>
+        <div class="detail-room-price-pair">${hotelRoomPriceHtml(selected)}</div>
         <div class="stack detail-summary-list-v49">
           <div class="row"><span>هتل انتخاب‌شده</span><b dir="ltr">${selected.name || '—'}</b></div>
           <div class="row"><span>ظرفیت</span><b>${faNum(totalCapacity(t))}</b></div>
@@ -1242,7 +1302,7 @@ function renderBooking(t) {
   if (!entries.some(e => e.i === booking.hotel)) booking.hotel = entries[0]?.i || 0;
   const h = t.hotels[booking.hotel] || entries[0]?.h || t.hotels[0];
   $('app').innerHTML =
-    `${buyerTabs()}<button class="soft" onclick="route('detail',${t.id})">بازگشت به جزئیات</button><div id="success" class="card pad hidden" style="margin-top:16px;text-align:center;background:linear-gradient(135deg,var(--ok),#34d399);color:white"></div><div id="formArea" class="grid" style="grid-template-columns:2fr 1fr;margin-top:16px"><div class="card pad"><div class="stepper"><div id="st1" class="step active">1</div><div class="line" id="ln1"></div><div id="st2" class="step">2</div><div class="line" id="ln2"></div><div id="st3" class="step">3</div></div><div id="content1"><h3>انتخاب تاریخ و هتل</h3><div class="grid g3">${t.dates.map((d, i) => `<button class="date-chip ${i === 0 ? 'selected' : ''}" onclick="booking.date='${d}';document.querySelectorAll('.date-chip').forEach(x=>x.classList.remove('selected'));this.classList.add('selected');updateSummary()">${d}</button>`).join('')}</div><h3>هتل</h3>${bookingHotelList(t)}${hotelPhotosModalHtml()}<button class="btn" style="width:100%;margin-top:16px" onclick="nextStep()">مرحله بعد</button></div><div id="content2" class="hidden"><h3>اطلاعات مسافر</h3><div class="grid g2"><input id="name" class="field" placeholder="نام و نام خانوادگی *" required><input id="phone" class="field" placeholder="شماره تماس *" required><input id="national" class="field" placeholder="کد ملی یا پاسپورت"><input id="birth" class="field" placeholder="تاریخ تولد *" required><select id="roomType" class="field"><option>دبل</option><option>توئین</option><option>سینگل</option></select><select id="passengers" class="field" onchange="booking.passengers=Number(this.value);updateSummary()"><option value="1">۱ نفر</option><option value="2" selected>۲ نفر</option><option value="3">۳ نفر</option><option value="4">۴ نفر</option></select><div><div class="row"><input id="discount" class="field" placeholder="کد تخفیف"><button class="soft" onclick="applyDiscount()">اعمال</button></div><small id="discountMsg" class="small"></small></div></div><textarea id="notes" class="field" rows="3" placeholder="توضیحات"></textarea><div class="row" style="margin-top:16px"><button class="soft" onclick="prevStep()">قبلی</button><button class="btn" onclick="nextStep()">مرحله بعد</button></div></div><div id="content3" class="hidden"><h3>تایید نهایی</h3><div id="review" class="stack"></div><div class="row" style="margin-top:16px"><button class="soft" onclick="prevStep()">قبلی</button><button class="btn" onclick="submitBooking()">ثبت نهایی</button></div></div></div><aside class="card pad" style="height:max-content;position:sticky;top:86px"><h3>خلاصه سفارش</h3><div class="stack"><div class="row"><span>تاریخ</span><b id="sumDate">${booking.date}</b></div><div class="row"><span>هتل</span><b id="sumHotel">${h.name}</b></div><div class="row"><span>مسافران</span><b id="sumPassengers">${faNum(booking.passengers)}</b></div><div class="row"><span>تخفیف</span><b id="sumDiscount">۰</b></div><hr style="width:100%;border:0;border-top:1px solid var(--b)"><div class="row"><b>قیمت نهایی</b><b class="price" id="sumTotal"></b></div></div></aside></div>`;
+    `${buyerTabs()}<button class="soft" onclick="route('detail',${t.id})">بازگشت به جزئیات</button><div id="success" class="card pad hidden" style="margin-top:16px;text-align:center;background:linear-gradient(135deg,var(--ok),#34d399);color:white"></div><div id="formArea" class="grid" style="grid-template-columns:2fr 1fr;margin-top:16px"><div class="card pad"><div class="stepper"><div id="st1" class="step active">1</div><div class="line" id="ln1"></div><div id="st2" class="step">2</div><div class="line" id="ln2"></div><div id="st3" class="step">3</div></div><div id="content1"><h3>انتخاب تاریخ و هتل</h3><div class="grid g3">${t.dates.map((d, i) => `<button class="date-chip ${i === 0 ? 'selected' : ''}" onclick="booking.date='${d}';document.querySelectorAll('.date-chip').forEach(x=>x.classList.remove('selected'));this.classList.add('selected');updateSummary()">${d}</button>`).join('')}</div><h3>هتل</h3>${bookingHotelList(t)}${hotelPhotosModalHtml()}<button class="btn" style="width:100%;margin-top:16px" onclick="nextStep()">مرحله بعد</button></div><div id="content2" class="hidden"><h3>اطلاعات مسافر</h3><div class="grid g2"><input id="name" class="field" placeholder="نام و نام خانوادگی *" required><input id="phone" class="field" placeholder="شماره تماس *" required><input id="national" class="field" placeholder="کد ملی یا پاسپورت"><input id="birth" class="field" placeholder="تاریخ تولد *" required><select id="roomType" class="field" onchange="updateSummary()"><option>دبل</option><option>توئین</option><option>سینگل</option></select><select id="passengers" class="field" onchange="booking.passengers=Number(this.value);updateSummary()"><option value="1">۱ نفر</option><option value="2" selected>۲ نفر</option><option value="3">۳ نفر</option><option value="4">۴ نفر</option></select><div><div class="row"><input id="discount" class="field" placeholder="کد تخفیف"><button class="soft" onclick="applyDiscount()">اعمال</button></div><small id="discountMsg" class="small"></small></div></div><textarea id="notes" class="field" rows="3" placeholder="توضیحات"></textarea><div class="row" style="margin-top:16px"><button class="soft" onclick="prevStep()">قبلی</button><button class="btn" onclick="nextStep()">مرحله بعد</button></div></div><div id="content3" class="hidden"><h3>تایید نهایی</h3><div id="review" class="stack"></div><div class="row" style="margin-top:16px"><button class="soft" onclick="prevStep()">قبلی</button><button class="btn" onclick="submitBooking()">ثبت نهایی</button></div></div></div><aside class="card pad" style="height:max-content;position:sticky;top:86px"><h3>خلاصه سفارش</h3><div class="stack"><div class="row"><span>تاریخ</span><b id="sumDate">${booking.date}</b></div><div class="row"><span>هتل</span><b id="sumHotel">${h.name}</b></div><div class="row"><span>مسافران</span><b id="sumPassengers">${faNum(booking.passengers)}</b></div><div class="row"><span>نوع اتاق</span><b id="sumRoomType">دو‌تخته</b></div><div class="row"><span>تخفیف</span><b id="sumDiscount">۰</b></div><hr style="width:100%;border:0;border-top:1px solid var(--b)"><div class="row"><b>قیمت نهایی</b><b class="price" id="sumTotal"></b></div></div></aside></div>`;
   updateSummary();
 }
 
@@ -1250,10 +1310,12 @@ function calc() {
   const t = findTour(booking.tourId),
     entries = visibleHotelEntries(t);
   if (!t.hotels[booking.hotel]) booking.hotel = entries[0]?.i || 0;
-  const h = t.hotels[booking.hotel] || entries[0]?.h,
-    gross = h.price * booking.passengers,
-    d = findDiscount($('discount')?.value, t, gross);
-  return { t, h, gross, d, net: Math.max(0, gross - (d.valid ? d.amount : 0)) };
+  const h = t.hotels[booking.hotel] || entries[0]?.h;
+  const roomKind = selectedRoomTypeForBooking();
+  const unitPrice = buyerRoomPriceValue(h, roomKind);
+  const gross = unitPrice * booking.passengers;
+  const d = findDiscount($('discount')?.value, t, gross);
+  return { t, h, roomKind, unitPrice, gross, d, net: Math.max(0, gross - (d.valid ? d.amount : 0)) };
 }
 
 function updateSummary() {
@@ -1262,6 +1324,7 @@ function updateSummary() {
     $('sumDate').textContent = booking.date;
     $('sumHotel').textContent = c.h.name;
     $('sumPassengers').textContent = faNum(booking.passengers);
+    if ($('sumRoomType')) $('sumRoomType').textContent = c.roomKind === 'single' ? 'یک‌تخته' : 'دو‌تخته';
     $('sumDiscount').textContent = money(c.d.valid ? c.d.amount : 0);
     $('sumTotal').textContent = money(c.net);
   }

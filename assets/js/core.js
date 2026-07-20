@@ -278,11 +278,15 @@ function tourPriceBadges(t, limit = 5) {
 }
 function hotelRoomPriceHtml(h) {
   const dbl = priceNumber(h?.dblPrice || h?.doublePrice || h?.price || 0);
-  const sgl = priceNumber(h?.sglPrice || h?.singlePrice || 0);
+  const sglRaw = priceNumber(h?.sglPrice || h?.singlePrice || h?.sgl || 0);
+  const sgl = sglRaw || (dbl ? Math.ceil((dbl * 1.35) / 100000) * 100000 : 0);
   const dc = h?.dblCurrency || h?.priceCurrency || 'IRR';
   const sc = h?.sglCurrency || h?.priceCurrency || dc;
   if (!dbl && !sgl) return `<b>${money(h?.price || 0)}</b>`;
-  return `<span class="hotel-room-price"><b>${formatCurrencyAmount(dbl, dc)}</b>${sgl ? `<small>${formatCurrencyAmount(sgl, sc)}</small>` : ''}</span>`;
+  return `<span class="hotel-room-price hotel-room-price-v62">
+    ${dbl ? `<span class="room-price-line"><em>دو‌تخته</em><b>${formatCurrencyAmount(dbl, dc)}</b></span>` : ''}
+    ${sgl ? `<span class="room-price-line single"><em>یک‌تخته</em><b>${formatCurrencyAmount(sgl, sc)}</b></span>` : ''}
+  </span>`;
 }
 
 function hotelStars(n) {
