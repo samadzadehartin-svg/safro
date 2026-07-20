@@ -10111,3 +10111,646 @@ body.buyer-page .country-line-card.active {
     width: 100%;
   }
 }
+
+
+/* =========================================================
+   v6.6 TOUR CARD CINEMATIC — خفن‌ترین کارت تور
+   لایت + دارک یکسان | ورود انیمیشن‌دار | هاور سینمایی
+   glassmorphism | featured tile | موبایل کامل
+   ========================================================= */
+
+/* ─── Keyframes ─────────────────────────────────────────── */
+@keyframes safro-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes safro-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes safro-badge-pop {
+  0%   { transform: scale(0.72); opacity: 0; }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+@keyframes safro-img-reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+@keyframes safro-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251, 183, 28, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(251, 183, 28, 0.18); }
+}
+
+/* ─── Grid ──────────────────────────────────────────────── */
+body.buyer-page .tour-grid-v49 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  align-items: stretch;
+}
+@media (max-width: 980px) {
+  body.buyer-page .tour-grid-v49 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+@media (max-width: 600px) {
+  body.buyer-page .tour-grid-v49 {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* ─── Card base ─────────────────────────────────────────── */
+body.buyer-page .tour-card-v49 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 28px !important;
+  overflow: hidden;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(241, 246, 255, 0.96) 100%
+  ) !important;
+  border: 1px solid rgba(32, 45, 89, 0.13) !important;
+  box-shadow:
+    0 2px 4px rgba(32, 45, 89, 0.04),
+    0 8px 22px rgba(32, 45, 89, 0.07),
+    0 24px 56px rgba(32, 45, 89, 0.09) !important;
+  transition:
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease !important;
+  will-change: transform;
+  animation: safro-card-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* staggered entrance delay */
+body.buyer-page .tour-grid-v49 .tour-card-v49:nth-child(1)  { animation-delay: 0.04s; }
+body.buyer-page .tour-grid-v49 .tour-card-v49:nth-child(2)  { animation-delay: 0.10s; }
+body.buyer-page .tour-grid-v49 .tour-card-v49:nth-child(3)  { animation-delay: 0.16s; }
+body.buyer-page .tour-grid-v49 .tour-card-v49:nth-child(4)  { animation-delay: 0.22s; }
+body.buyer-page .tour-grid-v49 .tour-card-v49:nth-child(5)  { animation-delay: 0.28s; }
+body.buyer-page .tour-grid-v49 .tour-card-v49:nth-child(6)  { animation-delay: 0.34s; }
+body.buyer-page .tour-grid-v49 .tour-card-v49:nth-child(n+7){ animation-delay: 0.38s; }
+
+/* ─── Card hover — سینمایی ──────────────────────────────── */
+body.buyer-page .tour-card-v49:hover {
+  transform: translateY(-8px) scale(1.012) !important;
+  border-color: rgba(251, 183, 28, 0.55) !important;
+  box-shadow:
+    0 4px 8px rgba(32, 45, 89, 0.06),
+    0 16px 38px rgba(32, 45, 89, 0.13),
+    0 40px 90px rgba(32, 45, 89, 0.17),
+    0 0 0 1px rgba(251, 183, 28, 0.22) !important;
+}
+
+/* shimmer sweep روی hover */
+body.buyer-page .tour-card-v49::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+body.buyer-page .tour-card-v49:hover::before {
+  opacity: 1;
+  animation: safro-shimmer 0.8s ease forwards;
+}
+
+/* ─── Image wrap ────────────────────────────────────────── */
+body.buyer-page .tour-image-wrap-v49 {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px 22px 0 0;
+}
+body.buyer-page .tour-card-v49 .tour-img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.55s ease !important;
+  transform-origin: center center;
+}
+body.buyer-page .tour-card-v49:hover .tour-img {
+  transform: scale(1.08) !important;
+  filter: brightness(1.04) contrast(1.03) !important;
+}
+
+/* گرادیانت روی عکس */
+body.buyer-page .tour-image-wrap-v49::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 38%,
+    rgba(7, 17, 40, 0.22) 75%,
+    rgba(7, 17, 40, 0.42) 100%
+  );
+  z-index: 1;
+  border-radius: inherit;
+  transition: opacity 0.38s ease;
+}
+body.buyer-page .tour-card-v49:hover .tour-image-wrap-v49::after {
+  opacity: 0.7;
+}
+
+/* ─── flash badge ───────────────────────────────────────── */
+body.buyer-page .tour-image-wrap-v49 .flash-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  background: linear-gradient(135deg, #dc2626, #f97316) !important;
+  color: #fff !important;
+  border-radius: 999px;
+  padding: 5px 13px;
+  font-size: 10.5px;
+  font-weight: 1000;
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.38);
+  animation: safro-badge-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  backdrop-filter: blur(4px);
+}
+
+/* ─── Wish button (قلب) ─────────────────────────────────── */
+body.buyer-page .wish-float-v49 {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  border: none !important;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.14),
+    0 1px 3px rgba(15, 23, 42, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.2s ease,
+              box-shadow 0.22s ease !important;
+}
+body.buyer-page .wish-float-v49:hover {
+  transform: scale(1.15) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 0 8px 22px rgba(239, 68, 68, 0.22) !important;
+}
+
+/* ─── Card body ─────────────────────────────────────────── */
+body.buyer-page .tour-card-body-v49 {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px 18px 18px !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* ─── Title ─────────────────────────────────────────────── */
+body.buyer-page .tour-card-v49 .tour-title {
+  font-size: clamp(16px, 1.5vw, 20px) !important;
+  font-weight: 1000 !important;
+  color: #111d36 !important;
+  line-height: 1.55 !important;
+  margin: 6px 0 0 !important;
+  min-height: 0 !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── badges ────────────────────────────────────────────── */
+body.buyer-page .tour-card-v49 .badges {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+body.buyer-page .tour-card-v49 .badge {
+  animation: safro-badge-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Meta grid (مقصد / مدت / امتیاز / هتل) ────────────── */
+body.buyer-page .tour-meta-grid-v49 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin: 12px 0 10px !important;
+}
+body.buyer-page .tour-meta-grid-v49 span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px !important;
+  border-radius: 12px;
+  background: rgba(32, 45, 89, 0.05) !important;
+  border: 1px solid rgba(32, 45, 89, 0.09) !important;
+  color: #3d4f6e !important;
+  font-size: 11px;
+  font-weight: 900;
+  transition: background 0.2s ease, border-color 0.2s ease !important;
+}
+body.buyer-page .tour-card-v49:hover .tour-meta-grid-v49 span {
+  background: rgba(32, 45, 89, 0.08) !important;
+  border-color: rgba(32, 45, 89, 0.15) !important;
+}
+body.buyer-page .tour-meta-grid-v49 i {
+  color: #202d59 !important;
+  font-size: 11px;
+}
+
+/* ─── Price pills ───────────────────────────────────────── */
+body.buyer-page .tour-card-v49 .tour-room-price-pair {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+  margin: 10px 0 14px !important;
+}
+body.buyer-page .tour-card-v49 .room-price-pill {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 11px 13px;
+  background: linear-gradient(145deg, #f8fbff, #eef4ff) !important;
+  border: 1px solid rgba(32, 45, 89, 0.13) !important;
+  box-shadow: 0 6px 18px rgba(32, 45, 89, 0.06) !important;
+  transition: box-shadow 0.22s ease, transform 0.22s ease !important;
+}
+body.buyer-page .tour-card-v49:hover .room-price-pill {
+  box-shadow: 0 10px 26px rgba(32, 45, 89, 0.11) !important;
+  transform: translateY(-1px);
+}
+body.buyer-page .tour-card-v49 .room-price-pill span {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 1000;
+  color: #53637e !important;
+  margin-bottom: 4px;
+}
+body.buyer-page .tour-card-v49 .room-price-pill b {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 1000;
+  color: #202d59 !important;
+  line-height: 1.5;
+}
+body.buyer-page .tour-card-v49 .room-price-pill.single {
+  background: linear-gradient(145deg, #fffdf0, #fff5cc) !important;
+  border-color: rgba(251, 183, 28, 0.38) !important;
+}
+body.buyer-page .tour-card-v49 .room-price-pill.single b {
+  color: #5c3d08 !important;
+}
+
+/* ─── Footer (ظرفیت + دکمه) ─────────────────────────────── */
+body.buyer-page .tour-card-footer-v49 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(32, 45, 89, 0.09) !important;
+}
+body.buyer-page .tour-card-footer-v49 small {
+  display: block;
+  font-size: 10px;
+  font-weight: 900;
+  color: #64748b !important;
+}
+body.buyer-page .tour-card-footer-v49 em {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 1000;
+  color: #202d59 !important;
+}
+body.buyer-page .tour-card-footer-v49 .btn {
+  flex-shrink: 0;
+  border-radius: 14px !important;
+  padding: 10px 18px !important;
+  font-size: 12px;
+  font-weight: 1000;
+  background: linear-gradient(135deg, #182552, #202d59) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 22px rgba(32, 45, 89, 0.28) !important;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease !important;
+  border: none !important;
+}
+body.buyer-page .tour-card-footer-v49 .btn:hover {
+  background: linear-gradient(135deg, #202d59, #2b3d7a) !important;
+  transform: translateY(-2px) scale(1.04) !important;
+  box-shadow: 0 14px 34px rgba(32, 45, 89, 0.36) !important;
+}
+
+/* ─── Compare button ────────────────────────────────────── */
+body.buyer-page .tour-card-v49 .compare-btn {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px dashed rgba(32, 45, 89, 0.28) !important;
+  color: rgba(32, 45, 89, 0.65) !important;
+  background: transparent !important;
+  border-radius: 11px;
+  padding: 8px;
+  font-size: 11px;
+  font-weight: 900;
+  transition: all 0.2s ease !important;
+}
+body.buyer-page .tour-card-v49 .compare-btn:hover {
+  background: rgba(32, 45, 89, 0.06) !important;
+  color: #202d59 !important;
+  border-color: rgba(32, 45, 89, 0.45) !important;
+}
+body.buyer-page .tour-card-v49 .compare-btn.active {
+  background: linear-gradient(135deg, #202d59, #2b3d7a) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 6px 18px rgba(32, 45, 89, 0.22) !important;
+}
+
+/* ─── Featured tile (اول گرید بزرگ‌تر) ─────────────────── */
+body.buyer-page .tour-grid-v49 .tour-card-v49:first-child {
+  grid-column: span 1;
+}
+@media (min-width: 981px) {
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child .tour-img {
+    height: 260px;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child .tour-card-body-v49 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto 1fr;
+    gap: 0 20px;
+    align-items: start;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child .badges {
+    grid-column: 1 / -1;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child .tour-title {
+    grid-column: 1 / -1;
+    font-size: clamp(19px, 1.8vw, 24px) !important;
+    -webkit-line-clamp: 2;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child .tour-meta-grid-v49 {
+    grid-column: 1;
+    grid-template-columns: 1fr;
+    align-content: start;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child .tour-room-price-pair {
+    grid-column: 2;
+    grid-template-columns: 1fr;
+    align-content: start;
+    margin: 12px 0 !important;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child .tour-card-footer-v49 {
+    grid-column: 1 / -1;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child .compare-btn {
+    grid-column: 1 / -1;
+  }
+  body.buyer-page .tour-grid-v49 .tour-card-v49:first-child {
+    animation: safro-glow-pulse 3.2s ease 1.2s infinite;
+    border-color: rgba(251, 183, 28, 0.28) !important;
+  }
+}
+
+/* ─── DARK MODE ─────────────────────────────────────────── */
+body.dark.buyer-page .tour-card-v49,
+body.buyer-page.dark .tour-card-v49 {
+  background: linear-gradient(
+    160deg,
+    rgba(14, 26, 58, 0.97) 0%,
+    rgba(8, 16, 38, 0.98) 100%
+  ) !important;
+  border-color: rgba(132, 158, 220, 0.16) !important;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.22),
+    0 12px 30px rgba(0, 0, 0, 0.28),
+    0 30px 70px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+body.dark.buyer-page .tour-card-v49:hover,
+body.buyer-page.dark .tour-card-v49:hover {
+  border-color: rgba(251, 183, 28, 0.48) !important;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.3),
+    0 20px 48px rgba(0, 0, 0, 0.38),
+    0 48px 100px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(251, 183, 28, 0.28),
+    0 0 32px rgba(251, 183, 28, 0.08) !important;
+}
+
+/* shimmer تاریک */
+body.dark.buyer-page .tour-card-v49:hover::before,
+body.buyer-page.dark .tour-card-v49:hover::before {
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 70%
+  );
+}
+
+/* عکس دارک */
+body.dark.buyer-page .tour-card-v49 .tour-img,
+body.buyer-page.dark .tour-card-v49 .tour-img {
+  filter: brightness(0.88) contrast(1.04) !important;
+}
+body.dark.buyer-page .tour-card-v49:hover .tour-img,
+body.buyer-page.dark .tour-card-v49:hover .tour-img {
+  filter: brightness(0.96) contrast(1.06) !important;
+}
+
+/* عنوان دارک */
+body.dark.buyer-page .tour-card-v49 .tour-title,
+body.buyer-page.dark .tour-card-v49 .tour-title {
+  color: #eef4ff !important;
+}
+
+/* متا دارک */
+body.dark.buyer-page .tour-meta-grid-v49 span,
+body.buyer-page.dark .tour-meta-grid-v49 span {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(132, 158, 220, 0.14) !important;
+  color: #b8c6e2 !important;
+}
+body.dark.buyer-page .tour-card-v49:hover .tour-meta-grid-v49 span,
+body.buyer-page.dark .tour-card-v49:hover .tour-meta-grid-v49 span {
+  background: rgba(255, 255, 255, 0.09) !important;
+  border-color: rgba(251, 183, 28, 0.22) !important;
+}
+body.dark.buyer-page .tour-meta-grid-v49 i,
+body.buyer-page.dark .tour-meta-grid-v49 i {
+  color: #8eaad8 !important;
+}
+
+/* price pills دارک */
+body.dark.buyer-page .tour-card-v49 .room-price-pill,
+body.buyer-page.dark .tour-card-v49 .room-price-pill {
+  background: linear-gradient(145deg, rgba(15, 28, 62, 0.9), rgba(8, 18, 44, 0.92)) !important;
+  border-color: rgba(132, 158, 220, 0.18) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22) !important;
+}
+body.dark.buyer-page .tour-card-v49 .room-price-pill span,
+body.buyer-page.dark .tour-card-v49 .room-price-pill span {
+  color: #94a8ca !important;
+}
+body.dark.buyer-page .tour-card-v49 .room-price-pill b,
+body.buyer-page.dark .tour-card-v49 .room-price-pill b {
+  color: #dae8ff !important;
+}
+body.dark.buyer-page .tour-card-v49 .room-price-pill.single,
+body.buyer-page.dark .tour-card-v49 .room-price-pill.single {
+  background: linear-gradient(145deg, rgba(40, 28, 8, 0.9), rgba(55, 38, 8, 0.92)) !important;
+  border-color: rgba(251, 183, 28, 0.35) !important;
+}
+body.dark.buyer-page .tour-card-v49 .room-price-pill.single b,
+body.buyer-page.dark .tour-card-v49 .room-price-pill.single b {
+  color: #ffd97a !important;
+}
+
+/* footer دارک */
+body.dark.buyer-page .tour-card-footer-v49,
+body.buyer-page.dark .tour-card-footer-v49 {
+  border-top-color: rgba(132, 158, 220, 0.12) !important;
+}
+body.dark.buyer-page .tour-card-footer-v49 small,
+body.buyer-page.dark .tour-card-footer-v49 small {
+  color: #6e85aa !important;
+}
+body.dark.buyer-page .tour-card-footer-v49 em,
+body.buyer-page.dark .tour-card-footer-v49 em {
+  color: #c8d8f4 !important;
+}
+body.dark.buyer-page .tour-card-footer-v49 .btn,
+body.buyer-page.dark .tour-card-footer-v49 .btn {
+  background: linear-gradient(135deg, #fbb71c, #ffcf4a) !important;
+  color: #111d36 !important;
+  box-shadow: 0 8px 24px rgba(251, 183, 28, 0.3) !important;
+}
+body.dark.buyer-page .tour-card-footer-v49 .btn:hover,
+body.buyer-page.dark .tour-card-footer-v49 .btn:hover {
+  background: linear-gradient(135deg, #ffc93a, #ffe07a) !important;
+  box-shadow: 0 14px 36px rgba(251, 183, 28, 0.42) !important;
+}
+
+/* wish دارک */
+body.dark.buyer-page .wish-float-v49,
+body.buyer-page.dark .wish-float-v49 {
+  background: rgba(10, 20, 46, 0.82) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.38) !important;
+}
+body.dark.buyer-page .wish-float-v49:hover,
+body.buyer-page.dark .wish-float-v49:hover {
+  background: rgba(18, 32, 68, 0.96) !important;
+  box-shadow: 0 8px 22px rgba(239, 68, 68, 0.28) !important;
+}
+
+/* compare دارک */
+body.dark.buyer-page .tour-card-v49 .compare-btn,
+body.buyer-page.dark .tour-card-v49 .compare-btn {
+  border-color: rgba(132, 158, 220, 0.25) !important;
+  color: rgba(180, 200, 240, 0.65) !important;
+}
+body.dark.buyer-page .tour-card-v49 .compare-btn:hover,
+body.buyer-page.dark .tour-card-v49 .compare-btn:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #c8d8f4 !important;
+}
+body.dark.buyer-page .tour-card-v49 .compare-btn.active,
+body.buyer-page.dark .tour-card-v49 .compare-btn.active {
+  background: linear-gradient(135deg, #fbb71c, #ffcf4a) !important;
+  color: #111d36 !important;
+}
+
+/* featured dark glow */
+@media (min-width: 981px) {
+  body.dark.buyer-page .tour-grid-v49 .tour-card-v49:first-child,
+  body.buyer-page.dark .tour-grid-v49 .tour-card-v49:first-child {
+    animation: safro-card-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.04s both,
+               safro-glow-pulse-dark 3.2s ease 1.2s infinite;
+  }
+}
+@keyframes safro-glow-pulse-dark {
+  0%, 100% { box-shadow: 0 30px 70px rgba(0,0,0,.32), 0 0 0 0 rgba(251,183,28,0); }
+  50%       { box-shadow: 0 30px 70px rgba(0,0,0,.38), 0 0 0 6px rgba(251,183,28,.22); }
+}
+
+/* ─── موبایل ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  body.buyer-page .tour-card-v49 .tour-img {
+    height: 185px;
+  }
+  body.buyer-page .tour-card-v49 .tour-card-body-v49 {
+    padding: 14px 15px 16px !important;
+  }
+  body.buyer-page .tour-card-v49 .tour-title {
+    font-size: 16px !important;
+  }
+  body.buyer-page .tour-meta-grid-v49 {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  body.buyer-page .tour-meta-grid-v49 span {
+    font-size: 10px;
+    padding: 6px 8px !important;
+  }
+  body.buyer-page .tour-card-v49 .tour-room-price-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+  body.buyer-page .tour-card-v49 .room-price-pill b {
+    font-size: 13px;
+  }
+  body.buyer-page .tour-card-footer-v49 .btn {
+    padding: 9px 14px !important;
+    font-size: 11.5px;
+  }
+  /* hover در موبایل خاموش — touch بهتره */
+  body.buyer-page .tour-card-v49:hover {
+    transform: none !important;
+  }
+  body.buyer-page .tour-card-v49:active {
+    transform: scale(0.98) !important;
+    transition-duration: 0.1s !important;
+  }
+}
+
+/* ─── کاهش motion برای کسایی که ترجیح می‌دن ───────────── */
+@media (prefers-reduced-motion: reduce) {
+  body.buyer-page .tour-card-v49,
+  body.buyer-page .tour-card-v49 .tour-img,
+  body.buyer-page .tour-card-v49::before {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
