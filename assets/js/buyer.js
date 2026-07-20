@@ -41,11 +41,28 @@ function ratingStar() {
   return '<span class="rating-star">★</span>';
 }
 
-// v5.7: Buyer page data source alias.
+// v5.8: Buyer page data source alias.
 // Some UI blocks use buyerTours() while the shared data layer exposes tours().
 // Keep this small wrapper so the buyer UI always reads the repaired tour list.
 function buyerTours() {
   return typeof tours === 'function' ? tours() : [];
+}
+
+
+// v5.8: destination options used by hero search and hidden filters.
+// This prevents the buyer home from crashing when the search UI is rendered.
+function homeSearchDestOptions(selected = 'all') {
+  const names = Array.from(
+    new Set(
+      buyerTours()
+        .filter(t => !t || t.status === 'active')
+        .map(t => (typeof tourDestName === 'function' ? tourDestName(t) : t?.dest || t?.destination || ''))
+        .filter(Boolean)
+    )
+  ).sort((a, b) => String(a).localeCompare(String(b), 'fa'));
+  return `<option value="all" ${selected === 'all' ? 'selected' : ''}>همه مقصدها</option>${names
+    .map(name => `<option value="${name}" ${selected === name ? 'selected' : ''}>${name}</option>`)
+    .join('')}`;
 }
 
 function defaultSections() {
@@ -949,5 +966,5 @@ function filterHome() {
   }
 }
 
-// v5.7: make sure the buyer app actually boots on /buyer and on Vercel rewrites.
+// v5.8: make sure the buyer app actually boots on /buyer and on Vercel rewrites.
 document.addEventListener('DOMContentLoaded', initBuyer);
