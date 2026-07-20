@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safarro-cache-v5.9';
+const CACHE_NAME = 'safarro-cache-v6.0';
 const ASSETS = [
   '/',
   '/buyer/',
@@ -77,4 +77,4 @@ self.addEventListener('message', event => {
   }
 });
 
-// v5.9: prevent undefined fetch fallbacks from breaking Chrome's service worker response pipeline.
+// v6.0: prevent undefined fetch fallbacks from breaking Chrome's service worker response pipeline.
