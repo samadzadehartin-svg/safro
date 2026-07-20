@@ -8456,3 +8456,289 @@ body.buyer-page .custom-tour-popup-card {
 .hidden-home-filters {
   display: none !important;
 }
+
+/* =========================================================
+   v6.1 Blue palette unification
+   همه بخش‌های باقی‌مانده صفحه مشتری با طیف‌های آبی #202D59 هماهنگ شدند.
+   زرد/طلایی فقط به‌صورت هایلایت بسیار محدود و ملایم نگه داشته شده است.
+   ========================================================= */
+body.buyer-page {
+  --safro-blue-950: #0b132b;
+  --safro-blue-900: #111b3d;
+  --safro-blue-800: #182552;
+  --safro-blue-700: #202d59;
+  --safro-blue-600: #2b3b70;
+  --safro-blue-500: #40548c;
+  --safro-blue-400: #6173a6;
+  --safro-blue-300: #8f9cc3;
+  --safro-blue-200: #c8d1e8;
+  --safro-blue-100: #e9edf8;
+  --safro-blue-050: #f5f7fc;
+  --safro-gold-soft: rgba(251, 183, 28, 0.18);
+  --p: var(--safro-blue-700) !important;
+  --pl: var(--safro-blue-500) !important;
+  --v49-purple: var(--safro-blue-700) !important;
+  --v49-purple-2: var(--safro-blue-500) !important;
+  --v49-line: rgba(32, 45, 89, 0.18) !important;
+}
+
+body.buyer-page::before {
+  filter: saturate(0.72) hue-rotate(178deg) contrast(1.02) !important;
+  opacity: 0.7 !important;
+}
+
+body.buyer-page .buyer-shell,
+body.buyer-page .hero-experience,
+body.buyer-page .hero-v49,
+body.buyer-page .hero-figma-fusion,
+body.buyer-page .country-line-section-v49,
+body.buyer-page .special-tours-v49,
+body.buyer-page .visa-section,
+body.buyer-page .faq-section-v49,
+body.buyer-page .detail-hero-v49 {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(64, 84, 140, 0.20), transparent 31%),
+    radial-gradient(circle at 92% 18%, rgba(143, 156, 195, 0.18), transparent 24%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(233, 237, 248, 0.88)) !important;
+  border-color: rgba(32, 45, 89, 0.18) !important;
+  box-shadow: 0 26px 82px rgba(32, 45, 89, 0.13) !important;
+}
+
+body.buyer-page .hero-experience,
+body.buyer-page .detail-hero-v49,
+body.buyer-page .hero-v49.dark-hero,
+body.buyer-page .hero-figma-fusion {
+  background:
+    radial-gradient(circle at 15% 16%, rgba(143, 156, 195, 0.22), transparent 32%),
+    linear-gradient(135deg, var(--safro-blue-950) 0%, var(--safro-blue-800) 48%, var(--safro-blue-600) 100%) !important;
+  color: #fff !important;
+}
+
+body.buyer-page h1,
+body.buyer-page h2,
+body.buyer-page h3,
+body.buyer-page .section-title-v49 h2,
+body.buyer-page .country-line-head h2,
+body.buyer-page .tour-list-head-v49 h2,
+body.buyer-page .buyer-hero-title,
+body.buyer-page .country-card-body strong,
+body.buyer-page .tour-card-title-v49,
+body.buyer-page .detail-main-v49 h3,
+body.buyer-page .detail-aside-v49 h3,
+body.buyer-page .modal-card h3,
+body.buyer-page .custom-tour-popup-card h3 {
+  color: var(--safro-blue-700) !important;
+}
+
+body.buyer-page .hero-experience h1,
+body.buyer-page .hero-experience h2,
+body.buyer-page .hero-experience h3,
+body.buyer-page .detail-hero-v49 h1,
+body.buyer-page .detail-hero-v49 h2,
+body.buyer-page .detail-hero-v49 h3,
+body.buyer-page .hero-figma-fusion h1,
+body.buyer-page .hero-figma-fusion h2,
+body.buyer-page .hero-figma-fusion h3 {
+  color: #ffffff !important;
+}
+
+body.buyer-page .section-title-v49 h2::after,
+body.buyer-page .tour-list-head-v49 h2::after,
+body.buyer-page .country-line-head h2::after,
+body.buyer-page .visa-section h2::after {
+  background: linear-gradient(90deg, var(--safro-blue-700), var(--safro-blue-300), transparent) !important;
+}
+
+body.buyer-page .card,
+body.buyer-page .panel,
+body.buyer-page .tour-card-v49,
+body.buyer-page .country-card-v49,
+body.buyer-page .country-line-card,
+body.buyer-page .hero-custom-tour-card,
+body.buyer-page .custom-tour-popup-card,
+body.buyer-page .modal-card,
+body.buyer-page .consult-popup,
+body.buyer-page .detail-main-v49,
+body.buyer-page .detail-aside-v49,
+body.buyer-page .hotel,
+body.buyer-page .hotel-room-price,
+body.buyer-page .hero-search-panel,
+body.buyer-page .hero-search-field,
+body.buyer-page .hero-stats-v49 span,
+body.buyer-page .detail-hero-chips-v49 span,
+body.buyer-page .faq-grid-v49 > div,
+body.buyer-page .catbar-v49 {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 247, 252, 0.92)) !important;
+  border-color: rgba(32, 45, 89, 0.17) !important;
+  box-shadow: 0 18px 52px rgba(32, 45, 89, 0.10) !important;
+}
+
+body.buyer-page .tour-card-v49:hover,
+body.buyer-page .country-card-v49:hover,
+body.buyer-page .country-line-card:hover,
+body.buyer-page .hotel:hover:not(.disabled),
+body.buyer-page .custom-tour-top-trigger:hover {
+  border-color: rgba(32, 45, 89, 0.36) !important;
+  box-shadow: 0 30px 88px rgba(32, 45, 89, 0.18) !important;
+}
+
+body.buyer-page .btn,
+body.buyer-page button,
+body.buyer-page button.btn,
+body.buyer-page .catbar button.active,
+body.buyer-page .hero-search-btn,
+body.buyer-page .custom-tour-top-trigger,
+body.buyer-page .tour-card-footer-v49 .btn,
+body.buyer-page .detail-aside-v49 .btn,
+body.buyer-page .modal-card .btn {
+  background: linear-gradient(135deg, var(--safro-blue-800), var(--safro-blue-600)) !important;
+  border-color: rgba(32, 45, 89, 0.42) !important;
+  color: #fff !important;
+  box-shadow: 0 15px 42px rgba(32, 45, 89, 0.22) !important;
+}
+
+body.buyer-page .btn:hover,
+body.buyer-page button.btn:hover,
+body.buyer-page .hero-search-btn:hover,
+body.buyer-page .tour-card-footer-v49 .btn:hover,
+body.buyer-page .detail-aside-v49 .btn:hover {
+  background: linear-gradient(135deg, var(--safro-blue-700), var(--safro-blue-500)) !important;
+  box-shadow: 0 20px 56px rgba(32, 45, 89, 0.28) !important;
+}
+
+body.buyer-page .gold,
+body.buyer-page .btn.gold,
+body.buyer-page button.gold,
+body.buyer-page .hero-custom-tour-card .gold,
+body.buyer-page .hero-custom-tour-card button.gold,
+body.buyer-page .flash-badge,
+body.buyer-page .badge.special,
+body.buyer-page .badge.luxury,
+body.buyer-page .badge.international,
+body.buyer-page .badge.domestic {
+  background: linear-gradient(135deg, var(--safro-blue-100), var(--safro-blue-200)) !important;
+  border: 1px solid rgba(32, 45, 89, 0.18) !important;
+  color: var(--safro-blue-700) !important;
+  box-shadow: 0 12px 34px rgba(32, 45, 89, 0.10) !important;
+}
+
+body.buyer-page .badge,
+body.buyer-page .chip,
+body.buyer-page .tour-meta-grid-v49 span,
+body.buyer-page .detail-summary-list-v49 .row,
+body.buyer-page .single-room-chip,
+body.buyer-page .hotel-room-price b,
+body.buyer-page .hotel-room-price small,
+body.buyer-page .price,
+body.buyer-page .tour-card-footer-v49 .price,
+body.buyer-page .detail-price-box-v49 b {
+  color: var(--safro-blue-700) !important;
+}
+
+body.buyer-page .tour-meta-grid-v49 i,
+body.buyer-page .hero-stats-v49 i,
+body.buyer-page .country-card-icon,
+body.buyer-page .country-line-card i,
+body.buyer-page .detail-summary-list-v49 i,
+body.buyer-page .visa-section i,
+body.buyer-page .faq-grid-v49 i,
+body.buyer-page .modal-card i {
+  color: var(--safro-blue-500) !important;
+}
+
+body.buyer-page .hero-search-field input,
+body.buyer-page .hero-search-field select,
+body.buyer-page input,
+body.buyer-page select,
+body.buyer-page textarea {
+  border-color: rgba(32, 45, 89, 0.18) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: var(--safro-blue-800) !important;
+}
+
+body.buyer-page .hero-search-field input:focus,
+body.buyer-page .hero-search-field select:focus,
+body.buyer-page input:focus,
+body.buyer-page select:focus,
+body.buyer-page textarea:focus {
+  border-color: rgba(32, 45, 89, 0.48) !important;
+  box-shadow: 0 0 0 4px rgba(32, 45, 89, 0.10) !important;
+}
+
+body.buyer-page .hotel.selected,
+body.buyer-page .country-line-card.active,
+body.buyer-page .tour-card-v49.is-featured,
+body.buyer-page .selected {
+  background:
+    radial-gradient(circle at 18% 8%, rgba(143, 156, 195, 0.18), transparent 36%),
+    linear-gradient(135deg, #ffffff, var(--safro-blue-050)) !important;
+  border-color: rgba(32, 45, 89, 0.42) !important;
+  box-shadow: 0 22px 62px rgba(32, 45, 89, 0.17) !important;
+}
+
+body.buyer-page .detail-price-box-v49,
+body.buyer-page .hotel-room-price,
+body.buyer-page .single-price,
+body.buyer-page .double-price {
+  background: linear-gradient(135deg, rgba(32, 45, 89, 0.08), rgba(143, 156, 195, 0.16)) !important;
+  border-color: rgba(32, 45, 89, 0.18) !important;
+}
+
+body.buyer-page .hotel-room-price small::before,
+body.buyer-page .hotel-room-price b::before {
+  color: rgba(32, 45, 89, 0.72) !important;
+}
+
+body.buyer-page .toast,
+body.buyer-page .alert,
+body.buyer-page .notice,
+body.buyer-page .empty,
+body.buyer-page .tracking-card {
+  background: linear-gradient(135deg, var(--safro-blue-050), #fff) !important;
+  border-color: rgba(32, 45, 89, 0.16) !important;
+  color: var(--safro-blue-700) !important;
+}
+
+body.buyer-page .text-green,
+body.buyer-page .green,
+body.buyer-page .ok,
+body.buyer-page .text-pink,
+body.buyer-page .pink,
+body.buyer-page .text-orange,
+body.buyer-page .orange,
+body.buyer-page .text-purple,
+body.buyer-page .purple {
+  color: var(--safro-blue-600) !important;
+}
+
+body.buyer-page.dark,
+.dark body.buyer-page {
+  --safro-blue-050: #111b2f;
+  --safro-blue-100: #17233e;
+  --safro-blue-200: #233156;
+}
+body.buyer-page.dark .card,
+body.buyer-page.dark .panel,
+body.buyer-page.dark .tour-card-v49,
+body.buyer-page.dark .country-card-v49,
+body.buyer-page.dark .country-line-card,
+body.buyer-page.dark .modal-card,
+body.buyer-page.dark .detail-main-v49,
+body.buyer-page.dark .detail-aside-v49,
+body.buyer-page.dark .hotel,
+body.buyer-page.dark .hero-search-panel,
+.dark body.buyer-page .card,
+.dark body.buyer-page .tour-card-v49,
+.dark body.buyer-page .country-card-v49,
+.dark body.buyer-page .country-line-card,
+.dark body.buyer-page .modal-card,
+.dark body.buyer-page .detail-main-v49,
+.dark body.buyer-page .detail-aside-v49,
+.dark body.buyer-page .hotel,
+.dark body.buyer-page .hero-search-panel {
+  background: linear-gradient(180deg, #111b2f, #0d1729) !important;
+  border-color: rgba(143, 156, 195, 0.18) !important;
+  color: #edf3ff !important;
+}
+
