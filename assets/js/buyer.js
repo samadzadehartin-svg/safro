@@ -739,7 +739,7 @@ function customTourSection() {
 
 
 function customTourLauncher() {
-  return `<section class="custom-tour-top-shell" aria-label="تور اختصاصی سفرو">
+  return `<section id="customTourFloatingShell" class="custom-tour-top-shell" aria-label="تور اختصاصی سفرو">
     <button class="custom-tour-top-card" onclick="openCustomTourPopup()" type="button">
       <span class="custom-tour-top-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
       <span class="custom-tour-top-copy"><b>تور خودتو بساز</b><small>هتل، تاریخ و بودجه دلخواهت را ثبت کن</small></span>
@@ -891,6 +891,7 @@ function renderHome() {
     <div id="compareModal" class="modal" onclick="if(event.target===this)closeCompare()"><div class="modal-card pad"><div class="row"><h2>مقایسه تورها</h2><button class="soft" onclick="closeCompare()">بستن</button></div><div id="compareContent" class="table-wrap"></div></div></div>`;
   filterHome();
   scheduleOneMinuteConsultPopup();
+  setupBuyerHomeInteractions();
 }
 
 function tourCard(t) {
@@ -1512,3 +1513,43 @@ function applyHeroSearch(e) {
 
 // v6.0: make sure the buyer app actually boots on /buyer and on Vercel rewrites.
 document.addEventListener('DOMContentLoaded', initBuyer);
+
+/* v6.6: buyer home polish - floating custom tour CTA + country motion */
+let buyerHomeInteractionsBound = false;
+let buyerCountryObserver = null;
+
+function handleBuyerFloatingCTA() {
+  const shell = $('customTourFloatingShell');
+  if (!shell) return;
+  const y = window.scrollY || window.pageYOffset || 0;
+  shell.classList.toggle('is-compact', y > 180);
+  const shift = Math.min(42, Math.round(y * 0.08));
+  shell.style.setProperty('--float-shift', shift + 'px');
+}
+
+function setupBuyerCountryMotion() {
+  const cards = Array.from(document.querySelectorAll('.country-line-card'));
+  if (!cards.length) return;
+  cards.forEach((card, index) => {
+    card.style.setProperty('--country-delay', `${index * 70}ms`);
+  });
+  if (buyerCountryObserver) buyerCountryObserver.disconnect();
+  buyerCountryObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    },
+    { threshold: 0.18 }
+  );
+  cards.forEach(card => buyerCountryObserver.observe(card));
+}
+
+function setupBuyerHomeInteractions() {
+  handleBuyerFloatingCTA();
+  setupBuyerCountryMotion();
+  if (buyerHomeInteractionsBound) return;
+  buyerHomeInteractionsBound = true;
+  window.addEventListener('scroll', handleBuyerFloatingCTA, { passive: true });
+  window.addEventListener('resize', handleBuyerFloatingCTA);
+}

@@ -9877,3 +9877,237 @@ body.dark.buyer-page .custom-tour-top-copy b {
 body.dark.buyer-page .custom-tour-top-copy small {
   color: #b8c6dd !important;
 }
+
+/* =========================================================
+   v6.6 buyer polish: readable dark mode + floating custom CTA + country motion
+   ========================================================= */
+body.dark.buyer-page {
+  background: #07111f !important;
+  color: #e8eefc !important;
+}
+body.dark.buyer-page::before {
+  opacity: 0.18 !important;
+  filter: saturate(0.85) brightness(0.72) !important;
+}
+body.dark.buyer-page .header,
+body.dark.buyer-page .footer,
+body.dark.buyer-page .site-footer,
+body.dark.buyer-page .bottom-nav,
+body.dark.buyer-page .sticky-cta {
+  background: linear-gradient(180deg, rgba(9, 17, 31, 0.96), rgba(12, 24, 44, 0.9)) !important;
+  border-color: rgba(124, 151, 211, 0.14) !important;
+}
+body.dark.buyer-page .card,
+body.dark.buyer-page .country-line-section,
+body.dark.buyer-page .country-line-card,
+body.dark.buyer-page .detail-main-v49,
+body.dark.buyer-page .detail-aside-v49,
+body.dark.buyer-page .visa-section,
+body.dark.buyer-page .buyer-visa-card,
+body.dark.buyer-page .custom-tour-popup-card,
+body.dark.buyer-page .custom-tour-top-card,
+body.dark.buyer-page .faq-section-v49,
+body.dark.buyer-page .modal-card,
+body.dark.buyer-page .tour,
+body.dark.buyer-page .hotel,
+body.dark.buyer-page .info,
+body.dark.buyer-page .field,
+body.dark.buyer-page input,
+body.dark.buyer-page select,
+body.dark.buyer-page textarea {
+  background: rgba(10, 19, 36, 0.88) !important;
+  color: #edf4ff !important;
+  border-color: rgba(111, 138, 194, 0.18) !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22) !important;
+}
+body.dark.buyer-page .country-art-wrap,
+body.dark.buyer-page .tour-image-wrap-v49,
+body.dark.buyer-page .detail-hero-img-v49 {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(111, 138, 194, 0.14) !important;
+}
+body.dark.buyer-page .hero-v49,
+body.dark.buyer-page .detail-hero-v49,
+body.dark.buyer-page .hero-v49.hero-figma-fusion {
+  background: linear-gradient(135deg, #0c1630, #14254a 58%, #20355f 100%) !important;
+  border-color: rgba(132, 157, 215, 0.18) !important;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32) !important;
+}
+body.dark.buyer-page h1,
+body.dark.buyer-page h2,
+body.dark.buyer-page h3,
+body.dark.buyer-page h4,
+body.dark.buyer-page h5,
+body.dark.buyer-page h6,
+body.dark.buyer-page b,
+body.dark.buyer-page strong,
+body.dark.buyer-page .tour-title,
+body.dark.buyer-page .country-card-body b,
+body.dark.buyer-page .buyer-hero-title,
+body.dark.buyer-page .price,
+body.dark.buyer-page .tour-capacity-note em,
+body.dark.buyer-page .tour-list-head-v49 h2,
+body.dark.buyer-page .detail-hero-v49 h1,
+body.dark.buyer-page .popup-title,
+body.dark.buyer-page .logo {
+  color: #f8fbff !important;
+}
+body.dark.buyer-page p,
+body.dark.buyer-page .small,
+body.dark.buyer-page .meta,
+body.dark.buyer-page .label,
+body.dark.buyer-page .muted,
+body.dark.buyer-page .buyer-hero-subtitle,
+body.dark.buyer-page .country-card-body em,
+body.dark.buyer-page .country-card-body small,
+body.dark.buyer-page .tour-meta-grid-v49 span,
+body.dark.buyer-page .detail-hero-chips-v49 span,
+body.dark.buyer-page .links,
+body.dark.buyer-page .links a,
+body.dark.buyer-page .popup-desc,
+body.dark.buyer-page .popup-title + p,
+body.dark.buyer-page .form-note-required,
+body.dark.buyer-page .tour-list-head-v49 .small,
+body.dark.buyer-page .detail-desc-v49,
+body.dark.buyer-page .buyer-main-tabs button,
+body.dark.buyer-page .catbar button {
+  color: #b8c6e5 !important;
+}
+body.dark.buyer-page .field::placeholder,
+body.dark.buyer-page input::placeholder,
+body.dark.buyer-page textarea::placeholder {
+  color: #8ea2cb !important;
+}
+body.dark.buyer-page .field:focus,
+body.dark.buyer-page input:focus,
+body.dark.buyer-page select:focus,
+body.dark.buyer-page textarea:focus {
+  border-color: rgba(251, 183, 28, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(251, 183, 28, 0.14) !important;
+}
+body.dark.buyer-page .soft,
+body.dark.buyer-page button.soft {
+  background: rgba(19, 35, 66, 0.94) !important;
+  color: #eef4ff !important;
+  border-color: rgba(130, 156, 212, 0.18) !important;
+}
+body.dark.buyer-page .btn,
+body.dark.buyer-page button.btn {
+  background: linear-gradient(135deg, #fbb71c, #ffcd55) !important;
+  color: #1a2340 !important;
+  border-color: transparent !important;
+}
+body.dark.buyer-page .gold,
+body.dark.buyer-page button.gold {
+  background: linear-gradient(135deg, #fbb71c, #ffd970) !important;
+  color: #1a2340 !important;
+  border-color: transparent !important;
+}
+body.dark.buyer-page .buyer-main-tabs button.active,
+body.dark.buyer-page .catbar button.active,
+body.dark.buyer-page .country-line-card.active,
+body.dark.buyer-page .booking-room-type-chip.selected,
+body.dark.buyer-page .booking-hotel-card.selected,
+body.dark.buyer-page .hotel.selected,
+body.dark.buyer-page .date-chip.selected {
+  background: linear-gradient(135deg, rgba(32, 45, 89, 0.94), rgba(38, 63, 119, 0.94)) !important;
+  color: #fff !important;
+  border-color: rgba(251, 183, 28, 0.45) !important;
+  box-shadow: 0 16px 36px rgba(6, 12, 26, 0.34) !important;
+}
+body.dark.buyer-page .room-price-pill,
+body.dark.buyer-page .tour-room-price-pair,
+body.dark.buyer-page .detail-room-price-pair {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(140, 168, 221, 0.14) !important;
+}
+
+body.buyer-page #customTourFloatingShell.custom-tour-top-shell {
+  position: fixed !important;
+  left: 24px;
+  bottom: 24px;
+  top: auto !important;
+  right: auto;
+  z-index: 120;
+  margin: 0 !important;
+  width: auto;
+  transform: translateY(calc(var(--float-shift, 0px) * -0.12));
+  transition: transform 0.26s ease, opacity 0.26s ease;
+}
+body.buyer-page #customTourFloatingShell .custom-tour-top-card {
+  min-width: 260px;
+  max-width: 292px;
+  border-radius: 22px;
+  padding: 14px 16px;
+  box-shadow: 0 22px 55px rgba(12, 22, 46, 0.18);
+}
+body.buyer-page #customTourFloatingShell.is-compact .custom-tour-top-card {
+  transform: scale(0.96);
+  padding: 12px 14px;
+}
+body.buyer-page #customTourFloatingShell.is-compact .custom-tour-top-copy small {
+  display: none;
+}
+body.buyer-page #customTourFloatingShell .custom-tour-top-action {
+  white-space: nowrap;
+}
+
+body.buyer-page .country-line-grid {
+  perspective: 1000px;
+}
+body.buyer-page .country-line-card {
+  opacity: 0;
+  transform: translateY(28px) scale(0.985);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+body.buyer-page .country-line-card.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: var(--country-delay, 0ms);
+}
+@keyframes countryFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+body.buyer-page .country-line-card .country-art-wrap img {
+  animation: countryFloat 6s ease-in-out infinite;
+  animation-delay: var(--country-delay, 0ms);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+body.buyer-page .country-line-card:nth-child(2n) .country-art-wrap img {
+  animation-duration: 7.4s;
+}
+body.buyer-page .country-line-card:nth-child(3n) .country-art-wrap img {
+  animation-duration: 5.8s;
+}
+body.buyer-page .country-line-card:hover .country-art-wrap img,
+body.buyer-page .country-line-card.active .country-art-wrap img {
+  transform: translateY(-8px) scale(1.05);
+  filter: drop-shadow(0 12px 20px rgba(32, 45, 89, 0.16));
+}
+body.buyer-page .country-line-card:hover,
+body.buyer-page .country-line-card.active {
+  box-shadow: 0 26px 55px rgba(32, 45, 89, 0.12);
+}
+
+@media (max-width: 900px) {
+  body.buyer-page #customTourFloatingShell.custom-tour-top-shell {
+    left: 14px;
+    right: 14px;
+    bottom: 16px;
+  }
+  body.buyer-page #customTourFloatingShell .custom-tour-top-card {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+}
