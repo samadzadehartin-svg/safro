@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safarro-cache-v5.8';
+const CACHE_NAME = 'safarro-cache-v5.9';
 const ASSETS = [
   '/',
   '/buyer/',
@@ -49,22 +49,22 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(event.request.url);
 
-  if (url.origin !== location.origin) {
-    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
-    return;
-  }
-
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        if (url.origin === location.origin && response && response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)).catch(() => null);
+        }
         return response;
       })
       .catch(() =>
         caches.match(event.request).then(cached => {
           if (cached) return cached;
-          if (event.request.mode === 'navigate') return caches.match('/buyer/');
+          if (event.request.mode === 'navigate') {
+            return caches.match('/buyer/').then(page => page || caches.match('/buyer/index.html'));
+          }
+          return new Response('', { status: 504, statusText: 'Offline' });
         })
       )
   );
@@ -76,3 +76,5 @@ self.addEventListener('message', event => {
     event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key)))));
   }
 });
+
+// v5.9: prevent undefined fetch fallbacks from breaking Chrome's service worker response pipeline.

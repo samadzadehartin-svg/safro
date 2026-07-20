@@ -1,4 +1,4 @@
-رفع خطای صفحه خریدار در v5.8
+رفع خطای صفحه خریدار در v5.9
 
 مشکل دیده‌شده در Console:
 - ReferenceError: homeSearchDestOptions is not defined
