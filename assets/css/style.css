@@ -8744,7 +8744,7 @@ body.buyer-page.dark .hero-search-panel,
 
 
 
-/* v6.3 luxury blue palette, room prices and smart custom-tour mini popup */
+/* v6.4 luxury blue palette, room prices and smart custom-tour mini popup */
 :root {
   --p: #202d59;
   --pl: #31457f;
@@ -9047,7 +9047,7 @@ body.dark.buyer-page .soft {
   .hotel-room-price-v62 { min-width: 0; width: 100%; }
 }
 
-/* v6.3 booking readability + selectable beds + removed side popup */
+/* v6.4 booking readability + selectable beds + removed side popup */
 body.buyer-page {
   --buyer-readable-ink: #0f1c3a;
   --buyer-readable-muted: #33486d;
@@ -9255,4 +9255,345 @@ body.dark.buyer-page .hotel-room-price-v62 .room-price-line.single {
   body.buyer-page .booking-room-type-chooser { grid-template-columns: 1fr; }
   body.buyer-page .booking-hotel-row { align-items: stretch; flex-direction: column; }
   body.buyer-page .hotel-room-price-v62 { min-width: 0; width: 100%; }
+}
+
+/* v6.4 subtle UI polish: cleaner cards, booking flow, typography */
+body.buyer-page {
+  --buyer-navy-950: #0b1530;
+  --buyer-navy-900: #111f43;
+  --buyer-navy-800: #202D59;
+  --buyer-navy-700: #2d4079;
+  --buyer-navy-600: #3d5597;
+  --buyer-navy-100: #edf3ff;
+  --buyer-navy-050: #f7faff;
+  --buyer-gold: #FBB71C;
+  --buyer-text: #101b36;
+  --buyer-text-soft: #465a7e;
+  --buyer-card-border: rgba(32,45,89,.135);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+body.buyer-page .section-title-v49 h2,
+body.buyer-page .tour-list-head-v49 h2,
+body.buyer-page .country-line-head h2,
+body.buyer-page .buyer-hero-title,
+body.buyer-page #content1 h3,
+body.buyer-page #content2 h3,
+body.buyer-page #content3 h3,
+body.buyer-page aside.card.pad h3 {
+  color: var(--buyer-navy-800) !important;
+  font-weight: 1000;
+  letter-spacing: -.035em;
+}
+body.buyer-page .section-title-v49,
+body.buyer-page .tour-list-head-v49,
+body.buyer-page .country-line-head {
+  margin-bottom: 18px;
+}
+body.buyer-page .section-title-v49 .small,
+body.buyer-page .tour-list-head-v49 .small,
+body.buyer-page .country-line-head .small {
+  color: var(--buyer-text-soft) !important;
+  font-weight: 850;
+  line-height: 1.9;
+}
+body.buyer-page .btn,
+body.buyer-page button.btn,
+body.buyer-page .gold,
+body.buyer-page button.gold {
+  border-radius: 17px;
+  font-weight: 1000;
+  letter-spacing: -.01em;
+  box-shadow: 0 16px 34px rgba(32,45,89,.18);
+}
+body.buyer-page .btn:hover,
+body.buyer-page button.btn:hover,
+body.buyer-page .gold:hover,
+body.buyer-page button.gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 46px rgba(32,45,89,.22);
+}
+body.buyer-page .soft {
+  border-radius: 15px;
+  font-weight: 950;
+}
+body.buyer-page .field,
+body.buyer-page input.field,
+body.buyer-page select.field,
+body.buyer-page textarea.field {
+  border-radius: 17px;
+  background: rgba(255,255,255,.94);
+  border-color: rgba(32,45,89,.16) !important;
+  color: var(--buyer-text) !important;
+  font-weight: 850;
+  box-shadow: 0 10px 24px rgba(32,45,89,.045);
+}
+body.buyer-page .field:focus,
+body.buyer-page input.field:focus,
+body.buyer-page select.field:focus,
+body.buyer-page textarea.field:focus {
+  border-color: rgba(32,45,89,.44) !important;
+  box-shadow: 0 0 0 4px rgba(32,45,89,.08), 0 14px 30px rgba(32,45,89,.075);
+}
+body.buyer-page .card,
+body.buyer-page .tour-card-v49,
+body.buyer-page .country-line-card,
+body.buyer-page .hero-search-card-v49,
+body.buyer-page .custom-tour-top-card,
+body.buyer-page .detail-main-v49,
+body.buyer-page .detail-aside-v49 {
+  border: 1px solid var(--buyer-card-border) !important;
+  box-shadow: 0 18px 52px rgba(32,45,89,.095);
+}
+body.buyer-page .tour-card-v49 {
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(247,250,255,.94));
+  overflow: hidden;
+}
+body.buyer-page .tour-card-v49:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 70px rgba(32,45,89,.16);
+}
+body.buyer-page .tour-card-v49 .tour-title,
+body.buyer-page .tour-title {
+  color: var(--buyer-navy-900) !important;
+  font-size: clamp(18px, 1.7vw, 23px);
+  line-height: 1.65;
+}
+body.buyer-page .tour-room-price-pair {
+  gap: 12px;
+  margin-top: 16px;
+}
+body.buyer-page .room-price-pill {
+  border-radius: 19px;
+  padding: 13px 14px;
+  background: linear-gradient(145deg, #ffffff, #eef4ff);
+  border-color: rgba(32,45,89,.17);
+  box-shadow: 0 14px 32px rgba(32,45,89,.075);
+}
+body.buyer-page .room-price-pill span {
+  color: #4a5d7f !important;
+  letter-spacing: -.01em;
+}
+body.buyer-page .room-price-pill b {
+  color: var(--buyer-navy-800) !important;
+  font-size: 15.5px;
+}
+body.buyer-page .room-price-pill.single {
+  background: linear-gradient(145deg, #fffaf0, #fff1c4);
+  border-color: rgba(251,183,28,.42);
+}
+body.buyer-page .room-price-pill.single b {
+  color: #47360b !important;
+}
+body.buyer-page #formArea {
+  gap: 20px;
+  align-items: start;
+}
+body.buyer-page #formArea > .card.pad,
+body.buyer-page #formArea > aside.card.pad {
+  border-radius: 28px;
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 24px 74px rgba(32,45,89,.11);
+}
+body.buyer-page .stepper {
+  margin-bottom: 22px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(32,45,89,.045), rgba(32,45,89,.015));
+  border: 1px solid rgba(32,45,89,.08);
+}
+body.buyer-page .stepper .step,
+body.buyer-page .step {
+  width: 34px;
+  height: 34px;
+  border-radius: 13px;
+  font-weight: 1000;
+  color: #526487;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(32,45,89,.08);
+}
+body.buyer-page .stepper .step.active,
+body.buyer-page .step.active {
+  background: linear-gradient(135deg, var(--buyer-navy-800), var(--buyer-navy-600)) !important;
+  color: #fff !important;
+  box-shadow: 0 12px 26px rgba(32,45,89,.24);
+}
+body.buyer-page .date-chip {
+  border-radius: 18px;
+  min-height: 48px;
+  box-shadow: 0 10px 22px rgba(32,45,89,.05);
+}
+body.buyer-page .booking-room-type-chooser {
+  gap: 14px;
+  margin: 12px 0 20px;
+}
+body.buyer-page .booking-room-type-chip {
+  border-radius: 24px;
+  padding: 16px;
+  background: linear-gradient(145deg, #ffffff, #f7faff);
+  border-color: rgba(32,45,89,.15);
+  box-shadow: 0 16px 38px rgba(32,45,89,.08);
+}
+body.buyer-page .booking-room-type-chip:hover,
+body.buyer-page .booking-room-type-chip.selected {
+  background: linear-gradient(145deg, #ffffff, #edf3ff);
+  border-color: rgba(32,45,89,.58);
+  box-shadow: 0 22px 52px rgba(32,45,89,.15);
+}
+body.buyer-page .booking-room-type-chip.selected:after {
+  content: 'انتخاب شد';
+  margin-right: auto;
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--buyer-navy-800);
+  font-size: 11px;
+  font-weight: 1000;
+}
+body.buyer-page .booking-hotel-stack {
+  gap: 13px;
+}
+body.buyer-page .booking-hotel-card {
+  border-radius: 24px !important;
+  padding: 16px !important;
+  background: linear-gradient(145deg, #ffffff, #f6f9ff) !important;
+  border-color: rgba(32,45,89,.15) !important;
+  box-shadow: 0 16px 40px rgba(32,45,89,.08) !important;
+}
+body.buyer-page .booking-hotel-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(32,45,89,.38) !important;
+  box-shadow: 0 22px 56px rgba(32,45,89,.13) !important;
+}
+body.buyer-page .booking-hotel-card.selected {
+  background: linear-gradient(145deg, #ffffff, #eaf1ff) !important;
+  border-color: var(--buyer-navy-800) !important;
+  box-shadow: 0 26px 70px rgba(32,45,89,.17) !important;
+}
+body.buyer-page .booking-hotel-card.selected:before {
+  content: '✓';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--buyer-navy-800);
+  color: #fff;
+  font-weight: 1000;
+  box-shadow: 0 10px 20px rgba(32,45,89,.22);
+}
+body.buyer-page .booking-hotel-card { position: relative; }
+body.buyer-page .booking-hotel-name b {
+  font-size: 16px;
+  color: var(--buyer-navy-900) !important;
+}
+body.buyer-page .hotel-capacity-badge {
+  background: rgba(32,45,89,.075);
+  color: var(--buyer-navy-800);
+}
+body.buyer-page .booking-hotel-action {
+  background: linear-gradient(135deg, var(--buyer-navy-800), var(--buyer-navy-600));
+  color: #fff !important;
+  box-shadow: 0 10px 24px rgba(32,45,89,.18);
+}
+body.buyer-page .hotel-room-price-v62 {
+  min-width: 220px;
+}
+body.buyer-page .hotel-room-price-v62 .room-price-line {
+  border-radius: 17px;
+  padding: 10px 12px;
+  background: #fff !important;
+  box-shadow: 0 10px 24px rgba(32,45,89,.065);
+}
+body.buyer-page .hotel-room-price-v62 em {
+  font-size: 11.5px !important;
+  color: #42567b !important;
+}
+body.buyer-page .hotel-room-price-v62 b {
+  font-size: 14px !important;
+  color: var(--buyer-navy-900) !important;
+}
+body.buyer-page #formArea > aside.card.pad {
+  border: 1px solid rgba(32,45,89,.14) !important;
+}
+body.buyer-page aside.card.pad .stack {
+  gap: 12px;
+}
+body.buyer-page aside.card.pad .row {
+  padding: 9px 0;
+  border-bottom: 1px dashed rgba(32,45,89,.11);
+}
+body.buyer-page aside.card.pad .row:last-child {
+  border-bottom: 0;
+  padding-top: 14px;
+}
+body.buyer-page #sumTotal {
+  padding: 6px 12px;
+  border-radius: 14px;
+  background: rgba(32,45,89,.075);
+  color: var(--buyer-navy-800) !important;
+}
+body.dark.buyer-page {
+  background:
+    radial-gradient(circle at 78% 12%, rgba(251,183,28,.13), transparent 30%),
+    radial-gradient(circle at 20% 86%, rgba(73,99,161,.28), transparent 32%),
+    linear-gradient(180deg, #040813 0%, #07122a 45%, #030712 100%) !important;
+}
+body.dark.buyer-page .field,
+body.dark.buyer-page input.field,
+body.dark.buyer-page select.field,
+body.dark.buyer-page textarea.field,
+body.dark.buyer-page #formArea > .card.pad,
+body.dark.buyer-page #formArea > aside.card.pad,
+body.dark.buyer-page .booking-room-type-chip,
+body.dark.buyer-page .booking-hotel-card,
+body.dark.buyer-page .tour-card-v49,
+body.dark.buyer-page .card {
+  background: linear-gradient(145deg, rgba(15,27,58,.94), rgba(6,14,32,.96)) !important;
+  border-color: rgba(166,184,226,.19) !important;
+  color: #eef4ff !important;
+}
+body.dark.buyer-page .booking-room-type-chip.selected,
+body.dark.buyer-page .booking-hotel-card.selected {
+  border-color: rgba(251,183,28,.62) !important;
+  background: linear-gradient(145deg, rgba(22,38,79,.96), rgba(8,18,41,.98)) !important;
+}
+body.dark.buyer-page .hotel-room-price-v62 .room-price-line,
+body.dark.buyer-page #sumTotal {
+  background: rgba(255,255,255,.055) !important;
+  border-color: rgba(251,183,28,.18) !important;
+}
+body.dark.buyer-page .hotel-room-price-v62 b,
+body.dark.buyer-page .room-price-pill b,
+body.dark.buyer-page #sumTotal {
+  color: #fff4c7 !important;
+}
+body.dark.buyer-page .hotel-room-price-v62 em,
+body.dark.buyer-page aside.card.pad .row span,
+body.dark.buyer-page .section-title-v49 .small,
+body.dark.buyer-page .tour-list-head-v49 .small {
+  color: #c5d2ec !important;
+}
+@media (max-width: 920px) {
+  body.buyer-page #formArea {
+    grid-template-columns: 1fr !important;
+  }
+  body.buyer-page #formArea > aside.card.pad {
+    position: static !important;
+  }
+}
+@media (max-width: 680px) {
+  body.buyer-page .booking-room-type-chip.selected:after {
+    display: none;
+  }
+  body.buyer-page .hotel-room-price-v62 {
+    min-width: 0;
+  }
 }
