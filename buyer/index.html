@@ -3,6 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('safro-theme');
+          var legacy = localStorage.getItem('safarro_three_panels_dark') === '1';
+          var theme = saved === 'dark' || (!saved && legacy) ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
     <title>سفرو | پنل مشتری</title>
     <meta name="theme-color" content="#202D59" />
     <link rel="manifest" href="../manifest.json" />
@@ -14,7 +26,7 @@
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/css/style.css?v=7.1" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=7.2" />
   </head>
   <body class="buyer-page">
     <div id="headerMount"></div>
@@ -28,7 +40,7 @@
 
     <script>
       (function() {
-        var version = 'safro-v7.1';
+        var version = 'safro-v7.2';
         try {
           if (localStorage.getItem('safro-app-version') !== version) {
             localStorage.setItem('safro-app-version', version);
@@ -38,10 +50,10 @@
         } catch(e) {}
       })();
     </script>
-    <script src="../assets/js/data.js?v=7.1"></script>
-    <script src="../assets/js/core.js?v=7.1"></script>
-    <script src="../assets/js/buyer.js?v=7.1"></script>
-    <script src="../assets/js/ui-enhancements.js?v=7.1"></script>
+    <script src="../assets/js/data.js?v=7.2"></script>
+    <script src="../assets/js/core.js?v=7.2"></script>
+    <script src="../assets/js/buyer.js?v=7.2"></script>
+    <script src="../assets/js/ui-enhancements.js?v=7.2"></script>
     <script>
       window.SAFRO_BUYER_BOOT_FALLBACK = true;
       window.addEventListener('load', function () {

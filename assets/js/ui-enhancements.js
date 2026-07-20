@@ -1,5 +1,5 @@
 /* ========================================
-   SAFRO UI Enhancements v7.1
+   SAFRO UI Enhancements v7.2
    Safe adapter for the existing static app
    ======================================== */
 (() => {
@@ -152,7 +152,7 @@
     const toggle = document.querySelector(SELECTORS.darkToggle);
     if (!toggle) return;
     const icon = toggle.querySelector('i');
-    const isDark = document.body.classList.contains('dark');
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || document.body.classList.contains('dark');
     if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     toggle.setAttribute('aria-label', isDark ? 'فعال کردن حالت روشن' : 'فعال کردن حالت تاریک');
     toggle.setAttribute('title', isDark ? 'حالت روشن' : 'حالت تاریک');
@@ -167,8 +167,10 @@
     }
     if ('MutationObserver' in window) {
       const themeObserver = new MutationObserver(syncDarkIcon);
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
       themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
     }
+    document.addEventListener('safro:themechange', syncDarkIcon);
   }
 
   function toEnglishDigits(value) {

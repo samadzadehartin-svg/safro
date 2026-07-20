@@ -12347,3 +12347,46 @@ img.loaded {
     animation: none !important;
   }
 }
+
+/* =========================================================
+   v7.2 data-theme compatibility layer
+   data-theme is the source of truth; .dark remains for legacy selectors.
+   ========================================================= */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #07111f;
+  --c: #0d192c;
+  --s: #101d33;
+  --t: #edf4ff;
+  --t2: #b8c6e5;
+  --t3: #8ea2cb;
+  --b: rgba(130, 156, 212, 0.18);
+  --gl: rgba(9, 17, 31, 0.94);
+  --panel: rgba(10, 19, 36, 0.88);
+  --line: rgba(124, 151, 211, 0.16);
+  --sh: 0 18px 45px rgba(0, 0, 0, 0.32);
+}
+html[data-theme='light'] {
+  color-scheme: light;
+}
+html[data-theme='dark'] body {
+  background-color: var(--bg);
+  color: var(--t);
+}
+html[data-theme='dark'] body:not(.dark) {
+  background-color: #07111f;
+  color: #edf4ff;
+}
+html[data-theme='dark'] .dark-toggle i {
+  color: #fbb71c;
+}
+html[data-theme='light'] .dark-toggle i {
+  color: #202d59;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme] *,
+  html[data-theme] *::before,
+  html[data-theme] *::after {
+    scroll-behavior: auto !important;
+  }
+}

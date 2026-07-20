@@ -10398,12 +10398,24 @@ function showToast(msg) {
   clearTimeout(showToast.t);
   showToast.t = setTimeout(() => e.classList.remove('on'), 2300);
 }
+function applyTheme(theme) {
+  const nextTheme = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', nextTheme);
+  document.body.classList.toggle('dark', nextTheme === 'dark');
+  document.body.classList.toggle('dark-mode', nextTheme === 'dark');
+  localStorage.setItem('safro-theme', nextTheme);
+  localStorage.setItem(PREFIX + 'dark', nextTheme === 'dark' ? '1' : '0');
+  document.dispatchEvent(new CustomEvent('safro:themechange', { detail: { theme: nextTheme } }));
+  return nextTheme;
+}
 function initTheme() {
-  if (localStorage.getItem(PREFIX + 'dark') === '1') document.body.classList.add('dark');
+  const savedTheme = localStorage.getItem('safro-theme');
+  const legacyDark = localStorage.getItem(PREFIX + 'dark') === '1';
+  applyTheme(savedTheme === 'dark' || (!savedTheme && legacyDark) ? 'dark' : 'light');
 }
 function toggleDark() {
-  document.body.classList.toggle('dark');
-  localStorage.setItem(PREFIX + 'dark', document.body.classList.contains('dark') ? '1' : '0');
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  return applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
 }
 function badge(c) {
   const m = {
