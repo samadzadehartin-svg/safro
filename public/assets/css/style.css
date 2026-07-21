@@ -31,7 +31,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--t);
-  font-family: Tahoma, 'Segoe UI', Arial, sans-serif;
+  font-family: 'Vazirmatn', sans-serif;
   overflow-x: hidden;
 }
 a {
@@ -1465,7 +1465,7 @@ small,
 b,
 strong,
 table {
-  font-family: Tahoma, 'Segoe UI', Arial, sans-serif !important;
+  font-family: 'Vazirmatn', 'Vazir', 'Tahoma', sans-serif !important;
 }
 
 .lead-tools {
@@ -1737,7 +1737,15 @@ table {
 /* Exact sample hero design */
 .hero-experience {
   min-height: 360px;
-  background: url('../images/isfahan-bridge.svg') center 54% / cover no-repeat;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 27, 45, 0.93) 0%,
+      rgba(7, 40, 63, 0.78) 47%,
+      rgba(7, 40, 63, 0.2) 100%
+    ),
+    url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1800&h=900&fit=crop') center
+      54% / cover;
   border-radius: 0.5rem;
   position: relative;
   overflow: hidden;
@@ -1788,8 +1796,10 @@ table {
     background-position: 62% center;
   }
   .hero-experience::before {
-    content: none;
-    display: none;
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 24, 39, 0.2);
   }
   .trust-strip {
     grid-template-columns: 1fr;
@@ -2184,7 +2194,7 @@ th,
 td,
 label,
 option {
-  font-family: Tahoma, 'Segoe UI', Arial, sans-serif !important;
+  font-family: 'Vazirmatn', 'Tahoma', 'Arial', sans-serif !important;
   font-feature-settings: 'ss01' 0;
   text-rendering: optimizeLegibility;
 }
@@ -3363,7 +3373,7 @@ h5,
 h6,
 div,
 a {
-  font-family: Tahoma, 'Segoe UI', Arial, sans-serif !important;
+  font-family: 'Vazirmatn', 'Vazir', 'Tahoma', 'Segoe UI', sans-serif !important;
 }
 pre,
 code,
@@ -13135,7 +13145,7 @@ html[data-theme='dark'] .country-line-card .country-art-wrap {
 
 
 /* =========================================================
-   SAFRO v8.3 — local media, system fonts, floating CTA
+   SAFRO v8.2 — responsive floating custom-tour CTA + natural photos
    ========================================================= */
 
 /* The custom-tour launcher always stays floating and changes size smoothly. */
@@ -13325,40 +13335,4 @@ body.buyer-page .hero-v8-media::after {
     animation: none !important;
     transition: none !important;
   }
-}
-
-
-/* =========================================================
-   SAFRO v8.3 — local assets only for hero media and text fonts
-   ========================================================= */
-html,
-body,
-button,
-input,
-select,
-textarea {
-  font-family: Tahoma, 'Segoe UI', Arial, sans-serif !important;
-}
-body.buyer-page .hero-v8-media img {
-  filter: none !important;
-  -webkit-filter: none !important;
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
-}
-body.buyer-page .hero-v8-media::before,
-body.buyer-page .hero-v8-media::after {
-  content: none !important;
-  display: none !important;
-  background: none !important;
-  opacity: 0 !important;
-}
-.hero-experience {
-  background-image: url('../images/isfahan-bridge.svg') !important;
-  background-position: center !important;
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-}
-.hero-experience::before {
-  content: none !important;
-  display: none !important;
 }

@@ -648,7 +648,7 @@ function referenceHeroSection() {
   const activeTours = buyerTours().filter(t => t.status === 'active');
   return `<section class="hero-v8" aria-labelledby="heroTitle">
     <div class="hero-v8-media">
-      <img src="/assets/images/isfahan-bridge.svg" alt="معماری تاریخی اصفهان و گنبدهای فیروزه‌ای" fetchpriority="high">
+      <img src="https://images.unsplash.com/photo-1761919237165-b53383cdf519?auto=format&amp;fit=crop&amp;w=1600&amp;q=82" alt="معماری تاریخی اصفهان و گنبدهای فیروزه‌ای" fetchpriority="high">
       <div class="hero-v8-photo-note"><i class="fa-solid fa-location-dot"></i> نقش جهان، اصفهان</div>
     </div>
     <div class="hero-v8-copy">
