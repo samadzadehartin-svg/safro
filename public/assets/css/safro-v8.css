@@ -23,7 +23,7 @@ body.buyer-page,
 body.panel-page {
   background: #f7faff !important;
   color: var(--v8-ink) !important;
-  font-family: Vazirmatn, Tahoma, sans-serif !important;
+  font-family: Tahoma, 'Segoe UI', Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
 }
 
