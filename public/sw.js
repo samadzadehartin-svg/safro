@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safarro-cache-8.4-immersive-20260721';
+const CACHE_NAME = 'safarro-cache-8.2-floating-natural-20260721';
 const ASSETS = [
   '/',
   '/buyer/',
@@ -9,8 +9,6 @@ const ASSETS = [
   '/admin/index.html',
   '/assets/css/style.css',
   '/assets/css/safro-v8.css',
-  '/assets/css/icons-local.css',
-  '/assets/css/immersive.css',
   '/assets/js/data.js',
   '/assets/js/core.js',
   '/assets/js/buyer.js',
@@ -18,11 +16,9 @@ const ASSETS = [
   '/assets/js/admin.js',
   '/assets/js/ui-enhancements.js',
   '/assets/js/safro-v8.js',
-  '/assets/js/immersive.js',
   '/assets/images/logo-safaro.png',
   '/assets/images/logo-safaro-192.png',
   '/assets/images/logo-safaro-512.png',
-  '/assets/images/isfahan-bridge.svg',
   '/assets/images/world-landmarks-minimal.svg',
   '/assets/images/world-landmarks-denser.svg',
   '/assets/images/world-landmarks-more.svg',
