@@ -16,7 +16,7 @@ await cp(source, output, { recursive: true });
 
 const deploymentInfo = {
   app: 'safro-uiux',
-  version: '8.2-floating-natural-20260721',
+  version: '8.4-immersive-20260721',
   gitCommit: process.env.VERCEL_GIT_COMMIT_SHA || null,
   gitBranch: process.env.VERCEL_GIT_COMMIT_REF || null,
   builtAt: new Date().toISOString(),

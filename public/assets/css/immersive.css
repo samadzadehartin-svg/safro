@@ -1,0 +1,916 @@
+/* Safro 8.4 — immersive travel experience
+   Local-only assets, no image filters, progressive motion with reduced-motion fallback. */
+:root {
+  --im-ink: #071522;
+  --im-navy: #11254a;
+  --im-blue: #2f6feb;
+  --im-cyan: #36c7bb;
+  --im-gold: #f4b63a;
+  --im-paper: #f5f8fc;
+  --im-glass: rgba(255,255,255,.78);
+  --im-line: rgba(255,255,255,.32);
+  --im-shadow: 0 32px 90px rgba(4,17,31,.22);
+}
+
+body.buyer-page {
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 14% 20%, rgba(47,111,235,.08), transparent 30%),
+    radial-gradient(circle at 88% 42%, rgba(54,199,187,.08), transparent 26%),
+    var(--im-paper) !important;
+}
+
+body.buyer-page main.container {
+  max-width: none !important;
+  padding: 0 0 96px !important;
+}
+
+body.buyer-page main.container > :not(.hero-v8):not(.immersive-story) {
+  width: min(100% - 48px, 1376px);
+  margin-inline: auto;
+}
+
+/* Immersive home header */
+body.buyer-page.immersive-home .header.main-header {
+  position: fixed !important;
+  inset: 0 0 auto;
+  z-index: 1600;
+  min-height: 88px;
+  border: 0 !important;
+  background: linear-gradient(180deg, rgba(3,14,28,.58), transparent) !important;
+  box-shadow: none !important;
+  backdrop-filter: none;
+  transition: background .35s ease, box-shadow .35s ease, min-height .35s ease, backdrop-filter .35s ease;
+}
+
+body.buyer-page.immersive-home .header.main-header .nav {
+  min-height: 88px;
+}
+
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header.main-header .main-nav a,
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header.main-header .logo > .brand-lockup,
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header.main-header .logo > .brand-lockup b {
+  color: #fff !important;
+}
+
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header.main-header .brand-lockup small {
+  color: rgba(255,255,255,.78) !important;
+}
+
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header.main-header .logo-img-box {
+  border-color: rgba(255,255,255,.38) !important;
+  background: rgba(255,255,255,.9) !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,.16);
+}
+
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header-support,
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header-support b,
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header-support small {
+  color: #fff !important;
+  border-color: rgba(255,255,255,.25) !important;
+}
+
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header-support > i,
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .dark-toggle,
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .header-wish,
+body.buyer-page.immersive-home:not(.immersive-header-scrolled) .my-bookings-btn {
+  color: #fff !important;
+  border-color: rgba(255,255,255,.34) !important;
+  background: rgba(4,17,31,.24) !important;
+  backdrop-filter: blur(14px);
+}
+
+body.buyer-page.immersive-home.immersive-header-scrolled .header.main-header {
+  min-height: 74px;
+  background: rgba(255,255,255,.86) !important;
+  box-shadow: 0 16px 46px rgba(7,21,34,.12) !important;
+  backdrop-filter: blur(22px) saturate(1.25);
+}
+
+body.buyer-page.immersive-home.immersive-header-scrolled .header.main-header .nav {
+  min-height: 74px;
+}
+
+/* Hero */
+body.buyer-page .hero-v8.immersive-hero {
+  direction: ltr;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 58%) minmax(420px, 42%);
+  min-height: 100svh;
+  margin: 0 0 72px !important;
+  overflow: hidden;
+  border-radius: 0 !important;
+  background: var(--im-ink) !important;
+  box-shadow: none !important;
+}
+
+body.buyer-page .hero-v8.immersive-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at var(--immersive-x, 22%) var(--immersive-y, 28%), rgba(54,199,187,.2), transparent 24%),
+    radial-gradient(circle at 88% 78%, rgba(47,111,235,.18), transparent 28%),
+    linear-gradient(145deg, #071522 0%, #0a1b2c 48%, #102c44 100%);
+}
+
+body.buyer-page .hero-v8.immersive-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 150px;
+  border: 0;
+  border-radius: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(7,21,34,.42));
+}
+
+.immersive-hero .hero-v8-media {
+  position: relative;
+  min-height: 100svh;
+  overflow: visible;
+  perspective: 1400px;
+}
+
+.immersive-hero .hero-v8-media::after {
+  display: none !important;
+}
+
+.immersive-visual-stack {
+  position: absolute;
+  inset: 104px 38px 64px 42px;
+  transform-style: preserve-3d;
+  transform: translate3d(calc(var(--hero-dx, 0px) * .15), calc(var(--hero-dy, 0px) * .15), 0);
+  transition: transform .18s ease-out;
+}
+
+.immersive-visual-card {
+  position: absolute;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 42px 100px rgba(0,0,0,.34);
+  transform-style: preserve-3d;
+}
+
+.immersive-visual-card img {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  object-fit: cover !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+.immersive-visual-card--main {
+  inset: 6% 7% 2% 2%;
+  z-index: 2;
+  transform: rotateY(5deg) rotateZ(-1.3deg) translate3d(var(--hero-dx, 0px), var(--hero-dy, 0px), 0);
+}
+
+.immersive-visual-card--top {
+  z-index: 4;
+  top: 0;
+  left: -4%;
+  width: 34%;
+  aspect-ratio: 1 / .72;
+  transform: translate3d(calc(var(--hero-dx, 0px) * -1.25), calc(var(--hero-dy, 0px) * -1.25), 80px) rotate(-5deg);
+}
+
+.immersive-visual-card--bottom {
+  z-index: 5;
+  right: -2%;
+  bottom: -1%;
+  width: 38%;
+  aspect-ratio: 1 / .72;
+  transform: translate3d(calc(var(--hero-dx, 0px) * 1.4), calc(var(--hero-dy, 0px) * 1.4), 100px) rotate(4deg);
+}
+
+.immersive-visual-label {
+  direction: rtl;
+  position: absolute;
+  z-index: 8;
+  left: 4%;
+  bottom: 4%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(7,21,34,.72);
+  backdrop-filter: blur(14px);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.immersive-hero .hero-v8-photo-note {
+  display: none;
+}
+
+.immersive-hero .hero-v8-copy {
+  direction: rtl;
+  position: relative;
+  z-index: 20;
+  justify-content: center;
+  min-height: 100svh;
+  padding: 132px clamp(28px, 4vw, 68px) 86px 42px;
+  color: #fff;
+}
+
+.immersive-hero .hero-v8-copy::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 88px 0 52px 18px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 34px 0 0 34px;
+  background: rgba(7,21,34,.4);
+  box-shadow: inset 0 1px rgba(255,255,255,.1);
+  backdrop-filter: blur(20px);
+}
+
+.immersive-hero .hero-v8-kicker {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  color: #fff !important;
+  border-color: rgba(244,182,58,.65) !important;
+  background: rgba(244,182,58,.14) !important;
+  backdrop-filter: blur(12px);
+}
+
+.immersive-hero .hero-v8-copy h1 {
+  max-width: 720px;
+  color: #fff !important;
+  font-size: clamp(44px, 5.1vw, 78px) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.immersive-hero .hero-v8-copy h1 span {
+  position: relative;
+  display: inline-block;
+  color: var(--im-gold) !important;
+}
+
+.immersive-hero .hero-v8-copy h1 span::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -.08em;
+  width: 100%;
+  height: .09em;
+  border-radius: 99px;
+  background: var(--im-cyan);
+  transform: scaleX(.72);
+  transform-origin: right;
+}
+
+.immersive-hero .hero-v8-copy > p {
+  max-width: 620px;
+  margin: 20px 0 26px;
+  color: rgba(255,255,255,.78) !important;
+  font-size: clamp(15px, 1.3vw, 18px) !important;
+  line-height: 2.05 !important;
+}
+
+.immersive-hero-index {
+  direction: ltr;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: rgba(255,255,255,.55);
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.immersive-hero-index b {
+  color: var(--im-gold);
+  font-size: 19px;
+}
+
+.immersive-hero-index i {
+  display: block;
+  width: 62px;
+  height: 1px;
+  background: rgba(255,255,255,.28);
+}
+
+.immersive-hero .hero-search-v8 {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100% !important;
+  max-width: 680px;
+  margin: 0 !important;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  border-radius: 24px !important;
+  background: rgba(255,255,255,.1) !important;
+  box-shadow: 0 24px 70px rgba(0,0,0,.24) !important;
+  backdrop-filter: blur(24px);
+}
+
+.immersive-hero .hero-search-item {
+  min-width: 0;
+  padding: 8px 10px;
+  border: 0 !important;
+  border-radius: 16px;
+  background: rgba(255,255,255,.96);
+}
+
+.immersive-hero .hero-search-item > span {
+  color: #516579 !important;
+}
+
+.immersive-hero .hero-search-v8 .field {
+  color: var(--im-ink) !important;
+}
+
+body.buyer-page .hero-v8.immersive-hero .hero-search-v8 .hero-search-submit {
+  min-height: 58px;
+  border-radius: 16px !important;
+  grid-column: 1 / -1;
+  font-size: 15px;
+  box-shadow: 0 14px 34px rgba(244,182,58,.3) !important;
+}
+
+.immersive-hero .hero-trust-v8 {
+  margin-top: 22px;
+  color: rgba(255,255,255,.78);
+}
+
+.immersive-hero .hero-trust-v8 span {
+  border-color: rgba(255,255,255,.18) !important;
+  color: rgba(255,255,255,.82) !important;
+  background: rgba(255,255,255,.06) !important;
+}
+
+.immersive-hero .hero-v8-meta {
+  color: rgba(255,255,255,.58) !important;
+}
+
+.immersive-scroll-cue {
+  direction: rtl;
+  position: absolute;
+  z-index: 30;
+  right: 50%;
+  bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 13px;
+  border: 0;
+  color: rgba(255,255,255,.7);
+  background: transparent;
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transform: translateX(50%);
+}
+
+.immersive-scroll-cue::before {
+  content: "";
+  width: 18px;
+  height: 29px;
+  border: 1px solid rgba(255,255,255,.46);
+  border-radius: 999px;
+}
+
+.immersive-scroll-cue::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  width: 3px;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--im-gold);
+  animation: immersive-wheel 1.7s ease-in-out infinite;
+}
+
+@keyframes immersive-wheel {
+  0%, 100% { transform: translateY(0); opacity: .3; }
+  45% { transform: translateY(8px); opacity: 1; }
+}
+
+/* Story strip */
+.immersive-story {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(300px, .78fr) minmax(0, 1.22fr);
+  gap: clamp(36px, 6vw, 96px);
+  min-height: 760px;
+  margin: 0 0 96px;
+  padding: 104px max(32px, calc((100vw - 1376px) / 2)) 110px;
+  overflow: hidden;
+  color: #fff;
+  background: #071522;
+}
+
+.immersive-story::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 32%, rgba(47,111,235,.22), transparent 28%),
+    radial-gradient(circle at 78% 72%, rgba(54,199,187,.16), transparent 26%);
+}
+
+.immersive-story-copy {
+  align-self: center;
+  position: sticky;
+  top: 120px;
+}
+
+.immersive-story-copy .badge {
+  color: #fff !important;
+  border-color: rgba(255,255,255,.22) !important;
+  background: rgba(255,255,255,.08) !important;
+}
+
+.immersive-story-copy h2 {
+  max-width: 520px;
+  margin: 22px 0 18px;
+  color: #fff;
+  font-size: clamp(38px, 5vw, 70px);
+  line-height: 1.28;
+  letter-spacing: -.04em;
+}
+
+.immersive-story-copy h2 span {
+  color: var(--im-gold);
+}
+
+.immersive-story-copy > p {
+  max-width: 510px;
+  color: rgba(255,255,255,.66);
+  font-size: 16px;
+  line-height: 2.1;
+}
+
+.immersive-story-steps {
+  display: grid;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.immersive-story-step {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 0;
+  border-top: 1px solid rgba(255,255,255,.11);
+}
+
+.immersive-story-step strong {
+  direction: ltr;
+  color: var(--im-cyan);
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+
+.immersive-story-step b {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.immersive-story-step small {
+  color: rgba(255,255,255,.58);
+  line-height: 1.8;
+}
+
+.immersive-story-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-content: center;
+  perspective: 1300px;
+}
+
+.immersive-scene {
+  position: relative;
+  min-height: 290px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 28px;
+  background: #0e2337;
+  box-shadow: 0 28px 72px rgba(0,0,0,.3);
+  transition: transform .5s cubic-bezier(.2,.75,.25,1), box-shadow .5s ease;
+}
+
+.immersive-scene:first-child {
+  grid-row: span 2;
+  min-height: 610px;
+}
+
+.immersive-scene:hover {
+  z-index: 5;
+  transform: translateY(-10px) rotateX(1.2deg) rotateY(-1.2deg);
+  box-shadow: 0 42px 100px rgba(0,0,0,.42);
+}
+
+.immersive-scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none !important;
+  transition: transform .75s cubic-bezier(.2,.75,.25,1);
+}
+
+.immersive-scene:hover img {
+  transform: scale(1.035);
+}
+
+.immersive-scene figcaption {
+  position: absolute;
+  inset: auto 16px 16px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 17px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 18px;
+  color: #fff;
+  background: rgba(7,21,34,.76);
+  backdrop-filter: blur(18px);
+}
+
+.immersive-scene figcaption b {
+  display: block;
+  font-size: 16px;
+}
+
+.immersive-scene figcaption small {
+  color: rgba(255,255,255,.62);
+}
+
+.immersive-scene figcaption span {
+  direction: ltr;
+  color: var(--im-gold);
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: .14em;
+}
+
+/* Content sections: editorial spacing and depth */
+body.buyer-page .country-line-section-v49,
+body.buyer-page .special-tours-v49,
+body.buyer-page .buyer-visa-section,
+body.buyer-page .faq-section-v49,
+body.buyer-page .about-contact-section {
+  margin-bottom: 104px !important;
+}
+
+body.buyer-page .section-title-v49 h2,
+body.buyer-page .country-line-head h2,
+body.buyer-page .tour-list-head-v49 h2 {
+  font-size: clamp(30px, 3.4vw, 52px) !important;
+  line-height: 1.35;
+  letter-spacing: -.035em;
+}
+
+body.buyer-page .country-line-grid {
+  display: grid !important;
+  grid-template-columns: repeat(12, 1fr) !important;
+  gap: 18px !important;
+}
+
+body.buyer-page .country-line-card,
+body.buyer-page .country-line-card.country-card-wide {
+  position: relative;
+  grid-column: span 4;
+  min-height: 270px !important;
+  overflow: hidden;
+  border-radius: 26px !important;
+  transform: translateZ(0);
+  transition: transform .45s cubic-bezier(.2,.75,.25,1), box-shadow .45s ease, border-color .3s ease;
+}
+
+body.buyer-page .country-line-card:first-child,
+body.buyer-page .country-line-card:nth-child(5n) {
+  grid-column: span 6;
+}
+
+body.buyer-page .country-line-card:hover {
+  transform: translateY(-10px) scale(1.012) !important;
+  box-shadow: 0 34px 74px rgba(7,21,34,.16) !important;
+}
+
+body.buyer-page .country-line-card .country-art-wrap img {
+  filter: none !important;
+  transition: transform .65s cubic-bezier(.2,.75,.25,1);
+}
+
+body.buyer-page .country-line-card:hover .country-art-wrap img {
+  transform: scale(1.06) translateY(-3px);
+}
+
+body.buyer-page .tour-grid-v49,
+body.buyer-page .special-tours-v49 .grid {
+  gap: 24px !important;
+}
+
+body.buyer-page .tour-card-v49 {
+  overflow: hidden;
+  border: 1px solid rgba(17,37,74,.1) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 18px 54px rgba(7,21,34,.08) !important;
+  transition: transform .5s cubic-bezier(.2,.75,.25,1), box-shadow .5s ease, border-color .35s ease !important;
+}
+
+body.buyer-page .tour-card-v49:hover {
+  transform: translateY(-12px) rotateX(.6deg) !important;
+  border-color: rgba(47,111,235,.25) !important;
+  box-shadow: 0 38px 90px rgba(7,21,34,.16) !important;
+}
+
+body.buyer-page .tour-card-v49 .tour-image-wrap-v49,
+body.buyer-page .tour-card-v49 .tour-img {
+  height: 285px !important;
+}
+
+body.buyer-page .tour-card-v49 .tour-img {
+  filter: none !important;
+}
+
+body.buyer-page #customTourFloatingShell.custom-tour-top-shell {
+  position: fixed !important;
+  right: 26px !important;
+  bottom: 24px !important;
+  left: auto !important;
+  z-index: 1450 !important;
+  width: min(410px, calc(100vw - 52px)) !important;
+  margin: 0 !important;
+  transform: translate3d(0,0,0) !important;
+  transition: width .32s ease, transform .32s ease !important;
+}
+
+body.buyer-page #customTourFloatingShell .custom-tour-top-card {
+  position: relative !important;
+  grid-template-columns: auto minmax(0,1fr) auto !important;
+  min-height: 80px !important;
+  padding: 12px 14px !important;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.42) !important;
+  border-radius: 22px !important;
+  color: #fff !important;
+  background: rgba(7,21,34,.88) !important;
+  box-shadow: 0 24px 65px rgba(7,21,34,.28) !important;
+  backdrop-filter: blur(24px) saturate(1.25);
+}
+
+body.buyer-page #customTourFloatingShell .custom-tour-top-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(var(--im-gold), var(--im-cyan));
+}
+
+body.buyer-page #customTourFloatingShell .custom-tour-top-copy b,
+body.buyer-page #customTourFloatingShell .custom-tour-top-copy small {
+  color: #fff !important;
+}
+
+body.buyer-page #customTourFloatingShell .custom-tour-top-copy small {
+  opacity: .64;
+}
+
+body.buyer-page #customTourFloatingShell .custom-tour-top-action {
+  color: var(--im-gold) !important;
+}
+
+body.buyer-page.immersive-cta-compact #customTourFloatingShell.custom-tour-top-shell {
+  width: 210px !important;
+}
+
+body.buyer-page.immersive-cta-compact #customTourFloatingShell .custom-tour-top-copy small,
+body.buyer-page.immersive-cta-compact #customTourFloatingShell .custom-tour-top-action {
+  display: none !important;
+}
+
+/* Reveal motion */
+.immersive-reveal {
+  opacity: 0;
+  transform: translateY(38px);
+  transition: opacity .8s cubic-bezier(.2,.75,.25,1), transform .8s cubic-bezier(.2,.75,.25,1);
+}
+
+.immersive-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.immersive-reveal:nth-child(2n) { transition-delay: .06s; }
+.immersive-reveal:nth-child(3n) { transition-delay: .12s; }
+
+.immersive-progress {
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  pointer-events: none;
+  background: rgba(255,255,255,.08);
+}
+
+.immersive-progress > i {
+  display: block;
+  width: var(--immersive-progress, 0%);
+  height: 100%;
+  background: linear-gradient(90deg, var(--im-cyan), var(--im-gold));
+  box-shadow: 0 0 16px rgba(54,199,187,.55);
+}
+
+/* Dark mode */
+body.buyer-page.dark {
+  background: #071522 !important;
+}
+
+body.buyer-page.dark main.container > :not(.hero-v8):not(.immersive-story) {
+  color: #eaf2fb;
+}
+
+body.buyer-page.dark .country-line-section-v49,
+body.buyer-page.dark .special-tours-v49,
+body.buyer-page.dark .tour-list-head-v49,
+body.buyer-page.dark .about-contact-section {
+  --v8-ink: #eaf2fb;
+}
+
+@media (max-width: 1180px) {
+  body.buyer-page .hero-v8.immersive-hero {
+    grid-template-columns: minmax(0, 52%) minmax(390px, 48%);
+  }
+  .immersive-visual-stack { left: 24px; right: 20px; }
+  .immersive-hero .hero-v8-copy { padding-inline: 28px; }
+  .immersive-hero .hero-v8-copy h1 { font-size: clamp(42px, 5vw, 64px) !important; }
+  .immersive-story { grid-template-columns: 1fr; }
+  .immersive-story-copy { position: relative; top: auto; }
+}
+
+@media (max-width: 900px) {
+  body.buyer-page main.container > :not(.hero-v8):not(.immersive-story) {
+    width: min(100% - 28px, 1376px);
+  }
+
+  body.buyer-page.immersive-home .header.main-header {
+    background: rgba(7,21,34,.72) !important;
+    backdrop-filter: blur(16px);
+  }
+
+  body.buyer-page.immersive-home .header.main-header .brand-lockup,
+  body.buyer-page.immersive-home .header.main-header .brand-lockup b {
+    color: #fff !important;
+  }
+
+  body.buyer-page.immersive-home .header.main-header .hamburger span {
+    background: #fff !important;
+  }
+
+  body.buyer-page .hero-v8.immersive-hero {
+    display: block;
+    min-height: auto;
+    padding-top: 82px;
+  }
+
+  .immersive-hero .hero-v8-media {
+    min-height: 56svh;
+  }
+
+  .immersive-visual-stack {
+    inset: 22px 18px 12px;
+  }
+
+  .immersive-visual-card--main { inset: 4% 4% 4% 4%; }
+  .immersive-visual-card--top { width: 32%; left: 0; }
+  .immersive-visual-card--bottom { width: 34%; right: 0; }
+
+  .immersive-hero .hero-v8-copy {
+    min-height: auto;
+    padding: 34px 22px 90px;
+  }
+
+  .immersive-hero .hero-v8-copy::before {
+    inset: 0 14px 54px;
+    border-radius: 26px;
+  }
+
+  .immersive-hero .hero-v8-copy h1 {
+    font-size: clamp(38px, 9vw, 58px) !important;
+  }
+
+  .immersive-scroll-cue { display: none; }
+
+  .immersive-story {
+    padding: 76px 22px 82px;
+  }
+
+  .immersive-story-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .immersive-scene,
+  .immersive-scene:first-child {
+    grid-row: auto;
+    min-height: 360px;
+  }
+
+  body.buyer-page .country-line-card,
+  body.buyer-page .country-line-card.country-card-wide,
+  body.buyer-page .country-line-card:first-child,
+  body.buyer-page .country-line-card:nth-child(5n) {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 640px) {
+  .immersive-hero .hero-v8-media { min-height: 47svh; }
+  .immersive-visual-card { border-radius: 20px; }
+  .immersive-visual-card--top { width: 38%; }
+  .immersive-visual-card--bottom { width: 40%; }
+  .immersive-hero .hero-v8-copy { padding-inline: 16px; }
+  .immersive-hero .hero-v8-copy::before { inset-inline: 8px; }
+  .immersive-hero .hero-search-v8 { grid-template-columns: 1fr; }
+  body.buyer-page .hero-v8.immersive-hero .hero-search-v8 .hero-search-submit { grid-column: auto; }
+  .immersive-hero .hero-trust-v8 { display: grid; grid-template-columns: 1fr 1fr; }
+
+  .immersive-story-copy h2 { font-size: 39px; }
+  .immersive-scene,
+  .immersive-scene:first-child { min-height: 280px; }
+
+  body.buyer-page .country-line-grid {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-bottom: 12px;
+  }
+
+  body.buyer-page .country-line-grid::-webkit-scrollbar { display: none; }
+
+  body.buyer-page .country-line-card,
+  body.buyer-page .country-line-card.country-card-wide,
+  body.buyer-page .country-line-card:first-child,
+  body.buyer-page .country-line-card:nth-child(5n) {
+    flex: 0 0 min(84vw, 340px);
+    min-height: 250px !important;
+    scroll-snap-align: center;
+  }
+
+  body.buyer-page .tour-card-v49 .tour-image-wrap-v49,
+  body.buyer-page .tour-card-v49 .tour-img { height: 230px !important; }
+
+  body.buyer-page #customTourFloatingShell.custom-tour-top-shell,
+  body.buyer-page.immersive-cta-compact #customTourFloatingShell.custom-tour-top-shell {
+    right: 14px !important;
+    bottom: 82px !important;
+    width: 64px !important;
+  }
+
+  body.buyer-page #customTourFloatingShell .custom-tour-top-card {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    place-items: center;
+    width: 64px !important;
+    min-height: 64px !important;
+    padding: 0 !important;
+    border-radius: 22px !important;
+  }
+
+  body.buyer-page #customTourFloatingShell .custom-tour-top-copy,
+  body.buyer-page #customTourFloatingShell .custom-tour-top-action {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .immersive-visual-stack,
+  .immersive-visual-card,
+  .immersive-scene,
+  .immersive-scene img,
+  .immersive-reveal {
+    transition: none !important;
+    transform: none !important;
+  }
+  .immersive-reveal { opacity: 1 !important; }
+  .immersive-scroll-cue::after { animation: none !important; }
+}

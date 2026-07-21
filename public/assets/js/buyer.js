@@ -646,15 +646,26 @@ function aboutContactSection() {
 
 function referenceHeroSection() {
   const activeTours = buyerTours().filter(t => t.status === 'active');
-  return `<section class="hero-v8" aria-labelledby="heroTitle">
+  return `<section class="hero-v8 immersive-hero" aria-labelledby="heroTitle">
     <div class="hero-v8-media">
-      <img src="https://images.unsplash.com/photo-1761919237165-b53383cdf519?auto=format&amp;fit=crop&amp;w=1600&amp;q=82" alt="معماری تاریخی اصفهان و گنبدهای فیروزه‌ای" fetchpriority="high">
-      <div class="hero-v8-photo-note"><i class="fa-solid fa-location-dot"></i> نقش جهان، اصفهان</div>
+      <div class="immersive-visual-stack" aria-label="لحظه‌هایی از سفر با سفرو">
+        <figure class="immersive-visual-card immersive-visual-card--main">
+          <img src="/assets/images/isfahan-bridge.svg" alt="تور میراث اصفهان" fetchpriority="high">
+        </figure>
+        <figure class="immersive-visual-card immersive-visual-card--top" aria-hidden="true">
+          <img src="/assets/images/cappadocia-balloons.svg" alt="">
+        </figure>
+        <figure class="immersive-visual-card immersive-visual-card--bottom" aria-hidden="true">
+          <img src="/assets/images/dubai-burj-khalifa.svg" alt="">
+        </figure>
+        <span class="immersive-visual-label"><i class="fa-solid fa-location-dot"></i> ایران تا جهان، یک انتخاب فاصله</span>
+      </div>
     </div>
     <div class="hero-v8-copy">
-      <span class="hero-v8-kicker"><i class="fa-regular fa-star"></i> انتخاب مطمئن، سفر دلنشین</span>
-      <h1 id="heroTitle">سفر رویاهایت را با <span>سفرو</span> حرفه‌ای‌تر رزرو کن</h1>
-      <p>تورهای داخلی و خارجی، خدمات ویزا، هتل دلخواه و ظرفیت واقعی را یک‌جا ببین؛ شفاف انتخاب کن و سریع وارد رزرو شو.</p>
+      <div class="immersive-hero-index"><b>01</b><i></i><span>Explore differently</span></div>
+      <span class="hero-v8-kicker"><i class="fa-regular fa-star"></i> انتخاب مطمئن، تجربه‌ای فراتر از رزرو</span>
+      <h1 id="heroTitle">سفر را فقط نبین؛ با <span>سفرو</span> زندگی‌اش کن</h1>
+      <p>مقصد، هتل و ظرفیت واقعی را در یک تجربه روان و تصویری کشف کن؛ شفاف مقایسه کن و با اطمینان وارد سفر بعدی‌ات شو.</p>
       <form class="hero-search-v8" aria-label="جستجوی تور" onsubmit="applyHeroSearch(event)">
         <label class="hero-search-item">
           <span><i class="fa-solid fa-location-dot"></i> مقصد</span>
@@ -670,15 +681,52 @@ function referenceHeroSection() {
             <option>۲ بزرگسال</option><option>۱ بزرگسال</option><option>۳ بزرگسال</option><option>۴ نفر یا بیشتر</option>
           </select>
         </label>
+        <label class="hero-search-item">
+          <span><i class="fa-solid fa-compass"></i> سبک سفر</span>
+          <select class="field" aria-label="سبک سفر">
+            <option>هر سبک سفری</option><option>آرام و خانوادگی</option><option>ماجراجویانه</option><option>لوکس</option><option>اقتصادی</option>
+          </select>
+        </label>
         <input id="heroSearchQuery" type="hidden" value="">
-        <button class="hero-search-submit" type="submit"><i class="fa-solid fa-magnifying-glass"></i> جستجوی تورها</button>
+        <button class="hero-search-submit" type="submit"><i class="fa-solid fa-magnifying-glass"></i> کشف تورهای مناسب من</button>
       </form>
       <div class="hero-trust-v8" aria-label="مزیت‌های سفرو">
         <span><i class="fa-solid fa-check"></i><b>قیمت شفاف</b></span>
         <span><i class="fa-solid fa-check"></i><b>ظرفیت واقعی</b></span>
         <span><i class="fa-solid fa-check"></i><b>پشتیبانی ۲۴/۷</b></span>
       </div>
-      <div class="hero-v8-meta"><b>${faNum(activeTours.length)}</b> تور فعال برای انتخاب</div>
+      <div class="hero-v8-meta"><b>${faNum(activeTours.length)}</b> تجربه آماده برای انتخاب</div>
+    </div>
+    <button class="immersive-scroll-cue" type="button" onclick="scrollImmersiveNext()">برای کشف بیشتر اسکرول کن</button>
+  </section>`;
+}
+
+function immersiveStorySection(list) {
+  const activeCount = (list || []).filter(t => t.status === 'active').length;
+  return `<section class="immersive-story" aria-labelledby="immersiveStoryTitle">
+    <div class="immersive-story-copy">
+      <span class="badge international">سفر، فراتر از یک مقصد</span>
+      <h2 id="immersiveStoryTitle">هر انتخاب، شروع یک <span>داستان تازه</span> است</h2>
+      <p>از اولین تصویر تا لحظه رزرو، مسیر انتخاب تور را طوری طراحی کرده‌ایم که حس مقصد را قبل از حرکت تجربه کنی.</p>
+      <div class="immersive-story-steps">
+        <div class="immersive-story-step"><strong>01</strong><div><b>کشف تصویری مقصد</b><small>مقصدها را با روایت و تصویرهای واقعی پروژه مرور کن.</small></div></div>
+        <div class="immersive-story-step"><strong>02</strong><div><b>مقایسه شفاف</b><small>قیمت، هتل، ظرفیت و تاریخ را بدون پیچیدگی کنار هم ببین.</small></div></div>
+        <div class="immersive-story-step"><strong>03</strong><div><b>رزرو با همراهی</b><small>${faNum(activeCount)} تور فعال و پشتیبانی سفرو تا پایان مسیر کنار توست.</small></div></div>
+      </div>
+    </div>
+    <div class="immersive-story-gallery">
+      <figure class="immersive-scene">
+        <img src="/assets/images/cappadocia-balloons.svg" alt="بالن‌سواری در کاپادوکیا" loading="lazy">
+        <figcaption><div><b>طلوع در کاپادوکیا</b><small>آسمان، سکوت و یک شروع متفاوت</small></div><span>DISCOVER</span></figcaption>
+      </figure>
+      <figure class="immersive-scene">
+        <img src="/assets/images/kish-island.svg" alt="سفر به جزیره کیش" loading="lazy">
+        <figcaption><div><b>آرامش جزیره</b><small>سفر کوتاه، حس ماندگار</small></div><span>ESCAPE</span></figcaption>
+      </figure>
+      <figure class="immersive-scene">
+        <img src="/assets/images/dubai-burj-khalifa.svg" alt="سفر شهری به دبی" loading="lazy">
+        <figcaption><div><b>ریتم شهرهای جهان</b><small>هتل دلخواه و تجربه‌ای شخصی</small></div><span>EXPLORE</span></figcaption>
+      </figure>
     </div>
   </section>`;
 }
@@ -851,6 +899,7 @@ function countryLineArtSection() {
 function renderHome() {
   const list = buyerTours().filter(t => t.status === 'active');
   $('app').innerHTML = `${referenceHeroSection()}
+    ${immersiveStorySection(list)}
     ${countryLineArtSection()}
     ${customTourLauncher()}
     ${specialToursSection(list)}
