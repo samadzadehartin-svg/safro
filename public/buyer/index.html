@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('safro-theme');
+          var legacy = localStorage.getItem('safarro_three_panels_dark') === '1';
+          var theme = saved === 'dark' || (!saved && legacy) ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <title>سفرو | پنل مشتری</title>
+    <meta name="theme-color" content="#202D59" />
+    <link rel="manifest" href="../manifest.json" />
+        <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css?v=7.4" />
+    <link rel="stylesheet" href="../assets/css/safro-v8.css?v=8.0" />
+  </head>
+  <body class="buyer-page">
+    <div id="headerMount"></div>
+    <main class="container" id="app"></main>
+    <div id="footerMount"></div>
+    <div id="lightbox" class="lightbox" onclick="this.classList.remove('on')">
+      <img id="lbImg" />
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+      (function() {
+        var version = 'safro-v7.4';
+        try {
+          if (localStorage.getItem('safro-app-version') !== version) {
+            localStorage.setItem('safro-app-version', version);
+            if (window.caches) caches.keys().then(function(keys) { return Promise.all(keys.map(function(k) { return caches.delete(k); })); });
+            if (navigator.serviceWorker) navigator.serviceWorker.getRegistrations().then(function(regs) { regs.forEach(function(r) { r.update(); if (r.active) r.active.postMessage({ type: 'CLEAR_SAFRO_CACHES' }); }); });
+          }
+        } catch(e) {}
+      })();
+    </script>
+    <script src="../assets/js/data.js?v=7.4"></script>
+    <script src="../assets/js/core.js?v=7.4"></script>
+    <script src="../assets/js/buyer.js?v=7.4"></script>
+    <script src="../assets/js/ui-enhancements.js?v=7.4"></script>
+    <script src="../assets/js/safro-v8.js?v=8.0"></script>
+    <script>
+      window.SAFRO_BUYER_BOOT_FALLBACK = true;
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          var app = document.getElementById('app');
+          if (app && !app.innerHTML.trim() && typeof initBuyer === 'function') initBuyer();
+        }, 300);
+      });
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () =>
+          navigator.serviceWorker.register('../sw.js').catch(() => {})
+        );
+      }
+    </script>
+  </body>
+</html>

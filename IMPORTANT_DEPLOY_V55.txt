@@ -1,7 +1,0 @@
-اگر تغییرات را نمی‌بینی:
-1) کل محتویات همین zip را در ریشه پروژه جایگزین کن، نه فقط پوشه buyer.
-2) در Vercel از Settings > Build & Development Settings مقدار Output Directory را خالی یا نقطه (.) بگذار.
-3) بعد از Deploy در Chrome یک بار Ctrl+F5 بزن.
-4) اگر هنوز نسخه قدیمی است: DevTools > Application > Service Workers > Unregister و Storage > Clear site data.
-
-این نسخه cache-bust دارد: CSS/JS با ?v=5.5 لود می‌شوند و هدرهای immutable حذف شده‌اند.
