@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safarro-cache-v8.0';
+const CACHE_NAME = 'safarro-cache-v9.0-photos';
 const BASE_URL = self.registration.scope;
 const scopedUrl = path => new URL(path, BASE_URL).toString();
 const ASSETS = [

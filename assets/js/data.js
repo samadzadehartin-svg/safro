@@ -1053,6 +1053,92 @@ const DEFAULT_TOURS = [
   },
 ];
 
+// Curated destination photography for the public storefront. The photo is kept
+// separate from the editable tour payload so existing installations can be
+// upgraded without deleting prices, dates, hotels, or staff edits.
+const TOUR_PHOTO_LIBRARY = {
+  1: {
+    src: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1600&q=82',
+    credit: 'https://unsplash.com/s/photos/istanbul-bosphorus',
+    label: 'استانبول، ترکیه',
+  },
+  2: {
+    src: 'https://unsplash.com/photos/Iqk8OFDJWnk/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/Iqk8OFDJWnk',
+    label: 'دبی، امارات',
+  },
+  3: {
+    src: 'https://unsplash.com/photos/GxG9P4t7kU4/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/GxG9P4t7kU4',
+    label: 'آنتالیا، ترکیه',
+  },
+  4: {
+    src: 'https://unsplash.com/photos/9NZ8_wc9NQI/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/9NZ8_wc9NQI',
+    label: 'جزیره کیش، ایران',
+  },
+  5: {
+    src: 'https://unsplash.com/photos/Nx9NJeemllY/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/Nx9NJeemllY',
+    label: 'مشهد، ایران',
+  },
+  6: {
+    src: 'https://unsplash.com/photos/t08qOK_Yl7M/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/t08qOK_Yl7M',
+    label: 'کاپادوکیا، ترکیه',
+  },
+  7: {
+    src: 'https://unsplash.com/photos/L45JVcMegCg/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/L45JVcMegCg',
+    label: 'تخت جمشید، شیراز',
+  },
+  8: {
+    src: 'https://unsplash.com/photos/YB6ko7oDVt0/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/YB6ko7oDVt0',
+    label: 'میدان نقش جهان، اصفهان',
+  },
+  9: {
+    src: 'https://unsplash.com/photos/nnzkZNYWHaU/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/nnzkZNYWHaU',
+    label: 'پاریس، فرانسه',
+  },
+  10: {
+    src: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1600&q=82',
+    credit: 'https://unsplash.com/s/photos/rome-colosseum',
+    label: 'رم، ایتالیا',
+  },
+  11: {
+    src: 'https://unsplash.com/photos/7vWO8Rl7KvQ/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/7vWO8Rl7KvQ',
+    label: 'بانکوک، تایلند',
+  },
+  12: {
+    src: 'https://unsplash.com/photos/5Wfv9RBkv48/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/5Wfv9RBkv48',
+    label: 'ایروان و آرارات، ارمنستان',
+  },
+  13: {
+    src: 'https://unsplash.com/photos/e-cLbouPEzU/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/e-cLbouPEzU',
+    label: 'تفلیس، گرجستان',
+  },
+  14: {
+    src: 'https://unsplash.com/photos/6U-sSfBV-gM/download?force=true&w=1600',
+    credit: 'https://unsplash.com/photos/6U-sSfBV-gM',
+    label: 'کوالالامپور، مالزی',
+  },
+};
+
+DEFAULT_TOURS.forEach(tour => {
+  const photo = TOUR_PHOTO_LIBRARY[Number(tour.id)];
+  if (!photo) return;
+  const illustratedGallery = (tour.gallery || []).filter(Boolean);
+  tour.img = photo.src;
+  tour.photoCredit = photo.credit;
+  tour.photoLabel = photo.label;
+  tour.gallery = [photo.src, ...illustratedGallery.filter(src => src !== photo.src)].slice(0, 5);
+});
+
 const DEFAULT_DISCOUNTS = [
   {
     code: 'SAFAR10',
