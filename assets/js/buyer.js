@@ -438,7 +438,7 @@ function scheduleOneMinuteConsultPopup() {
     if (sessionStorage.getItem('safarro_popup_closed') === '1') return;
     if (!$('consultPopup')) return;
     openConsultPopup();
-  }, 60000);
+  }, 35000);
 }
 
 function openConsultPopup() {
@@ -451,13 +451,11 @@ function countTourViewAndMaybePopup() {
   const n = Number(localStorage.getItem('safarro_tour_views') || 0) + 1;
   localStorage.setItem('safarro_tour_views', String(n));
   if (
-    n >= 3 &&
+    n >= 2 &&
     localStorage.getItem('safarro_popup_done') !== '1' &&
     sessionStorage.getItem('safarro_popup_closed') !== '1'
   ) {
-    setTimeout(() => {
-      if (view === 'detail') openConsultPopup();
-    }, 12000);
+    setTimeout(openConsultPopup, 900);
   }
 }
 
@@ -553,12 +551,7 @@ function countryLineArtData() {
       const destName = tourDestName(t);
       const country = countryFromDestination(destName);
       if (!grouped[country])
-        grouped[country] = {
-          country,
-          tours: 0,
-          dests: new Set(),
-          img: t.img || countryLineArtImg(country),
-        };
+        grouped[country] = { country, tours: 0, dests: new Set(), img: countryLineArtImg(country) };
       grouped[country].tours++;
       if (destName) grouped[country].dests.add(destName);
     });
@@ -593,7 +586,7 @@ function renderCountryPage(country) {
     `${buyerTabs()}<button class="soft" onclick="route('home')"><i class="fa-solid fa-arrow-right"></i> بازگشت به کشورها</button>
   <section class="country-page-hero">
     <div class="country-page-copy"><span class="badge international">تورهای ${clean}</span><h1>${clean}</h1><p class="small">همه تورهای فعال این کشور را اینجا ببین و با انتخاب هر کارت، وارد صفحه جزئیات همان تور شو.</p><b>${faNum(list.length)} تور فعال</b></div>
-    <div class="country-page-art"><img src="${data?.img || countryLineArtImg(clean)}" alt="نمایی از مقصد ${clean}"></div>
+    <div class="country-page-art"><img src="${data?.img || countryLineArtImg(clean)}" alt="لاین‌آرت ${clean}"></div>
   </section>
   <section class="country-page-grid grid g3">${list.map(tourCard).join('') || '<div class="card pad" style="grid-column:1/-1">فعلاً توری برای این کشور فعال نیست.</div>'}</section>
   ${hotelPhotosModalHtml()}${consultPopupHtml()}`;
@@ -653,11 +646,10 @@ function aboutContactSection() {
 
 function referenceHeroSection() {
   const activeTours = buyerTours().filter(t => t.status === 'active');
-  const featured = activeTours.find(t => Number(t.id) === 8) || activeTours[0];
   return `<section class="hero-v8" aria-labelledby="heroTitle">
     <div class="hero-v8-media">
-      <img src="${featured?.img || DEFAULT_IMG}" alt="${featured?.photoLabel || featured?.title || 'مقصد پیشنهادی سفرو'}" fetchpriority="high">
-      <div class="hero-v8-photo-note"><i class="fa-solid fa-location-dot"></i> ${featured?.photoLabel || tourDestName(featured)}</div>
+      <img src="https://images.unsplash.com/photo-1761919237165-b53383cdf519?auto=format&amp;fit=crop&amp;w=1600&amp;q=82" alt="معماری تاریخی اصفهان و گنبدهای فیروزه‌ای" fetchpriority="high">
+      <div class="hero-v8-photo-note"><i class="fa-solid fa-location-dot"></i> نقش جهان، اصفهان</div>
     </div>
     <div class="hero-v8-copy">
       <span class="hero-v8-kicker"><i class="fa-regular fa-star"></i> انتخاب مطمئن، سفر دلنشین</span>
@@ -687,36 +679,6 @@ function referenceHeroSection() {
         <span><i class="fa-solid fa-check"></i><b>پشتیبانی ۲۴/۷</b></span>
       </div>
       <div class="hero-v8-meta"><b>${faNum(activeTours.length)}</b> تور فعال برای انتخاب</div>
-    </div>
-  </section>`;
-}
-
-function photoStoriesSection(list) {
-  const preferredOrder = [6, 9, 13, 4, 11];
-  const picks = preferredOrder
-    .map(id => list.find(t => Number(t.id) === id))
-    .filter(Boolean);
-  if (!picks.length) return '';
-  return `<section class="travel-gallery-v9" aria-labelledby="travelGalleryTitle">
-    <div class="travel-gallery-head">
-      <div>
-        <span class="badge special">قاب سفر</span>
-        <h2 id="travelGalleryTitle">قبل از رزرو، مقصدت را زندگی کن</h2>
-        <p class="small">چند قاب واقعی از مسیرهای محبوب؛ روی هر تصویر بزن و جزئیات همان تور را ببین.</p>
-      </div>
-      <button class="soft" onclick="document.getElementById('tours')?.scrollIntoView({behavior:'smooth'})">دیدن همه تورها <i class="fa-solid fa-arrow-down"></i></button>
-    </div>
-    <div class="travel-gallery-grid">
-      ${picks
-        .map(
-          (t, i) => `<button type="button" class="travel-gallery-card ${i === 0 ? 'is-featured' : ''}" onclick="route('detail',${t.id})" aria-label="مشاهده ${t.title}">
-            <img src="${t.img || DEFAULT_IMG}" alt="${t.photoLabel || t.title}" loading="${i === 0 ? 'eager' : 'lazy'}">
-            <span class="travel-gallery-shade"></span>
-            <span class="travel-gallery-copy"><small>${countryFromDestination(tourDestName(t))}</small><b>${tourDestName(t)}</b><em>${normalizeDurationNightFirst(t.duration)} · از ${money(minHotel(t).price)}</em></span>
-            <span class="travel-gallery-arrow"><i class="fa-solid fa-arrow-left"></i></span>
-          </button>`
-        )
-        .join('')}
     </div>
   </section>`;
 }
@@ -872,7 +834,7 @@ function countryLineArtSection() {
       ${items
         .map(
           (item, i) => `<button type="button" class="country-line-card country-card-v${i % 5} ${i === 0 ? 'country-card-wide' : ''} ${currentCountry === item.country ? 'active' : ''}" onclick="selectCountryFromLineArt('${item.country}')">
-        <span class="country-art-wrap"><img src="${item.img}" alt="نمایی از مقصد ${item.country}" loading="lazy"></span>
+        <span class="country-art-wrap"><img src="${item.img}" alt="لاین‌آرت ${item.country}"></span>
         <span class="country-card-body">
           <b>${item.country}</b>
           <small>${faNum(item.tours)} تور فعال</small>
@@ -889,7 +851,6 @@ function countryLineArtSection() {
 function renderHome() {
   const list = buyerTours().filter(t => t.status === 'active');
   $('app').innerHTML = `${referenceHeroSection()}
-    ${photoStoriesSection(list)}
     ${countryLineArtSection()}
     ${customTourLauncher()}
     ${specialToursSection(list)}
@@ -913,14 +874,10 @@ function tourCard(t) {
   const startPrice = Number(t.newPrice || 0) > 0 ? Number(t.newPrice) : Number(minHotel(t).price || 0);
   const hotelCount = visibleHotelEntries(t).length || (t.hotels || []).length;
   const cap = totalCapacity(t);
-  const photoCount = [...new Set([t.img, ...(t.gallery || [])].filter(Boolean))].length;
   return `<article class="card clickable-tour-card tour-card-v49" tabindex="0" role="link" aria-label="مشاهده و رزرو ${t.title}" onclick="cardClickDetail(event,${t.id})" onkeydown="if(event.key==='Enter'){route('detail',${t.id})}">
     <div class="tour-image-wrap-v49">
-      <img class="tour-img" src="${t.img || DEFAULT_IMG}" alt="${t.photoLabel || t.title || ''}" loading="lazy">
-      <span class="tour-image-shade-v9"></span>
+      <img class="tour-img" src="${t.img || DEFAULT_IMG}" alt="${t.title || ''}">
       ${t.lastMinute ? '<span class="flash-badge">لحظه آخری</span>' : ''}
-      <span class="tour-photo-location-v9"><i class="fa-solid fa-location-dot"></i>${tourDestName(t)}</span>
-      <span class="tour-photo-count-v9"><i class="fa-regular fa-images"></i>${faNum(photoCount)}</span>
       <button class="wish-float-v49" onclick="event.stopPropagation();toggleWish(${t.id})" aria-label="علاقه‌مندی"><i class="${w ? 'fa-solid' : 'fa-regular'} fa-heart" style="${w ? 'color:#ef4444' : ''}"></i></button>
     </div>
     <div class="pad tour-card-body-v49">
@@ -949,11 +906,12 @@ function renderDetail(t) {
   if (!entries.some(e => e.i === selectedHotel)) selectedHotel = entries[0]?.i || 0;
   const selected = t.hotels[selectedHotel] || entries[0]?.h || minHotel(t);
   const displayPrice = Number(t.newPrice || 0) > 0 ? Number(t.newPrice) : Number(selected.price || 0);
-  const galleryPhotos = [...new Set([t.img, ...(t.gallery || [])].filter(Boolean))].slice(0, 5);
   const detailGallery = sectionOn(t, 'gallery')
-    ? `<div class="detail-gallery-shell-v9"><div class="detail-gallery-head-v9"><div><span class="badge international">گالری مقصد</span><h3>تصاویر این سفر</h3></div><span>${faNum(galleryPhotos.length)} تصویر</span></div><div class="gallery gallery-v49">${galleryPhotos
+    ? `<div class="gallery gallery-v49">${[t.img, ...(t.gallery || [])]
+        .filter(Boolean)
+        .slice(0, 5)
         .map(x => `<img src="${x}" onclick="lightbox('${x}')">`)
-        .join('')}</div>${t.photoCredit ? `<a class="photo-credit-v9" href="${t.photoCredit}" target="_blank" rel="noreferrer"><i class="fa-solid fa-camera"></i> منبع عکس مقصد: Unsplash</a>` : ''}</div>`
+        .join('')}</div>`
     : '';
   const descHtml = sectionOn(t, 'description') ? `<p class="small detail-desc-v49">${t.desc || ''}</p>` : '';
   const flightHtml = sectionOn(t, 'flightInfo')

@@ -186,13 +186,9 @@ async function bootSupabaseSync() {
   const r = await supabasePullAll();
   if (r.ok) {
     console.info(r.msg);
-    if (typeof normalizeTourPhotosV9 === 'function') normalizeTourPhotosV9(true);
     if (typeof renderAdmin === 'function') renderAdmin();
     if (typeof renderStaff === 'function') renderStaff();
-    if (location.pathname.includes('/buyer')) {
-      if (typeof renderBuyer === 'function') renderBuyer();
-      else if (typeof renderHome === 'function') renderHome();
-    }
+    if (typeof renderHome === 'function' && location.pathname.includes('/buyer')) renderHome();
   }
 }
 window.addEventListener('load', () => setTimeout(bootSupabaseSync, 450));
@@ -9863,25 +9859,6 @@ function normalizeTourImagesTheme() {
   write('imagesThemeV3Applied', true);
 }
 
-function normalizeTourPhotosV9(force = false) {
-  if (!force && read('tourPhotosV9Applied', false)) return;
-  if (typeof TOUR_PHOTO_LIBRARY === 'undefined') return;
-  const upgraded = tours().map(t => {
-    const photo = TOUR_PHOTO_LIBRARY[Number(t.id)];
-    if (!photo) return t;
-    const existing = (t.gallery || []).filter(Boolean).filter(src => src !== photo.src);
-    return {
-      ...t,
-      img: photo.src,
-      photoCredit: photo.credit,
-      photoLabel: photo.label,
-      gallery: [photo.src, ...existing].slice(0, 5),
-    };
-  });
-  saveTours(upgraded);
-  write('tourPhotosV9Applied', true);
-}
-
 const TOUR_TITLE_FA_MAP = {
   'Istanbul Spring Escape': 'تور بهاره استانبول',
   'Dubai Luxury Break': 'تور لوکس دبی',
@@ -10351,7 +10328,6 @@ function seed() {
   repairAppData();
   cleanFinalToursHotels();
   normalizeTourImagesTheme();
-  normalizeTourPhotosV9();
   if (typeof normalizeTourPersianNamesAndImages === 'function')
     normalizeTourPersianNamesAndImages();
 }
