@@ -7,10 +7,13 @@
     <meta name="theme-color" content="#202D59" />
     <script>
       var path = window.location.pathname || '';
-      var target = '/buyer/';
-      if (path.indexOf('/staff') === 0) target = '/staff/';
-      if (path.indexOf('/admin') === 0) target = '/admin/';
-      window.location.replace(target + (window.location.hash || ''));
+      var parts = path.split('/').filter(Boolean);
+      var isProjectPages = /\.github\.io$/i.test(window.location.hostname) && parts.length > 0;
+      var base = isProjectPages ? '/' + parts[0] + '/' : '/';
+      var target = 'buyer/';
+      if (parts.indexOf('staff') >= 0) target = 'staff/';
+      if (parts.indexOf('admin') >= 0) target = 'admin/';
+      window.location.replace(base + target + (window.location.hash || ''));
     </script>
     <style>
       body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Tahoma,sans-serif;background:#f8fafc;color:#202D59;text-align:center;padding:24px}a{color:#202D59;font-weight:800}
@@ -19,7 +22,7 @@
   <body>
     <main>
       <h1>در حال انتقال...</h1>
-      <p>اگر خودکار منتقل نشدی، <a href="/buyer/">اینجا کلیک کن</a>.</p>
+      <p>اگر خودکار منتقل نشدی، <a href="./buyer/">اینجا کلیک کن</a>.</p>
     </main>
   </body>
 </html>
