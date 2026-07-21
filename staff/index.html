@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('safro-theme');
+          var legacy = localStorage.getItem('safarro_three_panels_dark') === '1';
+          var theme = saved === 'dark' || (!saved && legacy) ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <title>سفرو | پنل فروش</title>
+    <meta name="theme-color" content="#202D59" />
+    <link rel="manifest" href="../manifest.json" />
+        <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css?v=8.0" />
+    <link rel="stylesheet" href="../assets/css/safro-v8.css?v=8.0" />
+  </head>
+  <body class="staff-page panel-page">
+    <div id="headerMount"></div>
+    <main class="container" id="app"></main>
+    <div id="footerMount"></div>
+
+    <div
+      id="modal"
+      class="modal staff-edit-modal"
+      onclick="if (event.target === this) closeForm();"
+    >
+      <div class="modal-card pad staff-edit-modal-card">
+        <div class="row staff-edit-sticky-head">
+          <h2 id="formTitle">افزودن تور</h2>
+          <div class="actions">
+            <button
+              class="btn"
+              type="button"
+              onclick="document.getElementById('staffTourForm')?.requestSubmit()"
+            >
+              ذخیره تغییرات تور
+            </button>
+            <button class="soft" type="button" onclick="closeForm()">بستن</button>
+          </div>
+        </div>
+
+        <form id="staffTourForm" onsubmit="saveTour(event)" class="stack">
+          <input id="tid" type="hidden" />
+
+          <div class="staff-edit-save-notice">
+            <b>در حال افزودن/ویرایش تور هستی.</b>
+            <span>بعد از تغییر اطلاعات، دکمه آبی «ذخیره تغییرات تور» را بزن.</span>
+            <button class="btn" type="submit">ذخیره تغییرات تور</button>
+          </div>
+
+          <div class="staff-form-section">
+            <h3>اطلاعات اصلی تور</h3>
+            <div class="grid g2">
+              <input id="title" class="field" required placeholder="عنوان تور *" />
+              <input id="dest" class="field" required placeholder="مقصد *" />
+              <input
+                id="duration"
+                class="field"
+                required
+                placeholder="مدت سفر * مثل ۴ شب و ۵ روز"
+              />
+              <div class="airline-field-wrap">
+                <input
+                  id="airline"
+                  class="field"
+                  required
+                  placeholder="ایرلاین رفت *"
+                  readonly
+                  onclick="toggleAirlinePicker('airline')"
+                />
+                <button class="soft" type="button" onclick="toggleAirlinePicker('airline')">
+                  انتخاب ایرلاین رفت
+                </button>
+                <div id="airlinePicker_airline" class="airline-picker-panel"></div>
+              </div>
+              <div class="airline-field-wrap">
+                <input
+                  id="returnAirline"
+                  class="field"
+                  placeholder="ایرلاین برگشت"
+                  readonly
+                  onclick="toggleAirlinePicker('returnAirline')"
+                />
+                <button class="soft" type="button" onclick="toggleAirlinePicker('returnAirline')">
+                  انتخاب ایرلاین برگشت
+                </button>
+                <div id="airlinePicker_returnAirline" class="airline-picker-panel"></div>
+              </div>
+              <input id="flightTime" class="field" placeholder="زمان پرواز رفت" />
+              <input id="returnFlightTime" class="field" placeholder="زمان پرواز برگشت" />
+              <input id="price" class="field" type="number" required placeholder="قیمت پایه *" />
+              <select id="type" class="field">
+                <option value="international">خارجی</option>
+                <option value="domestic">داخلی</option>
+              </select>
+              <select id="level" class="field">
+                <option value="">سطح ندارد</option>
+                <option value="luxury">لوکس</option>
+                <option value="economy">اقتصادی</option>
+                <option value="special">ویژه</option>
+              </select>
+              <select id="status" class="field">
+                <option value="active">فعال</option>
+                <option value="inactive">غیرفعال</option>
+              </select>
+              <label class="row staff-checkbox-line"
+                ><input id="lastMinute" type="checkbox" /> نمایش در قسمت ویژه</label
+              >
+              <input id="oldPrice" class="field" type="number" placeholder="مبلغ قبل تخفیف" />
+              <input id="newPrice" class="field" type="number" placeholder="مبلغ بعد تخفیف" />
+              <input id="dealPercent" class="field" type="number" placeholder="درصد تخفیف ویژه" />
+              <input
+                id="dealEndsAtFa"
+                class="field"
+                placeholder="تاریخ پایان تخفیف شمسی؛ ۱۴۰۵/۰۵/۳۰ ۲۳:۵۹"
+              />
+            </div>
+            <div class="jalali-input-help">تاریخ تخفیف را شمسی وارد کن، مثل: ۱۴۰۵/۰۵/۳۰ ۲۳:۵۹</div>
+          </div>
+
+          <div class="staff-form-section section-visibility-panel">
+            <div class="row wrap">
+              <div>
+                <span class="badge special">نمایش در پنل مشتری</span>
+                <h3>فعال / غیرفعال کردن بخش‌های صفحه تور</h3>
+                <p class="small">
+                  هر گزینه‌ای که روشن باشد، در صفحه جزئیات تور برای مشتری نمایش داده می‌شود.
+                </p>
+              </div>
+              <div class="actions">
+                <button class="soft" type="button" onclick="setAllSectionVisibility(true)">
+                  فعال کردن همه
+                </button>
+                <button class="soft" type="button" onclick="setAllSectionVisibility(false)">
+                  غیرفعال کردن همه
+                </button>
+              </div>
+            </div>
+
+            <div class="section-toggle-grid">
+              <label class="section-toggle-card"
+                ><input id="visDescription" type="checkbox" checked /><b>توضیحات تور</b
+                ><span>متن معرفی و توضیحات اصلی</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visFlightInfo" type="checkbox" checked /><b>اطلاعات پرواز</b
+                ><span>ایرلاین، زمان رفت و برگشت</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visDates" type="checkbox" checked /><b>تاریخ‌های حرکت</b
+                ><span>تاریخ‌ها و تقویم حرکت</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visHotels" type="checkbox" checked /><b>هتل‌ها</b
+                ><span>لیست هتل‌های قابل انتخاب</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visGallery" type="checkbox" checked /><b>گالری تصاویر</b
+                ><span>عکس‌های تور در جزئیات</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visItinerary" type="checkbox" checked /><b>برنامه سفر</b
+                ><span>روز به روز یا توضیح برنامه</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visDocs" type="checkbox" checked /><b>مدارک لازم</b
+                ><span>پاسپورت، ویزا، مدارک</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visIncludes" type="checkbox" checked /><b>خدمات شامل</b
+                ><span>پرواز، هتل، بیمه، ترانسفر</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visExcludes" type="checkbox" checked /><b>خدمات غیرشامل</b
+                ><span>هزینه‌های جداگانه</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visCancellation" type="checkbox" checked /><b>قوانین کنسلی</b
+                ><span>شرایط لغو و جریمه</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visChildPolicy" type="checkbox" checked /><b>شرایط کودک</b
+                ><span>قیمت و قوانین کودک</span></label
+              >
+              <label class="section-toggle-card"
+                ><input id="visReviews" type="checkbox" checked /><b>نظر مسافران</b
+                ><span>امتیاز و نظرات کاربران</span></label
+              >
+            </div>
+          </div>
+
+          <div class="staff-form-section">
+            <h3>محتوای بخش‌ها</h3>
+            <label class="label">تاریخ‌های حرکت؛ هر خط یک تاریخ</label>
+            <textarea
+              id="dates"
+              class="field"
+              rows="3"
+              placeholder="۱۴۰۵/۰۴/۱۵&#10;۱۴۰۵/۰۴/۲۲"
+            ></textarea>
+
+            <label class="label">توضیحات تور</label>
+            <textarea id="desc" class="field" rows="3" placeholder="توضیحات تور"></textarea>
+
+            <label class="label">برنامه سفر؛ هر خط یک آیتم</label>
+            <textarea
+              id="itinerary"
+              class="field"
+              rows="3"
+              placeholder="روز اول: ورود و ترانسفر&#10;روز دوم: گشت شهری"
+            ></textarea>
+
+            <label class="label">مدارک لازم؛ هر خط یک مورد</label>
+            <textarea
+              id="docs"
+              class="field"
+              rows="2"
+              placeholder="پاسپورت با اعتبار کافی&#10;عکس پرسنلی"
+            ></textarea>
+
+            <label class="label">خدمات شامل؛ هر خط یک مورد</label>
+            <textarea
+              id="includes"
+              class="field"
+              rows="2"
+              placeholder="بلیط رفت و برگشت&#10;اقامت هتل&#10;بیمه مسافرتی"
+            ></textarea>
+
+            <label class="label">خدمات غیرشامل؛ هر خط یک مورد</label>
+            <textarea
+              id="excludes"
+              class="field"
+              rows="2"
+              placeholder="هزینه ورودیه‌ها&#10;وعده‌های غذایی خارج از برنامه"
+            ></textarea>
+
+            <input id="cancel" class="field" placeholder="قوانین کنسلی" />
+            <input id="child" class="field" placeholder="شرایط کودک" />
+          </div>
+
+          <div class="staff-form-section">
+            <h3>هتل‌ها، قیمت و ظرفیت</h3>
+            <p class="small">
+              تیک «نمایش» کنار هر هتل مشخص می‌کند آن هتل در پنل مشتری دیده شود یا نه.
+            </p>
+            <div id="hotelEditor" class="hotel-editor"></div>
+          </div>
+
+          <button class="btn staff-bottom-save" type="submit">ذخیره تغییرات تور</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+      (function() {
+        var version = 'safro-v8.0';
+        try {
+          if (localStorage.getItem('safro-app-version') !== version) {
+            localStorage.setItem('safro-app-version', version);
+            if (window.caches) caches.keys().then(function(keys) { return Promise.all(keys.map(function(k) { return caches.delete(k); })); });
+            if (navigator.serviceWorker) navigator.serviceWorker.getRegistrations().then(function(regs) { regs.forEach(function(r) { r.update(); if (r.active) r.active.postMessage({ type: 'CLEAR_SAFRO_CACHES' }); }); });
+          }
+        } catch(e) {}
+      })();
+    </script>
+    <script src="../assets/js/data.js?v=8.0"></script>
+    <script src="../assets/js/core.js?v=8.0"></script>
+    <script src="../assets/js/staff.js?v=8.0"></script>
+    <script src="../assets/js/ui-enhancements.js?v=8.0"></script>
+    <script src="../assets/js/safro-v8.js?v=8.0"></script>
+  </body>
+</html>
