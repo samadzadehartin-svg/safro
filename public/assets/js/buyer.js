@@ -778,166 +778,17 @@ function specialToursSection(list) {
 }
 
 function filtersSection(list) {
-  const activeCount = Array.isArray(list) ? list.length : buyerTours().filter(t => t.status === 'active').length;
-  return `<section class="filters-shell-v49 filters-shell-v50">
-    <div class="filters-head-v50">
-      <div>
-        <span class="badge domestic">فیلتر سریع</span>
-        <h3>تور مناسب را سریع‌تر پیدا کن</h3>
-        <p class="small">جست‌وجو، مقصد، ظرفیت و مرتب‌سازی را همین‌جا کنترل کن.</p>
-      </div>
-      <div class="filters-meta-v50">
-        <div class="filters-total-v50"><b>${faNum(activeCount)}</b><span>تور فعال</span></div>
-        <button id="filtersResetBtn" class="soft" type="button" onclick="manualResetHome()"><i class="fa-solid fa-rotate-right"></i> بازنشانی</button>
-      </div>
-    </div>
-    <div class="filters-grid-v50">
-      <label class="filter-control-v50 filter-control-wide-v50">
-        <span>جست‌وجو</span>
-        <input id="search" class="field" value="" placeholder="مثلاً استانبول، دبی، تور ویژه..." oninput="filterHome()">
-      </label>
-      <label class="filter-control-v50">
-        <span>مقصد</span>
-        <select id="dest" class="field" onchange="filterHome()">${homeSearchDestOptions()}</select>
-      </label>
-      <label class="filter-control-v50">
-        <span>مرتب‌سازی</span>
-        <select id="sort" class="field" onchange="filterHome()">
-          <option value="default">پیش‌فرض</option>
-          <option value="asc">ارزان‌ترین</option>
-          <option value="desc">گران‌ترین</option>
-          <option value="rate">بالاترین امتیاز</option>
-        </select>
-      </label>
-      <label class="filter-control-v50">
-        <span>ایرلاین</span>
-        <input id="airline" class="field" value="" placeholder="مثل ترکیش، ماهان..." oninput="filterHome()">
-      </label>
-      <label class="filter-control-v50">
-        <span>ستاره هتل</span>
-        <select id="star" class="field" onchange="filterHome()">
-          <option value="all">همه</option>
-          <option value="3">۳ ستاره</option>
-          <option value="4">۴ ستاره</option>
-          <option value="5">۵ ستاره</option>
-        </select>
-      </label>
-      <label class="filter-check-v50">
-        <input id="onlyCap" type="checkbox" onchange="filterHome()">
-        <span>فقط تورهای ظرفیت‌دار</span>
-      </label>
-    </div>
-    <div class="quick-filter-row-v50">
-      <button class="soft quick-filter-chip-v50" type="button" data-home-quick="special" onclick="homeToolbarQuickAction('special')"><i class="fa-solid fa-bolt"></i> فقط تور ویژه</button>
-      <button class="soft quick-filter-chip-v50" type="button" data-home-quick="cap" onclick="homeToolbarQuickAction('cap')"><i class="fa-solid fa-users-viewfinder"></i> ظرفیت‌دار</button>
-      <button class="soft quick-filter-chip-v50" type="button" data-home-quick="luxury" onclick="homeToolbarQuickAction('luxury')"><i class="fa-solid fa-gem"></i> هتل ۵ ستاره</button>
-      <button class="soft quick-filter-chip-v50" type="button" data-home-quick="cheap" onclick="homeToolbarQuickAction('cheap')"><i class="fa-solid fa-tags"></i> ارزان‌ترین‌ها</button>
-    </div>
-    <div id="activeFilters" class="active-filters-v50" aria-live="polite"></div>
+  // فیلترهای قدیمی از UI حذف شده‌اند؛ این کنترل‌های پنهان فقط برای جستجوی سریع هیرو،
+  // لینک کشورها، دسته‌بندی‌ها و بازنشانی خودکار نگه داشته شده‌اند.
+  return `<section class="filters-shell-v49 hidden-home-filters" aria-hidden="true">
+    <input id="search" value="">
+    <select id="dest">${homeSearchDestOptions()}</select>
+    <select id="sort"><option value="default">پیش‌فرض</option><option value="asc">ارزان‌ترین</option><option value="desc">گران‌ترین</option><option value="rate">بالاترین امتیاز</option></select>
+    <input id="airline" value="">
+    <select id="star"><option value="all">همه</option><option value="3">۳ ستاره</option><option value="4">۴ ستاره</option><option value="5">۵ ستاره</option></select>
+    <input id="onlyCap" type="checkbox">
     <div id="autoResetStatus" class="auto-reset-status" aria-live="polite"></div>
   </section>`;
-}
-
-function homeToolbarQuickAction(action) {
-  if (action === 'special') {
-    currentCat = currentCat === 'special' ? 'all' : 'special';
-  } else if (action === 'cap') {
-    if ($('onlyCap')) $('onlyCap').checked = !$('onlyCap').checked;
-  } else if (action === 'luxury') {
-    if ($('star')) $('star').value = $('star').value === '5' ? 'all' : '5';
-  } else if (action === 'cheap') {
-    if ($('sort')) $('sort').value = $('sort').value === 'asc' ? 'default' : 'asc';
-  }
-  filterHome();
-}
-
-function activeHomeFiltersData() {
-  const q = $('search')?.value?.trim() || '';
-  const d = $('dest')?.value || 'all';
-  const sort = $('sort')?.value || 'default';
-  const star = $('star')?.value || 'all';
-  const airline = $('airline')?.value?.trim() || '';
-  const onlyCap = !!$('onlyCap')?.checked;
-  const items = [];
-  if (currentCat !== 'all') {
-    const map = {
-      domestic: 'تورهای داخلی',
-      international: 'تورهای خارجی',
-      luxury: 'تورهای لوکس',
-      economy: 'تورهای اقتصادی',
-      special: 'تورهای ویژه',
-    };
-    items.push({ key: 'cat', label: map[currentCat] || 'دسته‌بندی انتخاب شده' });
-  }
-  if (currentCountry !== 'all') items.push({ key: 'country', label: `کشور: ${currentCountry}` });
-  if (currentDepartureDate !== 'all') items.push({ key: 'date', label: `تاریخ: ${currentDepartureDate}` });
-  if (q) items.push({ key: 'search', label: `جست‌وجو: ${q}` });
-  if (d !== 'all') items.push({ key: 'dest', label: `مقصد: ${d}` });
-  if (sort !== 'default') {
-    const sortMap = { asc: 'مرتب‌سازی: ارزان‌ترین', desc: 'مرتب‌سازی: گران‌ترین', rate: 'مرتب‌سازی: بالاترین امتیاز' };
-    items.push({ key: 'sort', label: sortMap[sort] || 'مرتب‌سازی' });
-  }
-  if (star !== 'all') items.push({ key: 'star', label: `هتل ${faNum(star)} ستاره` });
-  if (airline) items.push({ key: 'airline', label: `ایرلاین: ${airline}` });
-  if (onlyCap) items.push({ key: 'onlyCap', label: 'فقط ظرفیت‌دار' });
-  return items;
-}
-
-function clearSingleFilter(key) {
-  if (key === 'cat') currentCat = 'all';
-  else if (key === 'country') {
-    currentCountry = 'all';
-    selectedCountry = '';
-  }
-  else if (key === 'date') currentDepartureDate = 'all';
-  else if (key === 'search' && $('search')) $('search').value = '';
-  else if (key === 'dest' && $('dest')) $('dest').value = 'all';
-  else if (key === 'sort' && $('sort')) $('sort').value = 'default';
-  else if (key === 'star' && $('star')) $('star').value = 'all';
-  else if (key === 'airline' && $('airline')) $('airline').value = '';
-  else if (key === 'onlyCap' && $('onlyCap')) $('onlyCap').checked = false;
-  filterHome();
-}
-
-function renderActiveFilters() {
-  const host = $('activeFilters');
-  if (!host) return;
-  const items = activeHomeFiltersData();
-  host.classList.toggle('on', items.length > 0);
-  host.innerHTML = items.length
-    ? `<div class="active-filter-list-v50">${items
-        .map(item => `<button type="button" class="active-filter-chip-v50" onclick="clearSingleFilter('${item.key}')">${item.label}<i class="fa-solid fa-xmark"></i></button>`)
-        .join('')}</div>`
-    : `<div class="active-filter-empty-v50"><i class="fa-regular fa-compass"></i><span>هنوز فیلتری فعال نیست؛ از میان‌برهای بالا برای محدود کردن نتایج استفاده کن.</span></div>`;
-}
-
-function refreshHomeFilterUi(list) {
-  const visibleCount = Array.isArray(list) ? list.length : 0;
-  const countLabel = $('tourCountLabel');
-  const hint = $('filterHint');
-  const dirty = homeFilterIsDirty();
-  renderActiveFilters();
-  if (countLabel) {
-    countLabel.textContent = visibleCount === 1 ? 'تور پیدا شد' : 'تور پیدا شد';
-  }
-  if (hint) {
-    hint.textContent = dirty
-      ? 'نتایج بر اساس فیلترهای فعلی به‌روزرسانی شده‌اند'
-      : 'همه تورهای فعال نمایش داده می‌شوند';
-  }
-  if ($('filtersResetBtn')) $('filtersResetBtn').classList.toggle('soft-pulse', dirty);
-  document.querySelectorAll('.catbar-v49 [data-cat]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.cat === currentCat);
-  });
-  document.querySelectorAll('[data-home-quick]').forEach(btn => {
-    const action = btn.dataset.homeQuick;
-    const active =
-      (action === 'special' && currentCat === 'special') ||
-      (action === 'cap' && !!$('onlyCap')?.checked) ||
-      (action === 'luxury' && String($('star')?.value || 'all') === '5') ||
-      (action === 'cheap' && String($('sort')?.value || 'default') === 'asc');
-    btn.classList.toggle('active', active);
-  });
 }
 
 function categoryBarHtml() {
@@ -1006,7 +857,7 @@ function renderHome() {
     ${customTourPopupHtml()}${consultPopupHtml()}${hotelPhotosModalHtml()}
     ${filtersSection(list)}
     ${categoryBarHtml()}
-    <div id="tours" class="tour-list-head-v49 row"><div><span class="badge domestic">انتخاب و رزرو</span><h2>تورهای آماده سفر</h2><p class="small">قیمت اتاق، ظرفیت و هتل‌ها را شفاف مقایسه کن.</p></div><div class="tour-results-side-v50"><div class="row tour-results-count-v50" role="status" aria-live="polite"><b id="tourCount">۰</b><span id="tourCountLabel" class="tour-count-label">تور پیدا شد</span></div><div id="filterHint" class="tour-filter-hint-v50">همه تورهای فعال نمایش داده می‌شوند</div></div></div>
+    <div id="tours" class="tour-list-head-v49 row"><div><span class="badge domestic">انتخاب و رزرو</span><h2>تورهای آماده سفر</h2><p class="small">قیمت اتاق، ظرفیت و هتل‌ها را شفاف مقایسه کن.</p></div><div class="row" role="status" aria-live="polite"><b id="tourCount">۰</b><span class="tour-count-label">تور پیدا شد</span></div></div>
     <section id="tourGrid" class="grid g3 tour-grid-v49"></section>
     ${visaSection()}
     ${uiFaqSection()}
@@ -1023,9 +874,7 @@ function tourCard(t) {
   const startPrice = Number(t.newPrice || 0) > 0 ? Number(t.newPrice) : Number(minHotel(t).price || 0);
   const hotelCount = visibleHotelEntries(t).length || (t.hotels || []).length;
   const cap = totalCapacity(t);
-  const soldOut = cap <= 0;
-  const ctaLabel = soldOut ? 'بررسی جزئیات' : 'مشاهده و رزرو';
-  return `<article class="card clickable-tour-card tour-card-v49 ${soldOut ? 'is-soldout' : ''}" tabindex="0" role="link" aria-label="مشاهده و رزرو ${t.title}" onclick="cardClickDetail(event,${t.id})" onkeydown="if(event.key==='Enter'){route('detail',${t.id})}">
+  return `<article class="card clickable-tour-card tour-card-v49" tabindex="0" role="link" aria-label="مشاهده و رزرو ${t.title}" onclick="cardClickDetail(event,${t.id})" onkeydown="if(event.key==='Enter'){route('detail',${t.id})}">
     <div class="tour-image-wrap-v49">
       <img class="tour-img" src="${t.img || DEFAULT_IMG}" alt="${t.title || ''}">
       ${t.lastMinute ? '<span class="flash-badge">لحظه آخری</span>' : ''}
@@ -1040,41 +889,14 @@ function tourCard(t) {
         <span><i class="fa-solid fa-star"></i>${faNum(t.rating || '۴.۸')}</span>
         <span><i class="fa-solid fa-hotel"></i>${faNum(hotelCount)} هتل</span>
       </div>
-      <div class="tour-price-row-v50">
-        <div class="tour-price-main-v50">
-          <small>شروع قیمت از</small>
-          <b>${money(startPrice)}</b>
-        </div>
-        <span class="tour-score-pill-v50"><i class="fa-solid fa-shield-heart"></i>${soldOut ? 'جزئیات فعال' : 'رزرو آنلاین'}</span>
-      </div>
       ${tourRoomPricePairHtml(t)}
       <div class="tour-card-footer-v49">
-        <div class="tour-capacity-note ${soldOut ? 'is-soldout' : ''}"><small>${soldOut ? 'وضعیت' : 'ظرفیت'}</small><em>${soldOut ? 'فعلاً تکمیل ظرفیت' : faNum(cap) + ' ظرفیت باقی‌مانده'}</em></div>
-        <button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">${ctaLabel}</button>
+        <div class="tour-capacity-note"><small>ظرفیت</small><em>${cap > 0 ? faNum(cap) + ' ظرفیت باقی‌مانده' : 'تکمیل ظرفیت'}</em></div>
+        <button class="btn" onclick="event.stopPropagation();route('detail',${t.id})">مشاهده و رزرو</button>
       </div>
       <button class="compare-btn ${compare.has(t.id) ? 'active' : ''}" onclick="event.stopPropagation();toggleCompare(${t.id})">${compare.has(t.id) ? 'در مقایسه' : 'افزودن به مقایسه'}</button>
     </div>
   </article>`;
-}
-
-function jumpToDetailSection(id) {
-  const box = document.getElementById(id);
-  if (!box) return;
-  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function detailSectionNav(t, parts) {
-  const items = [];
-  if (parts.gallery) items.push({ id: 'detailGallerySection', label: 'گالری', icon: 'fa-images' });
-  if (parts.info) items.push({ id: 'detailInfoSection', label: 'اطلاعات سفر', icon: 'fa-circle-info' });
-  if (parts.dates) items.push({ id: 'detailDatesSection', label: 'تاریخ‌ها', icon: 'fa-calendar-days' });
-  if (parts.hotels) items.push({ id: 'detailHotelsSection', label: 'هتل‌ها', icon: 'fa-hotel' });
-  if (parts.services) items.push({ id: 'detailServicesSection', label: 'خدمات', icon: 'fa-suitcase-rolling' });
-  if (parts.reviews) items.push({ id: 'detailReviewsSection', label: 'نظر مسافران', icon: 'fa-comment-dots' });
-  if (!items.length) return '';
-  return `<nav class="detail-section-nav-v50" aria-label="بخش‌های صفحه تور">${items
-    .map(item => `<button type="button" class="detail-nav-chip-v50" onclick="jumpToDetailSection('${item.id}')"><i class="fa-solid ${item.icon}"></i>${item.label}</button>`)
-    .join('')}</nav>`;
 }
 
 function renderDetail(t) {
@@ -1119,14 +941,6 @@ function renderDetail(t) {
     sectionOn(t, 'reviews') && (t.reviews || []).length
       ? `<h3>نظر مسافران</h3><div class="g2 grid">${(t.reviews || []).map(r => `<div class="info"><div class="row"><b>${r.name}</b><span style="color:#f59e0b">${'★'.repeat(r.rate || 5)}</span></div><p class="small">${r.text}</p></div>`).join('')}</div>`
       : '';
-  const sectionNavHtml = detailSectionNav(t, {
-    gallery: !!detailGallery,
-    info: !!flightHtml,
-    dates: !!datesHtml,
-    hotels: !!hotelsHtml,
-    services: !!(blocksHtml || policyHtml),
-    reviews: !!reviewsHtml,
-  });
   $('app').innerHTML = `${buyerTabs()}
     <button class="soft back-btn-v49" onclick="goBack()"><i class="fa-solid fa-arrow-right"></i> بازگشت</button>
     <section class="detail-hero-v49">
@@ -1144,15 +958,14 @@ function renderDetail(t) {
     </section>
     <section class="detail-layout-v49">
       <main class="detail-main-v49 card pad">
-        ${sectionNavHtml}
-        ${detailGallery ? `<section id="detailGallerySection" class="detail-section-block-v50">${detailGallery}</section>` : ''}
-        ${flightHtml ? `<section id="detailInfoSection" class="detail-section-block-v50">${flightHtml}</section>` : ''}
+        ${detailGallery}
+        ${flightHtml}
         ${destinationGuideDetail(t)}
-        ${datesHtml ? `<section id="detailDatesSection" class="detail-section-block-v50">${datesHtml}</section>` : ''}
-        ${hotelsHtml ? `<section id="detailHotelsSection" class="detail-section-block-v50">${hotelsHtml}</section>` : ''}
-        ${blocksHtml ? `<section id="detailServicesSection" class="detail-section-block-v50">${blocksHtml}</section>` : ''}
-        ${policyHtml ? `<section class="detail-section-block-v50">${policyHtml}</section>` : ''}
-        ${reviewsHtml ? `<section id="detailReviewsSection" class="detail-section-block-v50">${reviewsHtml}</section>` : ''}
+        ${datesHtml}
+        ${hotelsHtml}
+        ${blocksHtml}
+        ${policyHtml}
+        ${reviewsHtml}
       </main>
       <aside class="detail-aside-v49 card pad">
         <span class="badge special">رزرو سریع</span>
@@ -1209,7 +1022,6 @@ function filterHome() {
       $('tourGrid').innerHTML =
         list.map(tourCard).join('') ||
         '<div class="card pad empty-tour-result" style="grid-column:1/-1"><i class="fa-solid fa-route"></i><h3>توری با این انتخاب پیدا نشد</h3><p class="small">تاریخ یا مقصد دیگری را امتحان کن؛ همه تورها همیشه در دسترس‌اند.</p><button class="soft" onclick="manualResetHome()">مشاهده همه تورها</button></div>';
-    refreshHomeFilterUi(list);
     renderCompareDock();
     updateHomeAutoReset();
   } catch (e) {
@@ -1217,7 +1029,6 @@ function filterHome() {
     if ($('tourGrid'))
       $('tourGrid').innerHTML =
         '<div class="debug-error-box" style="grid-column:1/-1">خطا در نمایش تورها. داده‌ها را بازیابی کنید.</div>';
-    refreshHomeFilterUi([]);
   }
 }
 
