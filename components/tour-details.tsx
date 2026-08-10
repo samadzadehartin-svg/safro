@@ -7,7 +7,7 @@ import type { Tour } from "@/lib/types";
 import { CalendarIcon, PlaneIcon, StarIcon, UsersIcon } from "./icons";
 
 const money = (n: number) => `${new Intl.NumberFormat("fa-IR").format(n)} تومان`;
-const img = (src?: string) => src?.replace(/^\.\.\//, "/").replace(/^assets\//, "/assets/") || "/assets/images/default.svg";
+const img = (src?: string) => src?.replace(/^\.\.\//, "/").replace(/^assets\//, "/assets/").replace(/\.svg$/, ".gif") || "/assets/images/default.gif";
 
 export function TourDetails({ id }: { id: number }) {
   const [tour, setTour] = useState<Tour | null>(null);
@@ -46,7 +46,7 @@ export function TourDetails({ id }: { id: number }) {
     <div className="breadcrumbs mb-6 text-sm"><ul><li><Link href="/">تورهای سفر</Link></li><li>{tour.dest}</li><li>{tour.title}</li></ul></div>
     <section className="grid gap-7 lg:grid-cols-[1fr_380px]">
       <div className="space-y-6">
-        <div className="overflow-hidden rounded-[2rem] border border-base-300 bg-base-100 p-2 shadow-sm"><img src={img(tour.gallery?.[0] || tour.img)} alt={tour.title} className="h-[280px] w-full rounded-[1.6rem] object-cover sm:h-[430px]" /></div>
+        <div className="overflow-hidden rounded-[2rem] border border-base-300 bg-base-100 p-2 shadow-sm"><img src={img(tour.gallery?.[0] || tour.img)} alt={tour.title} decoding="async" fetchPriority="high" className="h-[280px] w-full rounded-[1.6rem] object-cover sm:h-[430px]" /></div>
         <div className="rounded-3xl border border-base-300 bg-base-100 p-5 sm:p-7">
           <div className="flex flex-wrap items-start justify-between gap-4"><div><div className="mb-2 flex flex-wrap gap-2">{tour.label && <span className="badge badge-secondary">{tour.label}</span>}<span className="badge badge-outline">{tour.type === "domestic" ? "داخلی" : "خارجی"}</span></div><h1 className="text-2xl font-black sm:text-3xl">{tour.title}</h1></div><div className="badge badge-lg bg-warning/10 text-warning"><StarIcon className="size-4 fill-current" /> {tour.rating ?? 4.5}</div></div>
           <div className="mt-6 grid gap-3 sm:grid-cols-3"><div className="info-tile"><PlaneIcon/><span><small>ایرلاین</small><b>{tour.airline}</b></span></div><div className="info-tile"><CalendarIcon/><span><small>مدت سفر</small><b>{tour.duration}</b></span></div><div className="info-tile"><UsersIcon/><span><small>مبدأ</small><b>{tour.origin || "تهران"}</b></span></div></div>

@@ -1100,7 +1100,7 @@ function customerTrailMini() {
 
 function destinationGuideCards() {
   const guides = destinationGuideList();
-  return `<section class="destination-guide-section card pad"><div class="row wrap"><div><span class="badge special">راهنمای مقصد</span><h2>مقصدهای پیشنهادی سفر</h2><p class="small"></p></div></div><div class="destination-guide-grid">${guides.map(g => `<button class="destination-guide-card" onclick="selectDestinationFromGuide('${g.dest}')"><b>${g.dest}</b><span>${g.intro.slice(0, 120)}...</span><small>${(g.bestFor || []).slice(0, 3).join('، ')}</small></button>`).join('')}</div></section>`;
+  return `<section class="destination-guide-section card pad"><div class="row wrap"><div><span class="badge special">راهنمای مقصد</span><h2>مقصدهای پیشنهادی سفر</h2><p class="small"></p></div></div><div class="destination-guide-grid">${guides.map(g => `<button class="destination-guide-card" onclick="selectDestinationFromGuide('${g.dest}')"><b>${g.dest}</b><small>${(g.bestFor || []).slice(0, 3).join('، ')}</small></button>`).join('')}</div></section>`;
 }
 
 function selectDestinationFromGuide(dest) {
@@ -1115,7 +1115,7 @@ function selectDestinationFromGuide(dest) {
 function destinationGuideDetail(t) {
   const g = destinationGuide(t.dest, t.title) || t.destinationGuide;
   if (!g) return '';
-  return `<section class="destination-detail-box destination-guide-detail"><div class="row wrap"><div><span class="badge international">راهنمای مقصد</span><h3>${g.title || `راهنمای سفر ${t.dest}`}</h3></div></div><p class="small destination-intro">${g.intro || ''}</p><div class="destination-mini-grid"><div><b>مناسب برای</b><p>${(g.bestFor || []).map(x => `<span class="destination-chip">${x}</span>`).join('')}</p></div><div><b>دیدنی‌ها و تجربه‌ها</b><ul>${(g.highlights || g.sights || []).map(x => `<li>${x}</li>`).join('')}</ul></div><div><b>نکته سفر</b><ul>${(g.tips || []).map(x => `<li>${x}</li>`).join('')}</ul></div></div></section>`;
+  return `<section class="destination-detail-box destination-guide-detail"><div class="row wrap"><div><span class="badge international">راهنمای مقصد</span><h3>${g.title || `راهنمای سفر ${t.dest}`}</h3></div></div><div class="destination-mini-grid"><div><b>مناسب برای</b><p>${(g.bestFor || []).map(x => `<span class="destination-chip">${x}</span>`).join('')}</p></div><div><b>دیدنی‌ها و تجربه‌ها</b><ul>${(g.highlights || g.sights || []).map(x => `<li>${x}</li>`).join('')}</ul></div><div><b>نکته سفر</b><ul>${(g.tips || []).map(x => `<li>${x}</li>`).join('')}</ul></div></div></section>`;
 }
 
 function buyerTourLabel(t) {

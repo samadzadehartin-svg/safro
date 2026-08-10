@@ -43,3 +43,25 @@ npm run dev
 `server/data/seed.json` شامل ۱۴ تور نمونه نسخه قبلی است. در اولین write، داده فعال در `server/data/store.json` ذخیره می‌شود.
 
 برای production بهتر است `StoreService` با repository دیتابیس (PostgreSQL + Prisma/TypeORM یا Supabase server client) جایگزین شود و auth پنل‌های staff/admin اضافه گردد.
+
+## GIF به‌جای عکس
+
+رسانه‌های اصلی تورها در این نسخه به GIF متحرک تغییر کرده‌اند و فایل‌ها داخل مسیر زیر هستند:
+
+```text
+public/assets/images/*.gif
+```
+
+برای جایگزینی با GIFهای خودت، فایل جدید را در همین پوشه قرار بده و مقدار `img` یا `gallery` تور را به مسیر GIF بده؛ مثال:
+
+```json
+{
+  "img": "../assets/images/istanbul-hagia-sophia.gif",
+  "gallery": [
+    "../assets/images/istanbul-hagia-sophia.gif",
+    "../assets/images/istanbul-hagia-sophia-2.gif"
+  ]
+}
+```
+
+فرانت برای سازگاری با داده‌های قدیمی، مسیرهای `.svg` تور را هم به‌صورت خودکار به فایل هم‌نام `.gif` تبدیل می‌کند. برای سرعت بهتر موبایل، GIF کارت‌های تور با lazy loading بارگذاری می‌شود. پیشنهاد می‌شود GIFهای سفارشی را نزدیک نسبت `16:9`، عرض حدود `800px` و تا حد امکان کم‌حجم نگه داری.

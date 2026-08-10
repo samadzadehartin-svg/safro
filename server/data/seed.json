@@ -23,11 +23,11 @@
       "lastMinute": true,
       "dealPercent": 10,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/istanbul-hagia-sophia.svg",
+      "img": "../assets/images/istanbul-hagia-sophia.gif",
       "gallery": [
-        "../assets/images/istanbul-hagia-sophia.svg",
-        "../assets/images/istanbul-hagia-sophia-2.svg",
-        "../assets/images/istanbul-hagia-sophia-3.svg"
+        "../assets/images/istanbul-hagia-sophia.gif",
+        "../assets/images/istanbul-hagia-sophia-2.gif",
+        "../assets/images/istanbul-hagia-sophia-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۴/۱۵",
@@ -117,11 +117,11 @@
       "lastMinute": false,
       "dealPercent": 0,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/dubai-burj-khalifa.svg",
+      "img": "../assets/images/dubai-burj-khalifa.gif",
       "gallery": [
-        "../assets/images/dubai-burj-khalifa.svg",
-        "../assets/images/dubai-burj-khalifa-2.svg",
-        "../assets/images/dubai-burj-khalifa-3.svg"
+        "../assets/images/dubai-burj-khalifa.gif",
+        "../assets/images/dubai-burj-khalifa-2.gif",
+        "../assets/images/dubai-burj-khalifa-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۴/۱۸",
@@ -211,11 +211,11 @@
       "lastMinute": true,
       "dealPercent": 12,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/antalya-beach.svg",
+      "img": "../assets/images/antalya-beach.gif",
       "gallery": [
-        "../assets/images/antalya-beach.svg",
-        "../assets/images/antalya-beach-2.svg",
-        "../assets/images/antalya-beach-3.svg"
+        "../assets/images/antalya-beach.gif",
+        "../assets/images/antalya-beach-2.gif",
+        "../assets/images/antalya-beach-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۴/۲۰",
@@ -305,11 +305,11 @@
       "lastMinute": true,
       "dealPercent": 8,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/kish-island.svg",
+      "img": "../assets/images/kish-island.gif",
       "gallery": [
-        "../assets/images/kish-island.svg",
-        "../assets/images/kish-island-2.svg",
-        "../assets/images/kish-island-3.svg"
+        "../assets/images/kish-island.gif",
+        "../assets/images/kish-island-2.gif",
+        "../assets/images/kish-island-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۵/۰۵",
@@ -399,11 +399,11 @@
       "lastMinute": false,
       "dealPercent": 0,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/mashhad-shrine.svg",
+      "img": "../assets/images/mashhad-shrine.gif",
       "gallery": [
-        "../assets/images/mashhad-shrine.svg",
-        "../assets/images/mashhad-shrine-2.svg",
-        "../assets/images/mashhad-shrine-3.svg"
+        "../assets/images/mashhad-shrine.gif",
+        "../assets/images/mashhad-shrine-2.gif",
+        "../assets/images/mashhad-shrine-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۴/۱۰",
@@ -493,11 +493,11 @@
       "lastMinute": true,
       "dealPercent": 9,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/cappadocia-balloons.svg",
+      "img": "../assets/images/cappadocia-balloons.gif",
       "gallery": [
-        "../assets/images/cappadocia-balloons.svg",
-        "../assets/images/cappadocia-balloons-2.svg",
-        "../assets/images/cappadocia-balloons-3.svg"
+        "../assets/images/cappadocia-balloons.gif",
+        "../assets/images/cappadocia-balloons-2.gif",
+        "../assets/images/cappadocia-balloons-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۵/۰۶",
@@ -587,11 +587,11 @@
       "lastMinute": false,
       "dealPercent": 0,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/shiraz-persepolis.svg",
+      "img": "../assets/images/shiraz-persepolis.gif",
       "gallery": [
-        "../assets/images/shiraz-persepolis.svg",
-        "../assets/images/shiraz-persepolis-2.svg",
-        "../assets/images/shiraz-persepolis-3.svg"
+        "../assets/images/shiraz-persepolis.gif",
+        "../assets/images/shiraz-persepolis-2.gif",
+        "../assets/images/shiraz-persepolis-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۴/۲۹",
@@ -681,11 +681,11 @@
       "lastMinute": false,
       "dealPercent": 0,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/isfahan-bridge.svg",
+      "img": "../assets/images/isfahan-bridge.gif",
       "gallery": [
-        "../assets/images/isfahan-bridge.svg",
-        "../assets/images/isfahan-bridge-2.svg",
-        "../assets/images/isfahan-bridge-3.svg"
+        "../assets/images/isfahan-bridge.gif",
+        "../assets/images/isfahan-bridge-2.gif",
+        "../assets/images/isfahan-bridge-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۵/۰۳",
@@ -775,11 +775,11 @@
       "lastMinute": false,
       "dealPercent": 0,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/paris-eiffel.svg",
+      "img": "../assets/images/paris-eiffel.gif",
       "gallery": [
-        "../assets/images/paris-eiffel.svg",
-        "../assets/images/paris-eiffel-2.svg",
-        "../assets/images/paris-eiffel-3.svg"
+        "../assets/images/paris-eiffel.gif",
+        "../assets/images/paris-eiffel-2.gif",
+        "../assets/images/paris-eiffel-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۶/۰۵",
@@ -869,11 +869,11 @@
       "lastMinute": false,
       "dealPercent": 0,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/rome-colosseum.svg",
+      "img": "../assets/images/rome-colosseum.gif",
       "gallery": [
-        "../assets/images/rome-colosseum.svg",
-        "../assets/images/rome-colosseum-2.svg",
-        "../assets/images/rome-colosseum-3.svg"
+        "../assets/images/rome-colosseum.gif",
+        "../assets/images/rome-colosseum-2.gif",
+        "../assets/images/rome-colosseum-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۶/۰۲",
@@ -963,11 +963,11 @@
       "lastMinute": true,
       "dealPercent": 7,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/bangkok-temple.svg",
+      "img": "../assets/images/bangkok-temple.gif",
       "gallery": [
-        "../assets/images/bangkok-temple.svg",
-        "../assets/images/bangkok-temple-2.svg",
-        "../assets/images/bangkok-temple-3.svg"
+        "../assets/images/bangkok-temple.gif",
+        "../assets/images/bangkok-temple-2.gif",
+        "../assets/images/bangkok-temple-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۵/۱۱",
@@ -1057,11 +1057,11 @@
       "lastMinute": true,
       "dealPercent": 6,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/yerevan-cascade.svg",
+      "img": "../assets/images/yerevan-cascade.gif",
       "gallery": [
-        "../assets/images/yerevan-cascade.svg",
-        "../assets/images/yerevan-cascade-2.svg",
-        "../assets/images/yerevan-cascade-3.svg"
+        "../assets/images/yerevan-cascade.gif",
+        "../assets/images/yerevan-cascade-2.gif",
+        "../assets/images/yerevan-cascade-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۴/۳۰",
@@ -1151,11 +1151,11 @@
       "lastMinute": false,
       "dealPercent": 0,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/georgia-caucasus.svg",
+      "img": "../assets/images/georgia-caucasus.gif",
       "gallery": [
-        "../assets/images/georgia-caucasus.svg",
-        "../assets/images/georgia-caucasus-2.svg",
-        "../assets/images/georgia-caucasus-3.svg"
+        "../assets/images/georgia-caucasus.gif",
+        "../assets/images/georgia-caucasus-2.gif",
+        "../assets/images/georgia-caucasus-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۵/۰۷",
@@ -1245,11 +1245,11 @@
       "lastMinute": false,
       "dealPercent": 0,
       "dealEndsAt": "2099-12-30T20:00:00.000Z",
-      "img": "../assets/images/malaysia-towers.svg",
+      "img": "../assets/images/malaysia-towers.gif",
       "gallery": [
-        "../assets/images/malaysia-towers.svg",
-        "../assets/images/malaysia-towers-2.svg",
-        "../assets/images/malaysia-towers-3.svg"
+        "../assets/images/malaysia-towers.gif",
+        "../assets/images/malaysia-towers-2.gif",
+        "../assets/images/malaysia-towers-3.gif"
       ],
       "dates": [
         "۱۴۰۵/۰۶/۰۳",

@@ -3,13 +3,13 @@ import type { Tour } from "@/lib/types";
 import { ArrowLeftIcon, CalendarIcon, PlaneIcon, StarIcon } from "./icons";
 
 const faMoney = (n: number) => `${new Intl.NumberFormat("fa-IR").format(n)} تومان`;
-const imagePath = (src?: string) => src?.replace(/^\.\.\//, "/").replace(/^assets\//, "/assets/") || "/assets/images/default.svg";
+const imagePath = (src?: string) => src?.replace(/^\.\.\//, "/").replace(/^assets\//, "/assets/").replace(/\.svg$/, ".gif") || "/assets/images/default.gif";
 
 export function TourCard({ tour }: { tour: Tour }) {
   return (
     <article className="card group overflow-hidden border border-base-300 bg-base-100 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
       <figure className="relative h-52 overflow-hidden bg-base-200 sm:h-56">
-        <img src={imagePath(tour.img)} alt={tour.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+        <img src={imagePath(tour.img)} alt={tour.title} loading="lazy" decoding="async" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
         <div className="absolute inset-x-0 top-0 flex items-start justify-between p-3">
           <div className="flex flex-wrap gap-2">
             {tour.label && <span className="badge badge-secondary border-0 shadow">{tour.label}</span>}
