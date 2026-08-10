@@ -826,7 +826,6 @@ function countryLineArtSection() {
       <div>
         <span class="badge international">پیشنهاد سفرو</span>
         <h2>مقصدهای محبوب</h2>
-        <p class="small">از مقصد شروع کن؛ تورها، هتل‌ها و ظرفیت‌های همان مسیر را یک‌جا ببین.</p>
       </div>
       <button class="soft country-reset" onclick="selectCountryFromLineArt('all')"><i class="fa-solid fa-earth-asia"></i> همه تورها</button>
     </div>
