@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "nest start"
+  },
+  "dependencies": {
+    "@nestjs/common": "latest",
+    "@nestjs/core": "latest",
+    "reflect-metadata": "latest",
+    "rxjs": "latest"
+  }
+}
