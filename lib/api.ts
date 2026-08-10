@@ -1,4 +1,5 @@
 import type { DashboardSummary, Order, Tour } from "./types";
+import fallbackData from "./fallback-data.json";
 
 export const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api";
 
@@ -17,10 +18,30 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+const fallbackTours = fallbackData.tours as Tour[];
+
+async function listTours(): Promise<Tour[]> {
+  try {
+    return await request<Tour[]>("/tours");
+  } catch {
+    return fallbackTours;
+  }
+}
+
+async function getTour(id: number): Promise<Tour> {
+  try {
+    return await request<Tour>(`/tours/${id}`);
+  } catch {
+    const tour = fallbackTours.find((item) => Number(item.id) === Number(id));
+    if (!tour) throw new Error("Tour not found");
+    return tour;
+  }
+}
+
 export const api = {
   tours: {
-    list: () => request<Tour[]>("/tours"),
-    one: (id: number) => request<Tour>(`/tours/${id}`),
+    list: listTours,
+    one: getTour,
     create: (tour: Partial<Tour>) =>
       request<Tour>("/tours", { method: "POST", body: JSON.stringify(tour) }),
     update: (id: number, tour: Partial<Tour>) =>

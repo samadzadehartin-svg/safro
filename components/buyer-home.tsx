@@ -43,10 +43,10 @@ export function BuyerHome() {
             </div>
             <div className="mt-5 flex flex-wrap gap-2 text-sm">{destinations.map(dest => <button key={dest} onClick={() => setQuery(dest)} className="btn btn-ghost btn-sm rounded-full bg-base-100/60">{dest}</button>)}</div>
           </div>
-          <div className="relative hidden lg:block">
+          <div className="relative mt-4 block lg:mt-0">
             <div className="absolute -inset-7 rounded-[3rem] bg-primary/10 blur-3xl" />
             <div className="relative overflow-hidden rounded-[2.5rem] border border-white/50 bg-base-100 p-3 shadow-2xl">
-              <img src="/assets/images/safarro-middle-hero.gif" alt="سفر با سفرو" loading="lazy" decoding="async" className="aspect-[4/4.15] w-full rounded-[2rem] object-cover" />
+              <img src="/assets/images/safarro-middle-hero.gif" alt="سفر با سفرو" loading="eager" decoding="async" className="aspect-[4/4.15] w-full rounded-[2rem] object-cover" />
               <div className="absolute bottom-7 right-7 rounded-2xl bg-base-100/90 p-4 shadow-lg backdrop-blur"><span className="text-sm text-base-content/60">پشتیبانی سفر</span><strong className="mt-1 block text-lg">از انتخاب تا بازگشت ✈️</strong></div>
             </div>
           </div>

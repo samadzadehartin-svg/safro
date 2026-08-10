@@ -1,4 +1,4 @@
-const CACHE_NAME = 'safro-next-v9';
+const CACHE_NAME = 'safro-next-v10-gif';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
