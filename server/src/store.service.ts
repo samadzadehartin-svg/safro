@@ -11,8 +11,8 @@ export type JsonStore = {
 
 @Injectable()
 export class StoreService {
-  private readonly file = process.env.SAFRO_DATA_FILE || path.join(process.cwd(), 'server', 'data', 'store.json');
-  private readonly seedFile = path.join(process.cwd(), 'server', 'data', 'seed.json');
+  private readonly file = process.env.SAFRO_DATA_FILE || (process.env.VERCEL ? '/tmp/safro-store.json' : path.join(process.cwd(), 'data', 'store.json'));
+  private readonly seedFile = path.join(process.cwd(), 'data', 'seed.json');
   private data: JsonStore;
 
   constructor() {

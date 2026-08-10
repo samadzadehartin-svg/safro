@@ -7,12 +7,24 @@
 - **Responsive:** هدر، کارت‌ها، فرم رزرو، پنل فروش و مدیریت برای موبایل/تبلت/دسکتاپ
 - **Data:** در حالت توسعه JSON file store با seed داده‌های نسخه قبلی؛ آماده جایگزینی با PostgreSQL/Supabase در لایه NestJS
 
-## اجرا
+## اجرا در لوکال
+
+ابتدا وابستگی‌های هر دو بخش را نصب کن:
 
 ```bash
 cp .env.example .env.local
 npm install
+npm --prefix server install
+```
+
+سپس در دو ترمینال اجرا کن:
+
+```bash
+# Terminal 1 — Next.js
 npm run dev
+
+# Terminal 2 — NestJS
+npm --prefix server run dev
 ```
 
 - Frontend: `http://localhost:3000`
@@ -65,3 +77,13 @@ public/assets/images/*.gif
 ```
 
 فرانت برای سازگاری با داده‌های قدیمی، مسیرهای `.svg` تور را هم به‌صورت خودکار به فایل هم‌نام `.gif` تبدیل می‌کند. برای سرعت بهتر موبایل، GIF کارت‌های تور با lazy loading بارگذاری می‌شود. پیشنهاد می‌شود GIFهای سفارشی را نزدیک نسبت `16:9`، عرض حدود `800px` و تا حد امکان کم‌حجم نگه داری.
+
+## دیپلوی روی Vercel
+
+برای Vercel، فرانت و بک‌اند باید به‌صورت دو Project از همین repository دیپلوی شوند:
+
+1. **Backend:** Root Directory = `server`
+2. **Frontend:** Root Directory = ریشه پروژه
+3. بعد از Deploy بک‌اند، در Environment Variables فرانت مقدار `API_INTERNAL_URL` را برابر آدرس بک‌اند قرار بده.
+
+جزئیات کامل در `VERCEL.md` است.
