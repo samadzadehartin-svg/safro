@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: "/buyer", destination: "/", permanent: false },
       { source: "/buyer/index.html", destination: "/", permanent: true },
       { source: "/staff/index.html", destination: "/staff", permanent: true },
       { source: "/admin/index.html", destination: "/admin", permanent: true },
