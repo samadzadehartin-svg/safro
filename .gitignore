@@ -40,3 +40,7 @@ next-env.d.ts
 /.sites-runtime/
 /outputs/
 /work/
+
+# Nest local JSON persistence
+/server/data/store.json
+/server/dist/

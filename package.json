@@ -1,45 +1,45 @@
 {
-  "name": "safro-uiux",
-  "version": "0.1.0",
+  "name": "safro-next-nest",
+  "version": "9.0.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
   },
   "scripts": {
-    "install:ci": "bash scripts/install-ci.sh",
-    "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
-    "build": "bash scripts/build-verified.sh",
-    "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs",
-    "validate:artifact": "bash scripts/validate-artifact.sh",
-    "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate",
-    "build:vercel": "node scripts/build-vercel.mjs"
+    "dev": "concurrently -n web,api -c auto \"next dev\" \"tsx watch server/src/main.ts\"",
+    "dev:web": "next dev",
+    "dev:api": "tsx watch server/src/main.ts",
+    "build": "npm run build:web && npm run build:api",
+    "build:web": "next build",
+    "build:api": "tsc -p server/tsconfig.json",
+    "start": "concurrently -n web,api -c auto \"next start\" \"node server/dist/main.js\"",
+    "start:web": "next start",
+    "start:api": "node server/dist/main.js",
+    "lint": "eslint . --ignore-pattern server/dist --ignore-pattern .next"
   },
   "dependencies": {
-    "drizzle-orm": "0.45.2",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "daisyui": "^5.7.16",
     "next": "16.2.6",
     "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "react-dom": "19.2.6",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.37.1",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.2",
-    "@vitejs/plugin-rsc": "0.5.26",
-    "drizzle-kit": "0.31.10",
+    "concurrently": "^9.2.0",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
-    "react-server-dom-webpack": "19.2.6",
     "tailwindcss": "4.2.1",
-    "typescript": "5.9.3",
-    "vinext": "0.0.50",
-    "vite": "8.0.13",
-    "wrangler": "4.92.0"
+    "tsx": "^4.20.0",
+    "typescript": "5.9.3"
   },
   "type": "module",
-  "displayName": "Safro UI/UX"
+  "displayName": "Safro Next + Nest"
 }

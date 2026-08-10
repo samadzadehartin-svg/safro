@@ -1,5 +1,6 @@
-import { redirect } from "next/navigation";
+import { BuyerHome } from "@/components/buyer-home";
+import { SiteHeader } from "@/components/site-header";
 
 export default function Home() {
-  redirect("/buyer/index.html");
+  return <><SiteHeader active="home" /><BuyerHome /></>;
 }
