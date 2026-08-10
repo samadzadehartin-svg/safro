@@ -3,7 +3,7 @@
   "version": "9.0.0",
   "private": true,
   "engines": {
-    "node": ">=22.13.0"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "concurrently -n web,api -c auto \"next dev\" \"tsx watch server/src/main.ts\"",
