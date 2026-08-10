@@ -2,24 +2,34 @@
 
 import { motion } from 'framer-motion';
 
+const destinations = [
+  'Turkey',
+  'France',
+  'Italy',
+  'Dubai',
+  'Japan',
+  'Thailand'
+];
+
 export default function Home() {
   return (
-    <main className="min-h-screen p-4 sm:p-8 overflow-x-hidden">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="card bg-base-100 shadow-xl w-full max-w-xl mx-auto"
-      >
-        <div className="card-body">
-          <h1 className="card-title text-xl sm:text-3xl">
-            Safro Mobile Ready
-          </h1>
-          <p className="text-sm sm:text-base">
-            Responsive layout with smoother animations.
-          </p>
+    <main className="min-h-screen p-4 sm:p-8">
+      <section>
+        <h2 className="text-2xl font-bold mb-6">مقصدهای محبوب</h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {destinations.map((country) => (
+            <motion.div
+              key={country}
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.2 }}
+              className="card bg-base-100 shadow-md p-4 text-center"
+            >
+              <h3 className="font-semibold">{country}</h3>
+            </motion.div>
+          ))}
         </div>
-      </motion.div>
+      </section>
     </main>
   );
 }
