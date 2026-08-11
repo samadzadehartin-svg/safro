@@ -1,0 +1,22 @@
+شروع سریع پروژه
+================
+
+1) پوشه پروژه را باز کن.
+2) Node.js 20 یا جدیدتر نصب باشد.
+3) داخل ریشه پروژه اجرا کن:
+
+   npm install
+   npm run dev
+
+4) آدرس‌ها:
+   Frontend: http://localhost:3000
+   Backend:  http://localhost:4000/api
+   Swagger:  http://localhost:4000/docs
+
+استک:
+Next.js + TypeScript + Tailwind CSS + DaisyUI + Framer Motion
+Node.js + NestJS + Swagger + Validation
+
+نکته:
+فرم تماس فرانت به POST /api/contact وصل است.
+در نسخه فعلی داده‌های تماس در حافظه NestJS نگه داشته می‌شوند و بعداً می‌توان PostgreSQL/Prisma اضافه کرد.

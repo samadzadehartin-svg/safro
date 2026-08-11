@@ -1,36 +1,18 @@
 {
-  "name": "safro-web",
-  "version": "9.0.5",
+  "name": "paris-luxury-stack",
+  "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": "22.x"
-  },
+  "workspaces": [
+    "apps/web",
+    "apps/api"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "dev:web": "next dev",
-    "build": "next build",
-    "build:vercel": "next build",
-    "build:web": "next build",
-    "start": "next start",
-    "start:web": "next start",
-    "lint": "eslint . --ignore-pattern .next --ignore-pattern server --ignore-pattern legacy-ui"
-  },
-  "dependencies": {
-    "daisyui": "^5.7.16",
-    "next": "16.2.6",
-    "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "dev": "concurrently -n WEB,API -c auto \"npm run dev -w @paris/web\" \"npm run start:dev -w @paris/api\"",
+    "build": "npm run build -w @paris/web && npm run build -w @paris/api",
+    "start:web": "npm run start -w @paris/web",
+    "start:api": "npm run start:prod -w @paris/api"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.2.1",
-    "@types/node": "22.19.19",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "eslint": "9.39.4",
-    "eslint-config-next": "16.2.6",
-    "tailwindcss": "4.2.1",
-    "typescript": "5.9.3"
-  },
-  "type": "module",
-  "displayName": "Safro Web"
+    "concurrently": "^9.0.0"
+  }
 }
