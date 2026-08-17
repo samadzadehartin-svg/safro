@@ -1,0 +1,401 @@
+/* ==========================================================
+   SAFARO PREMIUM SYSTEM v10
+   One visual language across Buyer / Staff / Admin.
+   Reference direction: black editorial canvas, floating capsule
+   navigation, white primary actions, electric-blue signal.
+   ========================================================== */
+
+:root {
+  --sx-bg: #050506;
+  --sx-bg-deep: #000;
+  --sx-panel: #0d0d0f;
+  --sx-panel-2: #121216;
+  --sx-panel-3: #17171c;
+  --sx-line: rgba(255,255,255,.085);
+  --sx-line-strong: rgba(255,255,255,.14);
+  --sx-text: #f7f7f8;
+  --sx-muted: rgba(247,247,248,.55);
+  --sx-faint: rgba(247,247,248,.32);
+  --sx-blue: #3973ff;
+  --sx-blue-2: #5d8cff;
+  --sx-green: #46d79a;
+  --sx-red: #ff6b78;
+  --sx-amber: #f5bd58;
+  --sx-radius: 26px;
+  --sx-radius-sm: 16px;
+  --sx-shadow: 0 30px 90px rgba(0,0,0,.42);
+  --sx-ease: cubic-bezier(.22,1,.36,1);
+}
+
+html { background: var(--sx-bg-deep); scroll-behavior: smooth; scroll-padding-top: 112px; }
+body.buyer-page,
+body.panel-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(57,115,255,.08), transparent 28rem),
+    radial-gradient(circle at 85% 42%, rgba(255,255,255,.035), transparent 30rem),
+    var(--sx-bg) !important;
+  color: var(--sx-text) !important;
+  font-family: Vazirmatn, Tahoma, sans-serif !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+body.buyer-page::before,
+body.panel-page::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.22;
+  background-image: linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom,rgba(0,0,0,.9),transparent 78%);
+}
+
+::selection { background: rgba(57,115,255,.38); color:#fff; }
+body.buyer-page :focus-visible,
+body.panel-page :focus-visible { outline:2px solid var(--sx-blue-2) !important; outline-offset:3px; }
+
+/* --- unified floating capsule header --- */
+body.buyer-page > #headerMount,
+body.panel-page > #headerMount { position:fixed; inset:0 0 auto 0; z-index:6000; pointer-events:none; }
+body.buyer-page .main-header,
+body.panel-page .main-header {
+  position:relative !important; top:auto !important;
+  width:min(1220px,calc(100% - 38px)); min-height:66px !important; margin:16px auto 0;
+  border:1px solid var(--sx-line) !important; border-radius:999px !important;
+  background:rgba(13,13,15,.76) !important;
+  box-shadow:0 18px 70px rgba(0,0,0,.28) !important;
+  backdrop-filter:blur(26px) saturate(130%); -webkit-backdrop-filter:blur(26px) saturate(130%);
+  pointer-events:auto; transition:background .3s ease,border-color .3s ease,transform .3s ease !important;
+}
+body.buyer-page .main-header.is-scrolled,
+body.panel-page .main-header.is-scrolled { background:rgba(9,9,10,.92) !important; border-color:rgba(255,255,255,.13) !important; box-shadow:0 22px 80px rgba(0,0,0,.48) !important; }
+body.buyer-page .main-header .nav,
+body.panel-page .main-header .nav { width:100%; max-width:none !important; min-height:64px !important; padding:0 12px !important; gap:18px !important; }
+body.buyer-page .logo,
+body.panel-page .logo { color:#fff !important; gap:10px !important; }
+body.buyer-page .logo-img-box,
+body.panel-page .logo-img-box { width:42px !important; height:42px !important; padding:2px !important; border:1px solid rgba(255,255,255,.12) !important; border-radius:50% !important; background:#fff !important; }
+body.buyer-page .brand-lockup b,
+body.panel-page .brand-lockup b { color:#fff !important; font-size:20px !important; font-weight:900 !important; }
+body.buyer-page .brand-lockup small,
+body.panel-page .brand-lockup small { margin-top:4px !important; color:rgba(255,255,255,.34) !important; font-size:7px !important; letter-spacing:.28em !important; }
+body.buyer-page .main-nav,
+body.panel-page .main-nav { gap:26px !important; }
+body.buyer-page .main-nav a,
+body.panel-page .main-nav a { position:relative; padding:22px 0 !important; color:rgba(255,255,255,.56) !important; font-size:11px !important; font-weight:700 !important; transition:color .22s ease !important; }
+body.buyer-page .main-nav a:hover,
+body.panel-page .main-nav a:hover,
+body.panel-page .main-nav a.active,
+body.buyer-page .main-nav a.active { color:#fff !important; }
+body.buyer-page .main-nav a::after,
+body.panel-page .main-nav a::after { bottom:14px !important; height:2px !important; background:var(--sx-blue) !important; box-shadow:0 0 18px rgba(57,115,255,.65); }
+body.buyer-page .dark-toggle,
+body.panel-page .dark-toggle { display:none !important; }
+body.buyer-page .hamburger,
+body.panel-page .hamburger,
+body.buyer-page .header-wish { border:1px solid var(--sx-line) !important; color:#fff !important; background:#151518 !important; }
+body.panel-page .hamburger { width:40px; height:40px; border-radius:50% !important; }
+body.panel-page .hamburger span { background:#fff !important; }
+
+/* --- page containers --- */
+body.panel-page main.container { width:min(100% - 40px,1380px) !important; max-width:none !important; margin:0 auto !important; padding:118px 0 90px !important; }
+body.buyer-page main.container { min-height:100vh; }
+
+/* --- reusable surfaces --- */
+body.buyer-page .card,
+body.panel-page .card,
+body.panel-page .staff-form-section,
+body.panel-page .sidebar,
+body.panel-page .table-wrap,
+body.panel-page .modal-card,
+body.panel-page .staff-section-panel,
+body.panel-page .admin-side-nav,
+body.panel-page .hotel-bank-shell,
+body.panel-page .airline-entry-card,
+body.panel-page .currency-entry-card,
+body.panel-page .source-import-card,
+body.panel-page .staff-visa-card,
+body.panel-page .staff-hotel-card {
+  border:1px solid var(--sx-line) !important;
+  color:var(--sx-text) !important;
+  background:linear-gradient(145deg,rgba(18,18,21,.96),rgba(10,10,12,.96)) !important;
+  box-shadow:0 20px 60px rgba(0,0,0,.22) !important;
+}
+body.panel-page .card,
+body.panel-page .staff-section-panel { border-radius:24px !important; }
+body.panel-page .card:hover { border-color:rgba(255,255,255,.13) !important; }
+body.panel-page .pad { padding:22px !important; }
+body.panel-page h1,
+body.panel-page h2,
+body.panel-page h3,
+body.panel-page h4 { color:#fff !important; letter-spacing:-.02em; }
+body.panel-page h1 { font-size:clamp(28px,4vw,50px); line-height:1.2; margin:.35rem 0; }
+body.panel-page h2 { font-size:28px; }
+body.panel-page h3 { font-size:18px; }
+body.panel-page p,
+body.panel-page .small,
+body.panel-page small,
+body.panel-page .muted-line { color:var(--sx-muted) !important; }
+body.panel-page .price { color:#fff !important; font-size:clamp(18px,2.2vw,30px); font-weight:850; }
+body.panel-page .badge { border:1px solid rgba(255,255,255,.09) !important; color:rgba(255,255,255,.72) !important; background:rgba(255,255,255,.045) !important; border-radius:999px !important; }
+body.panel-page .badge.special { color:#a8beff !important; background:rgba(57,115,255,.11) !important; border-color:rgba(57,115,255,.22) !important; }
+body.panel-page .badge.domestic { color:#8ce4bd !important; background:rgba(70,215,154,.09) !important; }
+body.panel-page .badge.international { color:#a8beff !important; background:rgba(57,115,255,.1) !important; }
+
+/* --- button hierarchy --- */
+body.panel-page .btn,
+body.panel-page button:not(.soft):not(.danger):not(.hamburger),
+body.buyer-page .btn {
+  min-height:42px; padding:0 17px !important; border:0 !important; border-radius:999px !important;
+  color:#050506 !important; background:#fff !important; font-weight:850 !important;
+  box-shadow:none !important; transition:transform .22s var(--sx-ease),background .22s ease,box-shadow .22s ease !important;
+}
+body.panel-page .btn:hover,
+body.panel-page button:not(.soft):not(.danger):not(.hamburger):hover { transform:translateY(-2px); background:#f0f0f1 !important; box-shadow:0 10px 28px rgba(255,255,255,.08) !important; }
+body.panel-page .soft,
+body.buyer-page .soft { min-height:42px; border:1px solid var(--sx-line) !important; border-radius:999px !important; color:rgba(255,255,255,.78) !important; background:#151518 !important; }
+body.panel-page .soft:hover { color:#fff !important; border-color:var(--sx-line-strong) !important; background:#1b1b20 !important; }
+body.panel-page .danger { min-height:42px; border:1px solid rgba(255,107,120,.18) !important; border-radius:999px !important; color:#ff9aa4 !important; background:rgba(255,107,120,.08) !important; }
+body.panel-page .danger:hover { background:rgba(255,107,120,.14) !important; }
+
+/* --- premium fields --- */
+body.panel-page .field,
+body.panel-page input,
+body.panel-page select,
+body.panel-page textarea,
+body.buyer-page .field,
+body.buyer-page input,
+body.buyer-page select,
+body.buyer-page textarea {
+  min-height:46px; border:1px solid var(--sx-line) !important; border-radius:14px !important;
+  color:#fff !important; background:#101013 !important; box-shadow:inset 0 1px 0 rgba(255,255,255,.015) !important;
+  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease !important;
+}
+body.panel-page textarea { padding:13px !important; }
+body.panel-page .field:focus,
+body.panel-page input:focus,
+body.panel-page select:focus,
+body.panel-page textarea:focus,
+body.buyer-page .field:focus,
+body.buyer-page input:focus,
+body.buyer-page select:focus,
+body.buyer-page textarea:focus { border-color:rgba(57,115,255,.56) !important; background:#121217 !important; box-shadow:0 0 0 4px rgba(57,115,255,.10) !important; }
+body.panel-page input::placeholder,
+body.panel-page textarea::placeholder { color:rgba(255,255,255,.25) !important; }
+body.panel-page select option,
+body.buyer-page select option { color:#111 !important; background:#fff !important; }
+body.panel-page .label { color:rgba(255,255,255,.40) !important; }
+
+/* --- staff/admin hero cards --- */
+body.panel-page #app > .card:first-child {
+  position:relative; overflow:hidden; min-height:160px; padding:28px 30px !important;
+  border-color:rgba(255,255,255,.10) !important;
+  background:
+    radial-gradient(circle at 15% 25%,rgba(57,115,255,.18),transparent 25rem),
+    linear-gradient(145deg,#101014,#09090b) !important;
+}
+body.panel-page #app > .card:first-child::after {
+  content:""; position:absolute; width:260px; height:260px; left:-70px; bottom:-170px; border-radius:50%;
+  background:rgba(57,115,255,.16); filter:blur(64px); pointer-events:none;
+}
+body.panel-page #app > .card:first-child > * { position:relative; z-index:1; }
+body.panel-page #app > .grid.g4 { gap:12px !important; margin:14px 0 22px !important; }
+body.panel-page #app > .grid.g4 > .card { min-height:118px; display:flex; flex-direction:column; justify-content:space-between; gap:13px; }
+body.panel-page #app > .grid.g4 > .card::before { content:""; width:28px; height:3px; border-radius:99px; background:var(--sx-blue); box-shadow:0 0 18px rgba(57,115,255,.45); }
+
+/* --- admin navigation: compact sticky command rail --- */
+body.admin-page .admin-layout { display:grid !important; grid-template-columns:minmax(210px,250px) minmax(0,1fr) !important; gap:18px !important; align-items:start; }
+body.admin-page .admin-side-nav {
+  position:sticky !important; top:104px !important; display:flex !important; flex-direction:column; gap:4px !important;
+  max-height:calc(100vh - 124px); padding:9px !important; border-radius:22px !important; overflow:auto;
+  scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.18) transparent;
+}
+body.admin-page .admin-side-nav a { display:flex; align-items:center; gap:10px; min-height:44px; padding:0 12px; border-radius:13px; color:rgba(255,255,255,.48) !important; font-size:11px; font-weight:720; transition:.2s ease; }
+body.admin-page .admin-side-nav a i { display:grid; place-items:center; width:28px; height:28px; border-radius:9px; color:rgba(255,255,255,.65); background:rgba(255,255,255,.04); }
+body.admin-page .admin-side-nav a:hover,
+body.admin-page .admin-side-nav a.active { color:#fff !important; background:rgba(255,255,255,.07); }
+body.admin-page .admin-side-nav a.active i { color:#fff; background:var(--sx-blue); box-shadow:0 8px 24px rgba(57,115,255,.25); }
+body.admin-page .admin-main-stack { display:grid; gap:16px; min-width:0; }
+body.admin-page .admin-main-stack > section { scroll-margin-top:110px; }
+
+/* --- staff shortcuts --- */
+body.staff-page .staff-top-tabs { position:sticky; top:98px; z-index:850; display:flex; width:max-content; max-width:100%; gap:5px !important; margin:14px 0 18px !important; padding:5px !important; border:1px solid var(--sx-line) !important; border-radius:999px !important; background:rgba(13,13,15,.88) !important; backdrop-filter:blur(18px); }
+body.staff-page .staff-top-tabs a { display:flex; align-items:center; gap:8px; min-height:38px; padding:0 14px; border-radius:999px; color:rgba(255,255,255,.46) !important; font-size:11px; font-weight:750; }
+body.staff-page .staff-top-tabs a:hover,
+body.staff-page .staff-top-tabs a.active { color:#fff !important; background:#1a1a1e !important; }
+body.staff-page .staff-top-tabs a.active i { color:var(--sx-blue-2); }
+body.staff-page .staff-section-panel { margin:16px 0 !important; padding:22px !important; }
+body.staff-page .section-title-row { margin:0 0 14px !important; }
+
+/* --- data tables: readable and dense, not spreadsheet-grey --- */
+body.panel-page .table-wrap { overflow:auto; border-radius:20px !important; }
+body.panel-page table { width:100%; border-collapse:separate !important; border-spacing:0 !important; color:rgba(255,255,255,.78) !important; }
+body.panel-page thead { position:sticky; top:0; z-index:4; }
+body.panel-page th { padding:13px 14px !important; border-color:var(--sx-line) !important; color:rgba(255,255,255,.40) !important; background:#111114 !important; font-size:10px !important; font-weight:800 !important; white-space:nowrap; }
+body.panel-page td { padding:13px 14px !important; border-color:rgba(255,255,255,.055) !important; color:rgba(255,255,255,.70) !important; vertical-align:middle; }
+body.panel-page tbody tr { transition:background .18s ease; }
+body.panel-page tbody tr:hover { background:rgba(255,255,255,.025) !important; }
+body.panel-page td b { color:#fff; }
+body.panel-page td img { border:1px solid var(--sx-line); background:#0a0a0c; }
+
+/* --- complex panel components --- */
+body.panel-page .source-import-note,
+body.panel-page .form-note-required,
+body.panel-page .hotel-bank-mini-note,
+body.panel-page .image-manager-note,
+body.panel-page .staff-edit-save-notice,
+body.panel-page .empty-state-mini,
+body.panel-page .import-result {
+  border:1px solid var(--sx-line) !important; border-radius:15px !important; color:var(--sx-muted) !important; background:rgba(255,255,255,.025) !important;
+}
+body.panel-page .staff-visa-grid,
+body.panel-page .staff-hotel-grid,
+body.panel-page .source-import-grid,
+body.panel-page .currency-entry-grid,
+body.panel-page .airline-entry-grid,
+body.panel-page .admin-mini-grid { gap:12px !important; }
+body.panel-page .staff-visa-card,
+body.panel-page .staff-hotel-card,
+body.panel-page .source-import-card,
+body.panel-page .currency-admin-card,
+body.panel-page .airline-admin-card { border-radius:18px !important; }
+body.panel-page .staff-visa-card:hover,
+body.panel-page .staff-hotel-card:hover,
+body.panel-page .source-import-card:hover { transform:translateY(-2px); border-color:rgba(255,255,255,.14) !important; }
+body.panel-page .hotel-stars,
+body.panel-page .rating-star { color:var(--sx-amber) !important; }
+body.panel-page .staff-edit-main { min-height:36px !important; }
+
+/* --- modal UX --- */
+body.panel-page .modal,
+body.buyer-page .modal { background:rgba(0,0,0,.72) !important; backdrop-filter:blur(12px); }
+body.panel-page .modal-card,
+body.buyer-page .modal-card { border:1px solid rgba(255,255,255,.11) !important; background:#0d0d10 !important; box-shadow:0 40px 120px rgba(0,0,0,.65) !important; }
+body.staff-page .staff-edit-modal-card { max-width:min(1120px,calc(100vw - 30px)) !important; max-height:calc(100vh - 34px) !important; border-radius:28px !important; }
+body.staff-page .staff-edit-sticky-head { position:sticky; top:-22px; z-index:20; margin:-22px -22px 18px !important; padding:17px 22px !important; border-bottom:1px solid var(--sx-line); background:rgba(13,13,16,.93); backdrop-filter:blur(18px); }
+
+/* --- login experience --- */
+body.panel-page .login-box { width:min(460px,100%); margin:11vh auto 0 !important; padding:30px !important; border-radius:28px !important; text-align:right; }
+body.panel-page .login-box::before { content:"SAFARO"; display:block; margin-bottom:22px; color:rgba(255,255,255,.25); font:800 10px/1 Arial,sans-serif; letter-spacing:.36em; }
+body.panel-page .login-box h2 { margin:0 0 12px; font-size:32px; }
+body.panel-page .login-box .field { margin-top:10px; }
+
+/* --- buyer page refinement beyond the hero --- */
+body.buyer-page .tour-grid-v49 { gap:16px !important; }
+body.buyer-page .tour-card-v49,
+body.buyer-page .country-line-card,
+body.buyer-page .buyer-visa-card,
+body.buyer-page .visa-card,
+body.buyer-page .destination-guide-card,
+body.buyer-page .contact-box,
+body.buyer-page .about-box,
+body.buyer-page .faq-grid-v49 > *,
+body.buyer-page .custom-tour-top-card {
+  border:1px solid var(--sx-line) !important; border-radius:26px !important;
+  color:#fff !important; background:linear-gradient(145deg,#101013,#09090b) !important;
+  box-shadow:0 20px 60px rgba(0,0,0,.22) !important;
+}
+body.buyer-page .tour-card-v49:hover,
+body.buyer-page .country-line-card:hover { transform:translateY(-6px) !important; border-color:rgba(255,255,255,.16) !important; box-shadow:0 30px 80px rgba(0,0,0,.42) !important; }
+body.buyer-page .section-title-v49 h2,
+body.buyer-page .tour-list-head-v49 h2,
+body.buyer-page .country-line-head h2,
+body.buyer-page .buyer-visa-section h2,
+body.buyer-page .ui-faq-section h2,
+body.buyer-page .about-contact-section h2 { color:#fff !important; font-size:clamp(26px,4vw,48px) !important; letter-spacing:-.035em; }
+body.buyer-page .section-title-v49 p,
+body.buyer-page .tour-list-head-v49 p,
+body.buyer-page .country-line-head p,
+body.buyer-page .buyer-visa-section p,
+body.buyer-page .ui-faq-section p,
+body.buyer-page .about-contact-section p { color:var(--sx-muted) !important; }
+body.buyer-page .catbar-v49 { border:1px solid var(--sx-line) !important; border-radius:999px !important; background:#0d0d10 !important; }
+body.buyer-page .catbar-v49 button { border-radius:999px !important; color:rgba(255,255,255,.48) !important; }
+body.buyer-page .catbar-v49 button.active { color:#fff !important; background:#1a1a1e !important; }
+body.buyer-page .tour-image-wrap-v49 { overflow:hidden; }
+body.buyer-page .tour-img { transition:transform .55s var(--sx-ease),filter .35s ease; }
+body.buyer-page .tour-card-v49:hover .tour-img { transform:scale(1.035); filter:saturate(.92) contrast(1.04); }
+body.buyer-page .detail-layout-v49,
+body.buyer-page .country-page-grid { color:#fff; }
+body.buyer-page .detail-main-v49,
+body.buyer-page .detail-aside-v49,
+body.buyer-page .detail-price-box-v49,
+body.buyer-page .destination-detail-box,
+body.buyer-page .booking-hotel-card { border:1px solid var(--sx-line) !important; color:#fff !important; background:#0e0e11 !important; border-radius:24px !important; }
+body.buyer-page .sticky-cta { border-color:var(--sx-line) !important; background:rgba(10,10,12,.88) !important; backdrop-filter:blur(18px); }
+
+/* --- footer and mobile bottom nav across all roles --- */
+body.buyer-page .safro-footer,
+body.panel-page .safro-footer { width:min(1220px,calc(100% - 40px)) !important; margin:0 auto 28px !important; padding:34px 0 !important; border-top:1px solid var(--sx-line) !important; color:var(--sx-muted) !important; background:transparent !important; }
+body.buyer-page .safro-footer b,
+body.panel-page .safro-footer b { color:#fff !important; }
+body.buyer-page .safro-footer a,
+body.panel-page .safro-footer a { color:#fff !important; }
+body.buyer-page .bottom-nav,
+body.panel-page .bottom-nav { border:1px solid var(--sx-line) !important; background:rgba(12,12,14,.90) !important; backdrop-filter:blur(22px); box-shadow:0 18px 60px rgba(0,0,0,.42) !important; }
+body.buyer-page .bottom-nav a,
+body.panel-page .bottom-nav a { color:rgba(255,255,255,.55) !important; }
+body.buyer-page .bottom-nav a:hover,
+body.panel-page .bottom-nav a:hover { color:#fff !important; }
+
+/* --- toast, scroll progress and reveal motion --- */
+body .toast { border:1px solid var(--sx-line) !important; border-radius:999px !important; color:#fff !important; background:rgba(18,18,21,.94) !important; box-shadow:0 24px 70px rgba(0,0,0,.45) !important; backdrop-filter:blur(16px); }
+#safaroScrollProgress { position:fixed; top:0; right:0; z-index:99999; width:0; height:2px; pointer-events:none; background:linear-gradient(90deg,var(--sx-blue),#8eaaff); box-shadow:0 0 20px rgba(57,115,255,.65); transition:width .08s linear; }
+.ui-reveal { opacity:0; transform:translateY(16px); transition:opacity .62s var(--sx-ease) var(--ui-delay,0ms),transform .62s var(--sx-ease) var(--ui-delay,0ms) !important; }
+.ui-reveal.ui-reveal-visible { opacity:1; transform:none; }
+
+/* lock selected direction to the premium dark system */
+html[data-theme="light"] body.buyer-page,
+html[data-theme="dark"] body.buyer-page,
+html[data-theme="light"] body.panel-page,
+html[data-theme="dark"] body.panel-page,
+body.panel-page.dark,
+body.buyer-page.dark { background-color:var(--sx-bg) !important; color:var(--sx-text) !important; }
+
+@media (max-width: 1100px) {
+  body.admin-page .admin-layout { grid-template-columns:1fr !important; }
+  body.admin-page .admin-side-nav { position:sticky !important; top:92px !important; z-index:800; flex-direction:row !important; max-height:none; overflow-x:auto; overflow-y:hidden; border-radius:999px !important; white-space:nowrap; }
+  body.admin-page .admin-side-nav a { flex:0 0 auto; }
+}
+
+@media (max-width: 920px) {
+  body.buyer-page .main-header,
+  body.panel-page .main-header { width:calc(100% - 24px); margin-top:10px; border-radius:24px !important; }
+  body.buyer-page .main-nav,
+  body.panel-page .main-nav { position:fixed !important; inset:82px 12px auto !important; display:none !important; flex-direction:column !important; align-items:stretch !important; gap:2px !important; padding:8px !important; border:1px solid var(--sx-line) !important; border-radius:22px !important; background:rgba(13,13,15,.97) !important; box-shadow:var(--sx-shadow) !important; backdrop-filter:blur(20px); }
+  body.buyer-page .main-nav.open,
+  body.panel-page .main-nav.open { display:flex !important; }
+  body.buyer-page .main-nav a,
+  body.panel-page .main-nav a { padding:13px 14px !important; border-radius:14px; }
+  body.buyer-page .main-nav a:hover,
+  body.panel-page .main-nav a:hover { background:#1a1a1e !important; }
+  body.buyer-page .hamburger,
+  body.panel-page .hamburger { display:inline-flex !important; width:40px; height:40px; border-radius:50% !important; }
+  body.panel-page main.container { width:calc(100% - 24px) !important; padding-top:100px !important; }
+  body.panel-page #app > .grid.g4 { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  body.staff-page .staff-top-tabs { top:84px; }
+}
+
+@media (max-width: 660px) {
+  body.panel-page main.container { width:calc(100% - 20px) !important; padding-bottom:96px !important; }
+  body.panel-page .pad { padding:17px !important; }
+  body.panel-page #app > .card:first-child { min-height:145px; padding:22px 19px !important; border-radius:24px !important; }
+  body.panel-page #app > .grid.g4 { grid-template-columns:1fr 1fr !important; }
+  body.panel-page #app > .grid.g4 > .card { min-height:100px; padding:16px !important; }
+  body.panel-page h1 { font-size:30px; }
+  body.admin-page .admin-side-nav { top:80px !important; margin-left:-2px; margin-right:-2px; }
+  body.staff-page .staff-top-tabs { top:80px; width:100%; overflow-x:auto; border-radius:18px !important; }
+  body.panel-page .actions { gap:7px !important; }
+  body.panel-page .actions .btn,
+  body.panel-page .actions .soft,
+  body.panel-page .actions .danger { min-height:39px; padding-inline:13px !important; font-size:10px; }
+  body.panel-page .table-wrap { border-radius:17px !important; }
+  body.panel-page th,
+  body.panel-page td { padding:11px !important; font-size:10px !important; }
+  body.panel-page .login-box { margin-top:8vh !important; padding:23px !important; }
+  body.buyer-page .safro-footer,
+  body.panel-page .safro-footer { width:calc(100% - 28px) !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  .ui-reveal { opacity:1 !important; transform:none !important; }
+}
