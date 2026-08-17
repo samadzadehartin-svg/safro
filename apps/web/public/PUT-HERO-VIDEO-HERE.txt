@@ -1,0 +1,8 @@
+Place your background video in this folder and name it exactly:
+
+hero-bg.mp4
+
+Expected final path:
+apps/web/public/hero-bg.mp4
+
+The Hero component already references /hero-bg.mp4 and uses autoplay, loop, muted and playsInline.
